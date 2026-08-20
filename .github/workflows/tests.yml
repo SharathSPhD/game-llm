@@ -1,0 +1,30 @@
+name: Tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.10", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+      - name: Install
+        run: |
+          uv venv --python ${{ matrix.python-version }}
+          uv pip install -e ".[dev]" --index-strategy unsafe-best-match \
+            --extra-index-url https://download.pytorch.org/whl/cpu
+      - name: Lint
+        run: |
+          uv run ruff check kinetic_ai/ tests/
+      - name: Type check
+        run: |
+          uv run mypy kinetic_ai/
+      - name: Test with coverage
+        run: |
+          uv run pytest tests/ -q --cov=kinetic_ai --cov-fail-under=80
