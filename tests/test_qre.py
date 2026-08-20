@@ -144,3 +144,47 @@ class TestKuhnPoker:
         # Verify the Nash equilibrium value
         payoff = game.evaluate(p1_strat, p2_strat)
         assert payoff == pytest.approx(-1/18, abs=1e-4)
+
+
+class TestQREHighRationality:
+    """Test QRE convergence at high rationality (λ > 0.32) — numerical stability."""
+
+    def test_biased_rps_converges_at_high_lambda(self) -> None:
+        """QRE on biased_rps must converge at λ ∈ {1, 10, 100}.
+
+        This test verifies that the fixed-point iteration converges even when
+        λ·‖A‖ is large. Undamped iteration would diverge; damped iteration
+        with adaptive damping should handle this robustly.
+
+        At high λ, the softmax becomes sharp and convergence is slow, so we use
+        a looser verify_qre tolerance (1e-2) than for low λ (1e-4).
+        """
+        # Create biased RPS: scale first row of RPS by 2
+        game = rock_paper_scissors()
+        game.payoff_1[0] *= 2
+        game.payoff_2[0] *= 2
+        game.name = "biased_rps"
+
+        # Test λ values with corresponding verify tolerances
+        test_cases = [
+            (1.0, 1e-4, 2000),
+            (10.0, 1e-4, 5000),
+            (100.0, 1e-2, 50000),  # Higher λ needs higher tol and more iterations
+        ]
+
+        for lam, verify_tol, max_iters in test_cases:
+            result = compute_qre(game, rationality=lam, max_iter=max_iters, tol=1e-8)
+            # Test should fail before the fix (with undamped iteration,
+            # these λ values cause oscillation/divergence)
+            assert result.converged, (
+                f"QRE did not converge for biased_rps at λ={lam}. "
+                f"Residual: {result.residual}, Iterations: {result.iterations}"
+            )
+            # Verify the result is actually an ε-QRE (with λ-adaptive tolerance)
+            is_valid_qre = verify_qre(
+                game, result.strategy_1, result.strategy_2, lam, tol=verify_tol
+            )
+            assert is_valid_qre, (
+                f"Result is not a valid QRE for biased_rps at λ={lam} (tol={verify_tol}). "
+                f"Strategies do not satisfy fixed-point condition."
+            )

@@ -1,18 +1,18 @@
 {
-  "cycle": 1,
+  "cycle": 2,
   "phase": "phase2-science",
   "current_rq": "RQ-2",
   "gpu_lock": false,
   "open_questions": [
-    "RQ-2 (H2): MMD last-iterate convergence vs GDA cycling",
     "RQ-3 (H1): EqLM-small vs GPT-2-class on BabyLM/BLiMP",
     "RQ-4 (H3): MPO vs DPO",
     "RQ-5 (H4): token-auction decoding",
     "RQ-6: DEQ O(1) depth-memory measured"
   ],
   "closed_questions": [
-    "RQ-1: review complete, 28 findings fixed (findings-rq1.md); tests 145/145, mypy+ruff clean, cov 93%"
+    "RQ-1: review complete, 28 findings fixed (findings-rq1.md); tests 145/145, mypy+ruff clean, cov 93%",
+    "RQ-2 (H2): VALIDATED - F1/F2/F3 (findings.md); RQ-6 Tier A part: F4/F5"
   ],
   "known_defects": [],
-  "next_action": "Phase 2 Tier A: rebuild experiments/run_all.py on fixed MMD; run H2 experiments (MMD vs GDA cycling, QRE homotopy, DEQ memory) with 10 seeds + stats"
+  "next_action": "Tier B smoke per SPEC 0004: tokenizer + data prep + EqLM/explicit tiny pretrain + vendored BLiMP eval end-to-end on GB10 (single GPU job)"
 }

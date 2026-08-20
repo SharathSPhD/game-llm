@@ -1,0 +1,54 @@
+# Experiment 1: MMD vs GDA on canonical games
+# Pre-registered Tier A experiment for H2 (MMD convergence to QRE)
+
+experiment:
+  name: "exp01_mmd_vs_gda"
+  description: "Compare MMD (fixed magnet), MMD with RND resets, and GDA on matching pennies, RPS, and biased RPS"
+  version: "1.0"
+
+# Games to test
+games:
+  - name: "matching_pennies"
+    type: "matching_pennies"
+  - name: "rock_paper_scissors"
+    type: "rock_paper_scissors"
+  - name: "biased_rps"
+    type: "biased_rps"  # RPS with first row scaled by 2
+
+# Methods: GDA and MMD variants
+methods:
+  gda:
+    name: "GDA"
+    type: "gda"
+    lr: 0.1  # Mirror ascent on simplex
+  mmd_fixed:
+    name: "MMD-Fixed"
+    type: "mmd_fixed"
+    lr: 0.1
+    tau: 0.1  # Magnetic strength (1/lambda for QRE)
+  mmd_rnd:
+    name: "MMD-RND"
+    type: "mmd_rnd"
+    lr: 0.1
+    tau: 0.1
+    reset_interval: 100  # Reset reference every K steps
+
+# Hyperparameters
+training:
+  num_steps: 2000  # Training steps per seed
+  num_seeds: 10   # Number of random seeds
+  log_interval: 10  # Log metrics every N steps
+  seed_base: 42   # Base random seed
+
+# Convergence criteria and metrics
+metrics:
+  nash_conv_threshold: 0.05  # MMD(RND) → Nash goal
+  qre_fit_r_squared: 0.9      # MMD(fixed) → QRE linear rate goal
+  qre_lambda: 10.0             # Inverse temperature for QRE target (1/tau)
+
+# Output
+output:
+  results_dir: "results/exp01_mmd_vs_gda"
+  save_trajectories: true
+  save_figures: true
+  figure_format: "pdf"

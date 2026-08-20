@@ -1,0 +1,61 @@
+# Configuration for exp03_deq_solvers: DEQ solver benchmark and memory scaling
+# Pre-registered per SPEC 0003
+
+experiment:
+  name: "exp03_deq_solvers"
+  description: "Anderson vs Broyden vs Picard on tanh contraction maps; DEQ vs explicit stack memory"
+  num_seeds: 10
+  device: "cpu"
+
+# Part (a): Solver benchmark on tanh contraction maps
+# Refined iteration 2: parametrize stiffness (rho) to test solver scaling
+solver_benchmark:
+  # Solver types to compare
+  solvers:
+    - picard
+    - anderson
+    - broyden
+
+  # Dimensions to test
+  dimensions: [32, 128]
+
+  # Contraction factors (Lipschitz constants): closer to 1.0 = harder problem
+  # rho=0.9: easy, rho=0.99: medium, rho=0.999: hard
+  contraction_factors: [0.9, 0.99, 0.999]
+
+  # Fixed-point solver config
+  max_iter: 500
+  tol: 1.0e-6
+
+  # Anderson-specific
+  anderson_m: 5
+  anderson_beta: 1.0
+
+  # Batch size for forward pass
+  batch_size: 4
+
+# Part (b): Memory scaling benchmark
+memory_benchmark:
+  # Stack depths to test (N-layer explicit stacks)
+  stack_depths: [4, 8, 16, 32]
+
+  # Hidden dimension for all layers
+  hidden_dim: 64
+
+  # Input size
+  input_dim: 64
+
+  # Batch size for memory measurement
+  batch_size: 4
+
+  # Profiling configuration
+  profiling:
+    profile_memory: true
+    profile_cpu: false
+    use_cuda: false
+
+  # Number of seeds for memory measurement
+  num_seeds: 5
+
+# Output
+output_dir: "results/exp03_deq_solvers"

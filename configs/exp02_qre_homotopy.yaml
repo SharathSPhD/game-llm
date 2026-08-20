@@ -1,0 +1,43 @@
+# exp02_qre_homotopy.yaml — QRE path tracing (homotopy) with cold vs warm start comparison
+#
+# Pre-registered outcomes (iteration 2 refinement):
+#   1. Exploitability monotonically decreases along the QRE path as lambda increases
+#      (on non-degenerate games: biased_rps, asymmetric_2x2)
+#   2. Warm-start (continued from previous lambda solution) reduces total iterations
+#      compared to cold-start (fresh uniform initialization each time)
+#      (expect >1 iterations on non-degenerate games, warm < cold)
+#   3. Max pairwise strategy distance along path > 0.05 for non-degenerate games
+#   4. Matching pennies serves as degenerate control (should show flat path, 1 iteration)
+#
+# Deterministic experiment (no seeds needed); traces exact QRE fixed points.
+# Iteration 2: Added non-degenerate games (biased_rps, asymmetric_2x2) to replace
+# flat degenerate games.
+
+experiment: exp02_qre_homotopy
+
+# Games to test: non-degenerate main + matching_pennies as degenerate control
+games:
+  - biased_rps              # RPS with first row scaled 2x (per exp01 spec)
+  - asymmetric_2x2          # 2x2 [[2,-1],[-1,1]]: asymmetric zero-sum (non-degenerate)
+  - matching_pennies        # CONTROL: degenerate (uniform Nash = QRE at all λ)
+
+# Lambda (rationality) sweep: logspace(0.01, 100, 50)
+# Automatically generated as numpy.logspace(-2, 2, 50)
+# Iteration 3: Full λ range [0.01, 100] enabled by damped fixed-point iteration
+# (see kinetic_ai/games/qre.py::compute_qre with use_damping=True).
+# Damped iteration scales γ adaptively with λ and applies line-search-like halving
+# on divergence, allowing convergence across the full range.
+rationality_sweep:
+  start_exp: -2        # log10(0.01)
+  end_exp: 2           # log10(100) — full range now stable with damped solver
+  num_points: 50
+
+# QRE solver settings
+# Note: High λ values require more iterations due to damping convergence.
+# Empirically, λ=100 converges in ~42k iterations with tol=1e-8.
+solver:
+  max_iter: 50000
+  tol: 1e-8
+
+# Output directory (relative to project root)
+output_dir: results/exp02_qre_homotopy

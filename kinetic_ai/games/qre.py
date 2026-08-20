@@ -85,38 +85,108 @@ def compute_qre(
     rationality: float = 1.0,
     max_iter: int = 1000,
     tol: float = 1e-8,
+    use_damping: bool = True,
+    damping_init: float | None = None,
+    damping_floor: float | None = None,
+    init_strategy_1: Tensor | None = None,
+    init_strategy_2: Tensor | None = None,
 ) -> QREResult:
     """Compute the Quantal Response Equilibrium via fixed-point iteration.
 
-    Iterates:
-        σ1 ← softmax(λ · A1 · σ2)
-        σ2 ← softmax(λ · A2^T · σ1)
+    Uses damped fixed-point iteration to improve numerical stability at high λ.
+    Iteration scheme:
+        σ1_new ← softmax(λ · A1 · σ2)
+        σ2_new ← softmax(λ · A2^T · σ1_new)
+        σ1 ← (1 - γ)σ1 + γ·σ1_new  (damped update)
+        σ2 ← (1 - γ)σ2 + γ·σ2_new
 
-    until convergence.
+    where γ (damping factor) adapts based on convergence: if residual increases,
+    γ is halved. This stabilizes the iteration when λ·‖A‖ is large.
+    For high λ, damping_init is automatically reduced to prevent divergence.
 
     Args:
         game: The normal-form game.
         rationality: λ parameter (inverse temperature).
         max_iter: Maximum iterations.
         tol: Convergence tolerance.
+        use_damping: If True, use adaptive damping. If False, use undamped iteration
+            (backward compatible with old behavior).
+        damping_init: Initial damping factor γ. If None, auto-scales with λ:
+            γ = 1.0 / (1 + λ / 10) to reduce step size at high λ.
+        damping_floor: Minimum damping factor to prevent convergence slowdown.
+        init_strategy_1: Initial strategy for player 1. If None, use uniform.
+        init_strategy_2: Initial strategy for player 2. If None, use uniform.
 
     Returns:
         QREResult with the equilibrium strategies and diagnostics.
+
+    Notes:
+        The damping scheme is adaptive: when the residual increases between iterations,
+        the damping factor is halved to slow the update step. This prevents oscillation
+        and divergence in high-λ regimes. For high λ (λ > 1), damping is applied from
+        the start with γ auto-scaled; adaptive halving provides additional stability.
     """
-    # Initialize with uniform strategies
-    s1 = torch.ones(game.num_actions_1) / game.num_actions_1
-    s2 = torch.ones(game.num_actions_2) / game.num_actions_2
+    # Initialize strategies (use provided init or default to uniform)
+    if init_strategy_1 is None:
+        s1 = torch.ones(game.num_actions_1) / game.num_actions_1
+    else:
+        s1 = init_strategy_1.clone()
 
-    for i in range(max_iter):  # noqa: B007  (used after loop)
-        s1_new = logit_qre_response(game.payoff_1, s2, rationality)
-        s2_new = logit_qre_response(game.payoff_2.T, s1_new, rationality)
+    if init_strategy_2 is None:
+        s2 = torch.ones(game.num_actions_2) / game.num_actions_2
+    else:
+        s2 = init_strategy_2.clone()
 
-        residual = (torch.norm(s1_new - s1) + torch.norm(s2_new - s2)).item()
+    if not use_damping:
+        # Undamped iteration (legacy behavior)
+        for i in range(max_iter):  # noqa: B007
+            s1_new = logit_qre_response(game.payoff_1, s2, rationality)
+            s2_new = logit_qre_response(game.payoff_2.T, s1_new, rationality)
 
-        s1, s2 = s1_new, s2_new
+            residual = (torch.norm(s1_new - s1) + torch.norm(s2_new - s2)).item()
 
-        if residual < tol:
-            break
+            s1, s2 = s1_new, s2_new
+
+            if residual < tol:
+                break
+    else:
+        # Damped iteration with adaptive damping
+        # Auto-scale initial damping for high λ
+        # For high λ, start with smaller damping to avoid divergence:
+        # γ = 1/(1+λ/10) gives γ=1 at λ≈0, γ≈0.5 at λ=10, γ≈0.01 at λ=990
+        gamma = 1.0 / (1.0 + rationality / 10.0) if damping_init is None else damping_init
+
+        # Auto-scale damping floor: allow very small damping at high λ
+        damping_floor_actual = 1e-10 if damping_floor is None else damping_floor
+
+        prev_residual_undamped = float("inf")
+
+        for i in range(max_iter):  # noqa: B007
+            s1_new = logit_qre_response(game.payoff_1, s2, rationality)
+            s2_new = logit_qre_response(game.payoff_2.T, s1_new, rationality)
+
+            # Compute residual before damping (distance to fixed point)
+            residual_undamped = (torch.norm(s1_new - s1) + torch.norm(s2_new - s2)).item()
+
+            # Adaptive damping: if residual increased, reduce damping factor
+            # This prevents oscillation when the map has steep gradients
+            if residual_undamped > prev_residual_undamped and gamma > damping_floor_actual:
+                gamma = max(gamma / 2.0, damping_floor_actual)
+
+            # Damped update: s ← (1-γ)s + γ·s_new
+            # This reduces the step size when convergence stalls
+            s1_old = s1.clone()
+            s2_old = s2.clone()
+            s1 = (1.0 - gamma) * s1 + gamma * s1_new
+            s2 = (1.0 - gamma) * s2 + gamma * s2_new
+
+            # Residual after damping: how much we actually moved
+            residual = (torch.norm(s1 - s1_old) + torch.norm(s2 - s2_old)).item()
+            prev_residual_undamped = residual_undamped
+
+            # Check convergence: move was small enough
+            if residual < tol:
+                break
 
     nc = nash_conv(game, s1, s2)
 

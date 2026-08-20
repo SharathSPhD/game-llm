@@ -1,0 +1,84 @@
+{
+  "experiment": "exp04_auction_truthfulness",
+  "config_file": "configs/exp04_auction_truthfulness.yaml",
+  "config_hash": "5c458dac27de777e90f9f85e6d5e5b16d810200561ce7d0646d6e7ed9d5b56f0",
+  "git_commit": "9a2cde2f2193b29194d6773de10f410e4d48378f",
+  "timestamp": "2026-08-20T21:47:19",
+  "spec_version": "0003",
+  "pre_registered": true,
+  "configuration": {
+    "num_seeds": 10,
+    "num_auctions_per_seed": 200,
+    "agent_counts": [
+      3,
+      5
+    ],
+    "vocab_size": 50,
+    "mechanisms": [
+      "second_price",
+      "weighted_aggregation"
+    ],
+    "misreport_grid": [
+      0.25,
+      0.5,
+      0.75,
+      1.0,
+      1.25,
+      1.5,
+      2.0
+    ],
+    "utility_definition": "valuation-weighted allocation minus payment"
+  },
+  "results": {
+    "second_price_n3": {
+      "mechanism": "second_price",
+      "n_agents": 3,
+      "regrets_count": 6000,
+      "mean_regret": 0.0,
+      "regret_ci_lower": 0.0,
+      "regret_ci_upper": 0.0,
+      "regret_std_error": 0.0
+    },
+    "second_price_n5": {
+      "mechanism": "second_price",
+      "n_agents": 5,
+      "regrets_count": 10000,
+      "mean_regret": 0.0,
+      "regret_ci_lower": 0.0,
+      "regret_ci_upper": 0.0,
+      "regret_std_error": 0.0
+    },
+    "weighted_aggregation_n3": {
+      "mechanism": "weighted_aggregation",
+      "n_agents": 3,
+      "regrets_count": 6000,
+      "mean_regret": 0.07731364403131209,
+      "regret_ci_lower": 0.07553189590019853,
+      "regret_ci_upper": 0.07909851004083,
+      "regret_std_error": 0.0009140134752041123
+    },
+    "weighted_aggregation_n5": {
+      "mechanism": "weighted_aggregation",
+      "n_agents": 5,
+      "regrets_count": 10000,
+      "mean_regret": 0.0682692231337104,
+      "regret_ci_lower": 0.06691810521941416,
+      "regret_ci_upper": 0.06960566787455082,
+      "regret_std_error": 0.0006826275175852459
+    }
+  },
+  "raw_results_count": 32000,
+  "pre_registered_hypotheses": {
+    "H_second_price": {
+      "claim": "Second-price truthful regret <= epsilon",
+      "interpretation": "By Vickrey's theorem, truthful bidding is a dominant strategy in second-price auctions. Empirical regret should be ~0.",
+      "actual_mean_regret": 0.0
+    },
+    "H_weighted_aggregation": {
+      "claim": "Weighted aggregation regret reported as measured",
+      "interpretation": "Weighted aggregation with VCG payments is NOT truthful. Report deviation magnitude honestly.",
+      "actual_mean_regret_n3": 0.07731364403131209,
+      "actual_mean_regret_n5": 0.0682692231337104
+    }
+  }
+}

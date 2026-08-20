@@ -25,19 +25,17 @@ import torch
 
 from kinetic_ai.config import (
     DEQConfig,
-    ExperimentConfig,
     SolverType,
 )
-from kinetic_ai.eval.convergence import ConvergenceTracker, verify_linear_convergence
-from kinetic_ai.eval.exploitability import compute_exploitability, exploitability_curve
+from kinetic_ai.eval.convergence import ConvergenceTracker
 from kinetic_ai.eval.statistical import bootstrap_ci, paired_bootstrap_test, wilcoxon_signed_rank
 from kinetic_ai.games.payoff import (
     coordination_game,
     matching_pennies,
     rock_paper_scissors,
 )
-from kinetic_ai.games.qre import compute_qre, nash_conv, qre_path
-from kinetic_ai.optim.bregman import Euclidean, NegativeEntropy
+from kinetic_ai.games.qre import nash_conv, qre_path
+from kinetic_ai.optim.bregman import NegativeEntropy
 from kinetic_ai.optim.mmd import mmd_strategy_update
 
 
@@ -208,6 +206,7 @@ def experiment_3_deq_solvers(
     print("=" * 60)
 
     import torch.nn as nn
+
     from kinetic_ai.models.deq_layer import DEQLayer
 
     hidden_dim = 32
@@ -222,8 +221,8 @@ def experiment_3_deq_solvers(
             linear.weight.data *= 0.3
             linear.bias.data *= 0.1
 
-        def transform(z: torch.Tensor, x: torch.Tensor) -> torch.Tensor:
-            return torch.tanh(linear(torch.cat([z, x], dim=-1)))
+        def transform(z: torch.Tensor, x: torch.Tensor, _lin=linear) -> torch.Tensor:
+            return torch.tanh(_lin(torch.cat([z, x], dim=-1)))
 
         x = torch.randn(4, hidden_dim)
 
@@ -310,7 +309,7 @@ def experiment_4_statistical_summary(
         # Apply Holm-Bonferroni correction
         p_values = [c["p_value"] for c in comparisons]
         corrected = holm_bonferroni_correction(p_values)
-        for c, sig in zip(comparisons, corrected):
+        for c, sig in zip(comparisons, corrected, strict=False):
             c["significant_corrected"] = sig
 
         summary[game_name] = comparisons
@@ -337,9 +336,7 @@ def _sanitize(obj):
         return [_sanitize(v) for v in obj]
     elif isinstance(obj, (np.floating, np.integer)):
         return float(obj)
-    elif isinstance(obj, np.ndarray):
-        return obj.tolist()
-    elif isinstance(obj, torch.Tensor):
+    elif isinstance(obj, (np.ndarray, torch.Tensor)):
         return obj.tolist()
     elif isinstance(obj, np.bool_):
         return bool(obj)

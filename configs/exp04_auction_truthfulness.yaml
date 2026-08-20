@@ -1,0 +1,35 @@
+# exp04_auction_truthfulness: Measure empirical regret of truthful bidding vs best misreport
+# Pre-registered per SPEC 0003
+# agents n in [3,5], 10 seeds x 200 auctions each
+# Mechanisms: SECOND_PRICE (truthful by theory), WEIGHTED_AGGREGATION (reported as measured)
+
+experiment:
+  name: "exp04_auction_truthfulness"
+  num_seeds: 10
+  num_auctions_per_seed: 200
+  agent_counts: [3, 5]
+  vocab_size: 50
+
+auction:
+  # Auction mechanism configurations
+  mechanisms:
+    - "second_price"
+    - "weighted_aggregation"
+  reserve_price: 0.0
+  aggregation_temp: 1.0
+
+# Misreport grid: [0.25v, 0.5v, 0.75v, v, 1.25v, 1.5v, 2v]
+misreport_grid:
+  - 0.25
+  - 0.5
+  - 0.75
+  - 1.0
+  - 1.25
+  - 1.5
+  - 2.0
+
+# Utility definition: utility = valuation * allocation - payment
+# allocation: bid-weighted softmax in weighted_aggregation, binary winner in second_price
+utility_definition: "valuation-weighted allocation minus payment"
+
+output_dir: "results/exp04_auction_truthfulness"
