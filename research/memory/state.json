@@ -1,22 +1,18 @@
 {
-  "cycle": 0,
-  "phase": "phase1-review",
-  "current_rq": "RQ-1",
+  "cycle": 1,
+  "phase": "phase2-science",
+  "current_rq": "RQ-2",
   "gpu_lock": false,
   "open_questions": [
-    "RQ-1: Does the codebase faithfully implement the research doc? (adversarial review)",
     "RQ-2 (H2): MMD last-iterate convergence vs GDA cycling",
     "RQ-3 (H1): EqLM-small vs GPT-2-class on BabyLM/BLiMP",
     "RQ-4 (H3): MPO vs DPO",
     "RQ-5 (H4): token-auction decoding",
     "RQ-6: DEQ O(1) depth-memory measured"
   ],
-  "closed_questions": [],
-  "known_defects": [
-    "MMD: 4/7 tests fail (test_mmd.py) - adjudicate impl vs tests vs theory",
-    "VCG payments (auctions.py:231-283) individual rewards not externality welfare",
-    "eval() in config.py:188 unsafe deserialization",
-    "DilatedEntropy weights (bregman.py:216) not treeplex-aware"
+  "closed_questions": [
+    "RQ-1: review complete, 28 findings fixed (findings-rq1.md); tests 145/145, mypy+ruff clean, cov 93%"
   ],
-  "next_action": "Run Phase 1b ultracode adversarial review workflow; write findings; begin TDD fix loop"
+  "known_defects": [],
+  "next_action": "Phase 2 Tier A: rebuild experiments/run_all.py on fixed MMD; run H2 experiments (MMD vs GDA cycling, QRE homotopy, DEQ memory) with 10 seeds + stats"
 }

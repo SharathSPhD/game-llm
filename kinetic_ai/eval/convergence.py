@@ -15,8 +15,6 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 
 import numpy as np
-import torch
-from torch import Tensor
 
 
 @dataclass
@@ -56,7 +54,11 @@ class ConvergenceTracker:
             self.wall_times.append(wall_time)
 
     def estimate_convergence_rate(
-        self, metric: str = "exploitability", window: int | None = None
+        self,
+        metric: str = "exploitability",
+        window: int | None = None,
+        eta: float | None = None,
+        tau: float | None = None,
     ) -> ConvergenceRateResult:
         """Estimate the convergence rate via log-linear regression.
 
@@ -68,9 +70,12 @@ class ConvergenceTracker:
         Args:
             metric: Which metric to analyze ("exploitability" or "residual").
             window: If specified, use only the last `window` data points.
+            eta: Stepsize parameter for theoretical rate O(η·τ). Optional.
+            tau: Magnetic strength for theoretical rate O(η·τ). Optional.
 
         Returns:
-            ConvergenceRateResult with rate estimate and diagnostics.
+            ConvergenceRateResult with rate estimate and theoretical bounds if
+            eta and tau are provided.
         """
         if metric == "exploitability":
             values = self.exploitabilities
@@ -81,7 +86,10 @@ class ConvergenceTracker:
 
         if len(values) < 3:
             return ConvergenceRateResult(
-                rate=0.0, r_squared=0.0, is_linear=False, num_points=len(values)
+                rate=0.0,
+                r_squared=0.0,
+                is_linear=False,
+                num_points=len(values),
             )
 
         if window is not None:
@@ -91,10 +99,13 @@ class ConvergenceTracker:
             steps = list(range(len(values)))
 
         # Filter out zeros/negatives for log
-        valid = [(s, v) for s, v in zip(steps, values) if v > 0]
+        valid = [(s, v) for s, v in zip(steps, values, strict=False) if v > 0]
         if len(valid) < 3:
             return ConvergenceRateResult(
-                rate=0.0, r_squared=0.0, is_linear=False, num_points=len(valid)
+                rate=0.0,
+                r_squared=0.0,
+                is_linear=False,
+                num_points=len(valid),
             )
 
         steps_arr = np.array([s for s, _ in valid])
@@ -111,11 +122,24 @@ class ConvergenceTracker:
         ss_tot = np.sum((log_values - np.mean(log_values)) ** 2)
         r_squared = 1.0 - (ss_res / max(ss_tot, 1e-12))
 
+        # Compute theoretical bounds if eta and tau provided
+        theory_rate = None
+        theory_lower = None
+        theory_upper = None
+        if eta is not None and tau is not None:
+            theory_rate = float(eta * tau)
+            # Allow ±10x variation from theory for practical experiments
+            theory_lower = theory_rate / 10
+            theory_upper = theory_rate * 10
+
         return ConvergenceRateResult(
             rate=float(rate),
             r_squared=float(r_squared),
             is_linear=r_squared > 0.9 and rate > 0,
             num_points=len(valid),
+            theory_rate=theory_rate,
+            theory_rate_lower=theory_lower,
+            theory_rate_upper=theory_upper,
         )
 
     def to_dict(self) -> dict[str, list[float]]:
@@ -136,14 +160,24 @@ class ConvergenceRateResult:
     Attributes:
         rate: Estimated convergence rate (positive = converging).
         r_squared: R² of the log-linear fit (1.0 = perfect linear convergence).
+            NOTE: R² measures how well the data fits an exponential decay,
+            NOT whether the decay rate matches the theoretical prediction.
         is_linear: Whether convergence appears to be linear (R² > 0.9).
+            This indicates exponential decay (linear in log scale), not
+            validation against theoretical rate.
         num_points: Number of data points used.
+        theory_rate: Theoretical convergence rate prediction if eta/tau provided.
+        theory_rate_lower: Lower bound of expected rate (theory - margin).
+        theory_rate_upper: Upper bound of expected rate (theory + margin).
     """
 
     rate: float
     r_squared: float
     is_linear: bool
     num_points: int
+    theory_rate: float | None = None
+    theory_rate_lower: float | None = None
+    theory_rate_upper: float | None = None
 
 
 def verify_linear_convergence(
@@ -154,16 +188,25 @@ def verify_linear_convergence(
 ) -> bool:
     """Verify that an algorithm exhibits linear convergence.
 
+    IMPORTANT: This function detects exponential decay (R² > 0.9), which is
+    necessary but NOT SUFFICIENT for validating convergence to theory.
+    The R² threshold measures fit quality to a log-linear model, not whether
+    the empirical rate matches the theoretical O(η·τ) prediction.
+
+    To validate against theory, call estimate_convergence_rate() with eta
+    and tau parameters and check that the rate falls within expected bounds.
+
     This is the key claim for MMD: it converges linearly to QRE.
 
     Args:
         tracker: ConvergenceTracker with logged metrics.
         metric: Which metric to check.
-        r_squared_threshold: Minimum R² for "linear" classification.
+        r_squared_threshold: Minimum R² for "linear" classification (fit quality).
         min_points: Minimum data points required.
 
     Returns:
-        True if linear convergence is confirmed.
+        True if exponential decay is detected (R² > threshold and rate > 0).
+        Does NOT validate that the rate matches theoretical prediction.
     """
     result = tracker.estimate_convergence_rate(metric)
-    return result.is_linear and result.num_points >= min_points and result.rate > 0
+    return result.r_squared > r_squared_threshold and result.num_points >= min_points and result.rate > 0

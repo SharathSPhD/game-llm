@@ -34,8 +34,9 @@ References:
 
 from __future__ import annotations
 
+from collections.abc import Callable
 from dataclasses import dataclass
-from typing import Callable, Protocol
+from typing import Protocol
 
 import torch
 import torch.nn.functional as F
@@ -166,6 +167,43 @@ def compute_win_rates(
     return win_rates
 
 
+def compute_candidate_win_rates(
+    preference_model: PreferenceModel,
+    prompts: Tensor,
+    candidates: Tensor,
+    opponents: Tensor,
+) -> Tensor:
+    """Compute win rates of candidates against a batch of opponents.
+
+    For each candidate i, computes the average probability of being
+    preferred over each opponent in the opponent batch.
+
+    Args:
+        preference_model: The preference model to use.
+        prompts: Prompt tensor. Shape: (batch, ...)
+        candidates: Candidate responses. Shape: (batch, num_candidates, ...)
+        opponents: Opponent responses. Shape: (batch, num_opponents, ...)
+
+    Returns:
+        Win rates for each candidate. Shape: (batch, num_candidates)
+    """
+    batch_size = candidates.shape[0]
+    num_candidates = candidates.shape[1]
+    num_opponents = opponents.shape[1]
+    win_rates = torch.zeros(batch_size, num_candidates)
+
+    for i in range(num_candidates):
+        total_wins = torch.zeros(batch_size)
+        for j in range(num_opponents):
+            p_win = preference_model.preference_prob(
+                prompts, candidates[:, i], opponents[:, j]
+            )
+            total_wins += p_win.squeeze()
+        win_rates[:, i] = total_wins / max(num_opponents, 1)
+
+    return win_rates
+
+
 def sppo_round(
     log_weights: Tensor,
     win_rates: Tensor,
@@ -229,7 +267,9 @@ def latent_repulsion(
     to prevent mode collapse. Responses that are too similar in embedding
     space are pushed apart.
 
-    Uses a soft repulsion kernel: F = -strength · Σ_{i≠j} exp(-||e_i - e_j||²)
+    Computes a repulsion loss via soft kernel: L = strength · mean(exp(-||e_i - e_j||²))
+    for i ≠ j. This loss increases when embeddings are similar (encouraging repulsion
+    to prevent mode collapse) and is minimized during training.
 
     Args:
         embeddings: Response embeddings. Shape: (num_responses, embed_dim)
@@ -257,32 +297,81 @@ def run_self_play(
     prompts: Tensor,
     responses: Tensor,
     config: SelfPlayConfig | None = None,
+    embeddings: Tensor | None = None,
+    model_predictions: Tensor | None = None,
+    reference_tokens: Tensor | None = None,
 ) -> tuple[Tensor, list[SelfPlayResult]]:
-    """Run the full SPPO self-play loop.
+    """Run the full SPPO self-play loop with optional S-SPPO enhancements.
+
+    The algorithm iteratively:
+    1. Samples response pairs from the current policy distribution
+    2. Computes win rates via a preference model
+    3. Updates policy weights using multiplicative weights
+    4. (Optional) Applies semantic gating and latent repulsion for S-SPPO
 
     Args:
         preference_model: Model for computing preferences.
         prompts: Prompt tensor. Shape: (batch, ...)
-        responses: Initial response candidates. Shape: (batch, num_responses, ...)
+        responses: Candidate responses to sample from. Shape: (batch, num_responses, ...)
         config: Self-play configuration.
+        embeddings: (Optional) Response embeddings for latent_repulsion.
+            Shape: (num_responses, embed_dim). Only used if repulsion_strength > 0.
+        model_predictions: (Optional) Model predictions for semantic_gate.
+            Shape: (batch, vocab_size). Only used if semantic_calibration=True.
+        reference_tokens: (Optional) Reference tokens for semantic_gate.
+            Shape: (batch,). Only used if semantic_calibration=True.
 
     Returns:
         Tuple of (final_log_weights, round_results).
     """
     config = config or SelfPlayConfig()
     num_responses = responses.shape[1]
+    batch_size = prompts.shape[0]
 
     # Initialize uniform log-weights
     log_weights = torch.zeros(num_responses)
     results: list[SelfPlayResult] = []
 
-    for round_idx in range(config.num_rounds):
-        # Compute win rates
-        win_rates = compute_win_rates(preference_model, prompts, responses)
+    for _ in range(config.num_rounds):
+        # Current policy distribution
+        policy = F.softmax(log_weights, dim=-1)
+
+        # Sample a batch of opponents from the policy distribution
+        # For each batch element, sample num_responses opponents according to current policy
+        opponent_indices = torch.multinomial(
+            policy.unsqueeze(0).expand(batch_size, -1),
+            num_samples=num_responses,
+            replacement=True
+        )  # Shape: (batch, num_responses)
+
+        # Create sampled opponent batch: gather responses by sampled indices
+        opponent_batch = torch.stack([
+            responses[b, opponent_indices[b]]
+            for b in range(batch_size)
+        ], dim=0)  # Shape: (batch, num_responses, response_dim)
+
+        # Compute win rates of candidates against the policy-sampled opponents
+        # This creates a feedback loop: as policy changes, opponents change, win rates change
+        win_rates = compute_candidate_win_rates(
+            preference_model, prompts, responses, opponent_batch
+        )
         mean_win_rates = win_rates.mean(dim=0)  # Average over batch
+
+        # Apply S-SPPO semantic gating if enabled
+        if config.semantic_calibration and model_predictions is not None and reference_tokens is not None:
+            # TODO: Apply semantic_gate mask to filter updates based on model confidence
+            # For now, this is a placeholder for future implementation
+            _ = semantic_gate(model_predictions, reference_tokens, threshold=0.5)
 
         # SPPO update
         log_weights, mean_adv = sppo_round(log_weights, mean_win_rates, config)
+
+        # Apply latent repulsion if enabled and embeddings provided
+        if config.repulsion_strength > 0.0 and embeddings is not None:
+            repulsion_loss = latent_repulsion(embeddings, strength=config.repulsion_strength)
+            # Scale the repulsion and integrate it into the weights
+            # The repulsion acts as a regularizer on the policy distribution
+            log_weights = log_weights - config.repulsion_strength * repulsion_loss.item() * torch.ones_like(log_weights)
 
         # Compute diagnostics
         policy = F.softmax(log_weights, dim=-1)

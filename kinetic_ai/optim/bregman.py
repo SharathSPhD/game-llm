@@ -179,15 +179,23 @@ class DilatedEntropy(BregmanDivergence):
     Dilated entropy constructs a weighted combination of local entropies
     at each information set, with weights chosen to achieve 1-strong convexity.
 
-    This implementation supports a simplified two-level tree structure:
-    a root decision point followed by K information sets, each with A_k actions.
+    Theory (Hoda et al. 2010, Kroer et al. 2018):
+        For 1-strong convexity, weights must be proportional to the reach
+        probability of each information set. The reach probability R(h) of an
+        information set h is the probability of reaching that node under
+        uniform random play from the root.
 
-    For full EFG support, the tree structure and weights must be computed
-    from the game tree. See Hoda et al. (2010) and Kroer et al. (2020).
+    This implementation supports reach-probability weighting:
+        - If reach_probabilities provided: weights are normalized reach probs
+        - If weights provided: uses those directly
+        - Default (neither): heuristic [1/(depth*max_branching)] (NO guarantee)
 
     Args:
         info_set_sizes: List of action counts at each information set.
-        weights: Per-info-set entropy weights. If None, computed for 1-strong convexity.
+        weights: Per-info-set entropy weights. If provided, overrides reach_probabilities.
+        reach_probabilities: Reach probability for each information set. If provided
+            and weights is None, normalizes these as weights. Without this or weights,
+            strong convexity is not guaranteed.
         eps: Numerical stability constant.
 
     References:
@@ -201,16 +209,27 @@ class DilatedEntropy(BregmanDivergence):
         self,
         info_set_sizes: list[int],
         weights: list[float] | None = None,
+        reach_probabilities: list[float] | None = None,
         eps: float = 1e-10,
     ) -> None:
         self.info_set_sizes = info_set_sizes
         self.eps = eps
 
         if weights is not None:
+            # Explicit weights take priority
             self.weights = weights
+        elif reach_probabilities is not None:
+            # Normalize reach probabilities to get weights
+            total_reach = sum(reach_probabilities)
+            if total_reach > 0:
+                self.weights = [r / total_reach for r in reach_probabilities]
+            else:
+                # Fallback if all reach probs are zero
+                self.weights = [1.0 / len(reach_probabilities)] * len(reach_probabilities)
         else:
-            # Default: uniform weights that achieve 1-strong convexity
-            # For a simple tree, weight = 1 / (depth * max_branching)
+            # Default heuristic: uniform weights
+            # WARNING: This is NOT theoretically justified for 1-strong convexity!
+            # For guaranteed convergence, provide reach_probabilities or weights.
             depth = len(info_set_sizes)
             max_branch = max(info_set_sizes) if info_set_sizes else 1
             self.weights = [1.0 / (depth * max_branch)] * len(info_set_sizes)
@@ -228,7 +247,7 @@ class DilatedEntropy(BregmanDivergence):
         """Weighted sum of local negative entropies at each information set."""
         parts = self._split_strategy(x)
         total = torch.zeros(x.shape[:-1], device=x.device, dtype=x.dtype)
-        for w, part in zip(self.weights, parts):
+        for w, part in zip(self.weights, parts, strict=True):
             part_safe = part.clamp(min=self.eps)
             total = total + w * torch.sum(part_safe * torch.log(part_safe), dim=-1)
         return total
@@ -237,7 +256,7 @@ class DilatedEntropy(BregmanDivergence):
         """Gradient: weighted log at each information set."""
         parts = self._split_strategy(x)
         grads = []
-        for w, part in zip(self.weights, parts):
+        for w, part in zip(self.weights, parts, strict=True):
             part_safe = part.clamp(min=self.eps)
             grads.append(w * (torch.log(part_safe) + 1.0))
         return torch.cat(grads, dim=-1)
@@ -246,7 +265,7 @@ class DilatedEntropy(BregmanDivergence):
         """Inverse mirror map: per-information-set softmax with weights."""
         parts = self._split_strategy(y)
         primals = []
-        for w, part in zip(self.weights, parts):
+        for w, part in zip(self.weights, parts, strict=True):
             # Invert the weighting: y_i = w * (log(x_i) + 1) → x = softmax(y/w)
             primals.append(torch.softmax(part / max(w, self.eps), dim=-1))
         return torch.cat(primals, dim=-1)

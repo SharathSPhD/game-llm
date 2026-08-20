@@ -7,7 +7,6 @@ Validates:
     4. Spectral normalization enforces contraction
 """
 
-import pytest
 import torch
 import torch.nn as nn
 
@@ -74,6 +73,26 @@ class TestDEQSolvers:
             residual = torch.norm(self.f(z_star, self.x) - z_star)
         assert residual < 1e-3, f"Broyden didn't converge: residual={residual}"
 
+    def test_deq_stores_solver_info(self) -> None:
+        """DEQLayer should populate last_info with solver diagnostics."""
+        config = DEQConfig(solver=SolverType.PICARD, max_iter=100, tol=1e-4)
+        deq = DEQLayer(self.f, config)
+        _ = deq(self.x)
+
+        # Verify last_info is populated, not empty dict
+        assert deq.last_info != {}, (
+            "last_info should not be empty after forward pass"
+        )
+        assert "iterations" in deq.last_info, "Missing 'iterations' key"
+        assert "residuals" in deq.last_info, "Missing 'residuals' key"
+        assert "converged" in deq.last_info, "Missing 'converged' key"
+        assert isinstance(deq.last_info["iterations"], int)
+        assert isinstance(deq.last_info["residuals"], list)
+        assert isinstance(deq.last_info["converged"], bool)
+        assert deq.last_info["converged"], (
+            "Solver should converge for contractive maps"
+        )
+
     def test_anderson_faster_than_picard(self) -> None:
         """Anderson should converge in fewer iterations than Picard."""
         config_picard = DEQConfig(solver=SolverType.PICARD, max_iter=200, tol=1e-4)
@@ -85,10 +104,22 @@ class TestDEQSolvers:
         _ = deq_picard(self.x)
         _ = deq_anderson(self.x)
 
-        # Note: This is a soft test — Anderson should *generally* be faster
-        # but the specific iteration count depends on the problem
-        # We check that both converge at minimum
-        assert deq_picard.last_info or True  # Both should produce results
+        # Both solvers should produce convergence info
+        assert deq_picard.last_info and deq_anderson.last_info, (
+            "Both solvers should populate last_info"
+        )
+        assert deq_picard.last_info["converged"] and deq_anderson.last_info["converged"], (
+            f"Both solvers must converge: picard={deq_picard.last_info}, "
+            f"anderson={deq_anderson.last_info}"
+        )
+        # Anderson typically converges in fewer iterations
+        # (soft test, not guaranteed for all problems)
+        picard_iters = deq_picard.last_info["iterations"]
+        anderson_iters = deq_anderson.last_info["iterations"]
+        assert picard_iters > 0 and anderson_iters > 0, (
+            f"Both should have iterations: picard={picard_iters}, "
+            f"anderson={anderson_iters}"
+        )
 
     def test_all_solvers_find_same_fixed_point(self) -> None:
         """All solvers should converge to the same fixed point."""
@@ -145,6 +176,35 @@ class TestDEQGradients:
         loss.backward()
 
         assert x.grad is not None, "JFB should still produce gradients"
+
+
+class TestBroydenNegativeDenominator:
+    """Test that Broyden's method handles negative denominators correctly."""
+
+    def test_broyden_handles_negative_denom(self) -> None:
+        """Broyden should converge correctly even with negative inner products.
+
+        The denominator denom = Δz^T @ J_inv @ Δg can be negative for
+        non-symmetric matrices. The fix ensures we preserve sign and don't
+        clamp negative values to positive, which would violate Sherman-Morrison.
+        """
+        torch.manual_seed(42)
+        state_dim = 4
+        transform, f = make_contractive_transform(state_dim)
+        x = torch.randn(1, state_dim)
+
+        config = DEQConfig(solver=SolverType.BROYDEN, max_iter=100, tol=1e-4)
+        deq = DEQLayer(f, config)
+        z_star = deq(x)
+
+        # Verify convergence (Broyden should handle negative denominators internally)
+        with torch.no_grad():
+            residual = torch.norm(f(z_star, x) - z_star).item()
+
+        assert residual < 1e-3, (
+            f"Broyden should converge reliably, "
+            f"but got residual={residual}"
+        )
 
 
 class TestSpectralNorm:

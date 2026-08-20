@@ -44,12 +44,15 @@ s2 = torch.tensor([0.1, 0.7, 0.2])
 ref = torch.ones(3) / 3  # Uniform reference (magnet)
 
 for step in range(500):
+    # Sequential (alternating) updates with reduced learning rate
+    # ensure convergence. Simultaneous updates require tighter stepsizes.
     g1 = game.utility_gradient(1, s1, s2)
+    s1 = mmd_strategy_update(s1, g1, ref, bregman, lr=0.1, tau=0.05)
+    
     g2 = game.utility_gradient(2, s2, s1)
-    s1 = mmd_strategy_update(s1, g1, ref, bregman, lr=0.3, tau=0.05)
-    s2 = mmd_strategy_update(s2, g2, ref, bregman, lr=0.3, tau=0.05)
+    s2 = mmd_strategy_update(s2, g2, ref, bregman, lr=0.1, tau=0.05)
 
-print(f"NashConv: {nash_conv(game, s1, s2):.6f}")  # Should be near 0
+print(f"NashConv: {nash_conv(game, s1, s2):.6f}")  # Converges to τ-regularized QRE (≈Nash for RPS)
 ```
 
 ### DEQ Layer with Anderson Acceleration

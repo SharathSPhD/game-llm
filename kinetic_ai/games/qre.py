@@ -27,6 +27,7 @@ References:
 from __future__ import annotations
 
 from dataclasses import dataclass
+from typing import cast
 
 import torch
 import torch.nn.functional as F
@@ -106,7 +107,7 @@ def compute_qre(
     s1 = torch.ones(game.num_actions_1) / game.num_actions_1
     s2 = torch.ones(game.num_actions_2) / game.num_actions_2
 
-    for i in range(max_iter):
+    for i in range(max_iter):  # noqa: B007  (used after loop)
         s1_new = logit_qre_response(game.payoff_1, s2, rationality)
         s2_new = logit_qre_response(game.payoff_2.T, s1_new, rationality)
 
@@ -186,9 +187,12 @@ def verify_qre(
     s1_expected = logit_qre_response(game.payoff_1, strategy_2, rationality)
     s2_expected = logit_qre_response(game.payoff_2.T, strategy_1, rationality)
 
-    return (
-        torch.norm(strategy_1 - s1_expected).item() < tol
-        and torch.norm(strategy_2 - s2_expected).item() < tol
+    return cast(
+        bool,
+        (
+            torch.norm(strategy_1 - s1_expected).item() < tol
+            and torch.norm(strategy_2 - s2_expected).item() < tol
+        ),
     )
 
 

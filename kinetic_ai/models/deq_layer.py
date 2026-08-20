@@ -34,7 +34,8 @@ References:
 
 from __future__ import annotations
 
-from typing import Callable
+from collections.abc import Callable
+from typing import cast
 
 import torch
 import torch.autograd as autograd
@@ -42,7 +43,6 @@ import torch.nn as nn
 from torch import Tensor
 
 from kinetic_ai.config import DEQConfig, SolverType
-
 
 # ---------------------------------------------------------------------------
 # Fixed-point solvers
@@ -63,7 +63,7 @@ def _picard_iteration(
     z = z_init.clone()
     residuals: list[float] = []
 
-    for i in range(max_iter):
+    for i in range(max_iter):  # noqa: B007  (used after loop)
         z_next = f(z, x)
         residual = torch.norm(z_next - z).item()
         residuals.append(residual)
@@ -117,7 +117,7 @@ def _anderson_acceleration(
 
     residuals: list[float] = []
 
-    for k in range(max_iter):
+    for k in range(max_iter):  # noqa: B007  (used after loop)
         f_z = f(z.reshape(z_init.shape), x).reshape(bsz, flat_dim)
         g_z = f_z - z_flat  # residual
 
@@ -219,7 +219,7 @@ def _broyden_solver(
     J_inv = -torch.eye(flat_dim, device=z.device, dtype=z.dtype).unsqueeze(0)
     J_inv = J_inv.expand(bsz, -1, -1).clone()
 
-    for k in range(max_iter):
+    for k in range(max_iter):  # noqa: B007  (used after loop)
         if residuals[-1] < tol:
             break
 
@@ -250,11 +250,14 @@ def _broyden_solver(
         mask = denom.abs() > 1e-12
         if mask.any():
             # J_inv += (u ⊗ (Δz^T @ J_inv)) / denom
+            # The mask ensures |denom| > 1e-12, so we can divide safely.
+            # Importantly, we do NOT clamp the denominator, which would flip
+            # the sign for negative values and violate Sherman-Morrison formula.
             numerator = torch.bmm(
                 u.unsqueeze(-1),
                 torch.bmm(delta_z.unsqueeze(1), J_inv),
             )
-            J_inv = J_inv + numerator / denom.unsqueeze(-1).unsqueeze(-1).clamp(min=1e-12)
+            J_inv = J_inv + numerator / denom.unsqueeze(-1).unsqueeze(-1)
 
         z = z_new
         g = g_new
@@ -331,7 +334,7 @@ class DEQFixedPoint(autograd.Function):
         If jfb=True, we use the Jacobian-Free Backprop approximation
         (just use grad_output directly, skipping the linear solve).
         """
-        z_star, x = ctx.saved_tensors
+        z_star, x = ctx.saved_tensors  # type: ignore[attr-defined]
         func = ctx.func  # type: ignore[attr-defined]
         jfb = ctx.jfb  # type: ignore[attr-defined]
 
@@ -425,16 +428,44 @@ class DEQLayer(nn.Module):
             test_out = self.func(z_init, x)
             z_init = torch.zeros_like(test_out)
 
-        z_star = DEQFixedPoint.apply(
-            self.func,
-            x,
-            z_init,
-            self.config.solver,
-            self.config.max_iter,
-            self.config.tol,
-            self.config.anderson_m,
-            self.config.anderson_beta,
-            self.config.jfb,
+            # Call solver directly to capture solver diagnostics
+            if self.config.solver == SolverType.ANDERSON:
+                z_star, info = _anderson_acceleration(
+                    self.func,
+                    x,
+                    z_init,
+                    self.config.max_iter,
+                    self.config.tol,
+                    m=self.config.anderson_m,
+                    beta=self.config.anderson_beta,
+                )
+            elif self.config.solver == SolverType.BROYDEN:
+                z_star, info = _broyden_solver(
+                    self.func, x, z_init, self.config.max_iter, self.config.tol
+                )
+            else:  # PICARD
+                z_star, info = _picard_iteration(
+                    self.func, x, z_init, self.config.max_iter, self.config.tol
+                )
+
+            # Store solver info for external inspection
+            self.last_info = info
+
+        # Apply DEQFixedPoint for autograd (it will re-solve to be safe,
+        # but could be optimized to reuse z_star)
+        z_star = cast(
+            Tensor,
+            DEQFixedPoint.apply(
+                self.func,
+                x,
+                z_init,
+                self.config.solver,
+                self.config.max_iter,
+                self.config.tol,
+                self.config.anderson_m,
+                self.config.anderson_beta,
+                self.config.jfb,
+            ),
         )
 
         return z_star

@@ -109,21 +109,24 @@ class TestPositiveConcaveBlock:
 class TestVerifyPositiveConcave:
     """Tests for the verification utility."""
 
-    def test_relu_is_not_concave(self) -> None:
-        """ReLU is convex, not concave — should fail concavity check."""
+    def test_strictly_convex_fails_concavity(self) -> None:
+        """Strictly convex quadratic should fail concavity check.
 
-        def relu_transform(z: torch.Tensor, x: torch.Tensor) -> torch.Tensor:
-            combined = torch.cat([z, x], dim=-1)
-            # Linear with all-positive weights + ReLU (convex)
-            w = torch.ones(z.shape[-1], combined.shape[-1]).abs()
-            return torch.relu(combined @ w.T)
+        Tests that verify_positive_concave correctly identifies functions
+        that violate concavity. A quadratic f(z) = z^2 is strictly convex,
+        not concave, and should fail the midpoint concavity test:
+            f((z1+z2)/2) < (f(z1)+f(z2))/2  for strict convexity
+        """
 
-        result = verify_positive_concave(relu_transform, z_dim=3, x_dim=2, n_tests=100)
-        # ReLU is piecewise linear and convex, NOT concave
-        # The verification should catch this in most cases
-        # (Note: ReLU is actually both convex and concave on each linear piece,
-        #  so it might pass depending on the test points. The key test is above
-        #  with PositiveConcaveBlock.)
+        def quadratic_transform(z: torch.Tensor, x: torch.Tensor) -> torch.Tensor:
+            # Strictly convex: f(z) = z^2 + 0.1 (ignoring x)
+            return z ** 2 + 0.1
+
+        result = verify_positive_concave(quadratic_transform, z_dim=3, x_dim=2, n_tests=100)
+        assert not result["concave"], (
+            "Quadratic (strictly convex) should fail concavity check. "
+            f"Got result={result}"
+        )
 
     def test_identity_fails_concavity(self) -> None:
         """A quadratic (convex) transform should fail concavity."""

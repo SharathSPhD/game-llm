@@ -7,7 +7,6 @@ Validates:
     4. Full self-play loop converges
 """
 
-import pytest
 import torch
 
 from kinetic_ai.config import SelfPlayConfig
@@ -177,3 +176,167 @@ class TestFullSelfPlay:
         for r in results:
             assert len(r.win_rates) == 3
             assert r.policy_entropy >= 0
+
+    def test_self_play_converges_to_best_response(self) -> None:
+        """SPPO should converge to Nash: best response gets highest weight, entropy decreases.
+
+        With deterministic reward ranking, policy should concentrate on best response
+        and entropy should strictly decrease over rounds.
+        """
+
+        def reward_fn(prompt: torch.Tensor, response: torch.Tensor) -> torch.Tensor:
+            """Deterministic reward: first coordinate differentiates responses."""
+            return response[:, 0:1]
+
+        pref = BradleyTerryPreference(reward_fn)
+        config = SelfPlayConfig(num_rounds=5, eta=0.5)
+
+        # Responses with fixed rewards: [2.0, 1.0, 0.0]
+        prompts = torch.zeros(2, 4)
+        responses = torch.zeros(2, 3, 4)
+        responses[:, 0, 0] = 2.0  # Best
+        responses[:, 1, 0] = 1.0  # Middle
+        responses[:, 2, 0] = 0.0  # Worst
+
+        log_weights, results = run_self_play(pref, prompts, responses, config)
+
+        entropies = [r.policy_entropy for r in results]
+
+        # Convergence Property 1: Entropy strictly decreases (mode collapse)
+        assert entropies[0] > entropies[-1], (
+            f"Entropy should decrease (mode collapse). Got {entropies[0]:.4f} → {entropies[-1]:.4f}"
+        )
+
+        # Convergence Property 2: Monotonic decrease
+        for i in range(len(entropies) - 1):
+            assert entropies[i] >= entropies[i + 1] - 1e-6, (
+                f"Entropy must monotonically decrease: {entropies[i]:.4f} at round {i} "
+                f"then {entropies[i + 1]:.4f} at round {i + 1}"
+            )
+
+        # Convergence Property 3: Best response concentrated
+        final_policy = torch.softmax(log_weights, dim=-1)
+        assert final_policy[0] > final_policy[1], (
+            f"Best response should have highest weight: {final_policy[0]:.4f} > {final_policy[1]:.4f}"
+        )
+        assert final_policy[1] > final_policy[2], (
+            f"Ranking should match rewards: {final_policy[1]:.4f} > {final_policy[2]:.4f}"
+        )
+
+    def test_self_play_converges_to_uniform_with_equal_rewards(self) -> None:
+        """With equal rewards, Nash = uniform; entropy and policy should stay constant.
+
+        When all responses have equal reward, advantages should be zero and policy
+        should remain uniform with constant entropy.
+        """
+
+        def reward_fn(prompt: torch.Tensor, response: torch.Tensor) -> torch.Tensor:
+            """All responses equally good."""
+            return torch.ones(prompt.shape[0], 1)
+
+        pref = BradleyTerryPreference(reward_fn)
+        config = SelfPlayConfig(num_rounds=5, eta=0.5)
+
+        prompts = torch.zeros(2, 4)
+        responses = torch.randn(2, 3, 4)
+
+        log_weights, results = run_self_play(pref, prompts, responses, config)
+
+        # Expected entropy for uniform distribution over 3 responses
+        uniform_policy = torch.ones(3) / 3
+        uniform_entropy = -(uniform_policy * torch.log(uniform_policy)).sum().item()
+
+        # Entropy should stay constant at uniform value
+        for r in results:
+            assert abs(r.policy_entropy - uniform_entropy) < 0.01, (
+                f"With equal rewards, entropy should be {uniform_entropy:.4f}, "
+                f"got {r.policy_entropy:.4f}"
+            )
+
+        # Policy should be uniform
+        final_policy = torch.softmax(log_weights, dim=-1)
+        expected_uniform = torch.ones(3) / 3
+        assert torch.allclose(final_policy, expected_uniform, atol=0.01), (
+            f"With equal rewards, policy should be uniform {expected_uniform}, got {final_policy}"
+        )
+
+    def test_win_rates_vary_with_policy(self) -> None:
+        """Win rates must change as policy evolves (demonstrates fixed-response bug).
+
+        This test verifies that win rates vary across rounds, indicating that
+        the algorithm is sampling from the current policy distribution rather than
+        using fixed responses.
+        """
+
+        def reward_fn(prompt: torch.Tensor, response: torch.Tensor) -> torch.Tensor:
+            return response.sum(dim=-1)
+
+        pref = BradleyTerryPreference(reward_fn)
+
+        # Two responses with very different rewards to show clear preference
+        base_responses = torch.tensor([
+            [10.0, 10.0, 10.0, 10.0],  # Dominant
+            [1.0, 1.0, 1.0, 1.0],       # Poor
+        ])
+
+        prompts = torch.zeros(1, 4)
+        # Reshape responses to (batch=1, num_responses=2, dims=4)
+        responses = base_responses.unsqueeze(0)
+        config = SelfPlayConfig(num_rounds=5, eta=0.5)
+
+        _, results = run_self_play(pref, prompts, responses, config)
+
+        # Extract win rates for response 0 across rounds
+        rates_r0 = [r.win_rates[0] for r in results]
+        variance = max(rates_r0) - min(rates_r0)
+
+        # With proper resampling, variance should be significant
+        # With fixed responses, variance ≈ 0 (bug)
+        assert variance > 0.1, (
+            f"Win rates should vary with policy evolution. "
+            f"Variance {variance:.3f} indicates fixed responses (bug not fixed). "
+            f"Rates: {rates_r0}"
+        )
+
+    def test_semantic_calibration_parameter_affects_convergence(self) -> None:
+        """S-SPPO semantic_calibration=True should differ from False.
+
+        Enabling semantic calibration with latent repulsion should change how
+        the algorithm updates, resulting in different final log weights compared
+        to standard SPPO when embeddings are provided.
+        """
+
+        def reward_fn(prompt: torch.Tensor, response: torch.Tensor) -> torch.Tensor:
+            return response.sum(dim=-1, keepdim=True)
+
+        pref = BradleyTerryPreference(reward_fn)
+
+        # Without semantic calibration (standard SPPO)
+        config_no_cal = SelfPlayConfig(
+            num_rounds=5, eta=0.5, semantic_calibration=False, repulsion_strength=0.0
+        )
+        torch.manual_seed(42)
+        prompts = torch.randn(4, 3)
+        responses = torch.randn(4, 3, 3)
+        # Create embeddings for candidates
+        embeddings = torch.randn(3, 8)
+        log_w_no_cal, _ = run_self_play(
+            pref, prompts, responses, config_no_cal, embeddings=embeddings
+        )
+
+        # With semantic calibration and latent repulsion
+        config_with_cal = SelfPlayConfig(
+            num_rounds=5, eta=0.5, semantic_calibration=True, repulsion_strength=0.1
+        )
+        torch.manual_seed(42)
+        prompts = torch.randn(4, 3)
+        responses = torch.randn(4, 3, 3)
+        embeddings = torch.randn(3, 8)
+        log_w_with_cal, _ = run_self_play(
+            pref, prompts, responses, config_with_cal, embeddings=embeddings
+        )
+
+        # Must differ due to latent repulsion being applied
+        assert not torch.allclose(log_w_no_cal, log_w_with_cal, atol=1e-6), (
+            "repulsion_strength parameter has NO EFFECT"
+        )

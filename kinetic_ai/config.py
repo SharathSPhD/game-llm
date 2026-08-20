@@ -9,7 +9,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from enum import Enum
 from pathlib import Path
-from typing import Any
+from typing import Any, cast, get_type_hints
 
 import yaml
 
@@ -155,14 +155,14 @@ class ExperimentConfig:
         """Deserialize config from YAML file."""
         with open(path) as f:
             data = yaml.safe_load(f)
-        return _dict_to_config(data, cls)
+        return cast(ExperimentConfig, _dict_to_config(data, cls))
 
 
 def _dataclass_to_dict(obj: Any) -> Any:
     """Recursively convert a dataclass to a dict, handling enums."""
     if hasattr(obj, "__dataclass_fields__"):
         result = {}
-        for k, v in obj.__dataclass_fields__.items():
+        for k, _v in obj.__dataclass_fields__.items():
             result[k] = _dataclass_to_dict(getattr(obj, k))
         return result
     elif isinstance(obj, Enum):
@@ -173,19 +173,22 @@ def _dataclass_to_dict(obj: Any) -> Any:
 
 
 def _dict_to_config(data: dict[str, Any], cls: type) -> Any:
-    """Recursively reconstruct a dataclass from a dict."""
+    """Recursively reconstruct a dataclass from a dict.
+
+    Uses get_type_hints() for safe type annotation resolution, which handles
+    forward references and string annotations without eval().
+    """
     if data is None:
         return cls()
 
-    field_types = {f.name: f.type for f in cls.__dataclass_fields__.values()}  # type: ignore[attr-defined]
+    # get_type_hints() safely resolves string annotations from __future__ import
+    field_types = get_type_hints(cls)
     kwargs = {}
     for key, value in data.items():
         if key not in field_types:
             continue
         ft = field_types[key]
-        # Resolve string annotations
-        if isinstance(ft, str):
-            ft = eval(ft)  # noqa: S307
+        # Type annotations are already resolved by get_type_hints()
         if hasattr(ft, "__dataclass_fields__"):
             kwargs[key] = _dict_to_config(value, ft)
         elif isinstance(ft, type) and issubclass(ft, Enum):

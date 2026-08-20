@@ -24,7 +24,8 @@ References:
 
 from __future__ import annotations
 
-from typing import Callable
+from collections.abc import Callable
+from typing import cast
 
 import torch
 import torch.nn as nn
@@ -160,7 +161,7 @@ class PositiveConcaveBlock(nn.Module):
             Updated state. Shape: (batch, hidden_dim)
         """
         combined = torch.cat([z, x], dim=-1)
-        return self.activation(self.linear(combined))
+        return cast(Tensor, self.activation(self.linear(combined)))
 
 
 def verify_positive_concave(

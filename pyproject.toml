@@ -43,6 +43,7 @@ dependencies = [
 dev = [
     "pytest>=7.0",
     "pytest-cov>=4.0",
+    "types-PyYAML",
     "mypy>=1.0",
     "ruff>=0.1.0",
 ]
@@ -72,11 +73,19 @@ markers = [
 ]
 
 [tool.mypy]
-python_version = "3.10"
+python_version = "3.12"  # analysis version; numpy>=2 stubs need 3.12 `type` statements
 warn_return_any = true
 warn_unused_configs = true
 disallow_untyped_defs = true
 check_untyped_defs = true
+
+[[tool.mypy.overrides]]
+module = ["scipy.*"]
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = ["yaml"]
+ignore_missing_imports = true
 
 [tool.ruff]
 target-version = "py310"
@@ -84,4 +93,4 @@ line-length = 100
 
 [tool.ruff.lint]
 select = ["E", "F", "W", "I", "N", "UP", "B", "SIM"]
-ignore = ["E501"]
+ignore = ["E501", "N806", "N812"]  # uppercase math vars & torch F import are idiomatic in numerical code

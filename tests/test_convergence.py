@@ -9,8 +9,6 @@ Validates:
 """
 
 import numpy as np
-import pytest
-import torch
 
 from kinetic_ai.eval.convergence import (
     ConvergenceTracker,
@@ -94,18 +92,93 @@ class TestConvergenceTracker:
         # Recent window should show better linear fit
         assert result_recent.r_squared > result_all.r_squared
 
+    def test_rate_within_theoretical_bounds(self) -> None:
+        """Verify convergence rate matches expected theoretical O(η·τ) prediction.
+
+        This test ensures that linear convergence is not just exponential decay,
+        but decay at the theoretically predicted rate. A convergence tracker with
+        exponential decay at rate r should validate only if r matches theory.
+
+        Theory: For mirror descent with magnetic regularization, the convergence
+        rate should be O(η·τ) where η is stepsize and τ is magnetic strength.
+        """
+        # Scenario: theoretical rate = η·τ = 0.3 * 0.01 = 0.003
+        eta = 0.3
+        tau = 0.01
+        theory_rate = eta * tau
+        theory_upper_bound = theory_rate * 10  # Allow 10x variation
+
+        # Case 1: Empirical rate matches theory (should validate)
+        tracker_good = ConvergenceTracker()
+        for t in range(100):
+            tracker_good.log(step=t, exploitability=np.exp(-theory_rate * t))
+
+        result_good = tracker_good.estimate_convergence_rate("exploitability")
+        # Should detect exponential decay
+        assert result_good.r_squared > 0.95, "Should detect exponential decay"
+        # Rate should be close to theory
+        assert abs(result_good.rate - theory_rate) < theory_rate * 0.1, (
+            f"Rate {result_good.rate} should be close to theory {theory_rate}"
+        )
+
+        # Case 2: Exponential decay but rate way too fast (should fail validation)
+        tracker_bad = ConvergenceTracker()
+        empirical_rate_wrong = 0.5  # 166x too fast
+        for t in range(100):
+            tracker_bad.log(step=t, exploitability=np.exp(-empirical_rate_wrong * t))
+
+        result_bad = tracker_bad.estimate_convergence_rate("exploitability")
+        # Should detect exponential decay (R² is good)
+        assert result_bad.r_squared > 0.95, "Should detect exponential decay"
+        # But rate is way outside theory bounds
+        assert result_bad.rate > theory_upper_bound, (
+            f"Rate {result_bad.rate} should be > theoretical upper bound {theory_upper_bound}"
+        )
+
+        # Case 3: Too slow (below theory) also fails
+        tracker_slow = ConvergenceTracker()
+        empirical_rate_slow = 0.00001  # 300x too slow
+        for t in range(100):
+            tracker_slow.log(step=t, exploitability=np.exp(-empirical_rate_slow * t))
+
+        result_slow = tracker_slow.estimate_convergence_rate("exploitability")
+        assert result_slow.r_squared > 0.95, "Should detect exponential decay"
+        assert result_slow.rate < theory_rate / 100, (
+            f"Rate {result_slow.rate} should be << theoretical lower bound {theory_rate}"
+        )
+
 
 class TestBootstrapCI:
     """Tests for bootstrap confidence intervals."""
 
-    def test_ci_contains_true_mean(self) -> None:
-        """CI should contain the true mean with high probability."""
-        rng = np.random.default_rng(42)
-        true_mean = 5.0
-        data = rng.normal(true_mean, 1.0, size=100)
+    def test_bootstrap_ci_coverage_probability(self) -> None:
+        """Bootstrap CI should achieve ~95% coverage over repeated experiments.
 
-        result = bootstrap_ci(data, confidence=0.95)
-        assert result.ci_lower <= true_mean <= result.ci_upper
+        NOT a guarantee that any single CI contains the true mean, but ~95% of
+        CIs should across repeated sampling. This validates the probabilistic
+        guarantee that defines a 95% confidence interval.
+        """
+        true_mean = 5.0
+        n_trials = 100
+        coverage_count = 0
+
+        # Repeat the experiment with different random samples
+        for seed in range(n_trials):
+            rng = np.random.default_rng(seed)
+            data = rng.normal(true_mean, 1.0, size=100)
+            result = bootstrap_ci(data, confidence=0.95, seed=seed)
+
+            if result.ci_lower <= true_mean <= result.ci_upper:
+                coverage_count += 1
+
+        coverage_rate = coverage_count / n_trials
+
+        # Allow statistical margin: 95% ± 1.96*sqrt(0.95*0.05/100) ≈ ±4.3%
+        # Expect 88-100 successes out of 100 trials
+        assert 0.88 <= coverage_rate <= 1.0, (
+            f"Coverage rate {coverage_rate:.1%} outside expected range [88%, 100%]. "
+            f"95% CI should contain true mean in ~95 of 100 experiments."
+        )
 
     def test_wider_ci_for_lower_confidence(self) -> None:
         """99% CI should be wider than 90% CI."""
@@ -147,6 +220,61 @@ class TestWilcoxon:
         b = [1.5, 2.5, 3.5, 4.5, 5.5]
         result = wilcoxon_signed_rank(a, b)
         assert result.effect_size >= 0
+
+    def test_wilcoxon_small_n_matches_scipy_exact(self) -> None:
+        """Wilcoxon p-value must match scipy exact for all n, especially n < 10."""
+        import scipy.stats
+
+        # Test case from defect report: n=5 with uniform differences
+        a = np.array([1.0, 2.0, 3.0, 4.0, 5.0])
+        b = a + 0.5
+
+        result = wilcoxon_signed_rank(a, b, alpha=0.05)
+        scipy_exact = scipy.stats.wilcoxon(a, b, alternative="two-sided", method="exact")
+
+        # Core assertion: p-values must match (allowing small numerical tolerance)
+        np.testing.assert_allclose(
+            result.p_value,
+            scipy_exact.pvalue,
+            rtol=1e-5,
+            err_msg=f"n=5 approximation error too large: {abs(result.p_value - scipy_exact.pvalue)}",
+        )
+
+        # Critical: significance decision must match
+        assert result.significant == (scipy_exact.pvalue < result.alpha), (
+            f"n=5 disagreement on significance: our p={result.p_value:.6f}, "
+            f"scipy p={scipy_exact.pvalue:.6f}"
+        )
+
+        # Test boundary cases n=5,7,9,10,15,20
+        for n in [5, 7, 9, 10, 15, 20]:
+            a = np.arange(1.0, n + 1.0)
+            b = a + 0.5  # Uniform difference
+
+            result = wilcoxon_signed_rank(a, b, alpha=0.05)
+            scipy_exact = scipy.stats.wilcoxon(a, b, alternative="two-sided", method="exact")
+
+            # For all n, p-values and significance must match.
+            # Use looser tolerance for extreme p-values where relative error is large.
+            if scipy_exact.pvalue < 1e-4:
+                # For very small p-values, use absolute tolerance
+                np.testing.assert_allclose(
+                    result.p_value,
+                    scipy_exact.pvalue,
+                    atol=1e-3,
+                    err_msg=f"n={n}: error = {abs(result.p_value - scipy_exact.pvalue)}",
+                )
+            else:
+                np.testing.assert_allclose(
+                    result.p_value,
+                    scipy_exact.pvalue,
+                    rtol=5e-3,
+                    err_msg=f"n={n}: error = {abs(result.p_value - scipy_exact.pvalue)}",
+                )
+            assert result.significant == (scipy_exact.pvalue < 0.05), (
+                f"n={n}: significance mismatch (ours={result.significant}, "
+                f"scipy={scipy_exact.pvalue < 0.05})"
+            )
 
 
 class TestPairedBootstrap:

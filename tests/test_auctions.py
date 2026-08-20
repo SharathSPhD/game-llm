@@ -64,6 +64,58 @@ class TestSecondPriceAuction:
         assert torch.all(result.output_distribution >= 0)
         assert torch.isclose(result.output_distribution.sum(), torch.tensor(1.0), atol=1e-5)
 
+    def test_second_price_respects_reserve_price(self) -> None:
+        """Winner must pay at least the reserve price in second-price auction.
+
+        Regression test for auctions-002: when second-highest bid falls below
+        reserve price (only one eligible bidder), winner still pays reserve.
+
+        Vickrey auction theory: payment = max(second_highest_bid, reserve_price)
+        """
+        config = AuctionConfig(
+            auction_type=AuctionType.SECOND_PRICE, vocab_size=5, reserve_price=2.0
+        )
+        auction = TokenAuction(config)
+
+        # Scenario: Only agent 1 qualifies (bid 2.5 >= reserve 2.0)
+        # Second-highest bid (1.5) is below reserve
+        bids = torch.tensor([1.0, 2.5, 1.5])
+        dists = torch.softmax(torch.randn(3, 5), dim=-1)
+
+        result = auction.run_auction(bids, dists)
+
+        # Agent 1 should win
+        assert result.winner_id == 1, "Highest bidder should win"
+
+        # Agent 1 must pay AT LEAST the reserve price (not the ineligible second-highest)
+        assert result.payments[1].item() >= config.reserve_price, (
+            f"Payment {result.payments[1].item()} must be >= reserve "
+            f"{config.reserve_price}"
+        )
+        assert result.payments[1].item() == pytest.approx(config.reserve_price), (
+            f"With only 1 eligible bidder, payment should equal reserve price "
+            f"{config.reserve_price}, got {result.payments[1].item()}"
+        )
+
+    def test_second_price_payment_equals_second_highest(self) -> None:
+        """Second-price auction payment equals second-highest eligible bid.
+
+        This is the key property that makes Vickrey truthful. With payment
+        independent of winner's own bid (only depends on others' bids),
+        truthful bidding becomes optimal.
+        """
+        bids = torch.tensor([1.0, 5.0, 3.0])
+        dists = torch.softmax(torch.randn(3, 5), dim=-1)
+
+        result = self.auction.run_auction(bids, dists)
+
+        # Winner should pay second-highest bid
+        assert result.payments[1].item() == pytest.approx(3.0)
+
+        # Non-winners should pay 0
+        assert result.payments[0].item() == pytest.approx(0.0)
+        assert result.payments[2].item() == pytest.approx(0.0)
+
 
 class TestWeightedAggregation:
     """Tests for the weighted distribution aggregation auction."""
@@ -139,6 +191,54 @@ class TestWeightedAggregation:
 
         result = auction.run_auction(bids, dists)
         assert result.winner_id == -1, "No winner when all bids below reserve"
+
+    def test_weighted_aggregation_not_truthful_with_vcg(self) -> None:
+        """Weighted aggregation with current VCG payments is NOT truthful.
+
+        Regression test for auctions-001: the current VCG payment formula uses
+        bids (not true valuations) in welfare calculations, violating IC.
+
+        This test documents that weighted aggregation with VCG is non-truthful.
+        Agents may find it profitable to overbid (or underbid) their true valuation.
+
+        For truthful weighted aggregation, a different payment rule is needed
+        (Duetting et al. 2024 discusses this carefully for monotone aggregation).
+        """
+        # Setup: orthogonal preferences
+        dists = torch.zeros(2, 5)
+        dists[0, 0] = 1.0  # Agent 0 prefers token 0
+        dists[1, 4] = 1.0  # Agent 1 prefers token 4
+
+        # Agent 0 has true valuation v0=2.0
+        v0 = 2.0
+        opponent_bid = 1.0
+
+        # Compute utility for different bids by agent 0
+        test_bids = torch.tensor([1.0, 2.0, 3.0, 4.0])
+        utilities = []
+
+        for b0 in test_bids:
+            bids = torch.tensor([b0.item(), opponent_bid])
+            result = self.auction.run_auction(bids, dists)
+            value = torch.dot(dists[0], result.output_distribution).item()
+            payment = result.payments[0].item()
+            utility = value - payment
+            utilities.append(utility)
+
+        # Find optimal bid
+        optimal_idx = torch.tensor(utilities).argmax().item()
+        optimal_bid = test_bids[optimal_idx].item()
+
+        # Under CURRENT (non-truthful) mechanism, optimal_bid != v0=2.0
+        # This documents the non-truthfulness; optimal bid is likely higher (overbidding)
+        is_truthful = abs(optimal_bid - v0) < 0.4
+        assert (
+            not is_truthful
+        ), (
+            f"Weighted aggregation with VCG is expected to be NON-TRUTHFUL. "
+            f"For v0={v0}, optimal bid is {optimal_bid} (should differ if non-truthful). "
+            f"This documents that the mechanism does not satisfy dominant-strategy IC."
+        )
 
 
 class TestSequentialAuction:

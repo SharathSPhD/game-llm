@@ -223,7 +223,6 @@ class KuhnPokerGame:
         Returns expected payoff for P1 (zero-sum, so P2 = -P1).
         """
         total_payoff = 0.0
-        total_prob = 0.0
 
         for c1 in self.CARDS:
             for c2 in self.CARDS:
@@ -269,17 +268,21 @@ class KuhnPokerGame:
                 # Path 5: P1 bets → P2 calls → Showdown (pot = 4)
                 payoff_5 = deal_prob * p1_bet_initial * p2_call * winner * 2
 
-                total_payoff += payoff_1 + payoff_2 + payoff_3 + payoff_4 + payoff_5
+                payoff_sum = payoff_1 + payoff_2 + payoff_3 + payoff_4 + payoff_5
+                total_payoff += float(payoff_sum.item()) if isinstance(payoff_sum, Tensor) else payoff_sum
 
         return total_payoff
 
     def nash_equilibrium_p1(self) -> Tensor:
         """Return the known Nash equilibrium strategy for Player 1.
 
-        Kuhn (1950): P1's optimal strategy:
-            - J: bet with prob 1/3 (bluff), check-fold always
-            - Q: always check, call with prob 1/3
-            - K: bet with prob 3× (value bet), always call
+        Kuhn (1950): P1's optimal strategy (symmetric Nash):
+            - J: bet with prob 1/3 (bluff), fold always after P2 bets
+            - Q: check always, call with prob 1/3 after P2 bets
+            - K: bet with prob 1 (value bet), call always
+
+        The symmetric Nash has both players using identical strategies.
+        This produces game value of -1/18 for P1 (zero-sum).
 
         Note: There's a family of NE parameterized by α ∈ [0, 1/3].
         This returns the one with α = 1/3.
@@ -294,12 +297,24 @@ class KuhnPokerGame:
 
         # Q initial: always check
         strategy[2 * 2 + 1] = 0.0
-        # Q facing bet: call with prob 1/3
-        strategy[3 * 2 + 1] = 1.0 / 3.0
+        # Q facing bet: call with prob alpha
+        strategy[3 * 2 + 1] = alpha
 
-        # K initial: bet with prob 3*alpha = 1
-        strategy[4 * 2 + 1] = 3.0 * alpha
+        # K initial: bet with prob 1 (always bet)
+        strategy[4 * 2 + 1] = 1.0
         # K facing bet: always call
         strategy[5 * 2 + 1] = 1.0
 
         return strategy
+
+    def nash_equilibrium_p2(self) -> Tensor:
+        """Return the known Nash equilibrium strategy for Player 2.
+
+        In the symmetric Kuhn poker Nash equilibrium, both players use
+        the same behavioral strategy. This method returns the same strategy
+        as nash_equilibrium_p1() for use by Player 2.
+
+        Returns:
+            Strategy tensor for Player 2 (identical to Player 1's).
+        """
+        return self.nash_equilibrium_p1().clone()

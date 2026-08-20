@@ -10,8 +10,14 @@ This script demonstrates the full Kinetic AI pipeline:
 Unlike the original simulate.py which used arbitrary utility functions,
 this simulation has proper game-theoretic structure: defined payoff matrices,
 dual-space mirror descent updates, and verified equilibrium convergence.
+
+Random seed support: --seed argument (default: None, random initialization).
 """
 
+import argparse
+import random
+
+import numpy as np
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
@@ -24,8 +30,8 @@ from kinetic_ai.config import (
     MMDConfig,
     SolverType,
 )
-from kinetic_ai.eval.convergence import ConvergenceTracker, verify_linear_convergence
-from kinetic_ai.games.payoff import matching_pennies, rock_paper_scissors
+from kinetic_ai.eval.convergence import ConvergenceTracker
+from kinetic_ai.games.payoff import rock_paper_scissors
 from kinetic_ai.games.qre import compute_qre, nash_conv
 from kinetic_ai.mechanisms.auctions import TokenAuction
 from kinetic_ai.models.deq_layer import DEQLayer
@@ -56,7 +62,7 @@ def run_strategy_space_mmd(num_steps: int = 500) -> None:
     lr = 0.3
     tau = 0.05
 
-    print(f"Initial strategies:")
+    print("Initial strategies:")
     print(f"  P1: {s1.numpy()}")
     print(f"  P2: {s2.numpy()}")
     print(f"  NashConv: {nash_conv(game, s1, s2):.6f}")
@@ -81,7 +87,7 @@ def run_strategy_space_mmd(num_steps: int = 500) -> None:
     final_nc = nash_conv(game, s1, s2)
     rate_result = tracker.estimate_convergence_rate("exploitability")
 
-    print(f"\nFinal Results:")
+    print("\nFinal Results:")
     print(f"  P1 strategy: {s1.numpy()}")
     print(f"  P2 strategy: {s2.numpy()}")
     print(f"  NashConv: {final_nc:.6f}")
@@ -165,7 +171,7 @@ def run_deq_agent_demo() -> None:
         probs = F.softmax(logits, dim=-1)
         bid = F.softplus(bid_head(z_star))
 
-    print(f"\nFinal agent output:")
+    print("\nFinal agent output:")
     print(f"  P(token {target_token}): {probs[0, target_token].item():.4f}")
     print(f"  Top token: {torch.argmax(probs).item()}")
     print(f"  Bid value: {bid.item():.4f}")
@@ -222,9 +228,9 @@ def run_auction_demo() -> None:
     wa_auction = TokenAuction(wa_config)
     wa_result = wa_auction.run_auction(bids, torch.stack([probs1, probs2]))
 
-    print(f"  Output distribution (top 3):")
+    print("  Output distribution (top 3):")
     top_probs, top_ids = torch.topk(wa_result.output_distribution, 3)
-    for prob, idx in zip(top_probs, top_ids):
+    for prob, idx in zip(top_probs, top_ids, strict=False):
         print(f"    Token {idx.item()}: {prob.item():.4f}")
     print(f"  Selected token: {wa_result.sampled_token}")
     print(f"  VCG payments: Agent 1={wa_result.payments[0]:.4f}, Agent 2={wa_result.payments[1]:.4f}")
@@ -232,8 +238,27 @@ def run_auction_demo() -> None:
 
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser(
+        description="Kinetic AI full pipeline simulation"
+    )
+    parser.add_argument(
+        "--seed",
+        type=int,
+        default=None,
+        help="Random seed for reproducibility (default: None for random initialization)",
+    )
+    args = parser.parse_args()
+
+    # Set random seeds if provided
+    if args.seed is not None:
+        torch.manual_seed(args.seed)
+        np.random.seed(args.seed)
+        random.seed(args.seed)
+
     print("╔══════════════════════════════════════════════════════════╗")
     print("║          Kinetic AI — Full Pipeline Simulation          ║")
+    if args.seed is not None:
+        print(f"║           Seed: {args.seed:<43} ║")
     print("╚══════════════════════════════════════════════════════════╝")
     print()
 

@@ -9,6 +9,7 @@ Mathematical Formulation:
 
     Magnetic Mirror Descent adds a magnetic regularization:
         y_{t+1} = ∇Φ(x_t) - η · g_t - η · τ · (∇Φ(x_t) - ∇Φ(x_ref))
+                = (1 - η·τ)·∇Φ(x_t) - η·g_t + η·τ·∇Φ(x_ref)
 
     Primal recovery:
         x_{t+1} = ∇Φ*(y_{t+1})
@@ -29,10 +30,18 @@ Mathematical Formulation:
             log(x_{t+1}) ∝ (1 - η·τ)·log(x_t) - η·g_t + η·τ·log(x_ref)
             x_{t+1} = softmax of the above
 
-    Key Property:
-        MMD converges LINEARLY to the Quantal Response Equilibrium (QRE)
-        in extensive-form games. This is the first result of its kind for
-        a first-order method in EFGs.
+    Convergence Properties (Sokota et al. 2023):
+        With FIXED reference x_ref:
+            MMD converges linearly to the τ-regularized QRE with rationality λ = 1/τ.
+
+        With PERIODIC reference updates (Regularized Nash Dynamics):
+            The sequence of τ-regularized QRE fixed points traces a path toward
+            the unregularized Nash Equilibrium as reference resets occur.
+
+        Stepsize Conditions:
+            For convergence on zero-sum games with simultaneous updates:
+            η must be sufficiently small relative to τ and game structure.
+            Sequential (alternating) updates enable larger stepsizes.
 
 Two Operating Modes:
     1. Strategy-space mode: Directly optimizes probability distributions
@@ -49,7 +58,8 @@ References:
 
 from __future__ import annotations
 
-from typing import Iterator
+from collections.abc import Callable, Iterator
+from typing import overload
 
 import torch
 from torch import Tensor
@@ -165,8 +175,14 @@ class MagneticMirrorDescent(Optimizer):
                 self._reference_state[idx] = p.detach().clone()
                 idx += 1
 
+    @overload
+    def step(self, closure: None = None) -> None: ...
+
+    @overload
+    def step(self, closure: Callable[[], float]) -> float: ...
+
     @torch.no_grad()
-    def step(self, closure: object = None) -> Tensor | None:
+    def step(self, closure: Callable[[], float] | None = None) -> float | None:
         """Perform a single MMD optimization step.
 
         The update rule in parameter space:
@@ -177,10 +193,12 @@ class MagneticMirrorDescent(Optimizer):
                        = (1 - η·τ)·y_t - η·g_t + η·τ·y_ref
             4. Primal recovery: θ_{t+1} = ∇Φ*(y_{t+1})
         """
-        loss = None
+        loss: float | None = None
         if closure is not None:
             with torch.enable_grad():
-                loss = closure()  # type: ignore[operator]
+                loss_result = closure()
+                # Convert Tensor result to float if needed
+                loss = float(loss_result.item()) if isinstance(loss_result, Tensor) else loss_result
 
         ref_idx = 0
         for group in self.param_groups:

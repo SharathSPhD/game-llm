@@ -5,7 +5,6 @@ import torch
 
 from kinetic_ai.games.payoff import (
     KuhnPokerGame,
-    coordination_game,
     matching_pennies,
     prisoners_dilemma,
     rock_paper_scissors,
@@ -111,10 +110,12 @@ class TestQREPath:
         results = qre_path(game, rationality_values=lambdas)
 
         # At matching pennies, Nash and QRE coincide, so NashConv
-        # should be small for all λ. But the trend should be towards 0.
+        # should be small for all λ. But the trend should be monotonically decreasing.
         assert len(results) == 4
-        # Last result (highest λ) should have lowest NashConv
-        assert results[-1].nash_conv <= results[0].nash_conv + 0.01
+        # Strict monotonicity: NashConv must decrease as λ increases
+        for i in range(len(results) - 1):
+            assert results[i].nash_conv >= results[i+1].nash_conv, \
+                f"NashConv not monotonic at index {i}: {results[i].nash_conv} < {results[i+1].nash_conv}"
 
 
 class TestKuhnPoker:
@@ -129,9 +130,17 @@ class TestKuhnPoker:
     def test_nash_equilibrium_value(self) -> None:
         """Kuhn poker has known game value of -1/18 for P1."""
         game = KuhnPokerGame()
-        ne = game.nash_equilibrium_p1()
+        p1_strat = game.nash_equilibrium_p1()
+        p2_strat = game.nash_equilibrium_p2()
 
-        # The Nash equilibrium strategy should be valid
-        assert len(ne) == 12
-        assert torch.all(ne >= 0)
-        assert torch.all(ne <= 1)
+        # Verify strategies are valid
+        assert len(p1_strat) == 12
+        assert torch.all(p1_strat >= 0)
+        assert torch.all(p1_strat <= 1)
+        assert len(p2_strat) == 12
+        assert torch.all(p2_strat >= 0)
+        assert torch.all(p2_strat <= 1)
+
+        # Verify the Nash equilibrium value
+        payoff = game.evaluate(p1_strat, p2_strat)
+        assert payoff == pytest.approx(-1/18, abs=1e-4)

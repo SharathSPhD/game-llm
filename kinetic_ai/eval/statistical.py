@@ -133,6 +133,8 @@ def wilcoxon_signed_rank(
     Non-parametric test that doesn't assume normal distributions.
     Tests whether the median of differences is zero.
 
+    Uses exact p-values for n <= 10 and normal approximation for n > 10.
+
     Args:
         method_a: Observations from method A (e.g., final exploitability
             across 10 seeds).
@@ -143,6 +145,8 @@ def wilcoxon_signed_rank(
     Returns:
         PairedTestResult with test statistics and significance.
     """
+    import scipy.stats
+
     a = np.asarray(method_a, dtype=np.float64)
     b = np.asarray(method_b, dtype=np.float64)
 
@@ -168,40 +172,55 @@ def wilcoxon_signed_rank(
             test_name="wilcoxon_signed_rank",
         )
 
-    # Rank the absolute differences
-    abs_d = np.abs(d)
-    ranks = _rank(abs_d)
-
-    # Signed ranks
-    positive_ranks = ranks[d > 0].sum()
-    negative_ranks = ranks[d < 0].sum()
-
-    # Test statistic: W = min(W+, W-)
-    w_plus = positive_ranks
-    w_minus = negative_ranks
-
-    if alternative == "two-sided":
-        w_stat = min(w_plus, w_minus)
-    elif alternative == "greater":
-        w_stat = w_minus  # Small W- means A > B
-    else:  # "less"
-        w_stat = w_plus  # Small W+ means A < B
-
-    # Normal approximation for p-value (valid for n >= 10)
-    mean_w = n_eff * (n_eff + 1) / 4
-    std_w = np.sqrt(n_eff * (n_eff + 1) * (2 * n_eff + 1) / 24)
-
-    if std_w > 0:
-        z = (w_stat - mean_w) / std_w
-        if alternative == "two-sided":
-            p_value = 2 * _normal_cdf(-abs(z))
-        else:
-            p_value = _normal_cdf(z)
+    # For small n (n <= 10), use scipy's exact method for better accuracy
+    if n_eff <= 10:
+        scipy_result = scipy.stats.wilcoxon(d, alternative=alternative, method="exact")
+        p_value = float(scipy_result.pvalue)
+        w_stat = float(scipy_result.statistic) if scipy_result.statistic is not None else 0.0
     else:
-        p_value = 1.0
+        # For n >= 10, use normal approximation
+        # Rank the absolute differences
+        abs_d = np.abs(d)
+        ranks = _rank(abs_d)
+
+        # Signed ranks
+        positive_ranks = ranks[d > 0].sum()
+        negative_ranks = ranks[d < 0].sum()
+
+        # Test statistic: W = min(W+, W-)
+        w_plus = positive_ranks
+        w_minus = negative_ranks
+
+        if alternative == "two-sided":
+            w_stat = min(w_plus, w_minus)
+        elif alternative == "greater":
+            w_stat = w_minus  # Small W- means A > B
+        else:  # "less"
+            w_stat = w_plus  # Small W+ means A < B
+
+        # Normal approximation for p-value (valid for n >= 10)
+        mean_w = n_eff * (n_eff + 1) / 4
+        std_w = np.sqrt(n_eff * (n_eff + 1) * (2 * n_eff + 1) / 24)
+
+        if std_w > 0:
+            z = (w_stat - mean_w) / std_w
+            p_value = 2 * _normal_cdf(-abs(z)) if alternative == "two-sided" else _normal_cdf(z)
+        else:
+            p_value = 1.0
 
     # Effect size: r = Z / sqrt(N)
-    effect_size = abs(z) / np.sqrt(n) if std_w > 0 else 0.0
+    # For small n where we use exact method, estimate z from p-value
+    if n_eff <= 10:
+        # Convert p-value back to z for effect size calculation
+        from scipy.special import erfinv
+
+        z = abs(np.sqrt(2) * erfinv(1 - p_value)) if p_value < 1.0 and p_value > 0.0 else 0.0
+    else:
+        z = (w_stat - (n_eff * (n_eff + 1) / 4)) / np.sqrt(
+            n_eff * (n_eff + 1) * (2 * n_eff + 1) / 24
+        )
+
+    effect_size = abs(z) / np.sqrt(n)
 
     return PairedTestResult(
         statistic=float(w_stat),
