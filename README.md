@@ -1,0 +1,124 @@
+# Kinetic AI
+
+**A unified library for game-theoretic LLM training: Magnetic Mirror Descent, Deep Equilibrium Models, and Mechanism Design.**
+
+[![Tests](https://github.com/SharathSPhD/game-llm/actions/workflows/tests.yml/badge.svg)](https://github.com/SharathSPhD/game-llm/actions)
+[![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+## The Thesis
+
+Current AI systems are trained via **dictatorial optimization** — a single loss function forces updates on every parameter. But real-world deployment environments are **adversarial, multi-agent, and strategic**. Game theory, not optimization, is the correct mathematical framework.
+
+Kinetic AI implements the transition from **static optimization** to **dynamic equilibrium**:
+
+| Component | What it replaces | Why |
+|-----------|-----------------|-----|
+| **Magnetic Mirror Descent** | SGD / Adam | Converges to QRE (not just local minima) in adversarial settings |
+| **Deep Equilibrium Models** | Explicit transformer layers | O(1) memory, implicit depth, fixed-point stability |
+| **Token Auctions** | Winner-take-all generation | Incentive-compatible multi-agent content generation |
+| **Self-Play (SPPO)** | RLHF / DPO | Game-theoretic alignment without reward hacking |
+
+## Installation
+
+```bash
+pip install -e ".[all]"
+```
+
+## Quick Start
+
+### Strategy-Space MMD on Rock-Paper-Scissors
+
+```python
+import torch
+from kinetic_ai.games.payoff import rock_paper_scissors
+from kinetic_ai.games.qre import nash_conv
+from kinetic_ai.optim.bregman import NegativeEntropy
+from kinetic_ai.optim.mmd import mmd_strategy_update
+
+game = rock_paper_scissors()
+bregman = NegativeEntropy()
+
+s1 = torch.tensor([0.7, 0.2, 0.1])  # Biased initial strategy
+s2 = torch.tensor([0.1, 0.7, 0.2])
+ref = torch.ones(3) / 3  # Uniform reference (magnet)
+
+for step in range(500):
+    g1 = game.utility_gradient(1, s1, s2)
+    g2 = game.utility_gradient(2, s2, s1)
+    s1 = mmd_strategy_update(s1, g1, ref, bregman, lr=0.3, tau=0.05)
+    s2 = mmd_strategy_update(s2, g2, ref, bregman, lr=0.3, tau=0.05)
+
+print(f"NashConv: {nash_conv(game, s1, s2):.6f}")  # Should be near 0
+```
+
+### DEQ Layer with Anderson Acceleration
+
+```python
+import torch
+import torch.nn as nn
+from kinetic_ai.config import DEQConfig, SolverType
+from kinetic_ai.models.deq_layer import DEQLayer
+
+transform = nn.Linear(32, 16)
+def f(z, x):
+    return torch.tanh(transform(torch.cat([z, x], dim=-1)))
+
+deq = DEQLayer(f, DEQConfig(solver=SolverType.ANDERSON, max_iter=50))
+z_star = deq(torch.randn(1, 16))  # Finds equilibrium state
+```
+
+### Token Auction
+
+```python
+import torch
+from kinetic_ai.config import AuctionConfig, AuctionType
+from kinetic_ai.mechanisms.auctions import TokenAuction
+
+auction = TokenAuction(AuctionConfig(
+    auction_type=AuctionType.WEIGHTED_AGGREGATION,
+    vocab_size=1000,
+))
+
+bids = torch.tensor([2.0, 5.0, 1.0])
+dists = torch.softmax(torch.randn(3, 1000), dim=-1)
+result = auction.run_auction(bids, dists)
+print(f"Selected token: {result.sampled_token}")
+```
+
+## Architecture
+
+```
+kinetic_ai/
+├── optim/          # Magnetic Mirror Descent + Bregman divergences
+├── models/         # Deep Equilibrium Layers (Anderson, Broyden, Picard)
+├── mechanisms/     # Token auctions, mechanism design
+├── games/          # Game definitions, QRE computation, self-play
+├── eval/           # Convergence diagnostics, statistical testing
+└── config.py       # Config-driven experiment system
+```
+
+## Running Tests
+
+```bash
+pytest tests/ -v                    # All tests
+pytest tests/ -v -m "not slow"      # Skip slow convergence tests
+```
+
+## Running the Full Simulation
+
+```bash
+python simulate.py
+```
+
+## References
+
+1. Sokota et al. "A Unified Approach to RL, QRE, and Two-Player Zero-Sum Games" (NeurIPS 2023)
+2. Bai et al. "Deep Equilibrium Models" (NeurIPS 2019)
+3. Duetting et al. "Mechanism Design for Large Language Models" (WWW 2024, Best Paper)
+4. Wu et al. "Self-Play Preference Optimization for Language Model Alignment" (2024)
+5. McKelvey & Palfrey "Quantal Response Equilibria for Normal Form Games" (1995)
+
+## License
+
+MIT

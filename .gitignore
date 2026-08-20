@@ -1,0 +1,49 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg-info/
+dist/
+build/
+*.egg
+
+# Virtual environments
+venv/
+.venv/
+env/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+._*
+Thumbs.db
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+.mypy_cache/
+.ruff_cache/
+
+# Experiments
+experiments/outputs/
+experiments/logs/
+runs/
+*.tensorboard
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Config overrides (keep defaults, ignore local)
+configs/local/
+
+# AppleDouble
+._*
+.DS_Store
