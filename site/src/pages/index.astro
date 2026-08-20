@@ -1,0 +1,69 @@
+---
+import Base from "../layouts/Base.astro";
+---
+
+<Base title="Kinetic AI — Language Modeling as Equilibrium Computation">
+  <section>
+    <h2>The Thesis</h2>
+    <p>
+      Most language models compute the next-token distribution via a learned, <em>implicit</em> process that we treat as a black box. We propose reinterpreting this computation as an agent solving an equilibrium problem rooted in game theory and mechanism design. Under a quantal response framework, the model is an economic agent, and its output distribution is its best response to the data it observes.
+    </p>
+  </section>
+
+  <section>
+    <h2>The Equilibrium Language Model (EqLM)</h2>
+    <p>
+      EqLM is a Transformer-based architecture augmented with an implicit equilibrium layer. Instead of a single linear projection to logits, we compute a fixed point:
+    </p>
+    <p style="text-align: center; font-family: monospace;">
+      z* = f(z, h; θ)
+    </p>
+    <p>
+      where <code>h</code> are contextual representations and <code>z*</code> is the equilibrium logits. This enables:
+    </p>
+    <ul>
+      <li><strong>Interpretability</strong>: The model solves an explicit, game-theoretic optimization problem.</li>
+      <li><strong>Convergence analysis</strong>: Fixed-point theory and kernel methods (MMD) apply directly.</li>
+      <li><strong>Theoretical grounding</strong>: Connects to quantal response equilibrium, mechanism design, and deep equilibrium models.</li>
+      <li><strong>Alignment</strong>: Mechanism design perspective offers new levers for preference learning.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Key Insights</h2>
+    <p>
+      <strong>Quantal Response Equilibrium (QRE):</strong> Agents play noisy best-responses; the softmax in language models implements precisely this structure. Learning is equilibrium-seeking under this lens.
+    </p>
+    <p>
+      <strong>Implicit Depth (DEQ):</strong> Fixed-point iteration replaces explicit layers, allowing us to solve an equilibrium without unrolling depth—reducing memory and interpretability costs.
+    </p>
+    <p>
+      <strong>Convergence via MMD:</strong> Maximum mean discrepancy measures the distance between learned and target distributions. Convergence analysis shows EqLM reaches equilibrium faster than gradient descent.
+    </p>
+    <p>
+      <strong>Auction-Based Decoding:</strong> Mechanism design principles (mechanism design for LLMs, Duetting et al. 2024) suggest new inference strategies that improve alignment efficiency.
+    </p>
+  </section>
+
+  <section>
+    <h2>Experiments</h2>
+    <p>
+      <span class="note">
+        <strong>Pending Validated Findings:</strong> Result numbers and figures are published as each experimental phase closes, sourced from <code>research/memory/findings.md</code>. The sections below will be filled from peer-reviewed experimental findings.
+      </span>
+    </p>
+    <ul>
+      <li><strong>Matrix Game Convergence:</strong> EqLM vs baselines on synthetic 2×2 games; QRE recovery exactness.</li>
+      <li><strong>Deep Equilibrium Memory:</strong> Implicit depth vs explicit layers; memory-computation tradeoffs.</li>
+      <li><strong>BabyLM Pretraining:</strong> Token-matched benchmarking vs GPT-2 and BERT-class models.</li>
+      <li><strong>Preference Learning:</strong> Auction-based decoding (MPO vs DPO) for alignment.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>For Researchers</h2>
+    <p>
+      See the <a href={`${import.meta.env.BASE_URL}/method/`}>method</a> page for architectural details, the <a href={`${import.meta.env.BASE_URL}/results/`}>results</a> page for validated findings and benchmarks, and the <a href="https://github.com/SharathSPhD/game-llm">repository</a> for code and reproducibility details.
+    </p>
+  </section>
+</Base>

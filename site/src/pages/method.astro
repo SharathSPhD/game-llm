@@ -1,0 +1,89 @@
+---
+import Base from "../layouts/Base.astro";
+---
+
+<Base title="Method — Kinetic AI">
+  <section>
+    <h2>Architecture Overview</h2>
+    <p>
+      EqLM builds on standard Transformer blocks but replaces the final logit projection with an implicit equilibrium layer. The model processes input tokens through contextual representations and then solves an equilibrium fixed-point problem.
+    </p>
+  </section>
+
+  <section>
+    <h2>Core Components</h2>
+
+    <h3>1. Contextual Encoder</h3>
+    <p>
+      Standard Transformer stack (attention + feedforward) produces hidden representations <code>h</code> ∈ ℝ^(vocab_size).
+    </p>
+
+    <h3>2. Equilibrium Solver</h3>
+    <p>
+      Instead of a simple linear projection, we solve:
+    </p>
+    <p style="text-align: center; font-family: monospace;">
+      z* = f(z*, h; θ)
+    </p>
+    <p>
+      using Anderson acceleration or fixed-point iteration. The function <code>f</code> encodes game-theoretic constraints (e.g., softmax normalization for QRE structure).
+    </p>
+
+    <h3>3. Quantal Response Layer</h3>
+    <p>
+      The output distribution is computed as:
+    </p>
+    <p style="text-align: center; font-family: monospace;">
+      π = softmax(z*)
+    </p>
+    <p>
+      This implements the quantal response structure from economic theory: agents play strategies proportional to their payoff.
+    </p>
+  </section>
+
+  <section>
+    <h2>Training</h2>
+    <p>
+      We train EqLM using standard cross-entropy loss on masked language modeling (MLM) objectives, on datasets from BabyLM and other standard benchmarks. The equilibrium layer is trained end-to-end via implicit differentiation.
+    </p>
+  </section>
+
+  <section>
+    <h2>Inference</h2>
+    <p>
+      At inference time, fixed-point iteration is used to converge to the equilibrium. We measure convergence via MMD (maximum mean discrepancy) and use early stopping to balance accuracy and latency.
+    </p>
+  </section>
+
+  <section>
+    <h2>Convergence Analysis</h2>
+    <p>
+      We analyze convergence properties using:
+    </p>
+    <ul>
+      <li><strong>Maximum Mean Discrepancy (MMD):</strong> A kernel-based divergence metric measuring distance between learned and target distributions.</li>
+      <li><strong>Fixed-Point Theory:</strong> Classical results on convergence rates of iterative methods apply.</li>
+      <li><strong>Anderson Acceleration:</strong> Improved convergence velocity via quasi-Newton methods.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Mechanism Design for Alignment</h2>
+    <p>
+      Following Duetting et al. (2024), we frame language model alignment as a mechanism design problem. The equilibrium layer can be augmented with incentive constraints that enforce preference alignment by construction.
+    </p>
+  </section>
+
+  <section>
+    <h2>Complexity and Tradeoffs</h2>
+    <p>
+      <strong>Computational Cost:</strong> Fixed-point iteration adds inference latency but reduces model depth (memory).
+    </p>
+    <p>
+      <strong>Theoretical Clarity:</strong> Equilibrium framing sacrifices some training efficiency for interpretability and theoretical grounding.
+    </p>
+    <p>
+      <strong>Scope:</strong> EqLM is designed for interpretability and theory, not frontier performance. We benchmark against GPT-2 and BERT-class models at matched token budgets.
+    </p>
+  </section>
+</Base>
