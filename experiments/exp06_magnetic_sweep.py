@@ -125,13 +125,14 @@ def train_arm(
         if step >= num_steps:
             break
 
-        # Get batch
-        input_ids = batch["input_ids"].to(device_obj)
-        target_ids = batch["target_ids"].to(device_obj)
+        # Get batch: loader yields [B, T] token tensors; shift for next-token LM
+        batch = batch.to(device_obj)
+        input_ids = batch[:, :-1]
+        target_ids = batch[:, 1:]
 
         # Forward pass
         logits = model(input_ids)  # [B, T, vocab_size]
-        loss = F.cross_entropy(logits.view(-1, logits.size(-1)), target_ids.view(-1))
+        loss = F.cross_entropy(logits.reshape(-1, logits.size(-1)), target_ids.reshape(-1))
 
         # Backward pass
         optimizer.zero_grad()
@@ -148,11 +149,10 @@ def train_arm(
         if step % log_every == 0:
             print(f"  {arm_name} step {step}: loss={loss.item():.4f}")
 
-        # Track solver stats if DEQ model
-        if hasattr(model, "transformer") and hasattr(model.transformer, "layer"):
-            layer = model.transformer.layer
-            if hasattr(layer, "deq_block") and hasattr(layer.deq_block, "solver_iterations"):
-                solver_iterations.append(layer.deq_block.solver_iterations)
+        # Track solver stats if DEQ model (exp05 pattern: model.deq.last_info)
+        _info = getattr(getattr(model, "deq", None), "last_info", None)
+        if _info:
+            solver_iterations.append(int(_info.get("iterations", 0)))
 
         # Peak memory tracking
         if device == "cuda":
@@ -348,8 +348,8 @@ def main() -> None:
     )
     train_loader = BabyLMDataLoader(
         token_tensor,
-        seq_len=cfg["data"]["seq_len"],
         batch_size=cfg["data"]["batch_size"],
+        shuffle=True,
         device=device,
     )
     print(f"Data loader: {cfg['data']['batch_size']} batch, {cfg['data']['seq_len']} seq_len")
@@ -375,14 +375,10 @@ def main() -> None:
     if "Baseline" in cfg["arms"]:
         print("\nInitializing Baseline (ExplicitLM)...")
         arm_cfg = cfg["arms"]["Baseline"]["config"]
+        _b_dict = dict(arm_cfg)
+        _b_layers = _b_dict.pop("n_layers", 4)
         baseline_model = ExplicitLM(
-            vocab_size=arm_cfg["vocab_size"],
-            d_model=arm_cfg["d_model"],
-            n_heads=arm_cfg["n_heads"],
-            d_ff=arm_cfg["d_ff"],
-            n_layers=4,
-            max_seq_len=arm_cfg["max_seq_len"],
-            dropout=arm_cfg.get("dropout", 0.1),
+            config=EqLMConfig(**_b_dict), n_layers=_b_layers
         ).to(device)
         baseline_params = count_params(baseline_model)
         print(f"  Params: {baseline_params:,}")
@@ -399,38 +395,16 @@ def main() -> None:
         print(f"\nInitializing {arm_name}...")
         arm_cfg = cfg["arms"][arm_name]["config"]
 
-        # Match width to baseline
-        if "Baseline" in cfg["arms"]:
-            base_cfg = cfg["arms"]["Baseline"]["config"]
-            matched_d_model, matched_d_ff = match_explicit_width(
-                base_cfg["d_model"],
-                base_cfg["n_heads"],
-                base_cfg["d_ff"],
-            )
-            arm_cfg["d_model"] = matched_d_model
-            arm_cfg["d_ff"] = matched_d_ff
-        else:
-            matched_d_model, matched_d_ff = match_explicit_width(
-                arm_cfg.get("d_model", 192),
-                arm_cfg.get("n_heads", 4),
-                arm_cfg.get("d_ff", 512),
-            )
-            arm_cfg["d_model"] = matched_d_model
-            arm_cfg["d_ff"] = matched_d_ff
-
-        eqlm_cfg = EqLMConfig(
-            vocab_size=arm_cfg["vocab_size"],
-            d_model=arm_cfg["d_model"],
-            n_heads=arm_cfg["n_heads"],
-            d_ff=arm_cfg["d_ff"],
-            max_seq_len=arm_cfg["max_seq_len"],
-            deq_max_iter=arm_cfg.get("deq_max_iter", 12),
-            deq_tol=arm_cfg.get("deq_tol", 1e-3),
-            solver=arm_cfg.get("solver", "anderson"),
-            jfb=arm_cfg.get("jfb", False),
-            dropout=arm_cfg.get("dropout", 0.1),
-        )
-        model = EqLM(eqlm_cfg).to(device)
+        # Param-match to baseline (same procedure as exp05)
+        _e_dict = dict(arm_cfg)
+        _e_dict.pop("n_layers", None)
+        eqlm_cfg = EqLMConfig(**_e_dict)
+        if "Baseline" in models_and_inits:
+            _target = count_params(models_and_inits["Baseline"][0])
+            eqlm_cfg = match_explicit_width(target_params=_target, base_cfg=eqlm_cfg)
+            arm_cfg["d_model"] = eqlm_cfg.d_model
+            arm_cfg["d_ff"] = eqlm_cfg.d_ff
+        model = EqLM(config=eqlm_cfg).to(device)
         num_params = count_params(model)
         print(f"  Params: {num_params:,}")
         models_and_inits[arm_name] = (

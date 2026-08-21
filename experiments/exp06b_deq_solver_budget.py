@@ -91,13 +91,14 @@ def train_with_solver_budget(
         if step >= num_steps:
             break
 
-        # Get batch
-        input_ids = batch["input_ids"].to(device_obj)
-        target_ids = batch["target_ids"].to(device_obj)
+        # Get batch: loader yields [B, T] token tensors; shift for next-token LM
+        batch = batch.to(device_obj)
+        input_ids = batch[:, :-1]
+        target_ids = batch[:, 1:]
 
         # Forward pass
         logits = model(input_ids)
-        loss = F.cross_entropy(logits.view(-1, logits.size(-1)), target_ids.view(-1))
+        loss = F.cross_entropy(logits.reshape(-1, logits.size(-1)), target_ids.reshape(-1))
 
         # Backward pass
         optimizer.zero_grad()
@@ -114,25 +115,14 @@ def train_with_solver_budget(
         if step % log_every == 0:
             print(f"  Step {step}: loss={loss.item():.4f}")
 
-        # Track solver stats (DEQ model)
-        if hasattr(model, "transformer") and hasattr(model.transformer, "layer"):
-            layer = model.transformer.layer
-            if hasattr(layer, "deq_block"):
-                deq_block = layer.deq_block
-
-                # Iteration count
-                if hasattr(deq_block, "solver_iterations"):
-                    solver_iterations_list.append(deq_block.solver_iterations)
-
-                # Convergence: check if it hit max_iter or converged early
-                max_iter = deq_block.max_iter if hasattr(deq_block, "max_iter") else 12
-                if hasattr(deq_block, "solver_iterations"):
-                    converged = 1 if deq_block.solver_iterations < max_iter else 0
-                    solver_convergences.append(converged)
-
-                # Residual at exit
-                if hasattr(deq_block, "solver_residual"):
-                    solver_residuals.append(deq_block.solver_residual)
+        # Track solver stats (exp05 pattern: model.deq.last_info)
+        _info = getattr(getattr(model, "deq", None), "last_info", None)
+        if _info:
+            solver_iterations_list.append(int(_info.get("iterations", 0)))
+            solver_convergences.append(1 if _info.get("converged") else 0)
+            _res = _info.get("residuals")
+            if _res:
+                solver_residuals.append(float(_res[-1]))
 
         # Peak memory
         if device == "cuda":
@@ -243,8 +233,8 @@ def main() -> None:
     )
     train_loader = BabyLMDataLoader(
         token_tensor,
-        seq_len=128,
         batch_size=32,
+        shuffle=True,
         device=device,
     )
     print("Data loader: batch=32, seq_len=128")
