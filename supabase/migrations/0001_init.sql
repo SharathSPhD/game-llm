@@ -64,8 +64,14 @@ create table if not exists public.runtime_config (
 );
 alter table public.runtime_config enable row level security;
 
+-- Secrets are admin-read-only; only non-secret keys are publicly readable.
 create policy "public_read_config" on public.runtime_config
-  for select using (true);
+  for select using (key not like 'secret:%' and key <> 'gateway_secret');
+
+create policy "admin_read_secrets" on public.runtime_config
+  for select using (
+    exists (select 1 from public.user_tiers
+            where user_tiers.user_id = auth.uid() and user_tiers.tier = 'admin'));
 
 -- One action per policy (Postgres requirement); admin gate on each write path.
 create policy "admin_insert_config" on public.runtime_config
@@ -105,9 +111,9 @@ begin
 end;
 $$ language plpgsql security definer;
 
--- Bootstrap config keys (example values; update as needed)
+-- Bootstrap non-secret config keys only. NEVER seed secrets in migrations:
+-- set gateway_secret out-of-band via select set_runtime_config('gateway_secret', '<value>');
 insert into public.runtime_config (key, value)
 values
-  ('gateway_url', 'https://kinetic.sharath-sathish.workers.dev'),
-  ('gateway_secret', 'dev-secret')
+  ('gateway_url', 'https://kinetic.sharath-sathish.workers.dev')
 on conflict (key) do nothing;

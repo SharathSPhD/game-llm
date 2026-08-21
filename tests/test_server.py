@@ -8,6 +8,7 @@ Tests the Phase 3 Equilibrium Lab server endpoints:
 """
 
 import os
+import time
 
 import pytest
 from fastapi.testclient import TestClient
@@ -342,13 +343,15 @@ class TestJobs:
         data = resp.json()
         job_id = data["job_id"]
 
-        # Check status: should be failed
-        status_resp = client.get(
-            f"/api/jobs/{job_id}",
-            headers=AUTH_HEADERS,
-        )
-        assert status_resp.status_code == 200
-        status_data = status_resp.json()
+        # Check status: should reach failed (poll — execution is async)
+        status_data = {}
+        for _ in range(40):
+            status_resp = client.get(f"/api/jobs/{job_id}", headers=AUTH_HEADERS)
+            assert status_resp.status_code == 200
+            status_data = status_resp.json()
+            if status_data["status"] in ("failed", "completed"):
+                break
+            time.sleep(0.05)
         assert status_data["status"] == "failed"
 
     def test_job_status_nonexistent(self) -> None:

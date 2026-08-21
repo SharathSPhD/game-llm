@@ -48,12 +48,22 @@ app = FastAPI(
 
 # Get config at request time (to support testing)
 def get_gateway_secret() -> str:
-    return os.environ.get("GATEWAY_SECRET", "dev-secret")
+    # Fail closed: no default secret. "dev-secret" is explicitly rejected so a
+    # placeholder can never authenticate in any environment.
+    secret = os.environ.get("GATEWAY_SECRET", "")
+    if not secret or secret == "dev-secret":
+        raise RuntimeError(
+            "GATEWAY_SECRET must be set to a strong value (openssl rand -hex 32)"
+        )
+    return secret
 
 
 def get_allowed_origins() -> list[str]:
-    origins_str = os.environ.get("ALLOWED_ORIGINS", "*")
-    return [o.strip() for o in origins_str.split(",")]
+    # Never wildcard: credentials are allowed, so origins must be explicit.
+    origins_str = os.environ.get(
+        "ALLOWED_ORIGINS", "https://kinetic.sharath-sathish.workers.dev"
+    )
+    return [o.strip() for o in origins_str.split(",") if o.strip() and o.strip() != "*"]
 
 
 def get_results_dir() -> str:

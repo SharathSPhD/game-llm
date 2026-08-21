@@ -1,18 +1,19 @@
 arms:
   A1:
     config:
-      d_ff: 256
-      d_model: 128
+      d_ff: 512
+      d_model: 192
       dropout: 0.1
       max_seq_len: 128
       n_heads: 4
       n_layers: 4
-      vocab_size: 8192
+      vocab_size: 50257
     name: ExplicitLM
+    optimizer: adamw
   A2:
     config:
       d_ff: 512
-      d_model: 256
+      d_model: 192
       deq_max_iter: 12
       deq_tol: 0.001
       dropout: 0.1
@@ -20,12 +21,13 @@ arms:
       max_seq_len: 128
       n_heads: 4
       solver: anderson
-      vocab_size: 8192
+      vocab_size: 50257
     name: EqLM
+    optimizer: adamw
   A3:
     config:
       d_ff: 512
-      d_model: 256
+      d_model: 192
       deq_max_iter: 12
       deq_tol: 0.001
       dropout: 0.1
@@ -33,9 +35,9 @@ arms:
       max_seq_len: 128
       n_heads: 4
       solver: anderson
-      vocab_size: 8192
+      vocab_size: 50257
     mmd_config:
-      ema_decay: 0.999
+      reference_update_interval: 10
       tau: 0.01
     name: EqLM+MMD
     optimizer: mmd
@@ -43,18 +45,21 @@ data:
   batch_size: 32
   dataset: BabyLM-2026-Strict-Small
   seq_len: 128
-  subset_size: 2000000
+  subset_size: 3300000
 eval:
   blimp:
-    num_phenomena: 3
-    pairs_per_phenomenon: 50
+    cache_dir: ~/.cache/huggingface/hub
+    num_phenomena: 5
+    pairs_per_phenomenon: 200
 tokenizer:
   prefer_gpt2: true
-  vocab_size: 8192
+  vocab_size: 50257
 training:
-  log_every: 50
+  grad_clip: 1.0
+  log_every: 25
   lr: 0.0003
-  num_epochs: 1
+  num_epochs: 132
+  num_steps: 800
   seed: 42
-  warmup_steps: 100
+  warmup_steps: 0
   weight_decay: 0.01

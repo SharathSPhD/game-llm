@@ -1,58 +1,62 @@
 # SMOKE Test Config for SPEC 0004: EqLM Pretraining on BabyLM
-# Tier B, minimal scale for end-to-end validation (GPU time ~30 min)
+# Tier B, proper validation with real token budget (~3.3M tokens / ~800 steps per arm)
 
 data:
   dataset: "BabyLM-2026-Strict-Small"
-  subset_size: 2000000  # ~2M tokens for smoke
+  subset_size: 3300000  # ~3.3M tokens for ~800 steps at B=32, T=128
   seq_len: 128
   batch_size: 32
 
 tokenizer:
-  vocab_size: 8192
+  vocab_size: 50257  # GPT-2 vocab size
   prefer_gpt2: true  # Try GPT-2 from cache first
 
 training:
   seed: 42
-  num_epochs: 1  # Smoke: 1 epoch
-  warmup_steps: 100
-  log_every: 50
+  num_epochs: 132  # Will cycle through data to reach ~800 steps (800 / 6 batches ≈ 133 epochs)
+  num_steps: 800  # Target ~800 steps per arm
+  warmup_steps: 0
+  log_every: 25  # Log every 25 steps
   lr: 3e-4
   weight_decay: 0.01
+  grad_clip: 1.0  # Gradient clipping
 
 # Model configurations for each arm
 arms:
   A1:
     name: "ExplicitLM"
     config:
-      vocab_size: 8192
-      d_model: 128
+      vocab_size: 50257
+      d_model: 192  # Smoke: smaller model for speed
       n_heads: 4
-      d_ff: 256
+      d_ff: 512
       max_seq_len: 128
-      n_layers: 4  # Explicit layers (smoke: 4 instead of 12)
+      n_layers: 4  # Explicit layers
       dropout: 0.1
+    optimizer: "adamw"
 
   A2:
     name: "EqLM"
     config:
-      vocab_size: 8192
-      d_model: 256  # Scaled up to match A1 params
+      vocab_size: 50257
+      d_model: 192  # Will be auto-matched via match_explicit_width
       n_heads: 4
-      d_ff: 512
+      d_ff: 512  # Will be auto-matched
       max_seq_len: 128
       deq_max_iter: 12
       deq_tol: 1e-3
       solver: "anderson"
       jfb: false
       dropout: 0.1
+    optimizer: "adamw"
 
   A3:
     name: "EqLM+MMD"
     config:
-      vocab_size: 8192
-      d_model: 256
+      vocab_size: 50257
+      d_model: 192  # Will be auto-matched via match_explicit_width
       n_heads: 4
-      d_ff: 512
+      d_ff: 512  # Will be auto-matched
       max_seq_len: 128
       deq_max_iter: 12
       deq_tol: 1e-3
@@ -61,10 +65,11 @@ arms:
       dropout: 0.1
     optimizer: "mmd"
     mmd_config:
-      tau: 1e-2  # Magnetic damping
-      ema_decay: 0.999  # EMA anchor decay
+      tau: 1e-2  # Magnetic damping (tau in {1e-3, 1e-2})
+      reference_update_interval: 10  # Update reference every 10 steps
 
 eval:
   blimp:
-    num_phenomena: 3  # Smoke: 3 phenomena
-    pairs_per_phenomenon: 50  # 150 pairs total
+    num_phenomena: 5  # Stratified over 5+ phenomena
+    pairs_per_phenomenon: 200  # 1000 pairs total (5 * 200)
+    cache_dir: ~/.cache/huggingface/hub
