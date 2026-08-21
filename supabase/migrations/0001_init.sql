@@ -64,9 +64,10 @@ create table if not exists public.runtime_config (
 );
 alter table public.runtime_config enable row level security;
 
--- Secrets are admin-read-only; only non-secret keys are publicly readable.
+-- Allowlist: only explicitly-named non-secret keys are publicly readable.
+-- Everything else (including gateway_secret and any future key) is admin-only.
 create policy "public_read_config" on public.runtime_config
-  for select using (key not like 'secret:%' and key <> 'gateway_secret');
+  for select using (key in ('gateway_url', 'brand_name', 'announcement'));
 
 create policy "admin_read_secrets" on public.runtime_config
   for select using (
