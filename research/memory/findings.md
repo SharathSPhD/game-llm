@@ -105,3 +105,19 @@ operator sign-off.)
   defects identified with fixes scheduled (init scale, MagneticAdamW, DEQ solver
   stats capture; data loader currently limited to first 1000 samples — noted).
 - **Status:** VALIDATED as method finding · sign-off pending
+
+## F10 — EqLM matches the explicit transformer at smoke scale after init fix (H1 signal; SMOKE)
+
+- **Claim:** With correct init (all arms start at CE 10.82–10.83 = ln|V|), EqLM+AdamW
+  reaches final loss 5.94 vs ExplicitLM 5.99 over identical 800-step budgets —
+  parity — with 6.2% fewer parameters (10.67M vs 11.06M), at 2.7x wall time
+  (177.6s vs 66.8s; 12 fixed-point iters/forward). BLiMP still ≈ chance at this
+  scale (0.452/0.465) as expected for a 3-minute pretrain.
+- **Evidence:** results/exp05_eqlm_pretrain/results.json iteration 3 (config sha
+  3ed6e8fc…, commit 2151a19).
+- **Caveats found (feed cycle 5):** (a) MagneticAdamW arm throttled learning
+  (10.83→9.91) — tau/EMA coupling mis-tuned; (b) MagneticAdamW peak memory 97.7GB
+  vs 3.5GB — memory bug; (c) DEQ solver 0% convergence at max_iter=12/tol=1e-3
+  during training yet training succeeds (phantom-gradient regime) — needs
+  characterization before full run.
+- **Status:** VALIDATED (smoke scale) · sign-off pending
