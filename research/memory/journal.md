@@ -60,3 +60,20 @@
   GATEWAY_SECRET; explicit CORS; session-gated allowlisted proxy; no error echo.
 - next: cycle 4 - MagneticAdamW (TDD) + init-scale fix + smoke rerun A2/A3;
   then full Tier B run (3 seeds), gateway deploy needs operator (Supabase/Vercel auth).
+
+## [cycles 4-5 | 2026-08-21] MAGNETIC-ADAMW DEBUGGING ARC + REAL DATA STREAM (F10-F12)
+- exp05 iter3: init fix verified; EqLM parity with explicit at smoke scale (F10),
+  later scoped: corpus was 22.7k unique tokens cycled (data cap; F10-correction).
+- Fixed F9 data blocker: build_token_stream streams until max_tokens (regression
+  tests); exp06 first runs exposed: agents twice delivered "ready to run" without
+  running; multiple imagined APIs caught by CPU dry-runs before GPU spend.
+- MagneticAdamW arc: 97.7GB memory leak fixed (no_grad discipline); then the real
+  bug — coupled weight decay destroying the tied embedding (F11), found via
+  isolated per-process A/B after the sweep showed tau-independent throttling.
+- exp06 (fixed): magnetic EMA pull loss-neutral at tau<=1e-2 (F12); drift prereg
+  ruled invalid (cross-architecture). exp06b: solver budget loss-neutral, 0%
+  convergence at tol 1e-3 across budgets.
+- App: Pages site LIVE at sharathsphd.github.io/game-llm; CI green after extras
+  fix; frontend + gateway + proxy hardened (3 security review rounds).
+- next: FULL Tier B run (A1/A2/A3 20k steps, full stream) launched in background;
+  harvest -> Tarka -> paper/site refresh -> operator sign-off pass on F1-F12.

@@ -1,5 +1,5 @@
 {
-  "cycle": 3,
+  "cycle": 5,
   "phase": "phase2-science",
   "current_rq": "RQ-2",
   "gpu_lock": true,
@@ -14,6 +14,6 @@
     "RQ-2 (H2): VALIDATED - F1/F2/F3 (findings.md); RQ-6 Tier A part: F4/F5"
   ],
   "known_defects": [],
-  "next_action": "Cycle 4: MagneticAdamW + EqLM init-scale fix (TDD) -> smoke rerun A2/A3/A3-prime -> full Tier B (3 seeds)",
-  "gpu_lock_holder": "exp05 iter3 cycle4"
+  "next_action": "Harvest exp05_full (A1/A2/A3 20k steps); Tarka; refresh paper/site; operator sign-off pass F1-F12",
+  "gpu_lock_holder": "exp05_full 20k-step run"
 }

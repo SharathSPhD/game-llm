@@ -130,3 +130,31 @@ operator sign-off.)
   arms), but describes an overfitting-regime corpus. Cap fixed in
   kinetic_ai/data/dataset.py (streaming until max_tokens; regression-tested);
   exp06 onward uses the real stream.
+
+## F11 — MagneticAdamW coupled-weight-decay bug: Adam-L2 destroys sparse-gradient parameters (METHOD FINDING, fixed)
+
+- **Claim:** Folding weight decay into the gradient before Adam normalization makes
+  wd·θ act as a ~lr-magnitude decay on parameters whose gradients are mostly zero
+  (tied embedding rows): EqLM+MagneticAdamW(τ=0) reached only 10.46 vs torch AdamW
+  8.82 on identical setup, τ-independent. Decoupling wd (θ←θ(1−lr·wd)−step) restores
+  EXACT AdamW equivalence at τ=0 (8.8236 ≡ 8.8236) and τ∈{1e-4,1e-3} preserve
+  learning (8.8236/8.8237). Root-caused by isolated per-process A/B; regression test
+  on a sparse-grad embedding now enforces equivalence.
+- **Lesson:** optimizer-equivalence tests must include sparse-gradient parameters;
+  dense-Linear tests masked the defect.
+- **Status:** VALIDATED · fixed in kinetic_ai/optim/magnetic_adamw.py · sign-off pending
+
+## F12 — Magnetic pull (EMA anchor, τ≤1e-2) is loss-neutral at pretraining scale; solver budget beyond 12 iters buys nothing at 300 steps (exp06/exp06b)
+
+- **Evidence (real data stream, 300 steps, fixed optimizer):** magnetic arms
+  8.52–8.61 vs explicit baseline 8.51 (within 10% prereg: MET). Drift prereg was
+  MIS-DESIGNED (compared EqLM arms to the explicit-architecture baseline) — recorded
+  as invalid, not "missed"; magnet-vs-no-magnet drift at these τ is negligible per
+  the closed form (shrink ≤ lr·τ = 3e-6/step vs trailing EMA). exp06b: max_iter
+  {12,24,48} → loss {8.60,8.67,8.67}, 0% solver convergence at tol 1e-3 in ALL
+  budgets — phantom-gradient training is loss-neutral here; tol 1e-3 appears
+  unreachable for this block, needs tol study not iteration study.
+- **Tier B decision:** pretraining arms use AdamW (A1/A2); MagneticAdamW with FIXED
+  reference is reserved for H3 preference-phase (its theoretical home). DEQ
+  max_iter stays 12 (cheapest; no loss penalty).
+- **Status:** VALIDATED · sign-off pending
