@@ -299,6 +299,8 @@ INPUT /home/sharaths/.TinyTeX/texmf-dist/tex/latex/varwidth/varwidth.sty
 INPUT /home/sharaths/.TinyTeX/texmf-dist/tex/latex/varwidth/varwidth.sty
 INPUT /home/sharaths/.TinyTeX/texmf-dist/tex/latex/booktabs/booktabs.sty
 INPUT /home/sharaths/.TinyTeX/texmf-dist/tex/latex/booktabs/booktabs.sty
+INPUT /home/sharaths/.TinyTeX/texmf-dist/tex/latex/multirow/multirow.sty
+INPUT /home/sharaths/.TinyTeX/texmf-dist/tex/latex/multirow/multirow.sty
 INPUT /home/sharaths/.TinyTeX/texmf-dist/tex/latex/newunicodechar/newunicodechar.sty
 INPUT /home/sharaths/.TinyTeX/texmf-dist/tex/latex/newunicodechar/newunicodechar.sty
 INPUT /home/sharaths/.TinyTeX/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def

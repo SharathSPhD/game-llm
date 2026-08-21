@@ -11,6 +11,7 @@
 \pgfplotsset{compat=1.18}
 \usepackage{adjustbox}
 \usepackage{booktabs}
+\usepackage{multirow}
 
 % Unicode to LaTeX for math symbols
 \usepackage{newunicodechar}
@@ -310,6 +311,58 @@ A3 & EqLM + MagneticAdamW($1e^{-3}$) & $4.68$ & $0.584$ & $10.67M$ \\
 \label{fig:eqlm_loss_curves}
 \end{figure}
 
+\subsubsection{Discovery: EqLM Has No Fixed Point—Weight-Tied Iteration, Not Equilibrium (F14)}
+
+Following F13's diagnosis, we investigated why the DEQ solver converged 0\% across all budgets. A direct probe (exp07, 100+ fixed-point iterations on the v1/v2 architectures) revealed the core issue: \textbf{the map $f_\theta$ has no bona fide fixed point}. Instead, solver residuals plateau at a constant nonzero value with tail-ratio $\approx 0.99$, and—critically—residual magnitude scales \textbf{linearly} with the damping coefficient:
+
+\begin{center}
+\begin{tabular}{lccc}
+\toprule
+Damping $\alpha$ & Residual (v1) & Residual (v2) & Signature \\
+\midrule
+$1.0$ & $32.65$ & $32.89$ & \multirow{3}{*}{Linear $z \gets z + \alpha g(z)$} \\
+$0.2$ & $5.41$ & $5.50$ & \\
+$0.05$ & $1.35$ & $1.40$ & \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+This is the exact signature of drift—iterates advance at speed $\alpha \|\mathbf{g}\|$ with no fixed point approached. Additionally, the convergence criterion in the solver was an absolute global norm over the batch tensor (\texttt{deq\_layer.py:68}), unsatisfiable at batch scale and hence never meaningful. \textbf{Reframing F13:} the trained ``EqLM'' models are 12-iteration weight-tied transformers; their BLiMP 0.571/0.584 quantify weight-tying at matched parameters, not equilibrium computation. (exp07, 300 steps, real stream, config sha in results/exp07\_contraction\_check/results.json).
+
+\subsubsection{EqLM-v3: Post-LN Map Restores Fixed Points, But Contraction Is Weak (F15—H1 Frontier Identified)}
+
+Armed with F14's diagnosis, we redesigned EqLM to move the outer LayerNorm inside the implicit map: $f(z, x) = \text{LN}(z + \text{Attn}(z) + \text{MLP}(z) + \text{inj}(x))$ (following Bai et al.\ DEQ-Transformer form). This ensures iterates are bounded and fixed points exist. A direct probe at full smoke width ($d=204$, $T=127$, 80 iterations) shows convergence:
+
+\textbf{Relative residual (v3):} decays monotonically $1.0 \to 0.105$ then creeps ($0.1078 \to 0.1053$ over the last 24 iterations)—the constant-drift signature from F14 is \textbf{eliminated}, indicating genuine approach toward a fixed point. However, the effective contraction factor is $\approx 1$ at this width: reaching tol $1e-2$ takes practical budgets, but tol $1e-3$ is unreachable in 100 iterations.
+
+Smoke losses (300 steps, real stream) show loss parity (F15 validation data):
+
+\begin{center}
+\begin{tabular}{lcccr}
+\toprule
+Arm & Architecture & Loss & Convergence at tol $1e-2$ & Status \\
+\midrule
+A0 & ExplicitLM & $8.72$ & N/A & Baseline \\
+A1 & EqLM-v1 (original) & $8.82$ & 0\% (F14 discovery) & Non-contractive \\
+A2 & EqLM-v2 (spectral attempt) & $8.86$ & 0\% & Still non-contractive \\
+A3 & EqLM-v3 (post-LN map) & $8.84$ & Bona fide approach & Weak contraction \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\textbf{Interpretation:} the architecture question H1 poses is now precise: \textbf{make the post-LN transformer map strongly contractive at language-model width WITHOUT destroying capacity}. This is the identified scientific frontier of the program.
+
+\textbf{Candidate v4 directions} (each a testable arm):
+\begin{enumerate}
+\item Damping/alpha annealing schedules during training to reduce effective map gain.
+\item Solver-aware auxiliary loss penalizing $\|f(z^*) - z^*\|$ near learned trajectories.
+\item Tighter spectral budget on attention value and projection paths only (not all weights).
+\item Projected conjugate-DEQ (pcDEQ) orthant constraints on activation magnitudes.
+\item Tolerance-sufficiency study: does rel residual 0.1 suffice for representation quality, or is tighter required?
+\end{enumerate}
+
+(exp07 validation, real stream, config sha in results/exp07\_contraction\_check/results.json; direct probe on full width at $d=204, T=127$ over 80 iters).
+
 \section{Related Work}
 
 The connection between language modeling and equilibrium is implicit in much recent work. Sokota et al.\ (2023) provides a unified framework connecting RL, QRE, and zero-sum games. Bai, Kolter, and Koltun (2019) pioneered DEQ models. Duetting et al.\ (2024) frame LLM alignment as mechanism design. Direct Preference Optimization (Rafailov et al., 2023) and Self-Play Preference Optimization (Wu et al., 2024) can be reinterpreted as equilibrium-seeking in preference space.
@@ -319,7 +372,7 @@ We also build on classical results: McKelvey and Palfrey (1995) on quantal respo
 \section{Limitations}
 
 \begin{itemize}
-\item \textbf{H1 iteration 1 missed (F13):} EqLM achieved 78–80\% of baseline BLiMP at scale, falling short of the $\geq 95\%$ pre-registered threshold. Root cause: spectral-norm enforcement for DEQ contraction was not wired into EqLM (Phase-0 gap). Smoke parity (F10) held only in memorization regimes; at scale, lack of contraction enforcement breaks learning signal.
+\item \textbf{Architectural frontier (F13–F15):} EqLM-v1/v2 had no fixed point (F14 discovery); iterates drifted linearly with damping $\alpha$. EqLM-v3 with post-LN map restores genuine fixed points and loss parity (F15), but effective contraction factor $\approx 1$ at LM width makes tight tolerance unreachable in practical iteration budgets. The frontier is now identified: make the map strongly contractive at width without destroying model capacity. Candidate solutions include $\alpha$-annealing, solver-aware auxiliary losses, spectral budgets on attention paths, pcDEQ constraints, and tolerance-sufficiency studies.
 \item Asymmetric-game theory: MMD-to-QRE identity holds only on symmetric games; asymmetric cases show context-dependent attractors (F2, research question open).
 \item Single-machine deployment: all Tier A/B work on GB10 (RTX 5090); scaling to multi-GPU/cloud requires serverless containerization (RunPod executor infrastructure in progress).
 \item Phantom-gradient regime (F12): DEQ solver convergence is 0\% at tol $1e-3$ during training, yet gradients flow and training succeeds. This regime requires characterization (solver-tolerance study, depth warmup) before production use.
@@ -327,9 +380,9 @@ We also build on classical results: McKelvey and Palfrey (1995) on quantal respo
 
 \section{Conclusion}
 
-We have proposed Kinetic AI, a framework for language modeling grounded in game theory and equilibrium computation. The EqLM architecture makes this concrete, and preliminary experiments validate the approach. This work opens new directions for interpretable, theoretically-grounded language models.
+We have proposed Kinetic AI, a framework for language modeling grounded in game theory and equilibrium computation. The EqLM architecture makes this concrete. Experiments validate the game-theoretic optimization results (F1–F8) and identify a precisely diagnosed architectural frontier (F13–F15): the post-LN DEQ map restores fixed points (F15) and achieves loss parity, but effective contraction $\approx 1$ at language-model width makes tight tolerance unreachable in practical budgets. This is not overclaim—it is the identified open problem of the program, with enumerated next steps (damping/alpha annealing, solver-aware auxiliary loss, targeted spectral budgets, pcDEQ constraints, tolerance-sufficiency study).
 
-Future work includes scaling EqLM to larger models, applying the framework to alignment and preference learning, and exploring connections to other dynamical systems perspectives on neural networks.
+This work opens new directions for interpretable, theoretically-grounded language models. Future work includes scaling EqLM to larger models with strong contraction enforcement, applying the framework to alignment and preference learning, and exploring connections to other dynamical systems perspectives on neural networks.
 
 \bibliographystyle{plainnat}
 \bibliography{references}

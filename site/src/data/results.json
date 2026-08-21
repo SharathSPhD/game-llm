@@ -188,6 +188,60 @@
       "next_iteration": "EqLM-v2: enforce contraction via spectral norm on block weights / pcDEQ constraints; verify >80% solver convergence; rerun matched comparison. Secondary: solver-tol study (1e-2 vs 1e-3), solver depth warmup.",
       "status": "VALIDATED (honest miss + diagnosis) · sign-off pending",
       "result": "H1 iter-1 missed — iterating"
+    },
+    {
+      "id": "F14",
+      "title": "EqLM's map has no bona fide fixed point: weight-tied iterated transformer, not equilibrium model",
+      "claim": "Solver residual plateaus at constant value with tail-ratio ≈0.99. Residual magnitude scales LINEARLY with damping α: 32.65 → 5.41 → 1.35 at α = 1 / 0.2 / 0.05. Signature of z ← z + α·g(z) with ‖g‖ constant: iterates drift at speed α‖g‖, no fixed point approached. Trained 'EqLM' models are 12-iteration weight-tied transformers, not equilibrium computation.",
+      "evidence": {
+        "exp": "exp07",
+        "config_path": "results/exp07_contraction_check/results.json",
+        "steps": 300,
+        "data": "real stream",
+        "damping_study": [
+          {"alpha": 1.0, "residual_v1": 32.65, "residual_v2": 32.89},
+          {"alpha": 0.2, "residual_v1": 5.41, "residual_v2": 5.50},
+          {"alpha": 0.05, "residual_v1": 1.35, "residual_v2": 1.40}
+        ],
+        "tail_ratio": 0.99,
+        "losses_300steps": {"a1_explicit": 8.71, "v2": 8.88, "v1": 8.84}
+      },
+      "discovery": "Absolute global norm convergence criterion was unsatisfiable at batch scale. Root cause: outer LayerNorm placed after the implicit map, not within it. Iterates not bounded, fixed points do not exist. Reframing F13: BLiMP 0.571/0.584 quantify weight-tying at matched parameters, not equilibrium.",
+      "status": "VALIDATED · sign-off pending · discovery via exp07",
+      "type": "DISCOVERY"
+    },
+    {
+      "id": "F15",
+      "title": "EqLM-v3 (post-LN map): fixed points now exist but contraction is weak at LM width (H1 frontier identified)",
+      "claim": "v3 with f(z,x)=LN(z + Attn + MLP + inj(x)) (Bai et al. DEQ-Transformer form) restores bona fide fixed points. Direct probe at full smoke width (d=204, T=127, 80 iters): relative residual decays 1.0 → 0.105 monotonically then creeps (0.1078 → 0.1053 over last 24 iters). F14 constant-speed-drift signature ELIMINATED (bounded iterates, genuine approach), but effective contraction factor ≈1 at width, so tol 1e-2 is unreachable in practical iteration budgets.",
+      "evidence": {
+        "exp": "exp07",
+        "config_path": "results/exp07_contraction_check/results.json",
+        "smoke_losses": {
+          "a0_explicit": 8.72,
+          "a1_v1_original": 8.82,
+          "a2_v2_spectral": 8.86,
+          "a3_v3_post_ln": 8.84
+        },
+        "probe_full_width": {
+          "d": 204,
+          "T": 127,
+          "iterations": 80,
+          "initial_residual": 1.0,
+          "residual_at_80": 0.105,
+          "creep_final": 0.1053
+        }
+      },
+      "interpretation": "Architecture question H1 poses is now precise: make the post-LN transformer map strongly contractive at width WITHOUT destroying capacity. This is the identified scientific frontier of the program.",
+      "candidate_v4_directions": [
+        "Damping/α annealing schedules during training",
+        "Solver-aware auxiliary loss penalizing ‖f(z*) − z*‖",
+        "Tighter spectral budget on attention value/projection paths only",
+        "pcDEQ orthant constraints on activation magnitudes",
+        "Tolerance-sufficiency study: does rel 0.1 suffice for representation quality?"
+      ],
+      "status": "VALIDATED · sign-off pending · H1 iteration 2 remains open — this is the identified scientific frontier",
+      "type": "VALIDATED"
     }
   ]
 }

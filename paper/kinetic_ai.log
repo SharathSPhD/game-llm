@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.28 (TeX Live 2025) (preloaded format=pdflatex 2026.8.13)  21 AUG 2026 06:19
+This is pdfTeX, Version 3.141592653-2.6-1.40.28 (TeX Live 2025) (preloaded format=pdflatex 2026.8.13)  21 AUG 2026 06:47
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -588,54 +588,60 @@ Package: booktabs 2020/01/12 v1.61803398 Publication quality tables
 \@thisruleclass=\count354
 \@lastruleclass=\count355
 \@thisrulewidth=\dimen331
+) (/home/sharaths/.TinyTeX/texmf-dist/tex/latex/multirow/multirow.sty
+Package: multirow 2024/11/12 v2.9 Span multiple rows of a table
+\multirow@colwidth=\skip62
+\multirow@cntb=\count356
+\multirow@dima=\skip63
+\bigstrutjot=\dimen332
 ) (/home/sharaths/.TinyTeX/texmf-dist/tex/latex/newunicodechar/newunicodechar.sty
 Package: newunicodechar 2018/04/08 v1.2 Defining Unicode characters
 )
 
-Package newunicodechar Warning: Redefining Unicode character on input line 18.
-
-
 Package newunicodechar Warning: Redefining Unicode character on input line 19.
 
 
-Package newunicodechar Warning: Redefining Unicode character on input line 23.
+Package newunicodechar Warning: Redefining Unicode character on input line 20.
+
+
+Package newunicodechar Warning: Redefining Unicode character on input line 24.
 
 (/home/sharaths/.TinyTeX/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def
 File: l3backend-pdftex.def 2025-10-09 L3 backend support: PDF output (pdfTeX)
-\l__color_backend_stack_int=\count356
+\l__color_backend_stack_int=\count357
 ) (./kinetic_ai.aux)
 \openout1 = `kinetic_ai.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 35.
-LaTeX Font Info:    ... okay on input line 35.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 35.
-LaTeX Font Info:    ... okay on input line 35.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 35.
-LaTeX Font Info:    ... okay on input line 35.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 35.
-LaTeX Font Info:    ... okay on input line 35.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 35.
-LaTeX Font Info:    ... okay on input line 35.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 35.
-LaTeX Font Info:    ... okay on input line 35.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 35.
-LaTeX Font Info:    ... okay on input line 35.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 35.
-LaTeX Font Info:    ... okay on input line 35.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 35.
-LaTeX Font Info:    ... okay on input line 35.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 36.
+LaTeX Font Info:    ... okay on input line 36.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 36.
+LaTeX Font Info:    ... okay on input line 36.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 36.
+LaTeX Font Info:    ... okay on input line 36.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 36.
+LaTeX Font Info:    ... okay on input line 36.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 36.
+LaTeX Font Info:    ... okay on input line 36.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 36.
+LaTeX Font Info:    ... okay on input line 36.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 36.
+LaTeX Font Info:    ... okay on input line 36.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 36.
+LaTeX Font Info:    ... okay on input line 36.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 36.
+LaTeX Font Info:    ... okay on input line 36.
  (/home/sharaths/.TinyTeX/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count357
-\scratchdimen=\dimen332
+\scratchcounter=\count358
+\scratchdimen=\dimen333
 \scratchbox=\box71
-\nofMPsegments=\count358
-\nofMParguments=\count359
+\nofMPsegments=\count359
+\nofMParguments=\count360
 \everyMPshowfont=\toks46
-\MPscratchCnt=\count360
-\MPscratchDim=\dimen333
-\MPnumerator=\count361
-\makeMPintoPDFobject=\count362
+\MPscratchCnt=\count361
+\MPscratchDim=\dimen334
+\MPnumerator=\count362
+\makeMPintoPDFobject=\count363
 \everyMPtoPDFconversion=\toks47
 ) (/home/sharaths/.TinyTeX/texmf-dist/tex/latex/epstopdf-pkg/epstopdf-base.sty
 Package: epstopdf-base 2020-01-24 v2.11 Base part for package epstopdf
@@ -648,7 +654,7 @@ Package caption Info: subfig package v1.3 is loaded.
 Package caption Info: float package is loaded.
 Package caption Info: hyperref package is loaded.
 Package caption Info: End \AtBeginDocument code.
-Package hyperref Info: Link coloring OFF on input line 35.
+Package hyperref Info: Link coloring OFF on input line 36.
  (./kinetic_ai.out) (./kinetic_ai.out)
 \@outlinefile=\write4
 \openout4 = `kinetic_ai.out'.
@@ -690,93 +696,103 @@ Package hyperref Info: Link coloring OFF on input line 35.
 
 Package pgfplots notification 'compat/show suggested version=true': document has been generated with the most recent feature set (\pgfplotsset{compat=1.18}).
 
-LaTeX Font Info:    Trying to load font information for U+msa on input line 38.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 39.
 (/home/sharaths/.TinyTeX/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 38.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 39.
  (/home/sharaths/.TinyTeX/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
-Overfull \hbox (2.51518pt too wide) in paragraph at lines 61--62
+Overfull \hbox (2.51518pt too wide) in paragraph at lines 62--63
 \OT1/cmr/m/n/12 Quantal re-sponse equi-lib-rium (QRE) is a re-fine-ment of Nash equi-lib-rium that mod-els bounded
  []
 
 [1
 
 {/home/sharaths/.TinyTeX/texmf-var/fonts/map/pdftex/updmap/pdftex.map}{/home/sharaths/.TinyTeX/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc}] [2]
-Overfull \hbox (1.98389pt too wide) in paragraph at lines 108--116
+Overfull \hbox (1.98389pt too wide) in paragraph at lines 109--117
  [] 
  []
 
-<figures/fig_mmd_convergence.pdf, id=139, 702.75513pt x 232.88985pt>
+<figures/fig_mmd_convergence.pdf, id=147, 702.75513pt x 232.88985pt>
 File: figures/fig_mmd_convergence.pdf Graphic file (type pdf)
 <use figures/fig_mmd_convergence.pdf>
-Package pdftex.def Info: figures/fig_mmd_convergence.pdf  used on input line 123.
+Package pdftex.def Info: figures/fig_mmd_convergence.pdf  used on input line 124.
 (pdftex.def)             Requested size: 328.82707pt x 108.97139pt.
 [3 <./figures/fig_mmd_convergence.pdf>]
-<figures/fig_deq_memory.pdf, id=169, 485.92291pt x 305.82129pt>
+<figures/fig_deq_memory.pdf, id=177, 485.92291pt x 305.82129pt>
 File: figures/fig_deq_memory.pdf Graphic file (type pdf)
 <use figures/fig_deq_memory.pdf>
-Package pdftex.def Info: figures/fig_deq_memory.pdf  used on input line 176.
+Package pdftex.def Info: figures/fig_deq_memory.pdf  used on input line 177.
 (pdftex.def)             Requested size: 305.33789pt x 192.17377pt.
  [4]
-<figures/fig_anderson_stiffness.pdf, id=175, 485.86205pt x 306.50197pt>
+<figures/fig_anderson_stiffness.pdf, id=183, 485.86205pt x 306.50197pt>
 File: figures/fig_anderson_stiffness.pdf Graphic file (type pdf)
 <use figures/fig_anderson_stiffness.pdf>
-Package pdftex.def Info: figures/fig_anderson_stiffness.pdf  used on input line 183.
+Package pdftex.def Info: figures/fig_anderson_stiffness.pdf  used on input line 184.
 (pdftex.def)             Requested size: 305.33789pt x 192.6249pt.
  [5 <./figures/fig_deq_memory.pdf> <./figures/fig_anderson_stiffness.pdf>]
-Overfull \hbox (6.78123pt too wide) in paragraph at lines 213--215
+Overfull \hbox (6.78123pt too wide) in paragraph at lines 214--216
 \OT1/cmr/m/n/12 Second-price auc-tions achieve ex-actly zero re-gret, as pre-dicted by Vick-rey's the-o-rem. Weighted
  []
 
-<figures/fig_auction_regret.pdf, id=200, 702.74986pt x 234.16734pt>
+<figures/fig_auction_regret.pdf, id=208, 702.74986pt x 234.16734pt>
 File: figures/fig_auction_regret.pdf Graphic file (type pdf)
 <use figures/fig_auction_regret.pdf>
-Package pdftex.def Info: figures/fig_auction_regret.pdf  used on input line 218.
+Package pdftex.def Info: figures/fig_auction_regret.pdf  used on input line 219.
 (pdftex.def)             Requested size: 328.82707pt x 109.57271pt.
 
-Overfull \hbox (44.00179pt too wide) in paragraph at lines 230--239
+Overfull \hbox (44.00179pt too wide) in paragraph at lines 231--240
  [] 
  []
 
 [6 <./figures/fig_auction_regret.pdf>]
-Overfull \hbox (34.08112pt too wide) in paragraph at lines 249--258
+Overfull \hbox (34.08112pt too wide) in paragraph at lines 250--259
  [] 
  []
 
 [7]
-<figures/fig_eqlm_loss_curves.pdf, id=235, 558.15968pt x 341.87851pt>
+<figures/fig_eqlm_loss_curves.pdf, id=243, 558.15968pt x 341.87851pt>
 File: figures/fig_eqlm_loss_curves.pdf Graphic file (type pdf)
 <use figures/fig_eqlm_loss_curves.pdf>
-Package pdftex.def Info: figures/fig_eqlm_loss_curves.pdf  used on input line 308.
+Package pdftex.def Info: figures/fig_eqlm_loss_curves.pdf  used on input line 309.
 (pdftex.def)             Requested size: 375.80544pt x 230.18419pt.
- [8] [9 <./figures/fig_eqlm_loss_curves.pdf>] (./kinetic_ai.bbl
+ [8]
+Overfull \hbox (56.30876pt too wide) in paragraph at lines 330--331
+\OT1/cmr/m/n/12 com-pu-ta-tion. (exp07, 300 steps, real stream, con-fig sha in re-sults/exp07[]contraction[]check/results.json). 
+ []
+
+[9 <./figures/fig_eqlm_loss_curves.pdf>]
+Overfull \hbox (18.68379pt too wide) in paragraph at lines 341--351
+ [] 
+ []
+
+[10] (./kinetic_ai.bbl
 
 Package natbib Warning: Empty `thebibliography' environment on input line 8.
 
-) [10] (./kinetic_ai.aux)
+) [11] (./kinetic_ai.aux)
  ***********
 LaTeX2e <2025-11-01>
 L3 programming layer <2026-01-19>
  ***********
 Package rerunfilecheck Info: File `kinetic_ai.out' has not changed.
-(rerunfilecheck)             Checksum: 9D7C00956744B12DE12732A203ECBCA2;5875.
+(rerunfilecheck)             Checksum: 6F1968B775E2FF7323618BAACB8FFF17;6967.
  ) 
 Here is how much of TeX's memory you used:
- 34582 strings out of 469471
- 797861 string characters out of 5468383
+ 34660 strings out of 469471
+ 799227 string characters out of 5468383
  1299770 words of memory out of 5000000
- 62663 multiletter control sequences out of 15000+600000
+ 62729 multiletter control sequences out of 15000+600000
  638566 words of font info for 81 fonts, out of 8000000 for 9000
  36 hyphenation exceptions out of 8191
- 99i,8n,108p,770b,522s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 99i,9n,108p,770b,520s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </home/sharaths/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></home/sharaths/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></home/sharaths/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></home/sharaths/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></home/sharaths/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></home/sharaths/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></home/sharaths/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></home/sharaths/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></home/sharaths/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></home/sharaths/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></home/sharaths/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb></home/sharaths/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt12.pfb></home/sharaths/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb></home/sharaths/.TinyTeX/texmf-dist/fonts/type1/public/cm-super/sfrm1200.pfb>
-Output written on kinetic_ai.pdf (10 pages, 276006 bytes).
+Output written on kinetic_ai.pdf (11 pages, 283073 bytes).
 PDF statistics:
- 335 PDF objects out of 1000 (max. 8388607)
- 255 compressed objects within 3 object streams
- 45 named destinations out of 1000 (max. 500000)
- 262 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 353 PDF objects out of 1000 (max. 8388607)
+ 272 compressed objects within 3 object streams
+ 53 named destinations out of 1000 (max. 500000)
+ 278 words of extra memory for PDF output out of 10000 (max. 10000000)
 
