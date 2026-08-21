@@ -13,6 +13,7 @@ Figures validated from:
   F5: results/exp03_deq_solvers/results.json (config a0f8f5c0, config 74726b7a, commit 9a2cde2f)
   F6: results/exp04_auction_truthfulness/results.json (config 5c458dac, commit 9a2cde2f)
   F13: results/exp05_full/results.json (config 8a2fa16e, commit 385f5d4)
+  F18: results/exp05_full_v4{,_s43,_s44}/results.json (3-seed verdict with CI)
 """
 from __future__ import annotations
 
@@ -359,6 +360,95 @@ def fig_eqlm_loss_curves() -> None:
     save(fig, "fig_eqlm_loss_curves.pdf")
 
 
+# --------------------------------------------------------------------------- #
+# Figure 6: H1 Iteration Trajectory (F18)
+# Source: results/exp05_full (F13), exp05_full_v4 (F17), exp05_full_v4_s{43,44} (F18)
+# Config: 8a2fa16e (exp05_full), 8f3c8969 (exp05_full_v4), frozen from results
+# --------------------------------------------------------------------------- #
+
+def fig_h1_iterations() -> None:
+    """F18: H1 iteration trajectory showing BLiMP ratio progression.
+
+    Iteration 1 (exp05_full, v1/v2): ratio 0.78 (0.571/0.734)
+    Iteration 2 (exp05_full_v4, single seed): ratio 0.944 (0.704/0.746)
+    Iteration 3 (exp05_full_v4 + 2 seeds): mean ratio 0.9303, CI [0.8979, 0.9492]
+
+    Frozen from results/exp05_full, exp05_full_v4, exp05_full_v4_s43/s44.
+    Horizontal line at 0.95 marks the pre-registered threshold (MISSED).
+    """
+    fig, ax = plt.subplots(figsize=(8, 5.5))
+
+    # Frozen data from validated runs
+    # Iteration 1: exp05_full (F13, config 8a2fa16e)
+    #   A1 (ExplicitLM): 0.734
+    #   A2 (EqLM): 0.571
+    #   Ratio: 0.571 / 0.734 = 0.778
+    iter1_ratio = 0.778
+
+    # Iteration 2: exp05_full_v4 single-seed (F17, config 8f3c8969)
+    #   A1 (ExplicitLM): 0.746
+    #   A2 (EqLM-v4 no aux): 0.704
+    #   Ratio: 0.704 / 0.746 = 0.944
+    iter2_ratio = 0.944
+
+    # Iteration 3: 3-seed mean (F18)
+    #   A1 mean: 0.7133
+    #   A3 mean: 0.6637
+    #   Ratio: 0.6637 / 0.7133 = 0.9303
+    #   95% bootstrap CI: [0.8979, 0.9492]
+    iter3_ratio = 0.9303
+    iter3_ci_lower = 0.8979
+    iter3_ci_upper = 0.9492
+
+    iterations = [1, 2, 3]
+    ratios = [iter1_ratio, iter2_ratio, iter3_ratio]
+    errors = [[0, 0, iter3_ratio - iter3_ci_lower],
+              [0, 0, iter3_ci_upper - iter3_ratio]]
+
+    # Plot points and lines
+    ax.errorbar([1, 2], [iter1_ratio, iter2_ratio], fmt="o", color=C_TREATMENT,
+                markersize=10, linewidth=2.5, label="Single seed / reported")
+    ax.errorbar([3], [iter3_ratio], yerr=[[iter3_ratio - iter3_ci_lower],
+                                           [iter3_ci_upper - iter3_ratio]],
+                fmt="s", color=C_TREATMENT, markersize=10, capsize=8, capthick=2.5,
+                linewidth=2.5, label="3-seed mean ± 95% CI")
+
+    # Connect with dashed line to show trajectory
+    ax.plot([1, 2, 3], [iter1_ratio, iter2_ratio, iter3_ratio], ":",
+            color=C_NEUTRAL, linewidth=1.5, alpha=0.6, zorder=1)
+
+    # Pre-registered threshold line
+    ax.axhline(y=0.95, color=C_HIGHLIGHT, linestyle="--", linewidth=2.0,
+               label="Pre-registered threshold (0.95)", zorder=2)
+
+    # Shaded region for miss
+    ax.fill_between([0.5, 3.5], 0.93, 0.95, alpha=0.15, color=C_HIGHLIGHT,
+                     zorder=0, label="Formal miss zone (0.93–0.95)")
+
+    ax.set_xlabel("Iteration", fontsize=12, fontweight="bold")
+    ax.set_ylabel("BLiMP Ratio (EqLM / ExplicitLM)", fontsize=12, fontweight="bold")
+    ax.set_title("H1 Hypothesis Trajectory: 3-Seed Verdict (F18)", fontsize=13, fontweight="bold")
+    ax.set_xticks([1, 2, 3])
+    ax.set_xticklabels(["Iter 1\n(v1/v2,\nno aux)", "Iter 2\n(v4,\nno aux)", "Iter 3\n(v4,\n3 seeds)"])
+    ax.set_ylim([0.70, 1.00])
+    ax.set_xlim([0.5, 3.5])
+    ax.legend(loc="lower right", frameon=True, fontsize=10)
+    despine(ax)
+    ygrid(ax)
+
+    # Annotate key values
+    ax.text(1, iter1_ratio - 0.04, f"{iter1_ratio:.3f}", ha="center", fontsize=9,
+            fontweight="bold")
+    ax.text(2, iter2_ratio + 0.03, f"{iter2_ratio:.3f}", ha="center", fontsize=9,
+            fontweight="bold")
+    ax.text(3, iter3_ratio - 0.06, f"{iter3_ratio:.4f}\nCI [{iter3_ci_lower:.4f},\n{iter3_ci_upper:.4f}]",
+            ha="center", fontsize=8, fontweight="bold", bbox=dict(boxstyle="round,pad=0.5",
+            facecolor="white", edgecolor=C_TREATMENT, linewidth=1))
+
+    fig.tight_layout()
+    save(fig, "fig_h1_iterations.pdf")
+
+
 if __name__ == "__main__":
     apply_style()
     print("Generating publication figures from validated findings...")
@@ -369,6 +459,7 @@ if __name__ == "__main__":
         fig_anderson_stiffness()
         fig_auction_regret()
         fig_eqlm_loss_curves()
+        fig_h1_iterations()
         print("\n✓ All figures generated successfully.")
     except SystemExit as e:
         print(f"✗ Figure generation failed: {e}")

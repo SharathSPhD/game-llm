@@ -41,9 +41,14 @@
 \newlabel{fig:eqlm_loss_curves}{{5}{9}{\textbf {F13: EqLM Full-Run Loss Curves.} 20k-step training over full strict-small corpus. A1 (ExplicitLM, orange) reaches 3.90 loss; A2 (EqLM, blue) reaches 4.41; A3 (EqLM+MagneticAdamW, purple) reaches 4.68. Frozen from results/exp05\_full/results.json (config sha 8a2fa16e, commit 385f5d4)}{figure.caption.5}{}}
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {5.6.6}Discovery: EqLM Has No Fixed Point—Weight-Tied Iteration, Not Equilibrium (F14)}{9}{subsubsection.5.6.6}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {5.6.7}EqLM-v3: Post-LN Map Restores Fixed Points, But Contraction Is Weak (F15—H1 Frontier Identified)}{10}{subsubsection.5.6.7}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {6}Related Work}{10}{section.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.6.8}Solver-Aware Auxiliary Loss Teaches Contraction (F16—Breakthrough)}{10}{subsubsection.5.6.8}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.6.9}H1 Iteration 2: Post-LN EqLM Reaches 94.4\% (F17—Near-Miss Within Noise)}{11}{subsubsection.5.6.9}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.6.10}H1 Verdict: 3 Seeds Confirm Formal Miss at 93\% (F18—Honest Result With Tight CI)}{11}{subsubsection.5.6.10}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces \textbf  {F18: H1 Iteration Trajectory.} EqLM BLiMP ratio (vs ExplicitLM baseline) progresses 0.78 (iter 1, exp05\_full v1/v2) → 0.944 (iter 2, exp05\_full\_v4 single seed) → 0.9303 mean (iter 3, 3-seed verdict). Ratio CI at iter 3: [0.8979, 0.9492] (upper bound < 0.95 threshold, formal miss). Frozen constants; sources: results/exp05\_full (F13), exp05\_full\_v4 (F17), results/exp05\_full\_v4{,\_s43,\_s44} (F18).}}{13}{figure.caption.6}\protected@file@percent }
+\newlabel{fig:h1_iterations}{{6}{13}{\textbf {F18: H1 Iteration Trajectory.} EqLM BLiMP ratio (vs ExplicitLM baseline) progresses 0.78 (iter 1, exp05\_full v1/v2) → 0.944 (iter 2, exp05\_full\_v4 single seed) → 0.9303 mean (iter 3, 3-seed verdict). Ratio CI at iter 3: [0.8979, 0.9492] (upper bound < 0.95 threshold, formal miss). Frozen constants; sources: results/exp05\_full (F13), exp05\_full\_v4 (F17), results/exp05\_full\_v4{,\_s43,\_s44} (F18)}{figure.caption.6}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {6}Related Work}{13}{section.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {7}Limitations}{13}{section.7}\protected@file@percent }
 \bibstyle{plainnat}
 \bibdata{references}
-\@writefile{toc}{\contentsline {section}{\numberline {7}Limitations}{11}{section.7}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {8}Conclusion}{11}{section.8}\protected@file@percent }
-\gdef \@abspage@last{11}
+\@writefile{toc}{\contentsline {section}{\numberline {8}Conclusion}{14}{section.8}\protected@file@percent }
+\gdef \@abspage@last{14}
