@@ -418,3 +418,40 @@ class TestMagneticAdamWMemory:
 
 if __name__ == "__main__":
     pytest.main([__file__, "-v"])
+
+
+class TestDecoupledWeightDecay:
+    """Regression: wd must be decoupled (AdamW), not folded into the gradient.
+
+    Coupled L2 through the Adam normalizer destroys sparse-gradient params
+    (e.g. a large tied embedding where most rows get no gradient per step):
+    exp06 showed EqLM+MagneticAdamW(tau=0) at loss 10.46 vs torch AdamW 8.82.
+    """
+
+    def test_tau0_matches_adamw_on_sparse_grad_embedding(self) -> None:
+        import copy
+
+        torch.manual_seed(0)
+        emb = nn.Embedding(1000, 16)  # most rows get zero grad per step
+        head = nn.Linear(16, 1000)
+        model_a = nn.Sequential(emb, head)
+        model_b = copy.deepcopy(model_a)
+
+        opt_a = torch.optim.AdamW(model_a.parameters(), lr=1e-2, weight_decay=0.1)
+        opt_b = MagneticAdamW(model_b.parameters(), lr=1e-2, weight_decay=0.1, tau=0.0)
+
+        ids = torch.randint(0, 10, (64,))  # only rows 0-9 ever used
+        for _ in range(20):
+            for model, opt in ((model_a, opt_a), (model_b, opt_b)):
+                opt.zero_grad()
+                out = model(ids)
+                loss = out.pow(2).mean()
+                loss.backward()
+                opt.step()
+
+        for (na, pa), (_nb, pb) in zip(
+            model_a.named_parameters(), model_b.named_parameters(), strict=True
+        ):
+            assert torch.allclose(pa, pb, atol=1e-5), (
+                f"{na} diverged: max diff {(pa - pb).abs().max().item():.2e}"
+            )

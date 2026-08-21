@@ -143,8 +143,6 @@ class MagneticAdamW(Optimizer):
                     )
 
                 wd = group["weight_decay"]
-                if wd != 0:
-                    grad = grad.add(p, alpha=wd)
 
                 # Get state for this parameter
                 state = self.state[p]
@@ -175,9 +173,15 @@ class MagneticAdamW(Optimizer):
                     # Compute adaptive learning rate term
                     denom = (exp_avg_sq.sqrt() / (bias_correction2**0.5)).add_(group["eps"])
 
-                    # Standard AdamW update
+                    # Standard AdamW update with DECOUPLED weight decay
+                    # (theta <- theta*(1 - lr*wd) - step_size * m_hat/denom).
+                    # Folding wd into the gradient (Adam-L2) breaks sparse-grad
+                    # params like tied embeddings: the Adam normalizer turns
+                    # wd*theta into a ~lr-magnitude decay per step.
                     step_size = group["lr"] / bias_correction1
-                    p_new = p.data.add(exp_avg / denom, alpha=-step_size)
+                    p_new = p.data.mul(1 - group["lr"] * wd).add_(
+                        exp_avg / denom, alpha=-step_size
+                    )
 
                     # Apply magnetic proximal pull if tau > 0
                     tau = group["tau"]
