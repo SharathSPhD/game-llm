@@ -219,3 +219,84 @@ class TestSpectralNorm:
         x = torch.randn(2, 4)
         output = model(x)
         assert output.shape == (2, 4)
+
+
+class TestRelativeResidualConvergence:
+    """Test relative residual convergence criterion (Task 1, F14).
+
+    F14 identified that absolute residual convergence is unsatisfiable at batch scale.
+    Solution: gate convergence on relative residual = ||z_next - z|| / (||z_next|| + eps)
+    instead of absolute norm over batch tensor.
+    """
+
+    def test_large_batch_converges_with_relative_residual(self) -> None:
+        """Large batch tensor with relative residual should converge where absolute fails.
+
+        This is the F14 issue: ||z_next - z|| is O(batch_size) for large batches,
+        making absolute criterion unsatisfiable. Relative residual = O(1) is satisfiable.
+        """
+        torch.manual_seed(42)
+
+        # Create a contractive map and large batch
+        state_dim = 32
+        batch_size = 128  # Large batch to trigger F14 issue
+        transform, f = make_contractive_transform(state_dim)
+
+        # Input with large batch: [B, d_model]
+        x = torch.randn(batch_size, state_dim)
+
+        # Test with relative residual criterion (tol 1e-3, should converge)
+        config = DEQConfig(
+            solver=SolverType.ANDERSON,
+            max_iter=100,
+            tol=1e-3,
+        )
+        deq = DEQLayer(f, config)
+        deq(x)
+
+        # Verify convergence info is stored
+        assert hasattr(deq, "last_info")
+        assert "rel_residuals" in deq.last_info, "Should store rel_residuals"
+        assert "residuals" in deq.last_info, "Should store residuals for backward compat"
+        assert "converged" in deq.last_info
+
+        # With relative residual criterion, should converge even on large batch
+        assert deq.last_info["converged"], (
+            f"Large batch should converge with relative residual; "
+            f"rel_residuals: {deq.last_info['rel_residuals'][-3:]}"
+        )
+
+        # Verify relative residuals are decreasing
+        rel_resis = deq.last_info["rel_residuals"]
+        if len(rel_resis) > 2:
+            assert rel_resis[-1] < rel_resis[0], "Relative residuals should decrease"
+
+    def test_rel_residual_stored_in_info(self) -> None:
+        """DEQ info dict should contain both residuals and rel_residuals."""
+        torch.manual_seed(42)
+        state_dim = 16
+        batch_size = 64
+        transform, f = make_contractive_transform(state_dim)
+        x = torch.randn(batch_size, state_dim)
+
+        config = DEQConfig(solver=SolverType.PICARD, max_iter=50, tol=1e-4)
+        deq = DEQLayer(f, config)
+        _ = deq(x)
+
+        info = deq.last_info
+        assert "residuals" in info, "Missing residuals (absolute, backward compat)"
+        assert "rel_residuals" in info, "Missing rel_residuals"
+
+        # Both should be lists of same length
+        assert isinstance(info["residuals"], list)
+        assert isinstance(info["rel_residuals"], list)
+        assert len(info["residuals"]) == len(info["rel_residuals"]), (
+            "residuals and rel_residuals should have same length"
+        )
+
+        # Relative residuals should be smaller than absolute
+        for i, (abs_res, rel_res) in enumerate(zip(info["residuals"], info["rel_residuals"], strict=False)):
+            # On large batch, rel should be much smaller than abs
+            assert rel_res <= abs_res + 1e-6, (
+                f"Iter {i}: rel_residual {rel_res} should be <= abs_residual {abs_res}"
+            )

@@ -67,6 +67,13 @@ class EqLMConfig:
                           Ensures ||f(z) - z|| < α ensures contraction when α < 1.
                           Default 0.2 ensures σ(f) < 1 for block with spectral norm.
                           Set to 1.0 for no damping (full residual, requires explicit α scaling).
+        map_form: Fixed-point map formulation: 'residual' (v1/v2, default) | 'postln' (v3).
+                  'residual': f(z,x) = (1-α)z + α(z + Attn + MLP + inj(x))
+                             Pre-LN transformer block with damped residuals (original DEQ form).
+                  'postln': f(z,x) = LN2(h + MLP(h)) where h = LN1(z + Attn(z,causal) + inj(x))
+                           Puts outer LayerNorm INSIDE the map so iterates are bounded.
+                           Follows Bai et al. DEQ-transformer practice. Ensures bona fide fixed points exist.
+                           Default 'residual' for backward compat.
     """
 
     vocab_size: int = 50257
@@ -81,6 +88,7 @@ class EqLMConfig:
     dropout: float = 0.1
     spectral_norm: bool = True
     residual_damping: float = 0.2
+    map_form: str = "residual"
 
 
 # ============================================================================
@@ -162,25 +170,41 @@ class EqLMBlock(nn.Module):
             apply_spectral_norm(self)
 
     def forward(self, z: Tensor, x: Tensor) -> Tensor:
-        """Fixed-point map f(z, x) = z + Attn(LN(z), causal) + MLP(LN(z+Attn)).
+        """Fixed-point map f(z, x).
+
+        Two formulations available:
+
+        map_form='residual' (v1/v2, default):
+            f(z,x) = (1-α)z + α(z + Attn(LN(z), causal) + MLP(LN(z+Attn)) + inj(x))
+            Pre-LN transformer block with damped residuals (standard DEQ form).
+
+        map_form='postln' (v3, F14 fix):
+            f(z,x) = LN2(h + MLP(h)) where h = LN1(z + Attn(z, causal) + inj(x))
+            Puts outer LayerNorm INSIDE the map so iterates are bounded.
+            Ensures bona fide fixed points exist (Bai et al. DEQ-transformer practice).
 
         Args:
             z: Hidden state [B, T, d_model].
-            x: Unused input parameter (kept for DEQLayer interface compatibility).
+            x: Input embeddings [B, T, d_model].
 
         Returns:
             Updated hidden state [B, T, d_model].
         """
         batch_size, seq_len, _ = z.shape
+        map_form = self.config.map_form
 
         # -------- Attention Block --------
-        # Pre-LN: normalize z before attention
-        z_ln = self.ln1(z)
-
-        # Project to Q, K, V
-        q = self.q_proj(z_ln)  # [B, T, d_model]
-        k = self.k_proj(z_ln)
-        v = self.v_proj(z_ln)
+        if map_form == "postln":
+            # postln: attention on z directly (post-LN on the output)
+            q = self.q_proj(z)  # [B, T, d_model]
+            k = self.k_proj(z)
+            v = self.v_proj(z)
+        else:  # residual
+            # residual: attention on LN(z) (pre-LN)
+            z_ln = self.ln1(z)
+            q = self.q_proj(z_ln)  # [B, T, d_model]
+            k = self.k_proj(z_ln)
+            v = self.v_proj(z_ln)
 
         # Reshape for multi-head attention
         q = q.reshape(batch_size, seq_len, self.n_heads, self.head_dim).transpose(1, 2)
@@ -210,33 +234,57 @@ class EqLMBlock(nn.Module):
         attn_out = self.out_proj(attn_out)
         attn_out = self.dropout(attn_out)
 
-        # -------- Feed-Forward Block --------
-        # Pre-LN on combined state: z + attn_out
-        z_post_attn = z + attn_out
-        z_ln2 = self.ln2(z_post_attn)
-
-        # Feed-forward network (MLP)
-        ff_out = self.fc1(z_ln2)
-        ff_out = F.relu(ff_out)
-        ff_out = self.dropout(ff_out)
-        ff_out = self.fc2(ff_out)
-        ff_out = self.dropout(ff_out)
-
         # -------- Input Injection (Causal) --------
         # Apply a gated input injection: x[t] only depends on token t (causal)
         # The gate controls how much of the embedding input is mixed in
         gate = torch.sigmoid(self.input_gate(x))  # [B, T, 1]
         input_injection = gate * x  # [B, T, d_model]
 
-        # -------- Damped Residual Connection --------
-        # Apply damping to ensure contraction: f(z) = (1-α)z + α(z + g(z))
-        # This guarantees ||f'(z)|| < 1 even when ||g'(z)|| is not directly controlled.
-        # When α=0.5, we get f(z) = 0.5*z + 0.5*(z + attn + ff + input)
-        #                        = 0.5*z + 0.5*z + 0.5*(attn + ff + input)
-        #                        = z + 0.5*(attn + ff + input)
-        # This damps the derivative: ||f'(z)|| <= 1 - α*(1-||g'||) when spectral norm is used.
-        residual_branch = attn_out + ff_out + input_injection
-        output = (1.0 - self.residual_damping) * z + self.residual_damping * (z + residual_branch)
+        if map_form == "postln":
+            # postln: f(z,x) = LN2(h + MLP(h)) where h = LN1(z + Attn + inj(x))
+            # This puts the outer LN inside the map, ensuring bounded iterates
+
+            # Combine z + attention + input
+            h = z + attn_out + input_injection  # [B, T, d_model]
+
+            # Apply first LN
+            h = self.ln1(h)
+
+            # Feed-forward network (MLP)
+            ff_out = self.fc1(h)
+            ff_out = F.relu(ff_out)
+            ff_out = self.dropout(ff_out)
+            ff_out = self.fc2(ff_out)
+            ff_out = self.dropout(ff_out)
+
+            # Apply second LN to h + MLP(h) (outer norm is now INSIDE the map)
+            output = self.ln2(h + ff_out)
+
+        else:  # residual (v1/v2)
+            # residual: f(z,x) = (1-α)z + α(z + Attn(LN(z)) + MLP(LN(z+Attn)) + inj(x))
+            # Pre-LN transformer block with damped residuals
+
+            # -------- Feed-Forward Block --------
+            # Pre-LN on combined state: z + attn_out
+            z_post_attn = z + attn_out
+            z_ln2 = self.ln2(z_post_attn)
+
+            # Feed-forward network (MLP)
+            ff_out = self.fc1(z_ln2)
+            ff_out = F.relu(ff_out)
+            ff_out = self.dropout(ff_out)
+            ff_out = self.fc2(ff_out)
+            ff_out = self.dropout(ff_out)
+
+            # -------- Damped Residual Connection --------
+            # Apply damping to ensure contraction: f(z) = (1-α)z + α(z + g(z))
+            # This guarantees ||f'(z)|| < 1 even when ||g'(z)|| is not directly controlled.
+            # When α=0.5, we get f(z) = 0.5*z + 0.5*(z + attn + ff + input)
+            #                        = 0.5*z + 0.5*z + 0.5*(attn + ff + input)
+            #                        = z + 0.5*(attn + ff + input)
+            # This damps the derivative: ||f'(z)|| <= 1 - α*(1-||g'||) when spectral norm is used.
+            residual_branch = attn_out + ff_out + input_injection
+            output = (1.0 - self.residual_damping) * z + self.residual_damping * (z + residual_branch)
 
         return cast(Tensor, output)
 
@@ -486,6 +534,7 @@ def match_explicit_width(
             dropout=base_cfg.dropout,
             spectral_norm=base_cfg.spectral_norm,
             residual_damping=base_cfg.residual_damping,
+            map_form=base_cfg.map_form,
         )
 
         eqlm = EqLM(scaled_cfg)

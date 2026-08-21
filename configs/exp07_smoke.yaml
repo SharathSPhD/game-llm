@@ -28,4 +28,5 @@ model:
   deq_tol: 1e-3
   solver: "anderson"
   dropout: 0.1
+  residual_damping: 0.2  # Used by v2 and v3 arms
   n_layers_explicit: 3  # A1 baseline has 3 explicit layers

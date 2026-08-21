@@ -350,6 +350,7 @@ class TestGradientFlow:
         Note: With residual_damping=0.2, learning is slowed by ~2x, so we need
         more iterations to show improvement.
         """
+        torch.manual_seed(42)
         # Create a tiny overfit batch
         batch_size, seq_len = 2, 8
         input_ids = torch.randint(0, 100, (batch_size, seq_len))
@@ -632,6 +633,213 @@ class TestInitialCELoss:
                 f"ExplicitLM initial CE loss {ce_loss:.4f} should be near ln({tiny_eqlm_config.vocab_size})={expected:.4f} "
                 f"(within 15%, tolerance={tolerance:.4f})"
             )
+
+
+class TestEqLMv3PostLN:
+    """Test EqLM-v3 with postln map form (Task 2, F14 fix).
+
+    F14 identified that EqLM-v1/v2's residual map has no bona fide fixed point.
+    Solution: put outer LayerNorm INSIDE the map so iterates are bounded and
+    fixed points exist.
+
+    Map form: f(z,x) = LN2(h + MLP(h)) where h = LN1(z + Attn(z, causal) + inj(x))
+    This follows Bai et al. DEQ-transformer practice.
+    """
+
+    def test_postln_map_form_iterates_bounded(
+        self, tiny_eqlm_config: EqLMConfig, tiny_batch: tuple
+    ) -> None:
+        """With map_form='postln', iterates should be bounded and convergence achievable.
+
+        Specifically:
+        (a) rel_residual should decrease
+        (b) converged=True within 60 iters at tol 1e-2
+        """
+        input_ids, batch_size, seq_len = tiny_batch
+
+        # Create config with postln map form
+        cfg = EqLMConfig(
+            vocab_size=tiny_eqlm_config.vocab_size,
+            d_model=tiny_eqlm_config.d_model,
+            n_heads=tiny_eqlm_config.n_heads,
+            d_ff=tiny_eqlm_config.d_ff,
+            max_seq_len=tiny_eqlm_config.max_seq_len,
+            deq_max_iter=60,  # Increased for this test
+            deq_tol=1e-2,  # Relative residual tolerance
+            solver="anderson",
+            jfb=False,
+            dropout=0.0,
+            spectral_norm=True,
+            residual_damping=0.2,
+            map_form="postln",  # v3 mode
+        )
+        model = EqLM(cfg)
+        logits = model(input_ids)
+
+        # Verify convergence with relative residual
+        assert hasattr(model.deq, "last_info")
+        info = model.deq.last_info
+        assert "rel_residuals" in info
+        assert "converged" in info
+
+        # Relative residuals should decrease
+        rel_residuals = info["rel_residuals"]
+        if len(rel_residuals) > 2:
+            assert rel_residuals[-1] < rel_residuals[0], (
+                f"Relative residuals should decrease with postln map; "
+                f"first={rel_residuals[0]:.6f}, last={rel_residuals[-1]:.6f}"
+            )
+
+        # Should converge with postln map
+        assert info["converged"], (
+            f"postln map should converge at tol=1e-2; "
+            f"final rel_residual={rel_residuals[-1]:.6f}"
+        )
+
+        # Check shape
+        assert logits.shape == (batch_size, seq_len, cfg.vocab_size)
+
+    def test_postln_removes_f14_signature(
+        self, tiny_eqlm_config: EqLMConfig, tiny_batch: tuple
+    ) -> None:
+        """With map_form='postln', F14's residual plateau signature should be gone.
+
+        F14 signature: absolute residual plateaus at constant value (tail-ratio ~0.99).
+        With postln, absolute residual should actually decay (tail-ratio < 0.9).
+        """
+        input_ids, _, _ = tiny_batch
+
+        cfg = EqLMConfig(
+            vocab_size=tiny_eqlm_config.vocab_size,
+            d_model=tiny_eqlm_config.d_model,
+            n_heads=tiny_eqlm_config.n_heads,
+            d_ff=tiny_eqlm_config.d_ff,
+            max_seq_len=tiny_eqlm_config.max_seq_len,
+            deq_max_iter=50,
+            deq_tol=1e-2,
+            solver="anderson",
+            jfb=False,
+            dropout=0.0,
+            spectral_norm=True,
+            residual_damping=0.2,
+            map_form="postln",
+        )
+        model = EqLM(cfg)
+        _ = model(input_ids)
+
+        info = model.deq.last_info
+        residuals = info["residuals"]
+
+        # Check tail-ratio: mean of last half / mean of first half
+        if len(residuals) >= 4:
+            mid = len(residuals) // 2
+            tail_ratio = (
+                sum(residuals[mid:]) / len(residuals[mid:])
+            ) / (sum(residuals[:mid]) / len(residuals[:mid]))
+            assert tail_ratio < 0.9, (
+                f"postln should show actual decay, not plateau; "
+                f"tail_ratio={tail_ratio:.2f} should be < 0.9"
+            )
+
+    def test_postln_causality_preserved(
+        self, tiny_eqlm_config: EqLMConfig
+    ) -> None:
+        """postln map form should still preserve causal masking."""
+        batch_size, seq_len = 1, 8
+        input_ids = torch.randint(0, 100, (batch_size, seq_len))
+
+        cfg = EqLMConfig(
+            vocab_size=tiny_eqlm_config.vocab_size,
+            d_model=tiny_eqlm_config.d_model,
+            n_heads=tiny_eqlm_config.n_heads,
+            d_ff=tiny_eqlm_config.d_ff,
+            max_seq_len=tiny_eqlm_config.max_seq_len,
+            deq_max_iter=20,
+            deq_tol=1e-2,
+            solver="anderson",
+            jfb=False,
+            dropout=0.0,
+            spectral_norm=True,
+            residual_damping=0.2,
+            map_form="postln",
+        )
+        model = EqLM(cfg)
+        logits_full = model(input_ids)
+
+        # Modify future tokens
+        input_ids_modified = input_ids.clone()
+        input_ids_modified[:, 5:] = torch.randint(0, 100, (batch_size, seq_len - 5))
+
+        logits_modified = model(input_ids_modified)
+
+        # Logits at positions 0-4 should match (allow numerical drift in DEQ solver)
+        diff = torch.abs(logits_full[:, :5, :] - logits_modified[:, :5, :]).max()
+        # Note: DEQ solvers have slight numerical coupling due to fixed-point iteration,
+        # so we allow slightly larger tolerance than deterministic transformers
+        assert diff < 1e-2, (
+            f"postln should preserve causality; "
+            f"positions 0-4 should match, max diff={diff}"
+        )
+
+    def test_postln_gradients_flow(
+        self, tiny_eqlm_config: EqLMConfig, tiny_batch: tuple
+    ) -> None:
+        """postln map form should support gradient flow."""
+        input_ids, _, _ = tiny_batch
+
+        cfg = EqLMConfig(
+            vocab_size=tiny_eqlm_config.vocab_size,
+            d_model=tiny_eqlm_config.d_model,
+            n_heads=tiny_eqlm_config.n_heads,
+            d_ff=tiny_eqlm_config.d_ff,
+            max_seq_len=tiny_eqlm_config.max_seq_len,
+            deq_max_iter=20,
+            deq_tol=1e-2,
+            solver="anderson",
+            jfb=False,
+            dropout=0.0,
+            spectral_norm=True,
+            residual_damping=0.2,
+            map_form="postln",
+        )
+        model = EqLM(cfg)
+        logits = model(input_ids)
+        loss = logits.mean()
+        loss.backward()
+
+        # Check gradients exist
+        assert model.embedding.weight.grad is not None
+        assert model.embedding.weight.grad.abs().sum() > 0
+
+    def test_residual_map_form_default_backward_compat(
+        self, tiny_eqlm_config: EqLMConfig, tiny_batch: tuple
+    ) -> None:
+        """map_form='residual' should reproduce old behavior (backward compat)."""
+        input_ids, batch_size, seq_len = tiny_batch
+
+        cfg = EqLMConfig(
+            vocab_size=tiny_eqlm_config.vocab_size,
+            d_model=tiny_eqlm_config.d_model,
+            n_heads=tiny_eqlm_config.n_heads,
+            d_ff=tiny_eqlm_config.d_ff,
+            max_seq_len=tiny_eqlm_config.max_seq_len,
+            deq_max_iter=20,
+            deq_tol=1e-3,
+            solver="anderson",
+            jfb=False,
+            dropout=0.0,
+            spectral_norm=True,
+            residual_damping=0.2,
+            map_form="residual",  # Explicit old form
+        )
+        model = EqLM(cfg)
+        logits = model(input_ids)
+
+        # Should work and produce correct shape
+        assert logits.shape == (batch_size, seq_len, cfg.vocab_size)
+
+        # Should expose solver info
+        assert hasattr(model.deq, "last_info")
 
 
 if __name__ == "__main__":

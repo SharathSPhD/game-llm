@@ -59,19 +59,33 @@ def _picard_iteration(
     """Simple fixed-point iteration: z ← f(z, x).
 
     Linear convergence at best. Provided as baseline.
+
+    Convergence is gated on RELATIVE residual: rel = ||z_next - z|| / (||z_next|| + eps)
+    This ensures convergence is achievable at batch scale (F14 fix).
+    Both absolute and relative residuals are recorded for analysis.
     """
     z = z_init.clone()
     residuals: list[float] = []
+    rel_residuals: list[float] = []
+    eps = 1e-8
 
     for i in range(max_iter):  # noqa: B007  (used after loop)
         z_next = f(z, x)
-        residual = torch.norm(z_next - z).item()
-        residuals.append(residual)
+        abs_residual = torch.norm(z_next - z).item()
+        norm_z_next = torch.norm(z_next).item()
+        rel_residual = abs_residual / (norm_z_next + eps)
+        residuals.append(abs_residual)
+        rel_residuals.append(rel_residual)
         z = z_next
-        if residual < tol:
+        if rel_residual < tol:
             break
 
-    info = {"iterations": i + 1, "residuals": residuals, "converged": residual < tol}
+    info = {
+        "iterations": i + 1,
+        "residuals": residuals,
+        "rel_residuals": rel_residuals,
+        "converged": rel_residual < tol,
+    }
     return z, info
 
 
@@ -91,6 +105,10 @@ def _anderson_acceleration(
 
     This typically provides superlinear convergence, significantly faster
     than Picard iteration.
+
+    Convergence is gated on RELATIVE residual: rel = ||z_next - z|| / (||z_next|| + eps)
+    This ensures convergence is achievable at batch scale (F14 fix).
+    Both absolute and relative residuals are recorded for analysis.
 
     Args:
         f: The fixed-point map z ← f(z, x).
@@ -116,15 +134,20 @@ def _anderson_acceleration(
     F_history: list[Tensor] = []  # f(z,x) values
 
     residuals: list[float] = []
+    rel_residuals: list[float] = []
+    eps = 1e-8
 
     for k in range(max_iter):  # noqa: B007  (used after loop)
         f_z = f(z.reshape(z_init.shape), x).reshape(bsz, flat_dim)
         g_z = f_z - z_flat  # residual
 
-        residual = torch.norm(g_z).item()
-        residuals.append(residual)
+        abs_residual = torch.norm(g_z).item()
+        norm_f_z = torch.norm(f_z).item()
+        rel_residual = abs_residual / (norm_f_z + eps)
+        residuals.append(abs_residual)
+        rel_residuals.append(rel_residual)
 
-        if residual < tol:
+        if rel_residual < tol:
             z = z_flat.reshape(z_init.shape)
             break
 
@@ -184,7 +207,8 @@ def _anderson_acceleration(
     info = {
         "iterations": min(k + 1, max_iter),
         "residuals": residuals,
-        "converged": (len(residuals) > 0 and residuals[-1] < tol),
+        "rel_residuals": rel_residuals,
+        "converged": (len(rel_residuals) > 0 and rel_residuals[-1] < tol),
     }
     return z.reshape(z_init.shape), info
 
@@ -203,6 +227,10 @@ def _broyden_solver(
 
     Uses the "good Broyden" update with Sherman-Morrison for efficient
     inverse Jacobian maintenance.
+
+    Convergence is gated on RELATIVE residual: rel = ||z_next - z|| / (||z_next|| + eps)
+    This ensures convergence is achievable at batch scale (F14 fix).
+    Both absolute and relative residuals are recorded for analysis.
     """
     bsz = z_init.shape[0] if z_init.dim() > 1 else 1
     flat_dim = z_init.numel() // bsz
@@ -212,7 +240,12 @@ def _broyden_solver(
     # Initial residual
     g = f(z.reshape(z_init.shape), x).reshape(bsz, flat_dim) - z
 
-    residuals: list[float] = [torch.norm(g).item()]
+    abs_residual = torch.norm(g).item()
+    norm_f_init = torch.norm(f(z.reshape(z_init.shape), x).reshape(bsz, flat_dim)).item()
+    eps = 1e-8
+    rel_residual = abs_residual / (norm_f_init + eps)
+    residuals: list[float] = [abs_residual]
+    rel_residuals: list[float] = [rel_residual]
 
     # Initialize inverse Jacobian approximation as -I
     # (good for contraction mappings where J ≈ 0)
@@ -220,7 +253,7 @@ def _broyden_solver(
     J_inv = J_inv.expand(bsz, -1, -1).clone()
 
     for k in range(max_iter):  # noqa: B007  (used after loop)
-        if residuals[-1] < tol:
+        if rel_residuals[-1] < tol:
             break
 
         # Newton-like step: Δz = -J_inv @ g
@@ -232,8 +265,11 @@ def _broyden_solver(
         # New residual
         g_new = f(z_new.reshape(z_init.shape), x).reshape(bsz, flat_dim) - z_new
 
-        residual = torch.norm(g_new).item()
-        residuals.append(residual)
+        abs_residual = torch.norm(g_new).item()
+        norm_f_new = torch.norm(f(z_new.reshape(z_init.shape), x).reshape(bsz, flat_dim)).item()
+        rel_residual = abs_residual / (norm_f_new + eps)
+        residuals.append(abs_residual)
+        rel_residuals.append(rel_residual)
 
         # Broyden update to J_inv (Sherman-Morrison)
         delta_g = g_new - g  # (bsz, flat_dim)
@@ -265,7 +301,8 @@ def _broyden_solver(
     info = {
         "iterations": min(k + 1, max_iter),
         "residuals": residuals,
-        "converged": residuals[-1] < tol,
+        "rel_residuals": rel_residuals,
+        "converged": rel_residuals[-1] < tol,
     }
     return z.reshape(z_init.shape), info
 
