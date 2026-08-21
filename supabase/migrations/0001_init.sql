@@ -155,5 +155,5 @@ $$ language plpgsql security definer;
 -- set gateway_secret out-of-band via select set_runtime_config('gateway_secret', '<value>');
 insert into public.runtime_config (key, value)
 values
-  ('gateway_url', 'https://kinetic.sharath-sathish.workers.dev')
+  ('gateway_url', 'https://kinetic.kinetic-ai.workers.dev')
 on conflict (key) do nothing;

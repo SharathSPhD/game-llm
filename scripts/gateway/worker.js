@@ -2,12 +2,12 @@
 // Architecture:
 //   API paths (/health, /api/*)  -> GB10 FastAPI backend (URL in KV)
 //   Everything else              -> Vercel app (web UI)
-// Public URL: https://kinetic.sharath-sathish.workers.dev (stable, never changes)
+// Public URL: https://kinetic.<account-subdomain>.workers.dev (stable, never changes)
 
-const VERCEL = "https://kinetic-web.vercel.app";
+const VERCEL = "https://kinetic-ai-web.vercel.app";
 const API = ["/health", "/api/"];
 const CORS = {
-  "access-control-allow-origin": "*",
+  "access-control-allow-origin": "https://kinetic-ai-web.vercel.app",
   "access-control-allow-methods": "GET,POST,OPTIONS",
   "access-control-allow-headers": "content-type,authorization",
 };
@@ -30,9 +30,12 @@ export default {
       const target = backend.replace(/\/$/, "") + url.pathname + url.search;
       let resp;
       try {
+        const apiHeaders = { "content-type": request.headers.get("content-type") || "application/json" };
+        const auth = request.headers.get("authorization");
+        if (auth) apiHeaders["authorization"] = auth;  // bearer must reach the backend
         resp = await fetch(target, {
           method: request.method,
-          headers: { "content-type": request.headers.get("content-type") || "application/json" },
+          headers: apiHeaders,
           body: (request.method === "GET" || request.method === "HEAD") ? undefined : await request.arrayBuffer(),
         });
       } catch (e) {

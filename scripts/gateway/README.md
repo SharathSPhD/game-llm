@@ -1,6 +1,6 @@
 # Kinetic AI gateway — permanent public URL
 
-**Public URL (stable, never changes):** https://kinetic.sharath-sathish.workers.dev
+**Public URL (stable, never changes):** https://kinetic.kinetic-ai.workers.dev
 
 ## Architecture
 
@@ -25,7 +25,7 @@ API requests ───────┘          │
                         └─────────────────┘
 ```
 
-The Worker (`worker.js`, deployed to `kinetic.sharath-sathish.workers.dev`) is
+The Worker (`worker.js`, deployed to `kinetic.kinetic-ai.workers.dev`) is
 the permanent front door. Behind it, an ephemeral cloudflared tunnel reaches the
 GB10; its URL is stored in KV. On any gateway restart, the KV value is refreshed,
 but the public URL is unaffected.
@@ -59,7 +59,7 @@ This:
 Example output:
 ```
 ✓ Gateway is live!
-  Public URL:  https://kinetic.sharath-sathish.workers.dev
+  Public URL:  https://kinetic.kinetic-ai.workers.dev
   Backend:     https://abc-def-ghi.trycloudflare.com
   Local:       http://localhost:8097
 ```
@@ -96,7 +96,7 @@ wrangler login
 wrangler deploy --name kinetic
 ```
 
-This creates the Worker at `kinetic.sharath-sathish.workers.dev` and binds it
+This creates the Worker at `kinetic.kinetic-ai.workers.dev` and binds it
 to the KV namespace. The Worker pulls the backend URL from KV and proxies `/api/*`
 requests to it.
 
@@ -117,10 +117,10 @@ All endpoints are served at the public URL. Examples:
 
 ```bash
 # Health check (no auth required)
-curl https://kinetic.sharath-sathish.workers.dev/health
+curl https://kinetic.kinetic-ai.workers.dev/health
 
 # Solve equilibrium (requires Bearer token)
-curl -X POST https://kinetic.sharath-sathish.workers.dev/api/solve \
+curl -X POST https://kinetic.kinetic-ai.workers.dev/api/solve \
   -H "Authorization: Bearer $GATEWAY_SECRET" \
   -H "Content-Type: application/json" \
   -d '{"game":"rps","method":"mmd_fixed","lr":0.1,"tau":1.0,"steps":100,"seed":42}'

@@ -61,7 +61,7 @@ def get_gateway_secret() -> str:
 def get_allowed_origins() -> list[str]:
     # Never wildcard: credentials are allowed, so origins must be explicit.
     origins_str = os.environ.get(
-        "ALLOWED_ORIGINS", "https://kinetic.sharath-sathish.workers.dev"
+        "ALLOWED_ORIGINS", "https://kinetic.kinetic-ai.workers.dev"
     )
     return [o.strip() for o in origins_str.split(",") if o.strip() and o.strip() != "*"]
 
