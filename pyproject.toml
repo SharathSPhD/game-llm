@@ -50,6 +50,7 @@ dev = [
     "pytest>=7.0",
     "pytest-cov>=4.0",
     "types-PyYAML",
+    "types-requests",
     "mypy>=1.0",
     "ruff>=0.1.0",
 ]
