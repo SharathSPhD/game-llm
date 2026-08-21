@@ -17,11 +17,50 @@ alter table public.user_tiers enable row level security;
 create policy "users_view_own_tier" on public.user_tiers
   for select using (auth.uid() = user_id);
 
--- Seed admin user (comment shows email for reference)
--- Admin invite: send via Supabase auth dashboard to sharath.sathish@gmail.com
-insert into public.user_tiers (user_id, tier)
-values (auth.uid(), 'admin')
-on conflict (user_id) do nothing;
+-- Admin bootstrap: grant the admin tier automatically when the admin email
+-- signs up. Guests get rows only via the admin RPC below (access = has a row).
+create or replace function public.handle_new_user()
+returns trigger as $$
+begin
+  if new.email = 'sharath.sathish@gmail.com' then
+    insert into public.user_tiers (user_id, tier)
+    values (new.id, 'admin')
+    on conflict (user_id) do update set tier = 'admin';
+  end if;
+  return new;
+end;
+$$ language plpgsql security definer;
+
+drop trigger if exists on_auth_user_created on auth.users;
+create trigger on_auth_user_created
+  after insert on auth.users
+  for each row execute function public.handle_new_user();
+
+-- Admin-only RPC to enable a guest account (same access as admin per operator).
+create or replace function public.set_user_tier(target_email text, new_tier text)
+returns json as $$
+declare
+  is_admin boolean;
+  target_id uuid;
+begin
+  select (tier = 'admin') into is_admin
+  from public.user_tiers where user_id = auth.uid();
+  if not coalesce(is_admin, false) then
+    raise exception 'Admin access required';
+  end if;
+  if new_tier not in ('user', 'admin') then
+    raise exception 'Invalid tier';
+  end if;
+  select id into target_id from auth.users where email = target_email;
+  if target_id is null then
+    raise exception 'No user with that email (they must sign up first)';
+  end if;
+  insert into public.user_tiers (user_id, tier)
+  values (target_id, new_tier)
+  on conflict (user_id) do update set tier = new_tier;
+  return json_build_object('success', true, 'email', target_email, 'tier', new_tier);
+end;
+$$ language plpgsql security definer;
 
 -- ─── Job History ─────────────────────────────────────────────────────────────
 -- Training Studio jobs: user submits via API, tracked here per-user.

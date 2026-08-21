@@ -47,3 +47,4 @@ configs/local/
 # AppleDouble
 ._*
 .DS_Store
+.gateway.env
