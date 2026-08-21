@@ -31,13 +31,13 @@ import json
 import subprocess
 import time
 from pathlib import Path
-from typing import Any
 
 import matplotlib.pyplot as plt
 import numpy as np
 import torch
 import torch.nn.functional as F
 import yaml
+from exp05_eqlm_pretrain import create_gpt2_tokenizer_fn  # noqa: E402
 
 from kinetic_ai.data import (
     BabyLMDataLoader,
@@ -66,7 +66,7 @@ def load_config(config_path: str) -> dict:
             if key in cfg["training"] and isinstance(cfg["training"][key], str):
                 cfg["training"][key] = float(cfg["training"][key])
 
-    for arm_name, arm_cfg in cfg.get("arms", {}).items():
+    for _arm_name, arm_cfg in cfg.get("arms", {}).items():
         if "config" in arm_cfg:
             for key in ["deq_tol"]:
                 if key in arm_cfg["config"] and isinstance(arm_cfg["config"][key], str):
@@ -215,9 +215,8 @@ def plot_loss_vs_tau(
                 if tau not in tau_values:
                     tau_values.append(tau)
                     loss_ema.append(final_loss)
-            elif ref_mode == "periodic":
-                if tau not in tau_values:
-                    loss_periodic.append(final_loss)
+            elif ref_mode == "periodic" and tau not in tau_values:
+                loss_periodic.append(final_loss)
 
     # Baseline loss
     baseline_loss = results_by_arm.get("Baseline", {}).get("final_loss")
@@ -266,9 +265,8 @@ def plot_drift_vs_tau(
                 if tau not in tau_values:
                     tau_values.append(tau)
                     drift_ema.append(drift)
-            elif ref_mode == "periodic":
-                if tau not in tau_values:
-                    drift_periodic.append(drift)
+            elif ref_mode == "periodic" and tau not in tau_values:
+                drift_periodic.append(drift)
 
     # Baseline drift
     baseline_drift = results_by_arm.get("Baseline", {}).get("weight_drift_from_init")
@@ -326,21 +324,30 @@ def main() -> None:
     device = "cuda" if torch.cuda.is_available() else "cpu"
     print(f"Using device: {device}")
 
-    # Load tokenizer
-    tokenizer_fn = load_or_build_tokenizer(
-        vocab_size=cfg["tokenizer"]["vocab_size"],
-        prefer_gpt2=cfg["tokenizer"].get("prefer_gpt2", False),
-    )
-    print(f"Tokenizer vocab size: {cfg['tokenizer']['vocab_size']}")
+    # Load tokenizer (same working path as exp05)
+    token2id, _id2token, tokenizer_choice = load_or_build_tokenizer(texts=None)
+    actual_vocab_size = len(token2id)
+    print(f"Tokenizer: {tokenizer_choice} | vocab_size {actual_vocab_size}")
+    tokenizer_fn = create_gpt2_tokenizer_fn(tokenizer_choice)
+    # Override configured vocab with the actual tokenizer vocab
+    for _arm_name, _arm in cfg["arms"].items():
+        if isinstance(_arm, dict) and "vocab_size" in _arm:
+            _arm["vocab_size"] = actual_vocab_size
 
     # Load dataset
     print(f"Loading dataset: {cfg['data']['dataset']}")
-    dataset = load_babylm_dataset(subset_size=cfg["data"].get("subset_size"))
+    dataset = load_babylm_dataset(subset=cfg["data"]["dataset"], max_samples=None)
+    print(f"Loaded dataset: {len(dataset)} samples")
 
     # Build token stream and dataloader
-    token_stream = build_token_stream(dataset, tokenizer_fn)
+    token_tensor, _num_seqs = build_token_stream(
+        dataset,
+        tokenizer_fn,
+        seq_len=cfg["data"]["seq_len"],
+        max_tokens=cfg["data"].get("subset_size"),
+    )
     train_loader = BabyLMDataLoader(
-        token_stream,
+        token_tensor,
         seq_len=cfg["data"]["seq_len"],
         batch_size=cfg["data"]["batch_size"],
         device=device,
@@ -539,10 +546,9 @@ def main() -> None:
         if arm_name == "Baseline":
             continue
         drift = arm_data.get("weight_drift_from_init")
-        if drift is not None and baseline_drift is not None:
-            if drift < baseline_drift * 0.9:
-                drift_below_90pct = True
-                print(f"  ✓ {arm_name}: drift {drift:.4f} (below 90% of baseline)")
+        if drift is not None and baseline_drift is not None and drift < baseline_drift * 0.9:
+            drift_below_90pct = True
+            print(f"  ✓ {arm_name}: drift {drift:.4f} (below 90% of baseline)")
 
     results["prereg"] = {
         "loss_within_10pct_of_baseline": loss_within_10pct,
@@ -577,7 +583,7 @@ def main() -> None:
     results_json_path = output_dir / "results.json"
     with open(results_json_path, "w") as f:
         json.dump(results, f, indent=2)
-    print(f"  Saved results.json")
+    print("  Saved results.json")
 
     # ========================================================================
     # SUMMARY

@@ -25,18 +25,16 @@ Usage:
 from __future__ import annotations
 
 import argparse
-import hashlib
 import json
 import subprocess
 import time
 from pathlib import Path
-from typing import Any
 
 import matplotlib.pyplot as plt
 import numpy as np
 import torch
 import torch.nn.functional as F
-import yaml
+from exp05_eqlm_pretrain import create_gpt2_tokenizer_fn  # noqa: E402
 
 from kinetic_ai.data import (
     BabyLMDataLoader,
@@ -48,7 +46,6 @@ from kinetic_ai.models.eqlm import (
     EqLM,
     EqLMConfig,
     count_params,
-    match_explicit_width,
 )
 
 
@@ -199,7 +196,7 @@ def plot_solver_budget_curve(
     plt.savefig(output_dir / "solver_budget_curve.pdf", dpi=150)
     plt.close()
 
-    print(f"  Saved solver_budget_curve.pdf")
+    print("  Saved solver_budget_curve.pdf")
 
 
 def main() -> None:
@@ -229,26 +226,28 @@ def main() -> None:
     device = "cuda" if torch.cuda.is_available() else "cpu"
     print(f"Using device: {device}")
 
-    # Tokenizer
-    tokenizer_fn = load_or_build_tokenizer(
-        vocab_size=50257,
-        prefer_gpt2=True,
-    )
-    print(f"Tokenizer vocab size: 50257")
+    # Tokenizer (same working path as exp05)
+    token2id, _id2token, tokenizer_choice = load_or_build_tokenizer(texts=None)
+    actual_vocab_size = len(token2id)
+    print(f"Tokenizer: {tokenizer_choice} | vocab_size {actual_vocab_size}")
+    tokenizer_fn = create_gpt2_tokenizer_fn(tokenizer_choice)
 
     # Dataset (same as exp05)
     print("Loading dataset...")
-    dataset = load_babylm_dataset(subset_size=3300000)
+    dataset = load_babylm_dataset(subset="BabyLM-2026-Strict-Small", max_samples=None)
+    print(f"Loaded dataset: {len(dataset)} samples")
 
     # Data loader
-    token_stream = build_token_stream(dataset, tokenizer_fn)
+    token_tensor, _num_seqs = build_token_stream(
+        dataset, tokenizer_fn, seq_len=128, max_tokens=3300000
+    )
     train_loader = BabyLMDataLoader(
-        token_stream,
+        token_tensor,
         seq_len=128,
         batch_size=32,
         device=device,
     )
-    print(f"Data loader: batch=32, seq_len=128")
+    print("Data loader: batch=32, seq_len=128")
 
     # ========================================================================
     # STAGE 2: Train with different solver budgets
@@ -272,7 +271,7 @@ def main() -> None:
 
         # Create fresh EqLM model for this budget
         eqlm_cfg = EqLMConfig(
-            vocab_size=50257,
+            vocab_size=actual_vocab_size,
             d_model=192,
             n_heads=4,
             d_ff=512,
@@ -378,7 +377,7 @@ def main() -> None:
     results_json_path = output_dir / "results.json"
     with open(results_json_path, "w") as f:
         json.dump(results, f, indent=2)
-    print(f"\n  Saved results.json")
+    print("\n  Saved results.json")
 
     # ========================================================================
     # SUMMARY AND INTERPRETATION
@@ -395,12 +394,12 @@ def main() -> None:
     loss_24 = results["solver_budgets"][24].get("final_loss")
     loss_48 = results["solver_budgets"][48].get("final_loss")
 
-    print(f"\nConvergence rates:")
+    print("\nConvergence rates:")
     print(f"  max_iter=12: {converged_12:.1%}")
     print(f"  max_iter=24: {converged_24:.1%}")
     print(f"  max_iter=48: {converged_48:.1%}")
 
-    print(f"\nFinal losses:")
+    print("\nFinal losses:")
     print(f"  max_iter=12: {loss_12:.4f}")
     print(f"  max_iter=24: {loss_24:.4f}")
     print(f"  max_iter=48: {loss_48:.4f}")
