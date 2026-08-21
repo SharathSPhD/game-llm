@@ -4,13 +4,13 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "kinetic-ai"
-version = "0.1.0"
-description = "A unified library for game-theoretic LLM training: Magnetic Mirror Descent, Deep Equilibrium Models, and Mechanism Design."
+version = "0.2.0"
+description = "Game-theoretic LLM training: Magnetic Mirror Descent, Quantal Response Equilibrium, Deep Equilibrium Models, token auctions, and magnetic optimizers."
 readme = "README.md"
 license = {text = "MIT"}
 requires-python = ">=3.10"
 authors = [
-    {name = "Sharath S", email = "sharath@example.com"},
+    {name = "SharathSPhD", email = "qbz506@york.ac.uk"},
 ]
 keywords = [
     "game-theory",
@@ -69,7 +69,7 @@ all = ["kinetic-ai[dev,experiments,serve]"]
 
 [project.urls]
 Homepage = "https://github.com/SharathSPhD/game-llm"
-Documentation = "https://sharathsphd.github.io/game-llm"
+Documentation = "https://sharathsphd.github.io/game-llm/"
 Repository = "https://github.com/SharathSPhD/game-llm"
 Issues = "https://github.com/SharathSPhD/game-llm/issues"
 

@@ -1,10 +1,10 @@
 {
-  "cycle": 12,
-  "phase": "phase2-science",
-  "current_rq": "RQ-2",
+  "cycle": 13,
+  "phase": "h1prime-adaptive + kinetic-studio",
+  "current_rq": "RQ-3b (H1-prime a/b/c per ADR 0004)",
   "gpu_lock": false,
   "open_questions": [
-    "RQ-3 (H1): EqLM-small vs GPT-2-class on BabyLM/BLiMP",
+    "RQ-3b (H1-prime): warm-start decoding / per-token early exit / think-harder dial (ADR 0004)",
     "RQ-4 (H3): MPO vs DPO",
     "RQ-5 (H4): token-auction decoding",
     "RQ-6: DEQ O(1) depth-memory measured"
@@ -15,5 +15,5 @@
     "RQ-3 (H1) iteration 3: formal miss at 0.930 [0.898,0.949] vs 0.95 (F18); program continues"
   ],
   "known_defects": [],
-  "next_action": "Paper/site F16-F18 refresh; choose next arm: H1-iter4 (eval-time budget/aux annealing/2-block) or Tier C (H3 MPO vs DPO, H4 auction decoding)"
+  "next_action": "Harvest exp09 build -> GPU smoke -> score H1-prime preregs; PyPI release verify; Studio runs console E2E; then HF checkpoints + model cards"
 }
