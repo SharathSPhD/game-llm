@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.28 (TeX Live 2025) (preloaded format=pdflatex 2026.8.13)  21 AUG 2026 01:36
+This is pdfTeX, Version 3.141592653-2.6-1.40.28 (TeX Live 2025) (preloaded format=pdflatex 2026.8.13)  21 AUG 2026 06:19
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -709,19 +709,19 @@ Overfull \hbox (1.98389pt too wide) in paragraph at lines 108--116
  [] 
  []
 
-<figures/fig_mmd_convergence.pdf, id=119, 702.75513pt x 232.88985pt>
+<figures/fig_mmd_convergence.pdf, id=139, 702.75513pt x 232.88985pt>
 File: figures/fig_mmd_convergence.pdf Graphic file (type pdf)
 <use figures/fig_mmd_convergence.pdf>
 Package pdftex.def Info: figures/fig_mmd_convergence.pdf  used on input line 123.
 (pdftex.def)             Requested size: 328.82707pt x 108.97139pt.
 [3 <./figures/fig_mmd_convergence.pdf>]
-<figures/fig_deq_memory.pdf, id=149, 485.92291pt x 305.82129pt>
+<figures/fig_deq_memory.pdf, id=169, 485.92291pt x 305.82129pt>
 File: figures/fig_deq_memory.pdf Graphic file (type pdf)
 <use figures/fig_deq_memory.pdf>
 Package pdftex.def Info: figures/fig_deq_memory.pdf  used on input line 176.
 (pdftex.def)             Requested size: 305.33789pt x 192.17377pt.
  [4]
-<figures/fig_anderson_stiffness.pdf, id=154, 485.86205pt x 306.50197pt>
+<figures/fig_anderson_stiffness.pdf, id=175, 485.86205pt x 306.50197pt>
 File: figures/fig_anderson_stiffness.pdf Graphic file (type pdf)
 <use figures/fig_anderson_stiffness.pdf>
 Package pdftex.def Info: figures/fig_anderson_stiffness.pdf  used on input line 183.
@@ -731,41 +731,52 @@ Overfull \hbox (6.78123pt too wide) in paragraph at lines 213--215
 \OT1/cmr/m/n/12 Second-price auc-tions achieve ex-actly zero re-gret, as pre-dicted by Vick-rey's the-o-rem. Weighted
  []
 
-<figures/fig_auction_regret.pdf, id=180, 702.74986pt x 234.16734pt>
+<figures/fig_auction_regret.pdf, id=200, 702.74986pt x 234.16734pt>
 File: figures/fig_auction_regret.pdf Graphic file (type pdf)
 <use figures/fig_auction_regret.pdf>
 Package pdftex.def Info: figures/fig_auction_regret.pdf  used on input line 218.
 (pdftex.def)             Requested size: 328.82707pt x 109.57271pt.
 
-Overfull \hbox (44.00179pt too wide) in paragraph at lines 228--237
+Overfull \hbox (44.00179pt too wide) in paragraph at lines 230--239
  [] 
  []
 
-[6 <./figures/fig_auction_regret.pdf>] [7] (./kinetic_ai.bbl
+[6 <./figures/fig_auction_regret.pdf>]
+Overfull \hbox (34.08112pt too wide) in paragraph at lines 249--258
+ [] 
+ []
+
+[7]
+<figures/fig_eqlm_loss_curves.pdf, id=235, 558.15968pt x 341.87851pt>
+File: figures/fig_eqlm_loss_curves.pdf Graphic file (type pdf)
+<use figures/fig_eqlm_loss_curves.pdf>
+Package pdftex.def Info: figures/fig_eqlm_loss_curves.pdf  used on input line 308.
+(pdftex.def)             Requested size: 375.80544pt x 230.18419pt.
+ [8] [9 <./figures/fig_eqlm_loss_curves.pdf>] (./kinetic_ai.bbl
 
 Package natbib Warning: Empty `thebibliography' environment on input line 8.
 
-) [8] (./kinetic_ai.aux)
+) [10] (./kinetic_ai.aux)
  ***********
 LaTeX2e <2025-11-01>
 L3 programming layer <2026-01-19>
  ***********
 Package rerunfilecheck Info: File `kinetic_ai.out' has not changed.
-(rerunfilecheck)             Checksum: F5A1ECE53B18A8668730715A3A408D90;4467.
+(rerunfilecheck)             Checksum: 9D7C00956744B12DE12732A203ECBCA2;5875.
  ) 
 Here is how much of TeX's memory you used:
- 34559 strings out of 469471
- 797293 string characters out of 5468383
- 1297770 words of memory out of 5000000
- 62649 multiletter control sequences out of 15000+600000
- 638219 words of font info for 80 fonts, out of 8000000 for 9000
+ 34582 strings out of 469471
+ 797861 string characters out of 5468383
+ 1299770 words of memory out of 5000000
+ 62663 multiletter control sequences out of 15000+600000
+ 638566 words of font info for 81 fonts, out of 8000000 for 9000
  36 hyphenation exceptions out of 8191
- 99i,8n,108p,770b,515s stack positions out of 10000i,1000n,20000p,200000b,200000s
-</home/sharaths/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></home/sharaths/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></home/sharaths/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></home/sharaths/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></home/sharaths/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></home/sharaths/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></home/sharaths/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></home/sharaths/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></home/sharaths/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></home/sharaths/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></home/sharaths/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt12.pfb></home/sharaths/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb></home/sharaths/.TinyTeX/texmf-dist/fonts/type1/public/cm-super/sfrm1200.pfb>
-Output written on kinetic_ai.pdf (8 pages, 240945 bytes).
+ 99i,8n,108p,770b,522s stack positions out of 10000i,1000n,20000p,200000b,200000s
+</home/sharaths/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></home/sharaths/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></home/sharaths/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></home/sharaths/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></home/sharaths/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></home/sharaths/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></home/sharaths/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></home/sharaths/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></home/sharaths/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></home/sharaths/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></home/sharaths/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb></home/sharaths/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt12.pfb></home/sharaths/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb></home/sharaths/.TinyTeX/texmf-dist/fonts/type1/public/cm-super/sfrm1200.pfb>
+Output written on kinetic_ai.pdf (10 pages, 276006 bytes).
 PDF statistics:
- 288 PDF objects out of 1000 (max. 8388607)
- 219 compressed objects within 3 object streams
- 37 named destinations out of 1000 (max. 500000)
- 217 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 335 PDF objects out of 1000 (max. 8388607)
+ 255 compressed objects within 3 object streams
+ 45 named destinations out of 1000 (max. 500000)
+ 262 words of extra memory for PDF output out of 10000 (max. 10000000)
 

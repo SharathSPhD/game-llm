@@ -1,13 +1,13 @@
 # Fdb version 4
-["bibtex kinetic_ai"] 1787272568.47505 "kinetic_ai.aux" "kinetic_ai.bbl" "kinetic_ai" 1787272568.91876 0
+["bibtex kinetic_ai"] 1787289571.63966 "kinetic_ai.aux" "kinetic_ai.bbl" "kinetic_ai" 1787289572.06961 0
   "./references.bib" 1787260475.77052 2676 94c6c00de4d527e3dfda52c8fc2b1bbd ""
   "/home/sharaths/.TinyTeX/texmf-dist/bibtex/bst/natbib/plainnat.bst" 1233624470 26816 ffe5423d2019860bad9f54bc402fac15 ""
-  "kinetic_ai.aux" 1787272568.86338 5784 84f4ba2c36f82b31694ee62744b57e19 "pdflatex"
+  "kinetic_ai.aux" 1787289572.01642 7331 20fead668b4a75d78c78c8e4a98000a5 "pdflatex"
   (generated)
   "kinetic_ai.bbl"
   "kinetic_ai.blg"
   (rewritten before read)
-["pdflatex"] 1787272568.48831 "kinetic_ai.tex" "kinetic_ai.pdf" "kinetic_ai" 1787272568.91888 0
+["pdflatex"] 1787289571.65206 "kinetic_ai.tex" "kinetic_ai.pdf" "kinetic_ai" 1787289572.06972 0
   "/home/sharaths/.TinyTeX/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc" 1136849721 2900 1537cc8184ad1792082cd229ecc269f4 ""
   "/home/sharaths/.TinyTeX/texmf-dist/fonts/tfm/jknappen/ec/tcrm1200.tfm" 1136768653 1536 74b7293ec3713bb7fdca8dd1bd1f469c ""
   "/home/sharaths/.TinyTeX/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex7.tfm" 1246382020 1004 54797486969f23fa377b128694d548df ""
@@ -32,6 +32,7 @@
   "/home/sharaths/.TinyTeX/texmf-dist/fonts/tfm/public/cm/cmsy10.tfm" 1136768653 1124 6c73e740cf17375f03eec0ee63599741 ""
   "/home/sharaths/.TinyTeX/texmf-dist/fonts/tfm/public/cm/cmsy6.tfm" 1136768653 1116 933a60c408fc0a863a92debe84b2d294 ""
   "/home/sharaths/.TinyTeX/texmf-dist/fonts/tfm/public/cm/cmsy8.tfm" 1136768653 1120 8b7d695260f3cff42e636090a8002094 ""
+  "/home/sharaths/.TinyTeX/texmf-dist/fonts/tfm/public/cm/cmti12.tfm" 1136768653 1484 ed72f8f5cf654cda15ecc8e32bfcbee5 ""
   "/home/sharaths/.TinyTeX/texmf-dist/fonts/tfm/public/cm/cmtt12.tfm" 1136768653 772 9a936b7f5e2ff0557fce0f62822f0bbf ""
   "/home/sharaths/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb" 1248133631 34811 78b52f49e893bcba91bd7581cdc144c0 ""
   "/home/sharaths/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb" 1248133631 32080 340ef9bf63678554ee606688e7b5339d ""
@@ -43,6 +44,7 @@
   "/home/sharaths/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb" 1248133631 32726 0a1aea6fcd6468ee2cf64d891f5c43c8 ""
   "/home/sharaths/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb" 1248133631 32569 5e5ddc8df908dea60932f3c484a54c0d ""
   "/home/sharaths/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb" 1248133631 32626 4f5c1b83753b1dd3a97d1b399a005b4b ""
+  "/home/sharaths/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb" 1248133631 36118 fad905eba93cff5bce1e185fe980a177 ""
   "/home/sharaths/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt12.pfb" 1248133631 24252 1e4e051947e12dfb50fee0b7f4e26e3a ""
   "/home/sharaths/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb" 1248133631 34694 ad62b13721ee8eda1dcc8993c8bd7041 ""
   "/home/sharaths/.TinyTeX/texmf-dist/fonts/type1/public/cm-super/sfrm1200.pfb" 1215737283 136101 f533469f523533d38317ab5729d00c8a ""
@@ -227,14 +229,15 @@
   "/home/sharaths/.TinyTeX/texmf-var/fonts/map/pdftex/updmap/pdftex.map" 1786640993 391977 eab4f9a15152512a9c144630da56c0b4 ""
   "/home/sharaths/.TinyTeX/texmf-var/web2c/pdftex/pdflatex.fmt" 1786640481 2286336 54fab0f45d7d9d2c9144469eb3028156 ""
   "/home/sharaths/.TinyTeX/texmf.cnf" 1772302105.1762 637 edd806fb06a89761a6034e1968af9017 ""
-  "figures/fig_anderson_stiffness.pdf" 1787272490.17726 12413 b74dade7c9d7de1f97f7e1d0c7701d7c ""
-  "figures/fig_auction_regret.pdf" 1787272490.30226 21191 696fc613fa9a5521d3fbc2def8935da2 ""
-  "figures/fig_deq_memory.pdf" 1787272490.13026 15681 e19c71114302bb8c04a9ef7d006f3c1a ""
-  "figures/fig_mmd_convergence.pdf" 1787272490.07626 24712 7a3d16a0beb82450d1519efec809e957 ""
-  "kinetic_ai.aux" 1787272568.86338 5784 84f4ba2c36f82b31694ee62744b57e19 "pdflatex"
-  "kinetic_ai.bbl" 1787272568.48438 275 de5ffaf5b665b622658d80bed97ba2a5 "bibtex kinetic_ai"
-  "kinetic_ai.out" 1787272568.86338 4467 f5a1ece53b18a8668730715a3a408d90 "pdflatex"
-  "kinetic_ai.tex" 1787272564.15737 16183 222e1d29d943a85a6538c9fa2b42963b ""
+  "figures/fig_anderson_stiffness.pdf" 1787289464.58507 12413 24bfef7f79706ae4e62a84ac521e8052 ""
+  "figures/fig_auction_regret.pdf" 1787289464.71807 21191 2ca4f4829ffc53bba7f860b0ee6dfa88 ""
+  "figures/fig_deq_memory.pdf" 1787289464.53607 15681 2e98ae4ce4b50971ad3b609758e7719f ""
+  "figures/fig_eqlm_loss_curves.pdf" 1787289464.77807 17012 6d098d0dab2215bbc2c96b84ae8c736a ""
+  "figures/fig_mmd_convergence.pdf" 1787289464.47907 24712 3cbca346e5bf325fc8ba19f4293993cd ""
+  "kinetic_ai.aux" 1787289572.01642 7331 20fead668b4a75d78c78c8e4a98000a5 "pdflatex"
+  "kinetic_ai.bbl" 1787289571.64842 275 de5ffaf5b665b622658d80bed97ba2a5 "bibtex kinetic_ai"
+  "kinetic_ai.out" 1787289572.01642 5875 9d7c00956744b12de12732a203ecbca2 "pdflatex"
+  "kinetic_ai.tex" 1787289562.25238 21980 3837d8a22eb55bf47b7bd249a2c422f7 ""
   (generated)
   "kinetic_ai.aux"
   "kinetic_ai.log"

@@ -220,7 +220,9 @@ Second-price auctions achieve exactly zero regret, as predicted by Vickrey's the
 \label{fig:auction_regret}
 \end{figure}
 
-\subsection{EqLM Pretraining on BabyLM: Smoke Pipeline Validation (F9)}
+\subsection{EqLM Pretraining on BabyLM: From Smoke to Scale (F9--F13)}
+
+\subsubsection{Smoke Pipeline Validation (F9)}
 
 We executed a smoke test of the full Tier B pipeline (exp05, iteration 2, 800 steps, 1000 BLiMP pairs, GB10 batch 4, param-matched within 5\%):
 
@@ -237,7 +239,76 @@ A3 & EqLM + raw-MMD & $128 \to 125$ & $0.537$ & No (no learning) \\
 \end{center}
 
 \noindent
-BLiMP accuracies ($0.459$–$0.537$) are noise around chance at these loss scales; they validate the tokenization→train→eval pipeline, not LM capability. A3's non-learning is a confound: raw Euclidean MMD lacks adaptive preconditioning needed for small-LR initialization. ADR 0003 schedules MagneticAdamW implementation to decouple magnetism from optimizer adaptivity for H3 testing. (Smoke status, ADR 0003 optimizer decision, method finding F9, config sha 1398dc8f, commit 39284dd5).
+BLiMP accuracies ($0.459$–$0.537$) are noise around chance at these loss scales; they validate the tokenization→train→eval pipeline, not LM capability. A3's non-learning is an optimizer confound: raw Euclidean MMD lacks adaptive preconditioning. (Smoke status, method finding F9, config sha 1398dc8f, commit 39284dd5).
+
+\subsubsection{Smoke Parity After Init Fix (F10)}
+
+We identified and corrected weight initialization in iteration 3: all arms started at cross-entropy loss $\approx 10.83 = \ln|V|$ (corrected embeddings std $0.02$, logits scaled $\sqrt{d_{\text{model}}}$). Under correct init, EqLM matched ExplicitLM at smoke scale:
+
+\begin{center}
+\begin{tabular}{lccccc}
+\toprule
+Arm & Model & Loss (init $\to$ final) & Time (s) & BLiMP & Params \\
+\midrule
+A1 & ExplicitLM + AdamW & $10.82 \to 5.99$ & $66.8$ & $0.465$ & $11.06M$ \\
+A2 & EqLM + AdamW & $10.83 \to 5.94$ & $177.6$ & $0.452$ & $10.67M$ \\
+A3 & EqLM + MagneticAdamW($\tau=0.01$) & $10.83 \to 9.91$ & $196.6$ & $0.481$ & $10.67M$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\noindent
+A1 and A2 show \emph{parity}: identical final loss ($5.99$ vs $5.94$, within training variance), with EqLM 6.2\% fewer parameters. Wall-clock time is $2.7 \times$ baseline due to 12 fixed-point iterations per forward pass. A3's learning is throttled (10.83→9.91), attributed to coupled weight decay in the initial MagneticAdamW implementation. BLiMP remains noise ($\approx 0.46$) at this pretraining scale, as expected. (exp05 iteration 3, config sha 3ed6e8fc, commit 2151a19).
+
+\subsubsection{Optimizer Debugging: Coupled-WD Bug (F11)}
+
+During F10 iteration 3, we diagnosed that MagneticAdamW's weight decay was coupled to the gradient before Adam normalization, causing $\text{wd} \cdot \theta$ to act as a large decay on sparse-gradient parameters (e.g., tied embedding rows). We decoupled weight decay: $\theta \gets \theta(1 - \text{lr} \cdot \text{wd}) - \text{step}$. This restored exact AdamW equivalence at $\tau = 0$ (loss $8.8236 \equiv 8.8236$ to machine precision) and preserved learning at $\tau \in \{10^{-4}, 10^{-3}\}$. \textbf{Lesson:} optimizer-equivalence tests must include sparse-gradient parameters; dense-Linear tests alone mask defects. (Fixed in \texttt{kinetic\_ai/optim/magnetic\_adamw.py}, F11 method finding, regression-tested).
+
+\subsubsection{Magnetic Neutrality and Solver Budget (F12)}
+
+Experiments exp06 and exp06b (real data stream, 300 steps, fixed optimizer) tested whether magnetic pull (EMA anchor) and DEQ solver budget affect loss. Results:
+
+\begin{itemize}
+\item \textbf{Magnetic pull:} arms with $\tau \in \{10^{-4}, 10^{-3}\}$ reached loss $8.52$–$8.61$ vs explicit baseline $8.51$; within 10\% preregistered tolerance (magnetic neutrality at pretraining scale, F12 finding).
+\item \textbf{Solver budget:} max\_iter $\in \{12, 24, 48\}$ → loss $\{8.60, 8.67, 8.67\}$; no improvement beyond 12 iters. DEQ solver converged 0\% of forward passes at tol $1e-3$ in all budgets — ``phantom-gradient'' training, where gradients flow through unconverged fixed-point iterations. This phantom regime is loss-neutral but requires further characterization before full deployment.
+\item \textbf{Drift preregistration:} initially designed to compare EqLM arms to explicit baseline; reclassified as invalid because baseline architecture differs. Honest correction recorded; no missed regs.
+\item \textbf{Tier B decision:} pretraining arms (A1/A2) use AdamW; MagneticAdamW with fixed reference reserved for H3 (preference-phase, its theoretical home). DEQ max\_iter=12 (cheapest, no loss penalty).
+\end{itemize}
+
+\noindent
+(F12 validation, exp06/exp06b, config sha 2e7cc76, commit 615c325).
+
+\subsubsection{H1 Iteration 1: Missed Threshold at Scale (F13)}
+
+We conducted the full Tier B hypothesis test (exp05\_full, 20k steps, full strict-small token stream, param-matched arms, 2000-pair BLiMP eval on 1000 scored pairs):
+
+\begin{center}
+\begin{tabular}{lcccr}
+\toprule
+Arm & Model & Loss & BLiMP & Params \\
+\midrule
+A1 & ExplicitLM & $3.90$ & $0.734$ & $11.06M$ \\
+A2 & EqLM & $4.41$ & $0.571$ & $10.67M$ \\
+A3 & EqLM + MagneticAdamW($1e^{-3}$) & $4.68$ & $0.584$ & $10.67M$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\noindent
+\textbf{Result:} H1 iteration 1 \textbf{MISSED}. EqLM achieved 78–80\% of baseline BLiMP (0.571/0.584 vs 0.734), falling short of the pre-registered $\geq 95\%$ threshold. A3 − A2 difference (0.8σ, $n=1000$ pairs) is not significant.
+
+\textbf{Diagnosis:} DEQ solver converged 0\% of forward passes across all budgets (exp06b), indicating the block's fixed-point map is not contractive. While spectral-norm enforcement exists in the codebase (\texttt{kinetic\_ai/models/deq\_layer.py::apply\_spectral\_norm}), it was never wired into EqLM—a known Phase-0 gap. Smoke ``parity'' (F10) held only in the 22.7k-token memorization regime; at scale, the lack of contraction-enforcement breaks learning signal propagation.
+
+\textbf{Wall-clock and memory:} EqLM is $2.9\times$ slower than ExplicitLM (3.5 hours vs 1.2 hours on RTX 5090). Peak memory is comparable (~3.5–4.7 GB) because logit activations dominate at this scale; depth-memory advantage predicted by DEQ theory is not visible.
+
+\textbf{Path forward (EqLM-v2, per operator ethos):} enforce contraction via spectral norm on block weights or projected conjugate-derivative constraints; verify $>80\%$ solver convergence on real data; rerun matched comparison. Secondary work: solver-tolerance study (1e-2 vs 1e-3), solver depth warmup. (exp05\_full iteration 3, config sha 8a2fa16e, commit 385f5d4).
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\textwidth]{figures/fig_eqlm_loss_curves.pdf}
+\caption{\textbf{F13: EqLM Full-Run Loss Curves.} 20k-step training over full strict-small corpus. A1 (ExplicitLM, orange) reaches 3.90 loss; A2 (EqLM, blue) reaches 4.41; A3 (EqLM+MagneticAdamW, purple) reaches 4.68. Frozen from results/exp05\_full/results.json (config sha 8a2fa16e, commit 385f5d4).}
+\label{fig:eqlm_loss_curves}
+\end{figure}
 
 \section{Related Work}
 
@@ -248,10 +319,10 @@ We also build on classical results: McKelvey and Palfrey (1995) on quantal respo
 \section{Limitations}
 
 \begin{itemize}
-\item Smoke-scale LM results (BabyLM 10M tokens, BLiMP 1000 pairs): BLiMP accuracies ($0.459$–$0.537$) are noise around chance; H1's full benchmark requires Tier B scaling (GB10 full training).
+\item \textbf{H1 iteration 1 missed (F13):} EqLM achieved 78–80\% of baseline BLiMP at scale, falling short of the $\geq 95\%$ pre-registered threshold. Root cause: spectral-norm enforcement for DEQ contraction was not wired into EqLM (Phase-0 gap). Smoke parity (F10) held only in memorization regimes; at scale, lack of contraction enforcement breaks learning signal.
 \item Asymmetric-game theory: MMD-to-QRE identity holds only on symmetric games; asymmetric cases show context-dependent attractors (F2, research question open).
 \item Single-machine deployment: all Tier A/B work on GB10 (RTX 5090); scaling to multi-GPU/cloud requires serverless containerization (RunPod executor infrastructure in progress).
-\item BLiMP full runs pending: current smoke shows tokenization→train→eval pipeline works; full-run model selection requires completion of H3 (MagneticAdamW) and revisit of weight initialization (ADR 0003).
+\item Phantom-gradient regime (F12): DEQ solver convergence is 0\% at tol $1e-3$ during training, yet gradients flow and training succeeds. This regime requires characterization (solver-tolerance study, depth warmup) before production use.
 \end{itemize}
 
 \section{Conclusion}

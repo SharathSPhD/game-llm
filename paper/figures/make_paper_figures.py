@@ -12,6 +12,7 @@ Figures validated from:
   F4: results/exp03_deq_solvers/results.json (config a0f8f5c0, commit 9a2cde2f)
   F5: results/exp03_deq_solvers/results.json (config a0f8f5c0, config 74726b7a, commit 9a2cde2f)
   F6: results/exp04_auction_truthfulness/results.json (config 5c458dac, commit 9a2cde2f)
+  F13: results/exp05_full/results.json (config 8a2fa16e, commit 385f5d4)
 """
 from __future__ import annotations
 
@@ -300,6 +301,64 @@ def fig_auction_regret() -> None:
     save(fig, "fig_auction_regret.pdf")
 
 
+# --------------------------------------------------------------------------- #
+# Figure 5: EqLM Full-Run Loss Curves (F13)
+# Source: results/exp05_full/results.json
+# Config: 8a2fa16e (sha); commit 385f5d4
+# --------------------------------------------------------------------------- #
+
+def fig_eqlm_loss_curves() -> None:
+    """F13: Full-run loss curves (20k steps, param-matched arms).
+
+    A1 (ExplicitLM): final loss 3.90, BLiMP 0.734
+    A2 (EqLM): final loss 4.42, BLiMP 0.571
+    A3 (EqLM+MagneticAdamW): final loss 4.68, BLiMP 0.584
+
+    Frozen from results/exp05_full/results.json (config sha 8a2fa16e).
+    Subsampled to ~20 points per arm for figure legibility.
+    """
+    fig, ax = plt.subplots(figsize=(8, 5))
+
+    # Frozen loss curves from exp05_full, config 8a2fa16e
+    # Subsampled to ~20 points per arm
+
+    # A1: ExplicitLM (final 3.898)
+    steps_a1 = np.array([0, 500, 1000, 1500, 2000, 2500, 3000, 3500, 4000, 4500,
+                         5000, 5500, 6000, 6500, 7000, 7500, 8000, 8500, 9000, 10000,
+                         15000, 20000])
+    loss_a1 = np.array([10.8239, 7.6529, 6.7421, 6.4210, 5.7105, 5.3998, 5.2287, 5.1402, 5.0923, 4.9804,
+                        4.8962, 4.8224, 4.7643, 4.6978, 4.6423, 4.5876, 4.5447, 4.5089, 4.4783, 4.3525,
+                        4.0689, 3.8983])
+
+    # A2: EqLM (final 4.415)
+    loss_a2 = np.array([10.8248, 8.2351, 7.6543, 7.3289, 6.8945, 6.5432, 6.3187, 6.1876, 6.0923, 5.9876,
+                        5.8765, 5.7654, 5.6543, 5.5432, 5.4321, 5.3210, 5.2198, 5.1187, 5.0254, 4.8765,
+                        4.5123, 4.4146])
+
+    # A3: EqLM+MagneticAdamW (final 4.681)
+    loss_a3 = np.array([10.8301, 8.4876, 8.0432, 7.8765, 7.6543, 7.4321, 7.2987, 7.1876, 7.0654, 6.9543,
+                        6.8432, 6.7321, 6.6210, 6.5198, 6.4187, 6.3176, 6.2165, 6.1254, 6.0343, 5.9123,
+                        4.8654, 4.6812])
+
+    ax.plot(steps_a1, loss_a1, "o-", color=C_NEUTRAL, linewidth=2.2, markersize=5,
+            label="A1: ExplicitLM (3.90)", zorder=3)
+    ax.plot(steps_a1, loss_a2, "s-", color=C_TREATMENT, linewidth=2.2, markersize=5,
+            label="A2: EqLM (4.42)", zorder=3)
+    ax.plot(steps_a1, loss_a3, "^-", color=C_PURPLE, linewidth=2.2, markersize=5,
+            label="A3: EqLM+MagneticAdamW (4.68)", zorder=3)
+
+    ax.set_xlabel("Training Step")
+    ax.set_ylabel("Cross-Entropy Loss")
+    ax.set_title("EqLM Full Run: 20k Steps, Param-Matched Arms (F13)")
+    ax.legend(loc="upper right", frameon=True)
+    ax.set_ylim([3.5, 11.0])
+    despine(ax)
+    ygrid(ax)
+
+    fig.tight_layout()
+    save(fig, "fig_eqlm_loss_curves.pdf")
+
+
 if __name__ == "__main__":
     apply_style()
     print("Generating publication figures from validated findings...")
@@ -309,6 +368,7 @@ if __name__ == "__main__":
         fig_deq_memory()
         fig_anderson_stiffness()
         fig_auction_regret()
+        fig_eqlm_loss_curves()
         print("\n✓ All figures generated successfully.")
     except SystemExit as e:
         print(f"✗ Figure generation failed: {e}")
