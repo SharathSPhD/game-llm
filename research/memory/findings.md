@@ -121,3 +121,12 @@ operator sign-off.)
   during training yet training succeeds (phantom-gradient regime) — needs
   characterization before full run.
 - **Status:** VALIDATED (smoke scale) · sign-off pending
+
+## F10-correction — exp05 token-budget description was wrong (data cap)
+
+- exp05 iterations 2–3 cycled a 22,703-unique-token corpus (the 1000-sample cap,
+  F9 blocker) for ~3.3M token-PRESENTATIONS — not 3.3M unique tokens. The F10
+  parity claim remains valid as a like-for-like comparison (identical data both
+  arms), but describes an overfitting-regime corpus. Cap fixed in
+  kinetic_ai/data/dataset.py (streaming until max_tokens; regression-tested);
+  exp06 onward uses the real stream.
