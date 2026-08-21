@@ -1,0 +1,29 @@
+# EXP08 DRY-RUN: Quick test on 3 steps (CPU, ~30 seconds)
+
+data:
+  dataset: "BabyLM-2026-Strict-Small"
+  max_tokens: 1300000
+  seq_len: 128
+
+tokenizer:
+  vocab_size: 50257
+
+training:
+  seed: 42
+  num_steps: 3  # 3 steps only
+  batch_size: 32
+  log_every: 1
+  lr: 3e-4
+  grad_clip: 1.0
+
+model:
+  vocab_size: 50257
+  d_model: 192
+  n_heads: 4
+  d_ff: 512
+  max_seq_len: 128
+  deq_max_iter: 12
+  deq_tol: 1e-3
+  solver: "anderson"
+  dropout: 0.1
+  residual_damping: 0.2

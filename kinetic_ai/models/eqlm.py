@@ -74,6 +74,13 @@ class EqLMConfig:
                            Puts outer LayerNorm INSIDE the map so iterates are bounded.
                            Follows Bai et al. DEQ-transformer practice. Ensures bona fide fixed points exist.
                            Default 'residual' for backward compat.
+        aux_residual: If True, compute auxiliary loss on the residual ||f(z*,x) − z*||/(||z*||+eps).
+                      Enables solver-aware training to learn contraction without explicit constraints.
+                      Stored in model.last_aux_residual and multiplied by lambda_aux during training.
+                      Default False for backward compat.
+        lambda_aux: Weight for the auxiliary residual loss. Only used if aux_residual=True.
+                    Total loss = L_ce + lambda_aux * aux_residual.
+                    Default 0.1.
     """
 
     vocab_size: int = 50257
@@ -89,6 +96,8 @@ class EqLMConfig:
     spectral_norm: bool = True
     residual_damping: float = 0.2
     map_form: str = "residual"
+    aux_residual: bool = False
+    lambda_aux: float = 0.1
 
 
 # ============================================================================
@@ -355,6 +364,9 @@ class EqLM(nn.Module):
         # DEQ layer wraps the fixed-point solver
         self.deq = DEQLayer(fixed_point_map, config=deq_config)
 
+        # Auxiliary residual loss (solver-aware): stores the last computed relative residual
+        self.last_aux_residual: Tensor | None = None
+
     def forward(self, input_ids: Tensor) -> Tensor:
         """Forward pass: compute logits for next-token prediction.
 
@@ -377,6 +389,28 @@ class EqLM(nn.Module):
         # Solve fixed point: z* = f(z*) where f is the transformer block
         # Pass z as both z and x for DEQLayer interface (x is unused in this model)
         z_star = self.deq(z)
+
+        # ========== Auxiliary Residual Loss (Solver-Aware) ==========
+        # If enabled, compute relative residual r = ||f(z*,x) − z*||/(||z*||+eps)
+        # with gradients enabled so training can minimize this to learn contraction.
+        self.last_aux_residual = None
+        if self.config.aux_residual:
+            # Compute f(z*) with gradients to enable backprop through block
+            # Note: z_star is detached from DEQ solve, but the block forward
+            # will flow gradients through block parameters
+            z_star_for_residual = z_star.detach().requires_grad_(True)
+            with torch.enable_grad():
+                f_z_star = self.block(z_star_for_residual, z)
+
+            # Compute relative residual: r = ||f(z*) - z*|| / (||z*|| + eps)
+            residual = f_z_star - z_star.detach()
+            norm_residual = torch.norm(residual)
+            norm_z_star = torch.norm(z_star.detach())
+            eps = 1e-8
+            rel_residual = norm_residual / (norm_z_star + eps)
+
+            # Store for training loss: L_total = L_ce + lambda_aux * rel_residual
+            self.last_aux_residual = rel_residual
 
         # Final layer norm
         z_star = self.ln_final(z_star)

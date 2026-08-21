@@ -847,5 +847,318 @@ class TestEqLMv3PostLN:
         assert hasattr(model.deq, "last_info")
 
 
+# ============================================================================
+# Test 7: Solver-Aware Auxiliary Residual Loss
+# ============================================================================
+
+class TestAuxiliaryResidual:
+    """Test solver-aware auxiliary residual loss for learning contraction."""
+
+    def test_aux_residual_disabled_by_default(
+        self, tiny_eqlm_config: EqLMConfig, tiny_batch: tuple
+    ) -> None:
+        """aux_residual=False (default) should not compute auxiliary loss."""
+        input_ids, batch_size, seq_len = tiny_batch
+
+        # Create model with aux_residual disabled
+        cfg = EqLMConfig(
+            vocab_size=tiny_eqlm_config.vocab_size,
+            d_model=tiny_eqlm_config.d_model,
+            n_heads=tiny_eqlm_config.n_heads,
+            d_ff=tiny_eqlm_config.d_ff,
+            max_seq_len=tiny_eqlm_config.max_seq_len,
+            deq_max_iter=12,
+            deq_tol=1e-3,
+            solver="anderson",
+            jfb=False,
+            dropout=0.0,
+            spectral_norm=True,
+            residual_damping=0.2,
+            map_form="postln",
+            aux_residual=False,  # Explicitly disabled
+            lambda_aux=0.1,
+        )
+        model = EqLM(cfg)
+        logits = model(input_ids)
+
+        # Auxiliary residual should be None when disabled
+        assert model.last_aux_residual is None, (
+            "last_aux_residual should be None when aux_residual=False"
+        )
+
+        # Forward pass should work normally
+        assert logits.shape == (batch_size, seq_len, cfg.vocab_size)
+
+    def test_aux_residual_identical_logits_when_disabled(
+        self, tiny_eqlm_config: EqLMConfig, tiny_batch: tuple
+    ) -> None:
+        """Logits should be identical with/without aux_residual (aux only affects loss)."""
+        input_ids, batch_size, seq_len = tiny_batch
+
+        # Model WITHOUT auxiliary residual
+        cfg_no_aux = EqLMConfig(
+            vocab_size=tiny_eqlm_config.vocab_size,
+            d_model=tiny_eqlm_config.d_model,
+            n_heads=tiny_eqlm_config.n_heads,
+            d_ff=tiny_eqlm_config.d_ff,
+            max_seq_len=tiny_eqlm_config.max_seq_len,
+            deq_max_iter=12,
+            deq_tol=1e-3,
+            solver="anderson",
+            jfb=False,
+            dropout=0.0,
+            spectral_norm=True,
+            residual_damping=0.2,
+            map_form="postln",
+            aux_residual=False,
+            lambda_aux=0.0,
+        )
+
+        # Model WITH auxiliary residual
+        cfg_with_aux = EqLMConfig(
+            vocab_size=tiny_eqlm_config.vocab_size,
+            d_model=tiny_eqlm_config.d_model,
+            n_heads=tiny_eqlm_config.n_heads,
+            d_ff=tiny_eqlm_config.d_ff,
+            max_seq_len=tiny_eqlm_config.max_seq_len,
+            deq_max_iter=12,
+            deq_tol=1e-3,
+            solver="anderson",
+            jfb=False,
+            dropout=0.0,
+            spectral_norm=True,
+            residual_damping=0.2,
+            map_form="postln",
+            aux_residual=True,
+            lambda_aux=0.1,
+        )
+
+        model_no_aux = EqLM(cfg_no_aux)
+        model_with_aux = EqLM(cfg_with_aux)
+
+        # Copy weights to ensure same forward pass
+        with torch.no_grad():
+            for p_no_aux, p_with_aux in zip(
+                model_no_aux.parameters(), model_with_aux.parameters()
+            ):
+                p_with_aux.copy_(p_no_aux)
+
+        # Forward passes should produce near-identical logits
+        logits_no_aux = model_no_aux(input_ids)
+        logits_with_aux = model_with_aux(input_ids)
+
+        diff = torch.abs(logits_no_aux - logits_with_aux).max()
+        assert diff < 1e-3, (
+            f"Logits should be near-identical with/without aux_residual, "
+            f"but max diff = {diff}"
+        )
+
+    def test_aux_residual_is_scalar_tensor_with_grad(
+        self, tiny_eqlm_config: EqLMConfig, tiny_batch: tuple
+    ) -> None:
+        """When aux_residual=True, last_aux_residual should be scalar requiring grad."""
+        input_ids, batch_size, seq_len = tiny_batch
+
+        cfg = EqLMConfig(
+            vocab_size=tiny_eqlm_config.vocab_size,
+            d_model=tiny_eqlm_config.d_model,
+            n_heads=tiny_eqlm_config.n_heads,
+            d_ff=tiny_eqlm_config.d_ff,
+            max_seq_len=tiny_eqlm_config.max_seq_len,
+            deq_max_iter=12,
+            deq_tol=1e-3,
+            solver="anderson",
+            jfb=False,
+            dropout=0.0,
+            spectral_norm=True,
+            residual_damping=0.2,
+            map_form="postln",
+            aux_residual=True,
+            lambda_aux=0.1,
+        )
+        model = EqLM(cfg)
+        logits = model(input_ids)
+
+        # Auxiliary residual should be computed
+        assert model.last_aux_residual is not None, (
+            "last_aux_residual should be computed when aux_residual=True"
+        )
+
+        # Should be a scalar tensor
+        assert model.last_aux_residual.shape == torch.Size([]), (
+            f"last_aux_residual should be scalar, got shape {model.last_aux_residual.shape}"
+        )
+
+        # Should require grad
+        assert model.last_aux_residual.requires_grad, (
+            "last_aux_residual should require gradients for loss backprop"
+        )
+
+        # Should be positive (it's a norm)
+        assert model.last_aux_residual.item() >= 0, (
+            f"Residual should be non-negative, got {model.last_aux_residual.item()}"
+        )
+
+    def test_aux_residual_backward_flows_to_block_params(
+        self, tiny_eqlm_config: EqLMConfig, tiny_batch: tuple
+    ) -> None:
+        """Backward through auxiliary residual should flow gradients to block parameters."""
+        input_ids, batch_size, seq_len = tiny_batch
+
+        cfg = EqLMConfig(
+            vocab_size=tiny_eqlm_config.vocab_size,
+            d_model=tiny_eqlm_config.d_model,
+            n_heads=tiny_eqlm_config.n_heads,
+            d_ff=tiny_eqlm_config.d_ff,
+            max_seq_len=tiny_eqlm_config.max_seq_len,
+            deq_max_iter=12,
+            deq_tol=1e-3,
+            solver="anderson",
+            jfb=False,
+            dropout=0.0,
+            spectral_norm=True,
+            residual_damping=0.2,
+            map_form="postln",
+            aux_residual=True,
+            lambda_aux=0.1,
+        )
+        model = EqLM(cfg)
+
+        # Forward pass
+        logits = model(input_ids)
+
+        # Backward through auxiliary residual only
+        aux_loss = model.last_aux_residual
+        assert aux_loss is not None
+        aux_loss.backward()
+
+        # Check that block parameters have gradients
+        block_params_have_grad = False
+        for param in model.block.parameters():
+            if param.grad is not None and torch.abs(param.grad).sum() > 1e-8:
+                block_params_have_grad = True
+                break
+
+        assert block_params_have_grad, (
+            "Backward through auxiliary residual should produce gradients "
+            "in block parameters"
+        )
+
+    def test_aux_residual_training_reduces_residual(
+        self, tiny_eqlm_config: EqLMConfig, tiny_batch: tuple
+    ) -> None:
+        """30-step training with lambda_aux=0.1 should reduce relative residual vs lambda_aux=0.
+
+        TDD test with seeded RNG for determinism. Validates that the auxiliary loss
+        actually drives learning of contraction (lower residual = more contractive).
+        """
+        torch.manual_seed(42)
+
+        input_ids, batch_size, seq_len = tiny_batch
+        target_ids = torch.randint(0, tiny_eqlm_config.vocab_size, (batch_size, seq_len))
+
+        # ===== Arm A: lambda_aux = 0.0 (control) =====
+        cfg_control = EqLMConfig(
+            vocab_size=tiny_eqlm_config.vocab_size,
+            d_model=tiny_eqlm_config.d_model,
+            n_heads=tiny_eqlm_config.n_heads,
+            d_ff=tiny_eqlm_config.d_ff,
+            max_seq_len=tiny_eqlm_config.max_seq_len,
+            deq_max_iter=12,
+            deq_tol=1e-3,
+            solver="anderson",
+            jfb=False,
+            dropout=0.0,
+            spectral_norm=True,
+            residual_damping=0.2,
+            map_form="postln",
+            aux_residual=True,  # Still compute, but lambda_aux=0
+            lambda_aux=0.0,
+        )
+        model_control = EqLM(cfg_control)
+        optimizer_control = torch.optim.Adam(model_control.parameters(), lr=1e-3)
+
+        # ===== Arm B: lambda_aux = 0.1 (treatment) =====
+        torch.manual_seed(42)
+        cfg_treatment = EqLMConfig(
+            vocab_size=tiny_eqlm_config.vocab_size,
+            d_model=tiny_eqlm_config.d_model,
+            n_heads=tiny_eqlm_config.n_heads,
+            d_ff=tiny_eqlm_config.d_ff,
+            max_seq_len=tiny_eqlm_config.max_seq_len,
+            deq_max_iter=12,
+            deq_tol=1e-3,
+            solver="anderson",
+            jfb=False,
+            dropout=0.0,
+            spectral_norm=True,
+            residual_damping=0.2,
+            map_form="postln",
+            aux_residual=True,
+            lambda_aux=0.1,
+        )
+        model_treatment = EqLM(cfg_treatment)
+        optimizer_treatment = torch.optim.Adam(model_treatment.parameters(), lr=1e-3)
+
+        # Copy weights to start identical
+        with torch.no_grad():
+            for p_ctrl, p_treat in zip(
+                model_control.parameters(), model_treatment.parameters()
+            ):
+                p_treat.copy_(p_ctrl)
+
+        # Training loop: 30 steps
+        n_steps = 30
+        residuals_control: list[float] = []
+        residuals_treatment: list[float] = []
+
+        for step in range(n_steps):
+            # ===== Control arm =====
+            optimizer_control.zero_grad()
+            logits_ctrl = model_control(input_ids)
+            ce_loss_ctrl = torch.nn.functional.cross_entropy(
+                logits_ctrl.reshape(-1, cfg_control.vocab_size),
+                target_ids.reshape(-1),
+            )
+            # Add aux residual to loss (lambda_aux=0)
+            aux_residual_ctrl = (
+                model_control.last_aux_residual
+                if model_control.last_aux_residual is not None
+                else torch.tensor(0.0)
+            )
+            loss_ctrl = ce_loss_ctrl + cfg_control.lambda_aux * aux_residual_ctrl
+            loss_ctrl.backward()
+            optimizer_control.step()
+            residuals_control.append(aux_residual_ctrl.item())
+
+            # ===== Treatment arm =====
+            optimizer_treatment.zero_grad()
+            logits_treat = model_treatment(input_ids)
+            ce_loss_treat = torch.nn.functional.cross_entropy(
+                logits_treat.reshape(-1, cfg_treatment.vocab_size),
+                target_ids.reshape(-1),
+            )
+            # Add aux residual to loss (lambda_aux=0.1)
+            aux_residual_treat = (
+                model_treatment.last_aux_residual
+                if model_treatment.last_aux_residual is not None
+                else torch.tensor(0.0)
+            )
+            loss_treat = ce_loss_treat + cfg_treatment.lambda_aux * aux_residual_treat
+            loss_treat.backward()
+            optimizer_treatment.step()
+            residuals_treatment.append(aux_residual_treat.item())
+
+        # Treatment arm should have lower residual at the end vs control
+        final_residual_control = residuals_control[-1]
+        final_residual_treatment = residuals_treatment[-1]
+
+        assert final_residual_treatment < final_residual_control, (
+            f"Treatment (lambda_aux=0.1) should have lower residual than control, "
+            f"but treatment={final_residual_treatment:.6f}, "
+            f"control={final_residual_control:.6f}"
+        )
+
+
 if __name__ == "__main__":
     pytest.main([__file__, "-v"])

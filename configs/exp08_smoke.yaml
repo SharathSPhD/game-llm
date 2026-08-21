@@ -1,0 +1,31 @@
+# EXP08 SMOKE: Solver-Aware Auxiliary Loss on 300 real training steps
+# Compares EqLM-v3 with lambda_aux in {0.0, 0.01, 0.1, 1.0}
+# Measures: final CE loss, solver rel-residual at exit, solver convergence, wall time
+
+data:
+  dataset: "BabyLM-2026-Strict-Small"
+  max_tokens: 1300000  # ~1.3M tokens (match exp07)
+  seq_len: 128
+
+tokenizer:
+  vocab_size: 50257
+
+training:
+  seed: 42
+  num_steps: 300  # 300 steps per arm (GPU smoke test, ~15 min on GB10)
+  batch_size: 32
+  log_every: 10
+  lr: 3e-4
+  grad_clip: 1.0
+
+model:
+  vocab_size: 50257
+  d_model: 192  # Smoke scale (match exp07)
+  n_heads: 4
+  d_ff: 512
+  max_seq_len: 128
+  deq_max_iter: 12
+  deq_tol: 1e-3
+  solver: "anderson"
+  dropout: 0.1
+  residual_damping: 0.2
