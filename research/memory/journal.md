@@ -126,3 +126,13 @@
   required); /lab 200. Operator: sign in once with sharath.sathish@gmail.com to
   auto-receive admin; enable guests via select set_user_tier('<email>','user').
 - next: EqLM-v4 arm; worker/KV permanent gateway when CF creds provided.
+
+## [cycle 10b | 2026-08-21] PERMANENT GATEWAY LIVE (operator CF creds)
+- Cloudflare account b7f7f1b1 (sharath.ai.colab@gmail.com): workers.dev subdomain
+  'kinetic-ai' registered; KV namespace fb379d31; worker 'kinetic' deployed via API
+  after fixing 3 worker.js defects (dropped Authorization header, wrong Vercel host,
+  wildcard CORS). Public stable URL: https://kinetic.kinetic-ai.workers.dev
+- Vercel GATEWAY_URL switched tunnel->worker (redeployed); Supabase runtime_config
+  updated; run_gateway.sh defaults point at new account/KV (secrets gitignored).
+- E2E verified: worker /health -> GB10 gpu true; UI proxied via worker (200);
+  anonymous GPU access still 401. Tunnel restarts now self-heal via run_gateway.sh.
