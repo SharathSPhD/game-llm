@@ -201,3 +201,22 @@ operator sign-off.)
 - **exp07 numbers (for the record):** losses A1 8.71 / v2 8.88 / v1 8.84 (300
   steps, real stream) — loss-parity prereg MET, convergence prereg NOT MET.
 - **Status:** VALIDATED (diagnosis reproducible in-repo) · sign-off pending
+
+## F15 — EqLM-v3 (post-LN map): fixed points now exist but contraction is weak at LM width (H1 frontier identified)
+
+- **Evidence:** exp07 four-arm smoke (300 steps, real stream): v3 loss 8.84 (parity
+  prereg MET vs v1 8.82; explicit 8.72); convergence prereg NOT MET at
+  max_iter=12. Direct probe at full smoke width (d=204, T=127, 80 iters):
+  relative residual decays 1.0 → 0.105 monotonically then creeps (0.1078 → 0.1053
+  over the last 24 iters) — the F14 constant-speed-drift signature is ELIMINATED
+  (bounded iterates, genuine approach), but the map's effective contraction factor
+  is ≈1 at this width, so tol 1e-2 is unreachable in practical iteration budgets.
+- **Interpretation:** the architecture question H1 poses is now precise: make the
+  post-LN transformer map strongly contractive at width WITHOUT destroying
+  capacity. Candidate v4 directions (each a testable arm): damping/α annealing
+  schedules; solver-aware auxiliary loss penalizing ‖f(z*)−z*‖; tighter spectral
+  budget on attention value/projection paths only; pcDEQ orthant constraints;
+  tol relaxation study (does rel 0.1 suffice for representation quality?).
+- **Status:** VALIDATED · sign-off pending · H1 iteration 2 remains open — this is
+  the identified scientific frontier of the program, with the falsifiable next arms
+  above.

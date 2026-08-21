@@ -1,36 +1,47 @@
 {
-  "config_hash": "ec62eeba11a4f9d7f89b50e7e286e249a67593608b70c124cc76a0629166f1c0",
+  "config_hash": "28c4ea1f50ed8c5edb227f606ff849c8c1cd7958fce36370593cb951e3276df0",
   "git": {
-    "commit": "2ddb8f0efd37d4787143ab9d37b66f148084e914"
+    "commit": "af081f317d7819cefc2fdcd1522ba8734d350925"
   },
   "arms": {
     "A1": {
       "name": "ExplicitLM (Baseline)",
       "params": 10713795,
-      "final_loss": 8.707655906677246,
-      "wall_time_sec": 27.882635354995728,
-      "peak_memory_mb": 3503.37255859375
+      "final_loss": 8.715262413024902,
+      "wall_time_sec": 27.774698495864868,
+      "peak_memory_mb": 3503.68505859375
     },
     "A2": {
-      "name": "EqLM-v2 (spectral_norm=True, damping=0.2)",
+      "name": "EqLM-v2 (spectral_norm=True, damping=0.2, residual form)",
       "params": 10020801,
-      "final_loss": 8.87636661529541,
-      "wall_time_sec": 77.9093599319458,
+      "final_loss": 8.858600616455078,
+      "wall_time_sec": 78.08782863616943,
       "peak_memory_mb": 3468.61279296875,
       "solver_convergence_rate": 0.0,
       "solver_mean_iterations": 12.0
     },
     "A3": {
-      "name": "EqLM-v1 (spectral_norm=False)",
+      "name": "EqLM-v1 (spectral_norm=False, residual form)",
       "params": 10020801,
-      "final_loss": 8.838096618652344,
-      "wall_time_sec": 70.43982338905334,
+      "final_loss": 8.821553230285645,
+      "wall_time_sec": 70.4814875125885,
       "peak_memory_mb": 3617.55859375,
+      "solver_convergence_rate": 0.0,
+      "solver_mean_iterations": 12.0
+    },
+    "A4": {
+      "name": "EqLM-v3 (spectral_norm=True, postln form, bona fide fixed points)",
+      "params": 10020801,
+      "final_loss": 8.837309837341309,
+      "wall_time_sec": 72.57178163528442,
+      "peak_memory_mb": 3766.51953125,
       "solver_convergence_rate": 0.0,
       "solver_mean_iterations": 12.0
     }
   },
   "preregistered_criteria": {
+    "a4_final_within_5pct_of_a3": true,
+    "a4_rel_convergence_above_80pct": false,
     "a2_final_within_5pct_of_a3": true,
     "a2_convergence_above_80pct": false
   }

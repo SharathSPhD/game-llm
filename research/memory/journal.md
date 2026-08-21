@@ -93,3 +93,12 @@
   convergence criterion also unsatisfiable by construction (F14).
 - F13 reframed: current EqLM = weight-tied 12-iteration transformer.
 - next: EqLM-v3 (outer-LN map, relative residual) queued as H1 iteration 2.
+
+## [cycle 8 | 2026-08-21] EQLM-V3 SMOKE + F15: fixed points exist, contraction is the frontier
+- v3 (post-LN map, rel-residual criterion) landed TDD (226 tests); exp07 4-arm
+  smoke: loss parity MET, convergence NOT MET at 12 iters; width probe: rel
+  residual 1.0->0.105 decaying (F14 drift gone) but contraction ~1 at width.
+- H1 status: iteration 2 open with precise v4 arms (alpha schedules, solver-aware
+  loss, targeted spectral budget, pcDEQ, tol-sufficiency study).
+- next: operator sign-off pass F1-F15; v4 arm selection; paper/site refresh with
+  F14/F15 arc; app deploy awaits operator (Supabase/Vercel/Cloudflare auth).
