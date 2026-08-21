@@ -233,3 +233,20 @@ traces to a real run with config hash + seeds. All statuses: operator sign-off: 
 - **Consequence:** H1 iteration 2 unlocked: full 20k-step matched comparison with
   EqLM-v4 (postln + aux λ=0.01).
 - **Status:** VALIDATED (smoke scale) · pending full-run confirmation
+
+## F17 — H1 iteration 2: post-LN EqLM reaches 94.4% of baseline BLiMP (near-miss, within noise); aux loss trades capacity for contraction at scale
+
+- **Evidence (exp05_full_v4, 20k steps, full stream, param-matched, 1000 scored
+  BLiMP pairs; config sha 8f3c8969, commit e360e7c5):** A1 ExplicitLM 0.746 (loss
+  3.75); A3 EqLM-v3 postln no-aux 0.704 = 94.4% of A1 (loss 4.45) — 0.6pp below
+  the pre-registered 95% threshold, within 1σ (binomial σ≈1.4pp at n=1000):
+  statistically a TIE with the threshold, seeds required to adjudicate. A2
+  EqLM-v4 aux λ=0.01: 0.658 (loss 4.43) — the solver-aware loss, ≤1.8% CE cost
+  at 300 steps (F16), costs ~4.6pp BLiMP compounded over 20k steps: contraction
+  and task capacity trade off at fixed λ.
+- **Iteration-1→2 progress:** EqLM 0.571 → 0.704 (arch fixes alone: post-LN map +
+  init scaling). Wall time 2.9x; memory parity.
+- **Next (iteration 3, pre-registered):** 2 more seeds of A1/A3 to resolve the
+  near-miss with mean±CI (CLAUDE.md ≥3-seed gate); rider hypothesis: λ=1e-3 aux
+  arm (10x smaller) preserves BLiMP while keeping residual gains.
+- **Status:** VALIDATED · seeds pending for H1 verdict

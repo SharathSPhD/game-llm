@@ -1,0 +1,74 @@
+arms:
+  A1:
+    config:
+      d_ff: 512
+      d_model: 192
+      dropout: 0.1
+      max_seq_len: 128
+      n_heads: 4
+      n_layers: 4
+      vocab_size: 50257
+    name: ExplicitLM
+    optimizer: adamw
+  A2:
+    config:
+      aux_residual: true
+      d_ff: 512
+      d_model: 192
+      deq_max_iter: 12
+      deq_tol: 1e-3
+      dropout: 0.1
+      jfb: false
+      map_form: postln
+      max_seq_len: 128
+      n_heads: 4
+      residual_damping: 0.2
+      solver: anderson
+      spectral_norm: true
+      vocab_size: 50257
+    lambda_aux: 0.001
+    name: EqLM-v4 (postln+aux 1e-3)
+    optimizer: adamw
+  A3:
+    config:
+      aux_residual: false
+      d_ff: 512
+      d_model: 192
+      deq_max_iter: 12
+      deq_tol: 1e-3
+      dropout: 0.1
+      jfb: false
+      map_form: postln
+      max_seq_len: 128
+      n_heads: 4
+      residual_damping: 0.2
+      solver: anderson
+      spectral_norm: true
+      vocab_size: 50257
+    name: EqLM-v3 (postln no-aux)
+    optimizer: adamw
+data:
+  batch_size: 32
+  dataset: BabyLM-2026-Strict-Small
+  seq_len: 128
+  subset_size: null
+eval:
+  blimp:
+    cache_dir: ~/.cache/huggingface/hub
+    num_phenomena: 5
+    pairs_per_phenomenon: 200
+  blimp_pairs: 2000
+notes: 'H1 iteration 3 seeds: A1 explicit; A2 EqLM aux lambda=1e-3 (rider); A3 EqLM-v3
+  postln no-aux (headline)'
+tokenizer:
+  prefer_gpt2: true
+  vocab_size: 50257
+training:
+  grad_clip: 1.0
+  log_every: 100
+  lr: 3e-4
+  num_epochs: 132
+  num_steps: 20000
+  seed: 44
+  warmup_steps: 0
+  weight_decay: 0.01
