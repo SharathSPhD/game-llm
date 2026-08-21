@@ -155,13 +155,16 @@ def train_arm(
             optimizer.step()
 
             # Track DEQ solver statistics if available (EqLM models)
-            if hasattr(model, "deq") and hasattr(model.deq, "last_info"):
-                if model.deq.last_info is not None:
-                    deq_info = model.deq.last_info
-                    if isinstance(deq_info, dict) and "num_steps" in deq_info:
-                        solver_iterations.append(deq_info["num_steps"])
-                        if not deq_info.get("converged", True):
-                            convergence_failures += 1
+            if (
+                hasattr(model, "deq")
+                and hasattr(model.deq, "last_info")
+                and model.deq.last_info is not None
+            ):
+                deq_info = model.deq.last_info
+                if isinstance(deq_info, dict) and "num_steps" in deq_info:
+                    solver_iterations.append(deq_info["num_steps"])
+                    if not deq_info.get("converged", True):
+                        convergence_failures += 1
 
             if step % log_every == 0:
                 loss_curve.append({"step": step, "loss": loss.item()})

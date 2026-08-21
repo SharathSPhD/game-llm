@@ -90,3 +90,18 @@ operator sign-off.)
   damped solver (default on, backward compatible).
 - **Status:** VALIDATED · sign-off pending · exposes future work: Anderson-accelerated
   QRE solves (42k iters at λ=100 is the next bottleneck).
+
+## F9 — Tier B pipeline validated end-to-end; EqLM trains but slowly; raw-MMD arm exposed an adaptivity confound (SMOKE, method finding)
+
+- **What ran (exp05 iteration 2, GB10, 800 steps/arm, param-matched within 5%,
+  1000 BLiMP pairs, ~7 min GPU):** A1 ExplicitLM+AdamW loss 125→4.39; A2 EqLM+AdamW
+  132→28.5 (learning, ~10x slower); A3 EqLM+raw-MMD 128→125 (no learning).
+- **Honest read:** BLiMP values (0.459/0.513/0.537) are noise around chance at these
+  loss levels — NOT evidence of an MMD win (contra the run agent's initial claim,
+  rejected on review). All arms start at loss ≈125 ≫ ln(vocab)≈10.8 → unscaled
+  weight-tied logits at init. A3's flatline is an optimizer-adaptivity confound:
+  Euclidean MMD is unpreconditioned SGD+magnet (see ADR 0003).
+- **Value:** data→tokenize→train→BLiMP pipeline proven on GB10; three concrete
+  defects identified with fixes scheduled (init scale, MagneticAdamW, DEQ solver
+  stats capture; data loader currently limited to first 1000 samples — noted).
+- **Status:** VALIDATED as method finding · sign-off pending

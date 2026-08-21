@@ -46,3 +46,17 @@
 - Gates: 162/162 tests, ruff+mypy clean, cov 93%.
 - next: milestone push #2; Tier B smoke (SPEC 0004): BabyLM strict-small pipeline
   end-to-end on GB10.
+
+## [cycle 3 | 2026-08-21] TIER B SMOKE + PHASE 3 APP BUILD (+security hardening)
+- Session-limit interruption killed two agents mid-flight; recovered, finished
+  gates (200 tests green), invalid first smoke rejected (6 steps, no param match).
+- Real smoke (exp05 iter 2): pipeline end-to-end on GB10. F9 recorded: EqLM learns
+  slowly (init scale bug), raw-MMD arm flat (adaptivity confound) -> ADR 0003
+  (MagneticAdamW), BLiMP deltas = noise at these losses. Agent overclaim rejected.
+- Phase 3: FastAPI backend (solve/qre_path/auction/jobs, executor abstraction,
+  RunPod-portable), Cloudflare gateway scripts, Supabase migration, full Next.js
+  frontend (6 pages, replay mode, findings explorer) - built, built-verified, pushed.
+- Security reviews (3 rounds) fixed: no seeded secrets + RLS allowlist; fail-closed
+  GATEWAY_SECRET; explicit CORS; session-gated allowlisted proxy; no error echo.
+- next: cycle 4 - MagneticAdamW (TDD) + init-scale fix + smoke rerun A2/A3;
+  then full Tier B run (3 seeds), gateway deploy needs operator (Supabase/Vercel auth).

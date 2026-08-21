@@ -1,5 +1,5 @@
 {
-  "cycle": 2,
+  "cycle": 3,
   "phase": "phase2-science",
   "current_rq": "RQ-2",
   "gpu_lock": false,
@@ -14,6 +14,5 @@
     "RQ-2 (H2): VALIDATED - F1/F2/F3 (findings.md); RQ-6 Tier A part: F4/F5"
   ],
   "known_defects": [],
-  "next_action": "Tier B smoke per SPEC 0004: tokenizer + data prep + EqLM/explicit tiny pretrain + vendored BLiMP eval end-to-end on GB10 (single GPU job)",
-  "gpu_lock_holder": "exp05 Tier B smoke"
+  "next_action": "Cycle 4: MagneticAdamW + EqLM init-scale fix (TDD) -> smoke rerun A2/A3/A3-prime -> full Tier B (3 seeds)"
 }
