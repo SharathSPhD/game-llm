@@ -1,8 +1,8 @@
 {
-  "cycle": 8,
+  "cycle": 11,
   "phase": "phase2-science",
   "current_rq": "RQ-2",
-  "gpu_lock": false,
+  "gpu_lock": true,
   "open_questions": [
     "RQ-3 (H1): EqLM-small vs GPT-2-class on BabyLM/BLiMP",
     "RQ-4 (H3): MPO vs DPO",
@@ -14,5 +14,6 @@
     "RQ-2 (H2): VALIDATED - F1/F2/F3 (findings.md); RQ-6 Tier A part: F4/F5"
   ],
   "known_defects": [],
-  "next_action": "Operator sign-off pass F1-F15; choose EqLM-v4 arm (alpha schedule / solver-aware loss / targeted spectral budget / pcDEQ / tol-sufficiency); paper+site refresh F14-F15"
+  "next_action": "Harvest seeds 43/44; 3-seed mean+-CI A1 vs A3 -> H1 verdict (Wilcoxon/bootstrap per stats gates); evaluate lambda=1e-3 rider; paper/site refresh F16-F18",
+  "gpu_lock_holder": "exp05_full_v4 seeds 43+44 (H1 iteration 3)"
 }
