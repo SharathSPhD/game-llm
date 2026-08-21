@@ -158,3 +158,24 @@ operator sign-off.)
   reference is reserved for H3 preference-phase (its theoretical home). DEQ
   max_iter stays 12 (cheapest; no loss penalty).
 - **Status:** VALIDATED · sign-off pending
+
+## F13 — H1 iteration 1: MISSED at scale; diagnosis points to non-contractive fixed-point map (Tier B full run)
+
+- **What ran (exp05_full, 20k steps/arm, full strict-small stream, param-matched,
+  2000-pair BLiMP eval on 1000 scored pairs, config sha 8a2fa16e, commit 385f5d4):**
+  A1 ExplicitLM: loss 3.90, BLiMP 0.734 (credible BabyLM-class baseline).
+  A2 EqLM: 4.42, BLiMP 0.571. A3 EqLM+MagneticAdamW(1e-3): 4.68, BLiMP 0.584.
+  EqLM = 78–80% of baseline BLiMP vs pre-registered ≥95% ⇒ **H1 iter-1 MISSED**.
+  A3−A2 = +1.3pp ≈ 0.8σ (n=1000) — not significant. Wall time 2.9x; peak memory
+  comparable (logit activations dominate at this scale, depth-memory advantage
+  not visible).
+- **Diagnosis:** DEQ solver converged 0% of forward passes at tol 1e-3 across ALL
+  budgets (12/24/48 iters; exp06b) ⇒ the block's fixed-point map is not
+  contractive — spectral normalization exists in kinetic_ai/models/deq_layer.py
+  (apply_spectral_norm) but was never wired into EqLM (known Phase-0 gap). Smoke
+  "parity" (F10) held only in the memorization regime (22.7k-token cycled corpus).
+- **Next iteration (EqLM-v2, per operator ethos hypotheses→invention):** enforce
+  contraction (spectral norm on block weights / pcDEQ constraints), verify >80%
+  solver convergence, then rerun the matched comparison; secondary: solver-tol
+  study (1e-2 vs 1e-3), solver-depth warmup.
+- **Status:** VALIDATED (honest miss + diagnosis) · sign-off pending

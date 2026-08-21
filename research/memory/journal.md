@@ -77,3 +77,11 @@
   fix; frontend + gateway + proxy hardened (3 security review rounds).
 - next: FULL Tier B run (A1/A2/A3 20k steps, full stream) launched in background;
   harvest -> Tarka -> paper/site refresh -> operator sign-off pass on F1-F12.
+
+## [cycle 6 | 2026-08-21] TIER B FULL RUN HARVESTED (F13): H1 iter-1 missed, cause identified
+- exp05_full (3.5h GB10): A1 BLiMP 0.734 vs EqLM 0.571 / +magnet 0.584 -> H1
+  MISSED (78-80% of baseline vs >=95% prereg). Solver 0% convergence at all
+  budgets = non-contractive map; spectral norm never wired in (Phase-0 gap).
+- next: EqLM-v2 cycle - wire apply_spectral_norm/pcDEQ into EqLM block (TDD),
+  verify solver convergence >80% on smoke, rerun matched full comparison;
+  refresh paper/site with F10-F13 truth; operator sign-off pass F1-F13.
