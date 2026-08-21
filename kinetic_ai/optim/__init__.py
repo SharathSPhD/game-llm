@@ -1,4 +1,4 @@
-"""Optimization module: Magnetic Mirror Descent and Bregman divergences."""
+"""Optimization module: AdamW variants, Magnetic Mirror Descent, and Bregman divergences."""
 
 from kinetic_ai.optim.bregman import (
     BregmanDivergence,
@@ -6,6 +6,7 @@ from kinetic_ai.optim.bregman import (
     Euclidean,
     NegativeEntropy,
 )
+from kinetic_ai.optim.magnetic_adamw import MagneticAdamW
 from kinetic_ai.optim.mmd import MagneticMirrorDescent, mmd_strategy_update
 
 __all__ = [
@@ -15,4 +16,5 @@ __all__ = [
     "DilatedEntropy",
     "MagneticMirrorDescent",
     "mmd_strategy_update",
+    "MagneticAdamW",
 ]

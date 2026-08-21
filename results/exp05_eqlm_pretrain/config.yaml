@@ -36,11 +36,9 @@ arms:
       n_heads: 4
       solver: anderson
       vocab_size: 50257
-    mmd_config:
-      reference_update_interval: 10
-      tau: 0.01
-    name: EqLM+MMD
-    optimizer: mmd
+    magnetic_adamw_tau: 0.01
+    name: EqLM+MagneticAdamW
+    optimizer: magnetic_adamw
 data:
   batch_size: 32
   dataset: BabyLM-2026-Strict-Small

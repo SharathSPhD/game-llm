@@ -231,11 +231,13 @@ class EqLM(nn.Module):
         super().__init__()
         self.config = config
 
-        # Token embedding
+        # Token embedding with proper initialization (std=0.02 following GPT-2)
         self.embedding = nn.Embedding(config.vocab_size, config.d_model)
+        nn.init.normal_(self.embedding.weight, mean=0.0, std=0.02)
 
-        # Positional embedding (learned)
+        # Positional embedding (learned) with same init
         self.pos_embedding = nn.Embedding(config.max_seq_len, config.d_model)
+        nn.init.normal_(self.pos_embedding.weight, mean=0.0, std=0.02)
 
         # Transformer block (the fixed-point map)
         self.block = EqLMBlock(config)
@@ -296,8 +298,12 @@ class EqLM(nn.Module):
         # Final layer norm
         z_star = self.ln_final(z_star)
 
-        # LM head: project to vocabulary
+        # LM head: project to vocabulary with weight-tied embedding
         logits = self.lm_head(z_star)  # [B, T, vocab_size]
+
+        # Scale logits by sqrt(d_model) to keep variance reasonable
+        # with weight-tied embeddings (std=0.02 initialization)
+        logits = logits / (self.config.d_model**0.5)
 
         return cast(Tensor, logits)
 
@@ -321,11 +327,13 @@ class ExplicitLM(nn.Module):
         self.config = config
         self.n_layers = n_layers
 
-        # Token embedding
+        # Token embedding with proper initialization (std=0.02 following GPT-2)
         self.embedding = nn.Embedding(config.vocab_size, config.d_model)
+        nn.init.normal_(self.embedding.weight, mean=0.0, std=0.02)
 
-        # Positional embedding (learned)
+        # Positional embedding (learned) with same init
         self.pos_embedding = nn.Embedding(config.max_seq_len, config.d_model)
+        nn.init.normal_(self.pos_embedding.weight, mean=0.0, std=0.02)
 
         # Stack of transformer blocks
         self.layers = nn.ModuleList(
@@ -369,8 +377,12 @@ class ExplicitLM(nn.Module):
         # Final layer norm
         z = self.ln_final(z)
 
-        # LM head: project to vocabulary
+        # LM head: project to vocabulary with weight-tied embedding
         logits = self.lm_head(z)  # [B, T, vocab_size]
+
+        # Scale logits by sqrt(d_model) to keep variance reasonable
+        # with weight-tied embeddings (std=0.02 initialization)
+        logits = logits / (self.config.d_model**0.5)
 
         return cast(Tensor, logits)
 

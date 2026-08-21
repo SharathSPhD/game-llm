@@ -51,7 +51,7 @@ arms:
     optimizer: "adamw"
 
   A3:
-    name: "EqLM+MMD"
+    name: "EqLM+MagneticAdamW"
     config:
       vocab_size: 50257
       d_model: 192  # Will be auto-matched via match_explicit_width
@@ -63,10 +63,8 @@ arms:
       solver: "anderson"
       jfb: false
       dropout: 0.1
-    optimizer: "mmd"
-    mmd_config:
-      tau: 1e-2  # Magnetic damping (tau in {1e-3, 1e-2})
-      reference_update_interval: 10  # Update reference every 10 steps
+    optimizer: "magnetic_adamw"
+    magnetic_adamw_tau: 1e-2  # Magnetic strength (pull toward EMA reference)
 
 eval:
   blimp:

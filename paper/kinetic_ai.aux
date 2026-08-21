@@ -1,0 +1,40 @@
+\relax 
+\providecommand\hyper@newdestlabel[2]{}
+\providecommand\HyField@AuxAddToFields[1]{}
+\providecommand\HyField@AuxAddToCoFields[2]{}
+\providecommand \oddpage@label [2]{}
+\@writefile{toc}{\contentsline {section}{\numberline {1}Introduction}{1}{section.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {2}Background}{2}{section.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.1}Quantal Response Equilibrium}{2}{subsection.2.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.2}Maximum Mean Discrepancy}{2}{subsection.2.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.3}Deep Equilibrium Models}{2}{subsection.2.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.4}Mechanism Design for Language Models}{2}{subsection.2.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {3}The EqLM Architecture}{2}{section.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.1}Core Design}{3}{subsection.3.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.2}Fixed-Point Iteration}{3}{subsection.3.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {4}Convergence Analysis}{3}{section.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.1}MMD vs.\ GDA on Symmetric Games (F1)}{3}{subsection.4.1}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces \textbf  {F1: MMD Convergence.} Distance-to-fixed-point on log scale showing linear (geometric) decay (R²=0.9948 for matching pennies, R²=0.9015 for RPS) over final 50\% of trajectory. GDA cycles, bounded away at NashConv ≈ 1.9–1.8.}}{3}{figure.caption.1}\protected@file@percent }
+\providecommand*\caption@xref[2]{\@setref\relax\@undefined{#1}}
+\newlabel{fig:mmd_convergence}{{1}{3}{\textbf {F1: MMD Convergence.} Distance-to-fixed-point on log scale showing linear (geometric) decay (R²=0.9948 for matching pennies, R²=0.9015 for RPS) over final 50\% of trajectory. GDA cycles, bounded away at NashConv ≈ 1.9–1.8}{figure.caption.1}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2}Asymmetric-Game Fixed Points (F2)}{4}{subsection.4.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.3}Regularized Nash via Periodic Reference Resets (F3)}{4}{subsection.4.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {5}Experiments}{4}{section.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.1}Matrix Game Convergence}{4}{subsection.5.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.2}Deep Equilibrium Memory and Computational Cost}{4}{subsection.5.2}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces \textbf  {F4: DEQ Memory Scaling.} Implicit DEQ (blue, O(1)) maintains flat 0.032 MB across depths; explicit stacks (orange, O(N)) scale linearly at 0.0168 MB/layer. At N=32, DEQ achieves $\approx 17\times $ reduction.}}{5}{figure.caption.2}\protected@file@percent }
+\newlabel{fig:deq_memory}{{2}{5}{\textbf {F4: DEQ Memory Scaling.} Implicit DEQ (blue, O(1)) maintains flat 0.032 MB across depths; explicit stacks (orange, O(N)) scale linearly at 0.0168 MB/layer. At N=32, DEQ achieves $\approx 17\times $ reduction}{figure.caption.2}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces \textbf  {F5: Anderson Acceleration.} Anderson achieves $< 0.95 \times $ Picard iterations on stiff contractions ($\rho =0.999$), validating theory. No advantage at easy $\rho $ (0.9), as expected.}}{5}{figure.caption.3}\protected@file@percent }
+\newlabel{fig:anderson_stiffness}{{3}{5}{\textbf {F5: Anderson Acceleration.} Anderson achieves $< 0.95 \times $ Picard iterations on stiff contractions ($\rho =0.999$), validating theory. No advantage at easy $\rho $ (0.9), as expected}{figure.caption.3}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.3}QRE Path Tracing with Warm-Start (F7)}{5}{subsection.5.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.4}Damped QRE Solver for High Rationality (F8)}{6}{subsection.5.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.5}Token Auction Truthfulness (F6)}{6}{subsection.5.5}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces \textbf  {F6: Auction Truthfulness.} Second-price (green) achieves zero regret (95\% CI [0,0]) across $n \in \{3,5\}$ agents. Weighted aggregation (orange) shows positive regret (0.0773 at n=3, 0.0683 at n=5), confirming non-truthfulness.}}{6}{figure.caption.4}\protected@file@percent }
+\newlabel{fig:auction_regret}{{4}{6}{\textbf {F6: Auction Truthfulness.} Second-price (green) achieves zero regret (95\% CI [0,0]) across $n \in \{3,5\}$ agents. Weighted aggregation (orange) shows positive regret (0.0773 at n=3, 0.0683 at n=5), confirming non-truthfulness}{figure.caption.4}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.6}EqLM Pretraining on BabyLM: Smoke Pipeline Validation (F9)}{6}{subsection.5.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {6}Related Work}{7}{section.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {7}Limitations}{7}{section.7}\protected@file@percent }
+\bibstyle{plainnat}
+\bibdata{references}
+\@writefile{toc}{\contentsline {section}{\numberline {8}Conclusion}{8}{section.8}\protected@file@percent }
+\gdef \@abspage@last{8}

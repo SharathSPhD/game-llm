@@ -25,7 +25,6 @@ import torch
 import torch.nn.functional as F
 import yaml
 
-from kinetic_ai.config import BregmanType, MMDConfig
 from kinetic_ai.data import (
     BabyLMDataLoader,
     build_token_stream,
@@ -40,7 +39,7 @@ from kinetic_ai.models.eqlm import (
     count_params,
     match_explicit_width,
 )
-from kinetic_ai.optim.mmd import MagneticMirrorDescent
+from kinetic_ai.optim.magnetic_adamw import MagneticAdamW
 
 
 def create_gpt2_tokenizer_fn(tokenizer_choice: str):
@@ -63,15 +62,14 @@ def load_config(config_path: str) -> dict:
     if "training" in cfg and "lr" in cfg["training"] and isinstance(cfg["training"]["lr"], str):
         cfg["training"]["lr"] = float(cfg["training"]["lr"])
 
-    # Fix MMD tau if it's a string
+    # Fix magnetic_adamw_tau if it's a string
     if (
         "arms" in cfg
         and "A3" in cfg["arms"]
-        and "mmd_config" in cfg["arms"]["A3"]
-        and "tau" in cfg["arms"]["A3"]["mmd_config"]
-        and isinstance(cfg["arms"]["A3"]["mmd_config"]["tau"], str)
+        and "magnetic_adamw_tau" in cfg["arms"]["A3"]
+        and isinstance(cfg["arms"]["A3"]["magnetic_adamw_tau"], str)
     ):
-        cfg["arms"]["A3"]["mmd_config"]["tau"] = float(cfg["arms"]["A3"]["mmd_config"]["tau"])
+        cfg["arms"]["A3"]["magnetic_adamw_tau"] = float(cfg["arms"]["A3"]["magnetic_adamw_tau"])
 
     # Fix deq_tol if it's a string
     for arm in ["A2", "A3"]:
@@ -161,8 +159,8 @@ def train_arm(
                 and model.deq.last_info is not None
             ):
                 deq_info = model.deq.last_info
-                if isinstance(deq_info, dict) and "num_steps" in deq_info:
-                    solver_iterations.append(deq_info["num_steps"])
+                if isinstance(deq_info, dict) and "iterations" in deq_info:
+                    solver_iterations.append(deq_info["iterations"])
                     if not deq_info.get("converged", True):
                         convergence_failures += 1
 
@@ -364,13 +362,13 @@ def main():
     print("=" * 70)
 
     results = {
-        "iteration": 2,
-        "refinement_reason": "Fixed harness: parameter matching, proper token budget, BLiMP ≥1000 pairs, DEQ tracking, config hash/commit",
+        "iteration": 3,
+        "refinement_reason": "Iteration 3: MagneticAdamW (tau=1e-2, ema mode) replaces raw MMD; EqLM/ExplicitLM init-scale fix (embeddings std=0.02, logits scaled by sqrt(d_model)); DEQ solver stats exposed cleanly",
         "arms": {},
         "config_hash": config_hash,
         "git_commit": git_commit,
         "tokenizer_choice": tokenizer_choice,
-        "notes": "SMOKE test for SPEC 0004 Tier B; real token budget (~3.3M) per arm, parameter-matched arms within 5%",
+        "notes": "SMOKE test for SPEC 0004 Tier B; real token budget (~3.3M) per arm, parameter-matched arms within 5%, A3 now uses MagneticAdamW",
     }
 
     # A1: ExplicitLM (baseline)
@@ -484,19 +482,17 @@ def main():
     )
 
     # Arm A3
-    print("\n--- Training A3 (MMD) ---")
-    mmd_cfg = MMDConfig(
+    print("\n--- Training A3 (MagneticAdamW) ---")
+    tau = cfg["arms"]["A3"].get("magnetic_adamw_tau", cfg["arms"]["A3"].get("mmd_config", {}).get("tau", 1e-2))
+    a3_opt = MagneticAdamW(
+        a3_model.parameters(),
         lr=cfg["training"]["lr"],
-        tau=cfg["arms"]["A3"]["mmd_config"].get("tau", 1e-2),
-        bregman_type=BregmanType.EUCLIDEAN,
-        reference_update_interval=cfg["arms"]["A3"]["mmd_config"].get("reference_update_interval", 10),
+        betas=(0.9, 0.999),
+        weight_decay=cfg["training"].get("weight_decay", 0.01),
+        tau=tau,
+        ref_mode="ema",
+        ref_beta=0.999,
     )
-    # Move model to device first
-    a3_model = a3_model.to(device)
-    a3_opt = MagneticMirrorDescent(a3_model.parameters(), config=mmd_cfg)
-    # Move reference state to device
-    if hasattr(a3_opt, "_reference_state"):
-        a3_opt._reference_state = [ref.to(device) for ref in a3_opt._reference_state]
     a3_results = train_arm(
         "A3",
         a3_model,
@@ -510,9 +506,9 @@ def main():
     results["arms"]["A3"] = {
         **a3_results,
         "num_params": a3_params,
-        "model_name": "EqLM+MMD",
+        "model_name": "EqLM+MagneticAdamW",
         "config": a3_cfg.__dict__,
-        "mmd_tau": mmd_cfg.tau,
+        "magnetic_adamw_tau": tau,
     }
     print(
         f"A3 done: {a3_results['total_time_sec']:.1f}s, "

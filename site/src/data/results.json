@@ -1,3 +1,108 @@
 {
-  "findings": []
+  "findings": [
+    {
+      "id": "F1",
+      "title": "MMD converges linearly to its magnetic fixed point where GDA cycles",
+      "claim": "On symmetric zero-sum matrix games, fixed-magnet MMD exhibits linear (geometric) last-iterate convergence to its fixed point, while simultaneous GDA cycles, bounded away from equilibrium.",
+      "evidence": {
+        "exp": "exp01",
+        "config_hash": "e1c1efdd",
+        "seeds": 10,
+        "games": [
+          {"name": "Matching Pennies", "mmd_fp_r2": 0.9948, "gda_nash_conv": "1.93 ± [1.90, 1.96]"},
+          {"name": "Rock-Paper-Scissors", "mmd_fp_r2": 0.9015, "gda_nash_conv": "1.76 ± [1.62, 1.88]"}
+        ]
+      },
+      "status": "VALIDATED",
+      "artifact_path": "results/exp01_mmd_vs_gda/"
+    },
+    {
+      "id": "F2",
+      "title": "Uniform-anchor MMD fixed points differ from logit-QRE for asymmetric games",
+      "claim": "For asymmetric games, MMD dynamics converge to an attractor distinct from logit-QRE(λ=1/τ), exhibiting context-dependent attractors.",
+      "status": "VALIDATED",
+      "artifact_path": "results/exp01_mmd_vs_gda/"
+    },
+    {
+      "id": "F3",
+      "title": "Regularized Nash Dynamics reach Nash universally",
+      "claim": "MMD with periodic reference resets converges to Nash (NashConv < 0.05) on symmetric AND asymmetric games.",
+      "status": "VALIDATED",
+      "artifact_path": "results/exp01_mmd_vs_gda/"
+    },
+    {
+      "id": "F4",
+      "title": "DEQ peak activation memory is O(1) in effective depth",
+      "claim": "DEQ implicit block: 0.032±0.000 MB peak activation memory, flat across effective depth; explicit stack: linear at 0.0168 MB/layer. At N=32: DEQ 0.032 MB vs explicit 0.539 MB (~17× reduction).",
+      "evidence": {
+        "exp": "exp03",
+        "config_hash": "a0f8f5c0",
+        "seeds": 5,
+        "deq_memory_mb": "0.032±0.000",
+        "explicit_slope": "0.0168 MB/layer"
+      },
+      "status": "VALIDATED",
+      "artifact_path": "results/exp03_deq_solvers/"
+    },
+    {
+      "id": "F5",
+      "title": "Anderson acceleration beats Picard on stiff fixed points",
+      "claim": "Anderson achieves <0.95× Picard iterations at ρ=0.999 (0.888 at dim 32; 0.940 at dim 128), validating theory. No advantage at easy ρ.",
+      "status": "VALIDATED",
+      "artifact_path": "results/exp03_deq_solvers/"
+    },
+    {
+      "id": "F6",
+      "title": "Second-price auction is exactly truthful; weighted aggregation is manipulable",
+      "claim": "Second-price: regret 0.0 (CI [0.0,0.0]). Weighted aggregation: regret 0.0773 (n=3), 0.0683 (n=5) — non-truthful.",
+      "evidence": {
+        "exp": "exp04",
+        "config_hash": "5c458dac",
+        "observations": "6000 (n=3) + 10000 (n=5)",
+        "second_price_regret": 0.0,
+        "weighted_agg_regret_n3": 0.0773,
+        "weighted_agg_regret_n5": 0.0683
+      },
+      "status": "VALIDATED",
+      "artifact_path": "results/exp04_auction_truthfulness/"
+    },
+    {
+      "id": "F7",
+      "title": "Warm-started homotopy accelerates QRE path tracing",
+      "claim": "Warm-starting reduces solver iterations: 25.2% on asymmetric 2×2, 2.6% on biased RPS; matching pennies flat (degenerate control).",
+      "evidence": {
+        "exp": "exp02",
+        "config_hash": "b52d1e0b",
+        "asymmetric_2x2_reduction": "25.2%",
+        "biased_rps_reduction": "2.6%"
+      },
+      "status": "VALIDATED",
+      "artifact_path": "results/exp02_qre_homotopy/"
+    },
+    {
+      "id": "F8",
+      "title": "Undamped logit-QRE requires damping for high rationality",
+      "claim": "Plain softmax(λAs) diverges at λ>0.32 on biased RPS. Adaptive damping converges across λ∈{1,10,100} in 21/700/42k iterations.",
+      "status": "VALIDATED",
+      "implementation": "kinetic_ai/games/qre.py"
+    },
+    {
+      "id": "F9",
+      "title": "Tier B EqLM pipeline validated end-to-end (SMOKE)",
+      "claim": "ExplicitLM+AdamW learns (125→4.39 loss); EqLM+AdamW learns slowly (132→28.5); EqLM+raw-MMD stalls (128→125) due to optimizer confound. BLiMP scores are noise at this scale; pipeline works.",
+      "evidence": {
+        "exp": "exp05",
+        "config_hash": "1398dc8f",
+        "steps": 800,
+        "arms": [
+          {"name": "A1 (ExplicitLM+AdamW)", "loss": "125→4.39", "blimp": 0.459, "status": "Learning"},
+          {"name": "A2 (EqLM+AdamW)", "loss": "132→28.5", "blimp": 0.513, "status": "Learning (~10x slower)"},
+          {"name": "A3 (EqLM+raw-MMD)", "loss": "128→125", "blimp": 0.537, "status": "No learning (confound)"}
+        ]
+      },
+      "status": "VALIDATED (method finding)",
+      "artifact_path": "results/exp05_eqlm_pretrain/"
+    }
+  ]
 }
+

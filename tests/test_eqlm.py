@@ -446,5 +446,89 @@ class TestExplicitLM:
         assert logits.shape[-1] == tiny_eqlm_config.vocab_size
 
 
+# ============================================================================
+# Test 8: Initial CE Loss
+# ============================================================================
+
+
+class TestInitialCELoss:
+    """Test that initial CE loss is approximately ln(vocab_size)."""
+
+    def test_eqlm_initial_ce_loss_near_ln_vocab(
+        self, tiny_eqlm_config: EqLMConfig
+    ) -> None:
+        """EqLM untrained CE loss should be near ln(vocab_size)."""
+        import math
+
+        # Create model without any training
+        model = EqLM(tiny_eqlm_config)
+        model.eval()
+
+        with torch.no_grad():
+            # Create random batch
+            batch_size, seq_len = 2, 8
+            input_ids = torch.randint(0, tiny_eqlm_config.vocab_size, (batch_size, seq_len))
+
+            # Forward pass
+            logits = model(input_ids)
+
+            # Compute CE loss (cross-entropy from logits to uniform labels)
+            # Uniform targets since we're testing initialization, not learned distribution
+            target_ids = torch.randint(0, tiny_eqlm_config.vocab_size, (batch_size, seq_len))
+
+            ce_loss = torch.nn.functional.cross_entropy(
+                logits.reshape(-1, tiny_eqlm_config.vocab_size),
+                target_ids.reshape(-1),
+            ).item()
+
+            # Expected: approximately ln(vocab_size)
+            expected = math.log(tiny_eqlm_config.vocab_size)
+
+            # Allow 15% deviation (as per spec)
+            tolerance = expected * 0.15
+
+            assert abs(ce_loss - expected) < tolerance, (
+                f"EqLM initial CE loss {ce_loss:.4f} should be near ln({tiny_eqlm_config.vocab_size})={expected:.4f} "
+                f"(within 15%, tolerance={tolerance:.4f})"
+            )
+
+    def test_explicit_lm_initial_ce_loss_near_ln_vocab(
+        self, tiny_eqlm_config: EqLMConfig
+    ) -> None:
+        """ExplicitLM untrained CE loss should be near ln(vocab_size)."""
+        import math
+
+        # Create model without any training
+        model = ExplicitLM(tiny_eqlm_config, n_layers=2)
+        model.eval()
+
+        with torch.no_grad():
+            # Create random batch
+            batch_size, seq_len = 2, 8
+            input_ids = torch.randint(0, tiny_eqlm_config.vocab_size, (batch_size, seq_len))
+
+            # Forward pass
+            logits = model(input_ids)
+
+            # Compute CE loss
+            target_ids = torch.randint(0, tiny_eqlm_config.vocab_size, (batch_size, seq_len))
+
+            ce_loss = torch.nn.functional.cross_entropy(
+                logits.reshape(-1, tiny_eqlm_config.vocab_size),
+                target_ids.reshape(-1),
+            ).item()
+
+            # Expected: approximately ln(vocab_size)
+            expected = math.log(tiny_eqlm_config.vocab_size)
+
+            # Allow 15% deviation (as per spec)
+            tolerance = expected * 0.15
+
+            assert abs(ce_loss - expected) < tolerance, (
+                f"ExplicitLM initial CE loss {ce_loss:.4f} should be near ln({tiny_eqlm_config.vocab_size})={expected:.4f} "
+                f"(within 15%, tolerance={tolerance:.4f})"
+            )
+
+
 if __name__ == "__main__":
     pytest.main([__file__, "-v"])
