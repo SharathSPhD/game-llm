@@ -109,3 +109,20 @@
 - Flaky overfit test made deterministic (copy task, single-thread reductions).
 - next: Supabase project + migration; Vercel deploy of apps/web; gateway tunnel
   (pending CF credentials on machine); EqLM-v4 arm launch.
+
+## [cycle 9b | 2026-08-21] DEPLOYMENT LIVE (Phase 3 closure, end-to-end verified)
+- Supabase project `kinetic-ai` (sevlncqcywaajapqitfk, eu-west-2, $0/mo) created via
+  MCP; migration applied (user_tiers + admin-signup trigger for
+  sharath.sathish@gmail.com + set_user_tier guest RPC + job_history + runtime_config
+  RLS allowlist).
+- Vercel project kinetic-ai-web linked to SharathSPhD/game-llm (root apps/web);
+  env: Supabase publics + GATEWAY_SECRET (generated, local copy in gitignored
+  .gateway.env) + GATEWAY_URL; production READY at https://kinetic-ai-web.vercel.app
+- GB10 backend live: uvicorn app.server :8097 (setsid) + cloudflared quick tunnel
+  (ephemeral URL - worker/KV permanent gateway pending operator CF_EMAIL/CF_KEY;
+  scripts/gateway ready).
+- E2E smoke: /api/health -> GB10 gpu_available:true through the full chain;
+  /api/proxy/api/solve correctly 401s anonymous (Supabase session + tier row
+  required); /lab 200. Operator: sign in once with sharath.sathish@gmail.com to
+  auto-receive admin; enable guests via select set_user_tier('<email>','user').
+- next: EqLM-v4 arm; worker/KV permanent gateway when CF creds provided.
