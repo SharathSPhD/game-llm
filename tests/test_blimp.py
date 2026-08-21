@@ -4,11 +4,15 @@ Tests the kinetic_ai.eval.blimp module: dataset loading, log-prob
 computation, and minimal-pair evaluation.
 """
 
+from pathlib import Path
+
 import pytest
 import torch
 import torch.nn as nn
 
-from kinetic_ai.eval.blimp import (
+pytest.importorskip("datasets")
+
+from kinetic_ai.eval.blimp import (  # noqa: E402
     compute_sentence_logprob,
     evaluate_blimp_subset,
     load_blimp_subset,
@@ -33,6 +37,10 @@ class SimpleTestModel(nn.Module):
 class TestBLiMPLoading:
     """Test BLiMP dataset loading."""
 
+    @pytest.mark.skipif(
+        not (Path.home() / ".cache" / "huggingface").exists(),
+        reason="HF cache not present",
+    )
     def test_load_blimp_subset(self):
         """Test loading BLiMP subset from cache."""
         subset = load_blimp_subset(num_phenomena=2, pairs_per_phenomenon=20)

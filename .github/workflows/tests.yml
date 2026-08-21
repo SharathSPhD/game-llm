@@ -21,7 +21,7 @@ jobs:
         run: |
           uv venv --python ${{ matrix.python-version }}
           uv pip install torch --index-url https://download.pytorch.org/whl/cpu
-          uv pip install -e ".[dev]"
+          uv pip install -e ".[dev,serve,data]"
       - name: Lint
         run: |
           uv run ruff check kinetic_ai/ tests/

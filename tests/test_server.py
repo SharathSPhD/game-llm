@@ -11,9 +11,12 @@ import os
 import time
 
 import pytest
-from fastapi.testclient import TestClient
 
-from app.server import app
+pytest.importorskip("fastapi")
+
+from fastapi.testclient import TestClient  # noqa: E402
+
+from app.server import app  # noqa: E402
 
 # Set test auth token
 os.environ["GATEWAY_SECRET"] = "test-secret"

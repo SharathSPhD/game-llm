@@ -4,15 +4,31 @@ Tests the kinetic_ai.data module: dataset loading, tokenization,
 and token stream building.
 """
 
+from pathlib import Path
+
 import pytest
 import torch
 
-from kinetic_ai.data import build_token_stream, load_babylm_dataset, load_or_build_tokenizer
+pytest.importorskip("datasets")
+pytest.importorskip("transformers")
+
+from kinetic_ai.data import (  # noqa: E402
+    build_token_stream,
+    load_babylm_dataset,
+    load_or_build_tokenizer,
+)
+
+_HF_HUB = Path.home() / ".cache" / "huggingface" / "hub"
+requires_hf_cache = pytest.mark.skipif(
+    not (_HF_HUB / "datasets--BabyLM-community--BabyLM-2026-Strict-Small").exists(),
+    reason="BabyLM HF cache not present on this machine",
+)
 
 
 class TestTokenizer:
     """Test tokenizer loading and building."""
 
+    @requires_hf_cache
     def test_load_gpt2_tokenizer(self):
         """Test loading GPT-2 tokenizer from cache."""
         token2id, id2token, choice = load_or_build_tokenizer()
@@ -44,6 +60,7 @@ class TestTokenizer:
 class TestBabyLMDataset:
     """Test BabyLM dataset loading."""
 
+    @requires_hf_cache
     def test_load_babylm_dataset(self):
         """Test loading BabyLM from cache."""
         dataset = load_babylm_dataset(max_samples=100)

@@ -54,6 +54,11 @@ dev = [
     "mypy>=1.0",
     "ruff>=0.1.0",
 ]
+data = [
+    "datasets>=2.14",
+    "tokenizers>=0.15",
+    "transformers>=4.35",
+]
 experiments = [
     "matplotlib>=3.7",
     "pandas>=2.0",
