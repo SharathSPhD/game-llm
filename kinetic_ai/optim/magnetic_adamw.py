@@ -169,44 +169,48 @@ class MagneticAdamW(Optimizer):
                 bias_correction1 = 1 - beta1 ** state["step"]
                 bias_correction2 = 1 - beta2 ** state["step"]
 
-                # Compute adaptive learning rate term
-                denom = (exp_avg_sq.sqrt() / (bias_correction2**0.5)).add_(group["eps"])
+                # All parameter updates must be in torch.no_grad() to prevent graph retention
+                # (fixes memory leak: exp05 A3 peaked at 97.7GB, should be ~3.5GB)
+                with torch.no_grad():
+                    # Compute adaptive learning rate term
+                    denom = (exp_avg_sq.sqrt() / (bias_correction2**0.5)).add_(group["eps"])
 
-                # Standard AdamW update
-                step_size = group["lr"] / bias_correction1
-                p_new = p.data.add(exp_avg / denom, alpha=-step_size)
+                    # Standard AdamW update
+                    step_size = group["lr"] / bias_correction1
+                    p_new = p.data.add(exp_avg / denom, alpha=-step_size)
 
-                # Apply magnetic proximal pull if tau > 0
-                tau = group["tau"]
-                if tau > 0:
-                    # Initialize reference on first step
-                    if self.ref_state is None:
-                        self.ref_state = {}
+                    # Apply magnetic proximal pull if tau > 0
+                    tau = group["tau"]
+                    if tau > 0:
+                        # Initialize reference on first step
+                        if self.ref_state is None:
+                            self.ref_state = {}
 
-                    # Get or initialize reference for this parameter
-                    param_id = id(p)
-                    if param_id not in self.ref_state:
-                        self.ref_state[param_id] = p.data.clone()
+                        # Get or initialize reference for this parameter
+                        param_id = id(p)
+                        if param_id not in self.ref_state:
+                            # Detach clone to ensure reference doesn't track autograd
+                            self.ref_state[param_id] = p.data.clone().detach()
 
-                    ref = self.ref_state[param_id]
+                        ref = self.ref_state[param_id]
 
-                    # Magnetic pull: p ← p' − lr·τ·(p' − p_ref)
-                    # This pulls the updated parameter back toward the reference
-                    p_new = p_new.add(p_new - ref, alpha=-group["lr"] * tau)
+                        # Magnetic pull: p ← p' − lr·τ·(p' − p_ref)
+                        # This pulls the updated parameter back toward the reference
+                        p_new = p_new.add(p_new - ref, alpha=-group["lr"] * tau)
 
-                    # Update reference based on mode
-                    if group["ref_mode"] == "ema":
-                        # EMA: ref ← β·ref + (1−β)·p_new
-                        ref.mul_(group["ref_beta"]).add_(p_new, alpha=1 - group["ref_beta"])
-                    elif (
-                        group["ref_mode"] == "periodic"
-                        and self.step_counter % group["ref_interval"] == 0
-                    ):
-                        # Periodic: snapshot every ref_interval steps
-                        ref.copy_(p_new)
+                        # Update reference based on mode (in-place to save memory)
+                        if group["ref_mode"] == "ema":
+                            # EMA: ref ← β·ref + (1−β)·p_new
+                            ref.mul_(group["ref_beta"]).add_(p_new, alpha=1 - group["ref_beta"])
+                        elif (
+                            group["ref_mode"] == "periodic"
+                            and self.step_counter % group["ref_interval"] == 0
+                        ):
+                            # Periodic: snapshot every ref_interval steps (in-place)
+                            ref.copy_(p_new)
 
-                # Update parameter
-                p.data.copy_(p_new)
+                    # Update parameter
+                    p.data.copy_(p_new)
 
         # Increment global step counter for periodic mode
         self.step_counter += 1

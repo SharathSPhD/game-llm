@@ -1,0 +1,159 @@
+# EXP06: tau/reference mini-sweep on EqLM+MagneticAdamW
+# Tier B SMOKE scale with grid of (tau, ref_mode) combinations
+# Same data and model as exp05 but 300 steps per arm to fit budget
+
+data:
+  dataset: "BabyLM-2026-Strict-Small"
+  subset_size: 3300000  # 3.3M tokens for smoke test
+  seq_len: 128
+  batch_size: 32
+
+tokenizer:
+  vocab_size: 50257
+  prefer_gpt2: true
+
+training:
+  seed: 42
+  num_epochs: 66  # ~300 steps at B=32, T=128
+  num_steps: 300  # Reduced from 800 to fit budget (300 * 7 arms = 2100 steps)
+  warmup_steps: 0
+  log_every: 25
+  lr: 3e-4
+  weight_decay: 0.01
+  grad_clip: 1.0
+
+# Grid: tau in {1e-4, 1e-3, 1e-2} x ref_mode in {ema, periodic}
+# Plus baseline AdamW for reference
+arms:
+  # Baseline: standard AdamW
+  Baseline:
+    name: "EqLM+AdamW"
+    config:
+      vocab_size: 50257
+      d_model: 192
+      n_heads: 4
+      d_ff: 512
+      max_seq_len: 128
+      deq_max_iter: 12
+      deq_tol: 1e-3
+      solver: "anderson"
+      jfb: false
+      dropout: 0.1
+    optimizer: "adamw"
+
+  # tau=1e-4
+  A1_tau1e4_ema:
+    name: "EqLM+MagneticAdamW(tau=1e-4, ema)"
+    config:
+      vocab_size: 50257
+      d_model: 192
+      n_heads: 4
+      d_ff: 512
+      max_seq_len: 128
+      deq_max_iter: 12
+      deq_tol: 1e-3
+      solver: "anderson"
+      jfb: false
+      dropout: 0.1
+    optimizer: "magnetic_adamw"
+    magnetic_adamw_tau: 1e-4
+    magnetic_adamw_ref_mode: "ema"
+    magnetic_adamw_ref_beta: 0.999
+
+  A2_tau1e4_periodic:
+    name: "EqLM+MagneticAdamW(tau=1e-4, periodic)"
+    config:
+      vocab_size: 50257
+      d_model: 192
+      n_heads: 4
+      d_ff: 512
+      max_seq_len: 128
+      deq_max_iter: 12
+      deq_tol: 1e-3
+      solver: "anderson"
+      jfb: false
+      dropout: 0.1
+    optimizer: "magnetic_adamw"
+    magnetic_adamw_tau: 1e-4
+    magnetic_adamw_ref_mode: "periodic"
+    magnetic_adamw_ref_interval: 100
+
+  # tau=1e-3
+  A3_tau1e3_ema:
+    name: "EqLM+MagneticAdamW(tau=1e-3, ema)"
+    config:
+      vocab_size: 50257
+      d_model: 192
+      n_heads: 4
+      d_ff: 512
+      max_seq_len: 128
+      deq_max_iter: 12
+      deq_tol: 1e-3
+      solver: "anderson"
+      jfb: false
+      dropout: 0.1
+    optimizer: "magnetic_adamw"
+    magnetic_adamw_tau: 1e-3
+    magnetic_adamw_ref_mode: "ema"
+    magnetic_adamw_ref_beta: 0.999
+
+  A4_tau1e3_periodic:
+    name: "EqLM+MagneticAdamW(tau=1e-3, periodic)"
+    config:
+      vocab_size: 50257
+      d_model: 192
+      n_heads: 4
+      d_ff: 512
+      max_seq_len: 128
+      deq_max_iter: 12
+      deq_tol: 1e-3
+      solver: "anderson"
+      jfb: false
+      dropout: 0.1
+    optimizer: "magnetic_adamw"
+    magnetic_adamw_tau: 1e-3
+    magnetic_adamw_ref_mode: "periodic"
+    magnetic_adamw_ref_interval: 100
+
+  # tau=1e-2
+  A5_tau1e2_ema:
+    name: "EqLM+MagneticAdamW(tau=1e-2, ema)"
+    config:
+      vocab_size: 50257
+      d_model: 192
+      n_heads: 4
+      d_ff: 512
+      max_seq_len: 128
+      deq_max_iter: 12
+      deq_tol: 1e-3
+      solver: "anderson"
+      jfb: false
+      dropout: 0.1
+    optimizer: "magnetic_adamw"
+    magnetic_adamw_tau: 1e-2
+    magnetic_adamw_ref_mode: "ema"
+    magnetic_adamw_ref_beta: 0.999
+
+  A6_tau1e2_periodic:
+    name: "EqLM+MagneticAdamW(tau=1e-2, periodic)"
+    config:
+      vocab_size: 50257
+      d_model: 192
+      n_heads: 4
+      d_ff: 512
+      max_seq_len: 128
+      deq_max_iter: 12
+      deq_tol: 1e-3
+      solver: "anderson"
+      jfb: false
+      dropout: 0.1
+    optimizer: "magnetic_adamw"
+    magnetic_adamw_tau: 1e-2
+    magnetic_adamw_ref_mode: "periodic"
+    magnetic_adamw_ref_interval: 100
+
+eval:
+  blimp:
+    num_phenomena: 3  # Reduced for budget
+    pairs_per_phenomenon: 100  # 300 pairs total
+    cache_dir: ~/.cache/huggingface/hub

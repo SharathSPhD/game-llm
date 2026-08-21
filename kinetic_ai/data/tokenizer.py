@@ -7,6 +7,7 @@ a custom BPE tokenizer from a text corpus.
 from __future__ import annotations
 
 from pathlib import Path
+from typing import cast
 
 from transformers import GPT2Tokenizer, PreTrainedTokenizer
 
@@ -27,7 +28,7 @@ def load_gpt2_tokenizer() -> PreTrainedTokenizer | None:
                 cache_dir=str(cache_dir),
                 local_files_only=True,
             )
-            return tokenizer
+            return cast(PreTrainedTokenizer, tokenizer)
     except Exception:
         pass
     return None

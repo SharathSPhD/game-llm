@@ -357,5 +357,64 @@ class TestMagneticAdamWConfigs:
         assert opt.ref_beta == 0.999
 
 
+class TestMagneticAdamWMemory:
+    """Test memory usage to catch regressions (exp05 A3 caveat)."""
+
+    @pytest.mark.skipif(
+        not torch.cuda.is_available(),
+        reason="CUDA not available; memory test requires GPU",
+    )
+    def test_memory_usage_within_baseline(self) -> None:
+        """Peak memory with MagneticAdamW should be within 1.5x of AdamW baseline.
+
+        Regression test for F10 caveat (b): MagneticAdamW arm throttled memory
+        at 97.7GB vs 3.5GB baseline. Fixed by wrapping updates in torch.no_grad().
+        """
+        torch.cuda.reset_peak_memory_stats()
+
+        # Baseline: AdamW on CUDA
+        model_baseline = TinyLinearModel(input_dim=100, output_dim=50).cuda()
+        opt_baseline = torch.optim.AdamW(model_baseline.parameters(), lr=0.01)
+
+        x_cuda = torch.randn(8, 100, device="cuda")
+        target_cuda = torch.randn(8, 50, device="cuda")
+
+        torch.cuda.reset_peak_memory_stats()
+        for _ in range(50):
+            loss = nn.MSELoss()(model_baseline(x_cuda), target_cuda)
+            loss.backward()
+            opt_baseline.step()
+            opt_baseline.zero_grad()
+
+        peak_memory_adamw = torch.cuda.max_memory_allocated()
+
+        # MagneticAdamW on CUDA
+        model_magnetic = TinyLinearModel(input_dim=100, output_dim=50).cuda()
+        opt_magnetic = MagneticAdamW(
+            model_magnetic.parameters(), lr=0.01, tau=0.01, ref_mode="ema"
+        )
+
+        torch.cuda.reset_peak_memory_stats()
+        for _ in range(50):
+            loss = nn.MSELoss()(model_magnetic(x_cuda), target_cuda)
+            loss.backward()
+            opt_magnetic.step()
+            opt_magnetic.zero_grad()
+
+        peak_memory_magnetic = torch.cuda.max_memory_allocated()
+
+        # MagneticAdamW peak should be within 1.5x of AdamW baseline
+        ratio = peak_memory_magnetic / max(peak_memory_adamw, 1.0)
+        assert ratio < 1.5, (
+            f"MagneticAdamW memory should be within 1.5x of AdamW baseline: "
+            f"ratio={ratio:.2f}, adamw={peak_memory_adamw / 1e9:.2f}GB, "
+            f"magnetic={peak_memory_magnetic / 1e9:.2f}GB"
+        )
+
+        # Clean up
+        del model_baseline, model_magnetic, opt_baseline, opt_magnetic
+        torch.cuda.empty_cache()
+
+
 if __name__ == "__main__":
     pytest.main([__file__, "-v"])
