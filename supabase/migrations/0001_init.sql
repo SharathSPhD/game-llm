@@ -1,0 +1,113 @@
+-- Kinetic AI app schema — user tiers, job history, runtime config, gateway setup.
+-- RLS on every table; public endpoints require Bearer auth; job history is per-user.
+
+create extension if not exists "uuid-ossp";
+
+-- ─── User Tiers ──────────────────────────────────────────────────────────────
+-- Bootstrap pattern: admin users get full access; default is 'user'.
+-- Seed: sharath.sathish@gmail.com is admin.
+
+create table if not exists public.user_tiers (
+  user_id uuid primary key references auth.users(id) on delete cascade,
+  tier text not null default 'user' check (tier in ('user', 'admin')),
+  created_at timestamptz default now()
+);
+alter table public.user_tiers enable row level security;
+
+create policy "users_view_own_tier" on public.user_tiers
+  for select using (auth.uid() = user_id);
+
+-- Seed admin user (comment shows email for reference)
+-- Admin invite: send via Supabase auth dashboard to sharath.sathish@gmail.com
+insert into public.user_tiers (user_id, tier)
+values (auth.uid(), 'admin')
+on conflict (user_id) do nothing;
+
+-- ─── Job History ─────────────────────────────────────────────────────────────
+-- Training Studio jobs: user submits via API, tracked here per-user.
+-- RLS: each user sees only their own jobs.
+
+create table if not exists public.job_history (
+  id uuid primary key default uuid_generate_v4(),
+  user_id uuid not null references auth.users(id) on delete cascade,
+  job_spec jsonb not null,
+  status text not null check (status in ('queued', 'running', 'completed', 'failed')),
+  result jsonb,
+  error text,
+  created_at timestamptz default now(),
+  completed_at timestamptz
+);
+alter table public.job_history enable row level security;
+
+create policy "users_view_own_jobs" on public.job_history
+  for select using (auth.uid() = user_id);
+
+create policy "users_insert_own_jobs" on public.job_history
+  for insert with check (auth.uid() = user_id);
+
+create policy "users_update_own_jobs" on public.job_history
+  for update using (auth.uid() = user_id);
+
+create index if not exists job_history_user_id_idx on public.job_history(user_id);
+create index if not exists job_history_created_at_idx on public.job_history(created_at);
+create index if not exists job_history_status_idx on public.job_history(status);
+
+-- ─── Runtime Config ──────────────────────────────────────────────────────────
+-- Gateway URL, secret, and other runtime settings. Public-read for gateway discovery;
+-- admin-write only (via RPC).
+
+create table if not exists public.runtime_config (
+  key text primary key,
+  value text,
+  updated_by uuid references auth.users(id),
+  updated_at timestamptz default now()
+);
+alter table public.runtime_config enable row level security;
+
+create policy "public_read_config" on public.runtime_config
+  for select using (true);
+
+-- One action per policy (Postgres requirement); admin gate on each write path.
+create policy "admin_insert_config" on public.runtime_config
+  for insert with check (
+    exists (select 1 from public.user_tiers
+            where user_tiers.user_id = auth.uid() and user_tiers.tier = 'admin'));
+
+create policy "admin_update_config" on public.runtime_config
+  for update using (
+    exists (select 1 from public.user_tiers
+            where user_tiers.user_id = auth.uid() and user_tiers.tier = 'admin'));
+
+create policy "admin_delete_config" on public.runtime_config
+  for delete using (
+    exists (select 1 from public.user_tiers
+            where user_tiers.user_id = auth.uid() and user_tiers.tier = 'admin'));
+
+-- RPC to set config (admin only; security definer bypasses RLS after the check)
+create or replace function public.set_runtime_config(key_name text, key_value text)
+returns json as $$
+declare
+  is_admin boolean;
+begin
+  select (tier = 'admin') into is_admin
+  from public.user_tiers where user_id = auth.uid();
+
+  if not coalesce(is_admin, false) then
+    raise exception 'Admin access required';
+  end if;
+
+  insert into public.runtime_config (key, value, updated_by)
+  values (key_name, key_value, auth.uid())
+  on conflict (key) do update
+  set value = key_value, updated_by = auth.uid(), updated_at = now();
+
+  return json_build_object('success', true, 'key', key_name);
+end;
+$$ language plpgsql security definer;
+
+-- Bootstrap config keys (example values; update as needed)
+insert into public.runtime_config (key, value)
+values
+  ('gateway_url', 'https://kinetic.sharath-sathish.workers.dev'),
+  ('gateway_secret', 'dev-secret')
+on conflict (key) do nothing;

@@ -1,0 +1,70 @@
+# SMOKE Test Config for SPEC 0004: EqLM Pretraining on BabyLM
+# Tier B, minimal scale for end-to-end validation (GPU time ~30 min)
+
+data:
+  dataset: "BabyLM-2026-Strict-Small"
+  subset_size: 2000000  # ~2M tokens for smoke
+  seq_len: 128
+  batch_size: 32
+
+tokenizer:
+  vocab_size: 8192
+  prefer_gpt2: true  # Try GPT-2 from cache first
+
+training:
+  seed: 42
+  num_epochs: 1  # Smoke: 1 epoch
+  warmup_steps: 100
+  log_every: 50
+  lr: 3e-4
+  weight_decay: 0.01
+
+# Model configurations for each arm
+arms:
+  A1:
+    name: "ExplicitLM"
+    config:
+      vocab_size: 8192
+      d_model: 128
+      n_heads: 4
+      d_ff: 256
+      max_seq_len: 128
+      n_layers: 4  # Explicit layers (smoke: 4 instead of 12)
+      dropout: 0.1
+
+  A2:
+    name: "EqLM"
+    config:
+      vocab_size: 8192
+      d_model: 256  # Scaled up to match A1 params
+      n_heads: 4
+      d_ff: 512
+      max_seq_len: 128
+      deq_max_iter: 12
+      deq_tol: 1e-3
+      solver: "anderson"
+      jfb: false
+      dropout: 0.1
+
+  A3:
+    name: "EqLM+MMD"
+    config:
+      vocab_size: 8192
+      d_model: 256
+      n_heads: 4
+      d_ff: 512
+      max_seq_len: 128
+      deq_max_iter: 12
+      deq_tol: 1e-3
+      solver: "anderson"
+      jfb: false
+      dropout: 0.1
+    optimizer: "mmd"
+    mmd_config:
+      tau: 1e-2  # Magnetic damping
+      ema_decay: 0.999  # EMA anchor decay
+
+eval:
+  blimp:
+    num_phenomena: 3  # Smoke: 3 phenomena
+    pairs_per_phenomenon: 50  # 150 pairs total

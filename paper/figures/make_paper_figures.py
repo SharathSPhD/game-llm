@@ -21,8 +21,6 @@ import matplotlib
 matplotlib.use("Agg")
 
 import matplotlib.pyplot as plt
-import numpy as np
-from matplotlib.patches import FancyBboxPatch
 
 # --------------------------------------------------------------------------- #
 # Design system: Okabe-Ito colorblind-safe palette

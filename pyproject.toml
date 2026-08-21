@@ -40,6 +40,12 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
+serve = [
+    "fastapi>=0.100.0",
+    "uvicorn>=0.24.0",
+    "httpx>=0.25.0",
+    "requests>=2.31.0",
+]
 dev = [
     "pytest>=7.0",
     "pytest-cov>=4.0",
@@ -53,7 +59,7 @@ experiments = [
     "tqdm>=4.65",
     "tensorboard>=2.13",
 ]
-all = ["kinetic-ai[dev,experiments]"]
+all = ["kinetic-ai[dev,experiments,serve]"]
 
 [project.urls]
 Homepage = "https://github.com/SharathSPhD/game-llm"
@@ -85,6 +91,25 @@ ignore_missing_imports = true
 
 [[tool.mypy.overrides]]
 module = ["yaml"]
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = ["transformers"]
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = [
+    "tokenizers",
+    "tokenizers.models",
+    "tokenizers.normalizers",
+    "tokenizers.pre_tokenizers",
+    "tokenizers.processors",
+    "tokenizers.trainers",
+]
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = ["datasets"]
 ignore_missing_imports = true
 
 [tool.ruff]

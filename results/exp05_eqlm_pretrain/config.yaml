@@ -1,0 +1,60 @@
+arms:
+  A1:
+    config:
+      d_ff: 256
+      d_model: 128
+      dropout: 0.1
+      max_seq_len: 128
+      n_heads: 4
+      n_layers: 4
+      vocab_size: 8192
+    name: ExplicitLM
+  A2:
+    config:
+      d_ff: 512
+      d_model: 256
+      deq_max_iter: 12
+      deq_tol: 0.001
+      dropout: 0.1
+      jfb: false
+      max_seq_len: 128
+      n_heads: 4
+      solver: anderson
+      vocab_size: 8192
+    name: EqLM
+  A3:
+    config:
+      d_ff: 512
+      d_model: 256
+      deq_max_iter: 12
+      deq_tol: 0.001
+      dropout: 0.1
+      jfb: false
+      max_seq_len: 128
+      n_heads: 4
+      solver: anderson
+      vocab_size: 8192
+    mmd_config:
+      ema_decay: 0.999
+      tau: 0.01
+    name: EqLM+MMD
+    optimizer: mmd
+data:
+  batch_size: 32
+  dataset: BabyLM-2026-Strict-Small
+  seq_len: 128
+  subset_size: 2000000
+eval:
+  blimp:
+    num_phenomena: 3
+    pairs_per_phenomenon: 50
+tokenizer:
+  prefer_gpt2: true
+  vocab_size: 8192
+training:
+  log_every: 50
+  lr: 0.0003
+  num_epochs: 1
+  seed: 42
+  warmup_steps: 100
+  weight_decay: 0.01

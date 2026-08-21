@@ -1,0 +1,57 @@
+{
+  "arms": {
+    "A1": {
+      "loss_curve": [
+        {
+          "step": 0,
+          "loss": 82.44329071044922
+        }
+      ],
+      "total_time_sec": 0.8261196613311768,
+      "peak_memory_mb": 3445.9345703125,
+      "total_steps": 6,
+      "num_params": 6979972,
+      "model_name": "ExplicitLM",
+      "blimp_accuracy": 0.55,
+      "blimp_num_correct": 55,
+      "blimp_num_total": 100
+    },
+    "A2": {
+      "loss_curve": [
+        {
+          "step": 0,
+          "loss": 163.59661865234375
+        }
+      ],
+      "total_time_sec": 1.8253793716430664,
+      "peak_memory_mb": 3452.11474609375,
+      "total_steps": 6,
+      "num_params": 13426433,
+      "model_name": "EqLM",
+      "blimp_accuracy": 0.44,
+      "blimp_num_correct": 44,
+      "blimp_num_total": 100
+    },
+    "A3": {
+      "loss_curve": [
+        {
+          "step": 0,
+          "loss": 162.86534118652344
+        }
+      ],
+      "total_time_sec": 1.5060603618621826,
+      "peak_memory_mb": 3603.75732421875,
+      "total_steps": 6,
+      "num_params": 13426433,
+      "model_name": "EqLM+MMD",
+      "mmd_tau": 0.01,
+      "blimp_accuracy": 0.5,
+      "blimp_num_correct": 50,
+      "blimp_num_total": 100
+    }
+  },
+  "config_hash": "",
+  "git_commit": "",
+  "tokenizer_choice": "gpt2",
+  "notes": "SMOKE test for SPEC 0004; tiny models for 30min GPU budget."
+}

@@ -2,7 +2,7 @@
   "cycle": 2,
   "phase": "phase2-science",
   "current_rq": "RQ-2",
-  "gpu_lock": false,
+  "gpu_lock": true,
   "open_questions": [
     "RQ-3 (H1): EqLM-small vs GPT-2-class on BabyLM/BLiMP",
     "RQ-4 (H3): MPO vs DPO",
@@ -14,5 +14,6 @@
     "RQ-2 (H2): VALIDATED - F1/F2/F3 (findings.md); RQ-6 Tier A part: F4/F5"
   ],
   "known_defects": [],
-  "next_action": "Tier B smoke per SPEC 0004: tokenizer + data prep + EqLM/explicit tiny pretrain + vendored BLiMP eval end-to-end on GB10 (single GPU job)"
+  "next_action": "Tier B smoke per SPEC 0004: tokenizer + data prep + EqLM/explicit tiny pretrain + vendored BLiMP eval end-to-end on GB10 (single GPU job)",
+  "gpu_lock_holder": "exp05 Tier B smoke"
 }

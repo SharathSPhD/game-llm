@@ -1,0 +1,140 @@
+"""Unit tests for data loading and tokenization (TDD).
+
+Tests the kinetic_ai.data module: dataset loading, tokenization,
+and token stream building.
+"""
+
+import pytest
+import torch
+
+from kinetic_ai.data import build_token_stream, load_babylm_dataset, load_or_build_tokenizer
+
+
+class TestTokenizer:
+    """Test tokenizer loading and building."""
+
+    def test_load_gpt2_tokenizer(self):
+        """Test loading GPT-2 tokenizer from cache."""
+        token2id, id2token, choice = load_or_build_tokenizer()
+
+        assert isinstance(token2id, dict)
+        assert isinstance(id2token, dict)
+        assert len(token2id) > 0
+        assert len(id2token) == len(token2id)
+        assert choice in ["gpt2", "custom_bpe", "minimal"]
+
+    def test_tokenizer_consistency(self):
+        """Test that token2id and id2token are consistent."""
+        token2id, id2token, _ = load_or_build_tokenizer()
+
+        for tok_str, tok_id in list(token2id.items())[:10]:
+            assert id2token[tok_id] == tok_str, f"Mismatch for token {tok_str}"
+
+    def test_tokenizer_vocab_size(self):
+        """Test that tokenizer has reasonable vocab size."""
+        token2id, id2token, choice = load_or_build_tokenizer()
+
+        # GPT-2 has ~50k tokens; custom BPE can be smaller
+        if choice == "gpt2":
+            assert 40000 < len(token2id) < 60000
+        else:
+            assert len(token2id) > 0
+
+
+class TestBabyLMDataset:
+    """Test BabyLM dataset loading."""
+
+    def test_load_babylm_dataset(self):
+        """Test loading BabyLM from cache."""
+        dataset = load_babylm_dataset(max_samples=100)
+
+        assert len(dataset) > 0
+        assert "text" in dataset.column_names
+        assert isinstance(dataset[0]["text"], str)
+
+    def test_babylm_max_samples(self):
+        """Test that max_samples limit is respected."""
+        max_n = 50
+        dataset = load_babylm_dataset(max_samples=max_n)
+
+        assert len(dataset) == max_n
+
+
+class TestTokenStream:
+    """Test token stream building."""
+
+    def test_build_token_stream(self):
+        """Test building token stream from dataset."""
+        from datasets import Dataset
+
+        # Create minimal dataset
+        dataset = Dataset.from_dict({
+            "text": ["hello world", "foo bar baz", "test sentence"]
+        })
+
+        def simple_tokenizer(text):
+            return [ord(word[0]) for word in text.split()]
+
+        token_tensor, num_seqs = build_token_stream(
+            dataset,
+            simple_tokenizer,
+            seq_len=4,
+            max_tokens=100,
+        )
+
+        assert isinstance(token_tensor, torch.Tensor)
+        assert token_tensor.shape[1] == 4  # seq_len dimension
+        assert num_seqs == token_tensor.shape[0]
+
+    def test_token_stream_shape(self):
+        """Test that token stream has correct shape."""
+        from datasets import Dataset
+
+        dataset = Dataset.from_dict({
+            "text": ["a b c d e f g h i j"] * 10
+        })
+
+        def simple_tokenizer(text):
+            return [i for i, _ in enumerate(text.split())]
+
+        token_tensor, num_seqs = build_token_stream(
+            dataset,
+            simple_tokenizer,
+            seq_len=8,
+        )
+
+        assert token_tensor.shape == (num_seqs, 8)
+        assert token_tensor.dtype == torch.long
+
+
+class TestDataLoader:
+    """Test BabyLM data loader."""
+
+    def test_dataloader_batching(self):
+        """Test that data loader correctly batches data."""
+        from kinetic_ai.data import BabyLMDataLoader
+
+        token_tensor = torch.randint(0, 100, (32, 16))  # 32 seqs, 16 tokens
+        loader = BabyLMDataLoader(token_tensor, batch_size=8, shuffle=False)
+
+        batches = list(loader)
+        assert len(batches) == 4  # 32 seqs / 8 batch_size
+        assert batches[0].shape == (8, 16)
+
+    def test_dataloader_to_device(self):
+        """Test that data loader moves tensors to device."""
+        from kinetic_ai.data import BabyLMDataLoader
+
+        token_tensor = torch.randint(0, 100, (16, 8))
+        loader = BabyLMDataLoader(
+            token_tensor,
+            batch_size=4,
+            device="cpu",
+        )
+
+        batch = next(iter(loader))
+        assert batch.device.type == "cpu"
+
+
+if __name__ == "__main__":
+    pytest.main([__file__, "-v"])
