@@ -176,3 +176,37 @@ class TestTokenStreamCoverage:
         tokenizer_fn = lambda text: [1] * len(text.split())  # noqa: E731
         tensor, _ = build_token_stream(ds, tokenizer_fn, seq_len=10, max_tokens=60)
         assert tensor.numel() <= 60
+
+
+class TestTokenStreamCache:
+    """Disk cache: identical (texts-hash, seq_len, max_tokens) must not re-tokenize."""
+
+    def test_cache_roundtrip(self, tmp_path) -> None:
+        from datasets import Dataset
+
+        ds = Dataset.from_dict({"text": ["a b c d e f g h"] * 200})
+        calls = {"n": 0}
+
+        def tokenizer_fn(text):
+            calls["n"] += 1
+            return [1] * len(text.split())
+
+        t1, n1 = build_token_stream(
+            ds, tokenizer_fn, seq_len=8, max_tokens=800, cache_dir=str(tmp_path)
+        )
+        first_calls = calls["n"]
+        assert first_calls > 0
+        t2, n2 = build_token_stream(
+            ds, tokenizer_fn, seq_len=8, max_tokens=800, cache_dir=str(tmp_path)
+        )
+        assert calls["n"] == first_calls, "second call should hit the cache"
+        assert torch.equal(t1, t2) and n1 == n2
+
+    def test_cache_key_differs_on_params(self, tmp_path) -> None:
+        from datasets import Dataset
+
+        ds = Dataset.from_dict({"text": ["a b c d"] * 100})
+        fn = lambda text: [1] * len(text.split())  # noqa: E731
+        t1, _ = build_token_stream(ds, fn, seq_len=4, max_tokens=200, cache_dir=str(tmp_path))
+        t2, _ = build_token_stream(ds, fn, seq_len=8, max_tokens=200, cache_dir=str(tmp_path))
+        assert t1.shape[1] == 4 and t2.shape[1] == 8

@@ -63,6 +63,7 @@ def build_token_stream(
     tokenizer_fn: Any,
     seq_len: int = 128,
     max_tokens: int | None = None,
+    cache_dir: str | None = None,
 ) -> tuple[torch.Tensor, int]:
     """Build a token stream from dataset text using tokenizer.
 
@@ -78,6 +79,25 @@ def build_token_stream(
     Returns:
         Tuple of (token_tensor [total_tokens, seq_len], num_sequences).
     """
+    # Optional disk cache: tokenizing millions of tokens costs minutes per run.
+    # Key = (fingerprint of the text column, seq_len, max_tokens). tokenizer_fn is
+    # not hashable; callers must use distinct cache_dirs for distinct tokenizers.
+    cache_path = None
+    if cache_dir is not None:
+        import hashlib
+        from pathlib import Path
+
+        h = hashlib.sha256()
+        n = len(dataset)
+        h.update(f"{n}:{seq_len}:{max_tokens}".encode())
+        # Fingerprint on a sample of rows (hashing every row costs as much as tokenizing)
+        for idx in range(0, n, max(1, n // 64)):
+            h.update(str(dataset[idx].get("text", ""))[:256].encode())
+        cache_path = Path(cache_dir) / f"tokstream_{h.hexdigest()[:24]}.pt"
+        if cache_path.exists():
+            cached = torch.load(cache_path, weights_only=True)
+            return cached["tensor"], int(cached["num_seqs"])
+
     # Tokenize sample-by-sample, accumulating until max_tokens is reached.
     # (Tokenizing per sample avoids tokenizer max-length limits and lets us
     # stop early instead of processing the whole corpus.)
@@ -108,6 +128,10 @@ def build_token_stream(
         tokens[: num_seqs * seq_len],
         dtype=torch.long,
     ).reshape(num_seqs, seq_len)
+
+    if cache_path is not None:
+        cache_path.parent.mkdir(parents=True, exist_ok=True)
+        torch.save({"tensor": token_tensor, "num_seqs": num_seqs}, cache_path)
 
     return token_tensor, num_seqs
 

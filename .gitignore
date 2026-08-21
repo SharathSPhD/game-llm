@@ -48,3 +48,4 @@ configs/local/
 ._*
 .DS_Store
 .gateway.env
+data/cache/
