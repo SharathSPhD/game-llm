@@ -155,3 +155,24 @@ class TestDataLoader:
 
 if __name__ == "__main__":
     pytest.main([__file__, "-v"])
+
+
+class TestTokenStreamCoverage:
+    """Regression: build_token_stream must not cap input at 1000 samples (F9 blocker)."""
+
+    def test_consumes_beyond_1000_samples(self) -> None:
+        from datasets import Dataset
+
+        # 2000 samples of 10 tokens each; requesting 15000 tokens requires >1000 samples
+        ds = Dataset.from_dict({"text": ["a b c d e f g h i j"] * 2000})
+        tokenizer_fn = lambda text: [1] * len(text.split())  # noqa: E731
+        tensor, num_seqs = build_token_stream(ds, tokenizer_fn, seq_len=100, max_tokens=15000)
+        assert tensor.numel() >= 15000 - 100, f"stream too small: {tensor.numel()}"
+
+    def test_max_tokens_respected(self) -> None:
+        from datasets import Dataset
+
+        ds = Dataset.from_dict({"text": ["a b c"] * 50})
+        tokenizer_fn = lambda text: [1] * len(text.split())  # noqa: E731
+        tensor, _ = build_token_stream(ds, tokenizer_fn, seq_len=10, max_tokens=60)
+        assert tensor.numel() <= 60

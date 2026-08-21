@@ -1,0 +1,174 @@
+{
+  "config_hash": "2e7cc76470019224f176d44d93d69d2eea8e088144dd5a977336d0c1794ba698",
+  "git_commit": "1c9da863e6b7f3f436a7742fbc337c24bfa8c502",
+  "arms": {
+    "A1_tau1e4_ema": {
+      "final_loss": 10.817707061767578,
+      "loss_curve": [
+        10.827704429626465,
+        10.826096534729004,
+        10.823470115661621,
+        10.821121215820312,
+        10.819751739501953,
+        10.817707061767578
+      ],
+      "total_steps": 6,
+      "total_time_sec": 2.311513662338257,
+      "peak_memory_mb": 4249.0496,
+      "solver_mean_iterations": 12.0,
+      "solver_convergence_rate": 1.0,
+      "solver_min_iterations": 12.0,
+      "solver_max_iterations": 12.0,
+      "weight_drift_from_init": 5.622819286685166,
+      "model_name": "EqLM+MagneticAdamW(tau=1e-4, ema)",
+      "num_params": 10667495,
+      "optimizer": "magnetic_adamw",
+      "magnetic_adamw_tau": 0.0001,
+      "magnetic_adamw_ref_mode": "ema"
+    },
+    "A2_tau1e4_periodic": {
+      "final_loss": 10.81962776184082,
+      "loss_curve": [
+        10.830198287963867,
+        10.828276634216309,
+        10.825726509094238,
+        10.823457717895508,
+        10.82233715057373,
+        10.81962776184082
+      ],
+      "total_steps": 6,
+      "total_time_sec": 1.417809247970581,
+      "peak_memory_mb": 4290.166272,
+      "solver_mean_iterations": 12.0,
+      "solver_convergence_rate": 1.0,
+      "solver_min_iterations": 12.0,
+      "solver_max_iterations": 12.0,
+      "weight_drift_from_init": 5.622572031337132,
+      "model_name": "EqLM+MagneticAdamW(tau=1e-4, periodic)",
+      "num_params": 10667495,
+      "optimizer": "magnetic_adamw",
+      "magnetic_adamw_tau": 0.0001,
+      "magnetic_adamw_ref_mode": "periodic"
+    },
+    "A3_tau1e3_ema": {
+      "final_loss": 10.81362247467041,
+      "loss_curve": [
+        10.82364559173584,
+        10.821930885314941,
+        10.819780349731445,
+        10.818145751953125,
+        10.81578254699707,
+        10.81362247467041
+      ],
+      "total_steps": 6,
+      "total_time_sec": 1.3964662551879883,
+      "peak_memory_mb": 4331.282944,
+      "solver_mean_iterations": 12.0,
+      "solver_convergence_rate": 1.0,
+      "solver_min_iterations": 12.0,
+      "solver_max_iterations": 12.0,
+      "weight_drift_from_init": 5.6225728192392745,
+      "model_name": "EqLM+MagneticAdamW(tau=1e-3, ema)",
+      "num_params": 10667495,
+      "optimizer": "magnetic_adamw",
+      "magnetic_adamw_tau": 0.001,
+      "magnetic_adamw_ref_mode": "ema"
+    },
+    "A4_tau1e3_periodic": {
+      "final_loss": 10.815242767333984,
+      "loss_curve": [
+        10.82518482208252,
+        10.822951316833496,
+        10.820876121520996,
+        10.819350242614746,
+        10.817084312438965,
+        10.815242767333984
+      ],
+      "total_steps": 6,
+      "total_time_sec": 1.380100965499878,
+      "peak_memory_mb": 4372.399616,
+      "solver_mean_iterations": 12.0,
+      "solver_convergence_rate": 1.0,
+      "solver_min_iterations": 12.0,
+      "solver_max_iterations": 12.0,
+      "weight_drift_from_init": 5.622374575126544,
+      "model_name": "EqLM+MagneticAdamW(tau=1e-3, periodic)",
+      "num_params": 10667495,
+      "optimizer": "magnetic_adamw",
+      "magnetic_adamw_tau": 0.001,
+      "magnetic_adamw_ref_mode": "periodic"
+    },
+    "A5_tau1e2_ema": {
+      "final_loss": 10.81612491607666,
+      "loss_curve": [
+        10.825606346130371,
+        10.823968887329102,
+        10.822311401367188,
+        10.819954872131348,
+        10.818029403686523,
+        10.81612491607666
+      ],
+      "total_steps": 6,
+      "total_time_sec": 1.3827967643737793,
+      "peak_memory_mb": 4413.516288,
+      "solver_mean_iterations": 12.0,
+      "solver_convergence_rate": 1.0,
+      "solver_min_iterations": 12.0,
+      "solver_max_iterations": 12.0,
+      "weight_drift_from_init": 5.622342986248402,
+      "model_name": "EqLM+MagneticAdamW(tau=1e-2, ema)",
+      "num_params": 10667495,
+      "optimizer": "magnetic_adamw",
+      "magnetic_adamw_tau": 0.01,
+      "magnetic_adamw_ref_mode": "ema"
+    },
+    "A6_tau1e2_periodic": {
+      "final_loss": 10.810100555419922,
+      "loss_curve": [
+        10.820070266723633,
+        10.817604064941406,
+        10.816198348999023,
+        10.813919067382812,
+        10.812179565429688,
+        10.810100555419922
+      ],
+      "total_steps": 6,
+      "total_time_sec": 1.4684021472930908,
+      "peak_memory_mb": 4454.63296,
+      "solver_mean_iterations": 12.0,
+      "solver_convergence_rate": 1.0,
+      "solver_min_iterations": 12.0,
+      "solver_max_iterations": 12.0,
+      "weight_drift_from_init": 5.622565048324082,
+      "model_name": "EqLM+MagneticAdamW(tau=1e-2, periodic)",
+      "num_params": 10667495,
+      "optimizer": "magnetic_adamw",
+      "magnetic_adamw_tau": 0.01,
+      "magnetic_adamw_ref_mode": "periodic"
+    },
+    "Baseline": {
+      "final_loss": 10.780920028686523,
+      "loss_curve": [
+        10.824576377868652,
+        10.809045791625977,
+        10.799976348876953,
+        10.79455852508545,
+        10.787924766540527,
+        10.780920028686523
+      ],
+      "total_steps": 6,
+      "total_time_sec": 0.6131272315979004,
+      "peak_memory_mb": 4552.76032,
+      "weight_drift_from_init": 4.378481250401643,
+      "model_name": "EqLM+AdamW",
+      "num_params": 11060292,
+      "optimizer": "adamw"
+    }
+  },
+  "prereg": {
+    "loss_within_10pct_of_baseline": true,
+    "drift_below_90pct_of_baseline": false,
+    "baseline_loss": 10.780920028686523,
+    "baseline_drift": 4.378481250401643
+  }
+}

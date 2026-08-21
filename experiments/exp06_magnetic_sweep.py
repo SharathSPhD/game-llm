@@ -121,7 +121,8 @@ def train_arm(
     peak_memory_mb = 0.0
 
     step = 0
-    for batch in train_loader:
+    while step < num_steps:
+      for batch in train_loader:
         if step >= num_steps:
             break
 

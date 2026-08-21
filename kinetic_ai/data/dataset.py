@@ -78,22 +78,22 @@ def build_token_stream(
     Returns:
         Tuple of (token_tensor [total_tokens, seq_len], num_sequences).
     """
-    # Concatenate all texts
-    all_text = " ".join(dataset["text"][:1000])  # Limit to first 1000 for speed
+    # Tokenize sample-by-sample, accumulating until max_tokens is reached.
+    # (Tokenizing per sample avoids tokenizer max-length limits and lets us
+    # stop early instead of processing the whole corpus.)
+    tokens: list[int] = []
+    for text in dataset["text"]:
+        if not text:
+            continue
+        t = tokenizer_fn(text)
+        if isinstance(t, str):
+            t = [int(x) if x.isdigit() else 0 for x in t.split()]
+        elif not isinstance(t, list):
+            t = list(t)
+        tokens.extend(int(x) if isinstance(x, (int, float)) else 0 for x in t)
+        if max_tokens and len(tokens) >= max_tokens:
+            break
 
-    # Tokenize
-    tokens = tokenizer_fn(all_text)
-    if isinstance(tokens, str):
-        # If tokenizer returns a string, split by spaces
-        tokens = [int(t) if t.isdigit() else 0 for t in tokens.split()]
-    elif not isinstance(tokens, list):
-        # Convert to list of ints
-        tokens = list(tokens)
-
-    # Ensure tokens are ints
-    tokens = [int(t) if isinstance(t, (int, float)) else 0 for t in tokens]
-
-    # Limit to max_tokens if specified
     if max_tokens and len(tokens) > max_tokens:
         tokens = tokens[:max_tokens]
 

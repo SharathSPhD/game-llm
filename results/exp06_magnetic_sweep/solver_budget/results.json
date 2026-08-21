@@ -1,0 +1,97 @@
+{
+  "git_commit": "1c9da863e6b7f3f436a7742fbc337c24bfa8c502",
+  "solver_budgets": {
+    "12": {
+      "final_loss": 10.801125526428223,
+      "loss_curve": [
+        10.829238891601562,
+        10.822882652282715,
+        10.817413330078125,
+        10.812163352966309,
+        10.806246757507324,
+        10.801125526428223
+      ],
+      "total_steps": 6,
+      "total_time_sec": 2.1891214847564697,
+      "peak_memory_mb": 3465.580032,
+      "solver_convergence_rate": 0.0,
+      "solver_mean_iterations": 12.0,
+      "solver_min_iterations": 12.0,
+      "solver_max_iterations": 12.0,
+      "solver_mean_residual": 364.73467508951825,
+      "solver_min_residual": 278.3313903808594,
+      "solver_max_residual": 383.00372314453125,
+      "model_config": {
+        "d_model": 192,
+        "n_heads": 4,
+        "d_ff": 512,
+        "max_iter": 12,
+        "tol": 0.001
+      }
+    },
+    "24": {
+      "final_loss": 10.798954963684082,
+      "loss_curve": [
+        10.825212478637695,
+        10.820466041564941,
+        10.814534187316895,
+        10.809906005859375,
+        10.803932189941406,
+        10.798954963684082
+      ],
+      "total_steps": 6,
+      "total_time_sec": 2.28981876373291,
+      "peak_memory_mb": 3544.365056,
+      "solver_convergence_rate": 0.0,
+      "solver_mean_iterations": 24.0,
+      "solver_min_iterations": 24.0,
+      "solver_max_iterations": 24.0,
+      "solver_mean_residual": 373.76524861653644,
+      "solver_min_residual": 285.2120361328125,
+      "solver_max_residual": 392.07623291015625,
+      "model_config": {
+        "d_model": 192,
+        "n_heads": 4,
+        "d_ff": 512,
+        "max_iter": 24,
+        "tol": 0.001
+      }
+    },
+    "48": {
+      "final_loss": 10.795527458190918,
+      "loss_curve": [
+        10.822050094604492,
+        10.816106796264648,
+        10.812440872192383,
+        10.806455612182617,
+        10.801360130310059,
+        10.795527458190918
+      ],
+      "total_steps": 6,
+      "total_time_sec": 4.157113075256348,
+      "peak_memory_mb": 3623.15008,
+      "solver_convergence_rate": 0.0,
+      "solver_mean_iterations": 48.0,
+      "solver_min_iterations": 48.0,
+      "solver_max_iterations": 48.0,
+      "solver_mean_residual": 420.10497029622394,
+      "solver_min_residual": 319.8652038574219,
+      "solver_max_residual": 440.8055725097656,
+      "model_config": {
+        "d_model": 192,
+        "n_heads": 4,
+        "d_ff": 512,
+        "max_iter": 48,
+        "tol": 0.001
+      }
+    }
+  },
+  "prereg": {
+    "baseline_loss": 10.801125526428223,
+    "loss_degradation_at_max_iter_24": -0.0002009570890394419,
+    "loss_degradation_at_max_iter_48": -0.0005182856382519877,
+    "convergence_rate_at_max_iter_12": 0.0,
+    "convergence_rate_at_max_iter_24": 0.0,
+    "convergence_rate_at_max_iter_48": 0.0
+  }
+}
