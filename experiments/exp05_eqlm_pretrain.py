@@ -92,7 +92,8 @@ def train_arm(
     device: str,
     num_steps: int,
     log_every: int,
-    grad_clip: float = 1.0,
+    grad_clip: float,
+    lambda_aux: float = 0.0,
 ) -> dict:
     """Train one model arm.
 
@@ -143,6 +144,10 @@ def train_arm(
                 logits.reshape(-1, logits.shape[-1]),
                 targets.reshape(-1),
             )
+            # Solver-aware auxiliary residual (EqLM-v4, F16): L += lambda_aux * r
+            aux = getattr(model, "last_aux_residual", None)
+            if aux is not None and lambda_aux > 0:
+                loss = loss + lambda_aux * aux
 
             # Backward
             loss.backward()
@@ -342,6 +347,7 @@ def main():
         tokenizer_fn,
         seq_len=cfg["data"]["seq_len"],
         max_tokens=cfg["data"]["subset_size"],
+        cache_dir="data/cache",
     )
     print(f"Built token stream: {num_seqs} sequences of length {cfg['data']['seq_len']}")
 
@@ -468,6 +474,7 @@ def main():
         num_steps,
         log_every,
         grad_clip=grad_clip,
+        lambda_aux=float(cfg["arms"]["A2"].get("lambda_aux", 0.0)),
     )
     results["arms"]["A2"] = {
         **a2_results,
@@ -481,18 +488,26 @@ def main():
         f"steps {a2_results['total_steps']}"
     )
 
-    # Arm A3
-    print("\n--- Training A3 (MagneticAdamW) ---")
-    tau = cfg["arms"]["A3"].get("magnetic_adamw_tau", cfg["arms"]["A3"].get("mmd_config", {}).get("tau", 1e-2))
-    a3_opt = MagneticAdamW(
-        a3_model.parameters(),
-        lr=cfg["training"]["lr"],
-        betas=(0.9, 0.999),
-        weight_decay=cfg["training"].get("weight_decay", 0.01),
-        tau=tau,
-        ref_mode="ema",
-        ref_beta=0.999,
-    )
+    # Arm A3 (optimizer selected by config: adamw | magnetic_adamw)
+    a3_opt_name = cfg["arms"]["A3"].get("optimizer", "magnetic_adamw")
+    print(f"\n--- Training A3 ({a3_opt_name}) ---")
+    if a3_opt_name == "adamw":
+        a3_opt: torch.optim.Optimizer = torch.optim.AdamW(
+            a3_model.parameters(),
+            lr=cfg["training"]["lr"],
+            weight_decay=cfg["training"].get("weight_decay", 0.01),
+        )
+    else:
+        tau = cfg["arms"]["A3"].get("magnetic_adamw_tau", cfg["arms"]["A3"].get("mmd_config", {}).get("tau", 1e-2))
+        a3_opt = MagneticAdamW(
+            a3_model.parameters(),
+            lr=cfg["training"]["lr"],
+            betas=(0.9, 0.999),
+            weight_decay=cfg["training"].get("weight_decay", 0.01),
+            tau=tau,
+            ref_mode="ema",
+            ref_beta=0.999,
+        )
     a3_results = train_arm(
         "A3",
         a3_model,
@@ -502,13 +517,15 @@ def main():
         num_steps,
         log_every,
         grad_clip=grad_clip,
+        lambda_aux=float(cfg["arms"]["A3"].get("lambda_aux", 0.0)),
     )
     results["arms"]["A3"] = {
         **a3_results,
         "num_params": a3_params,
-        "model_name": "EqLM+MagneticAdamW",
+        "model_name": cfg["arms"]["A3"].get("name", "EqLM-arm3"),
         "config": a3_cfg.__dict__,
-        "magnetic_adamw_tau": tau,
+        "optimizer": a3_opt_name,
+        **({"magnetic_adamw_tau": tau} if a3_opt_name != "adamw" else {}),
     }
     print(
         f"A3 done: {a3_results['total_time_sec']:.1f}s, "

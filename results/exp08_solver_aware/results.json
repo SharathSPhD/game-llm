@@ -1,0 +1,49 @@
+{
+  "config_hash": "932f004bde9b670a803bb081f3fdfa1deee1dd29e2e1ad813af6d54760854c25",
+  "git": {
+    "commit": "bc49d3d0b167abc0611aa1c8c0e1ac9c2285914f"
+  },
+  "criterion_met": true,
+  "arms": {
+    "B0": {
+      "name": "EqLM-v3 (postln, lambda_aux=0.0, control)",
+      "params": 10020801,
+      "final_ce_loss": 8.7742919921875,
+      "final_aux_loss": 0.12623491883277893,
+      "wall_time_sec": 74.09629011154175,
+      "peak_memory_mb": 3371.5927734375,
+      "solver_rel_residual_mean_last50": 0.127707506247133,
+      "solver_convergence_rate": 0.0
+    },
+    "B1": {
+      "name": "EqLM-v3 (postln, lambda_aux=0.01)",
+      "params": 10020801,
+      "final_ce_loss": 8.92835807800293,
+      "final_aux_loss": 0.006689944304525852,
+      "wall_time_sec": 73.4013774394989,
+      "peak_memory_mb": 3529.22412109375,
+      "solver_rel_residual_mean_last50": 0.007729290440374158,
+      "solver_convergence_rate": 0.0
+    },
+    "B2": {
+      "name": "EqLM-v3 (postln, lambda_aux=0.1, primary)",
+      "params": 10020801,
+      "final_ce_loss": 8.985518455505371,
+      "final_aux_loss": 0.0072655510157346725,
+      "wall_time_sec": 73.98069453239441,
+      "peak_memory_mb": 3688.39306640625,
+      "solver_rel_residual_mean_last50": 0.007570213145988417,
+      "solver_convergence_rate": 0.0
+    },
+    "B3": {
+      "name": "EqLM-v3 (postln, lambda_aux=1.0)",
+      "params": 10020801,
+      "final_ce_loss": 8.918136596679688,
+      "final_aux_loss": 0.007175944279879332,
+      "wall_time_sec": 73.87441611289978,
+      "peak_memory_mb": 3847.5,
+      "solver_rel_residual_mean_last50": 0.00783889128995584,
+      "solver_convergence_rate": 0.0
+    }
+  }
+}

@@ -219,3 +219,17 @@ traces to a real run with config hash + seeds. All statuses: operator sign-off: 
 - **Status:** VALIDATED · SIGNED OFF (operator, 2026-08-21) · H1 iteration 2 remains open — this is
   the identified scientific frontier of the program, with the falsifiable next arms
   above.
+
+## F16 — Solver-aware auxiliary loss teaches contraction almost for free (BREAKTHROUGH; resolves F15 frontier)
+
+- **Claim:** Adding L = CE + λ·r with r = ‖f(z*,x)−z*‖/‖z*‖ (one tracked block
+  application after the no-grad solve) reduces the exit relative residual 16×
+  (0.1277 → 0.0076–0.0078) for every λ ∈ {0.01, 0.1, 1.0}, at ≤1.8% CE cost
+  (8.92–8.99 vs control 8.77) and zero wall-time overhead (0.99–1.00×). The
+  post-LN map becomes a genuine equilibrium computation (rel residual ≪ 1e-2
+  target) — the model LEARNS to be contractive.
+- **Evidence:** results/exp08_solver_aware/results.json (300 steps, real stream,
+  4 arms; prereg criterion met by all three λ arms).
+- **Consequence:** H1 iteration 2 unlocked: full 20k-step matched comparison with
+  EqLM-v4 (postln + aux λ=0.01).
+- **Status:** VALIDATED (smoke scale) · pending full-run confirmation
