@@ -250,3 +250,21 @@ traces to a real run with config hash + seeds. All statuses: operator sign-off: 
   near-miss with mean±CI (CLAUDE.md ≥3-seed gate); rider hypothesis: λ=1e-3 aux
   arm (10x smaller) preserves BLiMP while keeping residual gains.
 - **Status:** VALIDATED · seeds pending for H1 verdict
+
+## F18 — H1 verdict (3 seeds): EqLM reaches 93.0% of the explicit baseline's BLiMP — formally below the 95% threshold (HONEST MISS with a tight CI)
+
+- **Evidence (seeds 42/43/44, 20k steps each, full stream, param-matched;
+  results/exp05_full_v4{,_s43,_s44}):** A1 explicit BLiMP 0.7133±0.0294
+  (0.746/0.689/0.705); A3 EqLM post-LN 0.6637±0.0365 (0.704/0.654/0.633).
+  Per-seed ratio 0.944/0.949/0.898; mean 0.9303, 95% bootstrap CI
+  [0.8979, 0.9492] — upper bound < 0.95 ⇒ pre-registered H1 threshold MISSED.
+  Paired bootstrap: Δ=+4.97pp for explicit, p<1e-3, effect size 1.84.
+  λ=1e-3 aux rider (seeds 43/44): 0.620/0.643 — no BLiMP benefit vs no-aux.
+- **Trajectory of the program:** iteration 1 ratio 0.78 → iteration 3 ratio 0.93
+  via diagnosed fixes (init scale, post-LN fixed-point map). Memory parity at this
+  scale; wall time 2.9x; O(1) depth-memory advantage retained (F4).
+- **Paper position:** a weight-tied equilibrium LM attains 93% of a param-matched
+  explicit transformer's BLiMP at equal token budget — reported with the full
+  diagnostic arc (F13–F17) and the open gap as future work (eval-time solver
+  budget, aux annealing, multi-block DEQ).
+- **Status:** VALIDATED (formal H1 miss) · closes RQ-3 iteration 3

@@ -136,3 +136,10 @@
   updated; run_gateway.sh defaults point at new account/KV (secrets gitignored).
 - E2E verified: worker /health -> GB10 gpu true; UI proxied via worker (200);
   anonymous GPU access still 401. Tunnel restarts now self-heal via run_gateway.sh.
+
+## [cycle 11b | 2026-08-21] H1 VERDICT (F18): 93.0% [89.8, 94.9] - formal miss, tight CI
+- 3 seeds complete (7h GB10). Ratio CI upper bound < 0.95: honest miss, huge
+  progress from iter-1 (0.78 -> 0.93). Aux rider no BLiMP benefit at 1e-3.
+- GPU lock released. next: paper/site F16-F18 refresh; H1 iteration 4 candidates
+  (eval-time solver budget, aux annealing, 2-block DEQ) + Tier C (H3 MPO, H4
+  auction decoding) remain open in the program backlog.

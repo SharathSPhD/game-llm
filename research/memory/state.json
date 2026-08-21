@@ -1,8 +1,8 @@
 {
-  "cycle": 11,
+  "cycle": 12,
   "phase": "phase2-science",
   "current_rq": "RQ-2",
-  "gpu_lock": true,
+  "gpu_lock": false,
   "open_questions": [
     "RQ-3 (H1): EqLM-small vs GPT-2-class on BabyLM/BLiMP",
     "RQ-4 (H3): MPO vs DPO",
@@ -11,9 +11,9 @@
   ],
   "closed_questions": [
     "RQ-1: review complete, 28 findings fixed (findings-rq1.md); tests 145/145, mypy+ruff clean, cov 93%",
-    "RQ-2 (H2): VALIDATED - F1/F2/F3 (findings.md); RQ-6 Tier A part: F4/F5"
+    "RQ-2 (H2): VALIDATED - F1/F2/F3 (findings.md); RQ-6 Tier A part: F4/F5",
+    "RQ-3 (H1) iteration 3: formal miss at 0.930 [0.898,0.949] vs 0.95 (F18); program continues"
   ],
   "known_defects": [],
-  "next_action": "Harvest seeds 43/44; 3-seed mean+-CI A1 vs A3 -> H1 verdict (Wilcoxon/bootstrap per stats gates); evaluate lambda=1e-3 rider; paper/site refresh F16-F18",
-  "gpu_lock_holder": "exp05_full_v4 seeds 43+44 (H1 iteration 3)"
+  "next_action": "Paper/site F16-F18 refresh; choose next arm: H1-iter4 (eval-time budget/aux annealing/2-block) or Tier C (H3 MPO vs DPO, H4 auction decoding)"
 }
