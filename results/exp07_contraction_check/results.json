@@ -1,0 +1,37 @@
+{
+  "config_hash": "ec62eeba11a4f9d7f89b50e7e286e249a67593608b70c124cc76a0629166f1c0",
+  "git": {
+    "commit": "2ddb8f0efd37d4787143ab9d37b66f148084e914"
+  },
+  "arms": {
+    "A1": {
+      "name": "ExplicitLM (Baseline)",
+      "params": 10713795,
+      "final_loss": 8.707655906677246,
+      "wall_time_sec": 27.882635354995728,
+      "peak_memory_mb": 3503.37255859375
+    },
+    "A2": {
+      "name": "EqLM-v2 (spectral_norm=True, damping=0.2)",
+      "params": 10020801,
+      "final_loss": 8.87636661529541,
+      "wall_time_sec": 77.9093599319458,
+      "peak_memory_mb": 3468.61279296875,
+      "solver_convergence_rate": 0.0,
+      "solver_mean_iterations": 12.0
+    },
+    "A3": {
+      "name": "EqLM-v1 (spectral_norm=False)",
+      "params": 10020801,
+      "final_loss": 8.838096618652344,
+      "wall_time_sec": 70.43982338905334,
+      "peak_memory_mb": 3617.55859375,
+      "solver_convergence_rate": 0.0,
+      "solver_mean_iterations": 12.0
+    }
+  },
+  "preregistered_criteria": {
+    "a2_final_within_5pct_of_a3": true,
+    "a2_convergence_above_80pct": false
+  }
+}

@@ -85,3 +85,11 @@
 - next: EqLM-v2 cycle - wire apply_spectral_norm/pcDEQ into EqLM block (TDD),
   verify solver convergence >80% on smoke, rerun matched full comparison;
   refresh paper/site with F10-F13 truth; operator sign-off pass F1-F13.
+
+## [cycle 7 | 2026-08-21] EXP07 + F14: no-fixed-point diagnosis (the real EqLM story)
+- exp07 (GPU): v2 spectral-norm+damping preserves loss but 0% convergence.
+- Follow-up numerics: residual scales linearly with damping, tail flat ->
+  NO fixed point exists (residual map without outer bounding op); absolute-norm
+  convergence criterion also unsatisfiable by construction (F14).
+- F13 reframed: current EqLM = weight-tied 12-iteration transformer.
+- next: EqLM-v3 (outer-LN map, relative residual) queued as H1 iteration 2.

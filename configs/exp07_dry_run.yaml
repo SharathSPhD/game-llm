@@ -1,0 +1,30 @@
+# EXP07 Dry-Run: CPU test with 3 steps (no GPU required)
+# Validates pipeline and code correctness before GPU run
+
+data:
+  dataset: "BabyLM-2026-Strict-Small"
+  max_tokens: 100000  # Tiny for dry-run
+  seq_len: 128
+
+tokenizer:
+  vocab_size: 50257
+
+training:
+  seed: 42
+  num_steps: 3  # Just 3 steps to verify correctness
+  batch_size: 4
+  log_every: 1
+  lr: 3e-4
+  grad_clip: 1.0
+
+model:
+  vocab_size: 50257
+  d_model: 64  # Tiny
+  n_heads: 2
+  d_ff: 128
+  max_seq_len: 128
+  deq_max_iter: 12
+  deq_tol: 1e-3
+  solver: "anderson"
+  dropout: 0.1
+  n_layers_explicit: 2

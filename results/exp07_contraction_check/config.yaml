@@ -1,0 +1,24 @@
+data:
+  dataset: BabyLM-2026-Strict-Small
+  max_tokens: 1300000
+  seq_len: 128
+model:
+  d_ff: 512
+  d_model: 192
+  deq_max_iter: 12
+  deq_tol: 0.001
+  dropout: 0.1
+  max_seq_len: 128
+  n_heads: 4
+  n_layers_explicit: 3
+  solver: anderson
+  vocab_size: 50257
+tokenizer:
+  vocab_size: 50257
+training:
+  batch_size: 32
+  grad_clip: 1.0
+  log_every: 10
+  lr: 0.0003
+  num_steps: 300
+  seed: 42

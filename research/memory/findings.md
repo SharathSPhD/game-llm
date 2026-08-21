@@ -179,3 +179,25 @@ operator sign-off.)
   solver convergence, then rerun the matched comparison; secondary: solver-tol
   study (1e-2 vs 1e-3), solver-depth warmup.
 - **Status:** VALIDATED (honest miss + diagnosis) · sign-off pending
+
+## F14 — EqLM's map has no bona fide fixed point: it is a weight-tied iterated transformer, not yet an equilibrium model (DISCOVERY via exp07)
+
+- **Evidence:** Solver residual plateaus at constant value with tail-ratio ≈0.99 for
+  100 iterations across v1/v2; residual magnitude scales LINEARLY with damping α
+  (32.65 → 5.41 → 1.35 at α = 1 / 0.2 / 0.05) — the signature of z ← z + α·g(z)
+  with ‖g‖ constant: iterates drift at speed α‖g‖, no fixed point is approached.
+  Spectral norm on sub-layers cannot fix a residual map with no outer bounding
+  operation. Additionally the solver's convergence criterion is an ABSOLUTE global
+  norm over the batch tensor (deq_layer.py:68) — unsatisfiable at batch scale, so
+  convergence % was never meaningful (retro-scopes the F12/F13 "0% convergence").
+- **Reframing of F13:** the trained "EqLM" models are 12-iteration weight-tied
+  transformers; their BLiMP 0.571/0.584 quantify weight-tying at matched params,
+  not equilibrium computation.
+- **EqLM-v3 design (next iteration):** (a) put the outer LayerNorm inside the map —
+  f(z,x)=LN(z + Attn + MLP + inj(x)) (Bai et al. DEQ-transformer form) so iterates
+  are bounded and fixed points exist; (b) record RELATIVE residual
+  ‖Δz‖/(‖z‖+eps) in deq_layer and gate convergence on it; (c) re-verify
+  contraction empirically, then rerun the matched comparison.
+- **exp07 numbers (for the record):** losses A1 8.71 / v2 8.88 / v1 8.84 (300
+  steps, real stream) — loss-parity prereg MET, convergence prereg NOT MET.
+- **Status:** VALIDATED (diagnosis reproducible in-repo) · sign-off pending

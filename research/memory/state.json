@@ -1,5 +1,5 @@
 {
-  "cycle": 6,
+  "cycle": 7,
   "phase": "phase2-science",
   "current_rq": "RQ-2",
   "gpu_lock": false,
@@ -14,5 +14,5 @@
     "RQ-2 (H2): VALIDATED - F1/F2/F3 (findings.md); RQ-6 Tier A part: F4/F5"
   ],
   "known_defects": [],
-  "next_action": "EqLM-v2: enforce contraction (spectral norm/pcDEQ) in EqLM block, verify solver convergence, rerun matched comparison; paper/site refresh F10-F13"
+  "next_action": "EqLM-v3: outer-LN fixed-point map + relative-residual convergence metric (TDD), contraction verification, then matched 20k-step rerun (H1 iteration 2)"
 }
