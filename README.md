@@ -12,12 +12,18 @@ Current AI systems are trained via **dictatorial optimization** — a single los
 
 Kinetic AI implements the transition from **static optimization** to **dynamic equilibrium**:
 
-| Component | What it replaces | Why |
-|-----------|-----------------|-----|
-| **Magnetic Mirror Descent** | SGD / Adam | Converges to QRE (not just local minima) in adversarial settings |
-| **Deep Equilibrium Models** | Explicit transformer layers | O(1) memory, implicit depth, fixed-point stability |
-| **Token Auctions** | Winner-take-all generation | Incentive-compatible multi-agent content generation |
-| **Self-Play (SPPO)** | RLHF / DPO | Game-theoretic alignment without reward hacking |
+| Component | What it replaces | Validated status (see `research/memory/findings.md`) |
+|-----------|-----------------|------------------------------------------------------|
+| **Magnetic Mirror Descent** | Simultaneous gradient play | Linear last-iterate convergence to its magnetic fixed point where GDA cycles (F1); RND resets reach Nash (F3); asymmetric-game attractor gap discovered (F2) |
+| **Deep Equilibrium Models** | Explicit transformer layers | O(1) activation memory vs O(N) measured (F4); Anderson wins on stiff fixed points (F5) |
+| **Token Auctions** | Winner-take-all generation | Second-price empirically truthful, regret exactly 0 (F6); weighted aggregation measurably manipulable |
+| **Self-Play (SPPO)** | RLHF / DPO | Policy-weighted self-play loop with convergence tests; LLM-scale runs pending |
+| **EqLM** (new architecture) | Stacked GPT-class LMs | Parity with a param-matched explicit baseline at smoke scale (F10); full BabyLM run in progress |
+
+Everything above traces to committed runs under `results/` (config hashes + seeds).
+The research process is spec-driven and adversarially reviewed — see `CLAUDE.md`,
+`research/specs/`, and `docs/decisions/`. Paper: `paper/kinetic_ai.tex`. Site: `site/`.
+Researcher app: `apps/web` + `app/server.py` (see `apps/web/DEPLOY.md`).
 
 ## Installation
 
