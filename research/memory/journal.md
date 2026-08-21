@@ -102,3 +102,10 @@
   loss, targeted spectral budget, pcDEQ, tol-sufficiency study).
 - next: operator sign-off pass F1-F15; v4 arm selection; paper/site refresh with
   F14/F15 arc; app deploy awaits operator (Supabase/Vercel/Cloudflare auth).
+
+## [cycle 9 | 2026-08-21] OPERATOR SIGN-OFF F1-F15; DEPLOYMENT PHASE OPENED
+- Operator signed off findings F1-F15 (closure layer 6 satisfied); Supabase and
+  Vercel connectors authorized; directive: deploy + continue goal autonomously.
+- Flaky overfit test made deterministic (copy task, single-thread reductions).
+- next: Supabase project + migration; Vercel deploy of apps/web; gateway tunnel
+  (pending CF credentials on machine); EqLM-v4 arm launch.

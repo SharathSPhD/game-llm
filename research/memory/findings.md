@@ -1,8 +1,7 @@
 # Validated Findings
 
 (Populated only with Tarka-reviewed findings as experiments close. Every number here
-traces to a real run with config hash + seeds. All statuses: SIGN-OFF PENDING until
-operator sign-off.)
+traces to a real run with config hash + seeds. All statuses: operator sign-off: F1-F15 SIGNED OFF 2026-08-21.)
 
 ## F1 — MMD converges linearly to its magnetic fixed point where GDA cycles (H2 core: VALIDATED on symmetric games)
 
@@ -15,7 +14,7 @@ operator sign-off.)
   GDA final NashConv: 1.93 [1.90,1.96] (MP), 1.76 [1.62,1.88] (RPS), R²<0.09 (no
   decay). Artifacts: results/exp01_mmd_vs_gda/ (config sha e1c1efdd…, commit 9a2cde2f).
 - **Tarka:** CONFIRM (independent recomputation).
-- **Status:** VALIDATED · sign-off pending
+- **Status:** VALIDATED · SIGNED OFF (operator, 2026-08-21)
 
 ## F2 — Uniform-anchor MMD fixed points ≠ logit-QRE for asymmetric games (DISCOVERY)
 
@@ -28,7 +27,7 @@ operator sign-off.)
   lr=1e-5 ground truth) + zero-variance convergence across 10 seeds.
 - **Tarka:** CONFIRM_WITH_CORRECTION (wording adopted above). Iteration-1's R²=0.033
   "failure" was a metric artifact (NashConv plateaus at the QRE(τ) floor).
-- **Status:** VALIDATED · sign-off pending · feeds paper §Convergence Analysis and
+- **Status:** VALIDATED · SIGNED OFF (operator, 2026-08-21) · feeds paper §Convergence Analysis and
   motivates adaptive-reference theory work.
 
 ## F3 — Regularized Nash Dynamics (periodic reference resets) reach Nash universally (H2: VALIDATED)
@@ -38,7 +37,7 @@ operator sign-off.)
 - **Evidence:** final NashConv 8.48e-6 [4.78e-6,1.26e-5] (MP), 1.07e-6 (RPS), 5.21e-5
   [2.62e-5,9.08e-5] (biased RPS); mean R² 0.7181–0.9825. exp01, 10 seeds.
 - **Tarka:** CONFIRM_WITH_CORRECTION (R² range corrected as stated).
-- **Status:** VALIDATED · sign-off pending
+- **Status:** VALIDATED · SIGNED OFF (operator, 2026-08-21)
 
 ## F4 — DEQ peak activation memory is O(1) in effective depth; explicit stacks are O(N) (RQ-6 Tier A: VALIDATED)
 
@@ -47,7 +46,7 @@ operator sign-off.)
   (N=4→0.067 MB … N=32→0.539 MB), like-for-like layers, CPU measurement.
 - **Evidence:** results/exp03_deq_solvers/ (config sha a0f8f5c0…, 5 seeds).
 - **Tarka:** CONFIRM. (GPU-scale measurement for H1's ≤50% claim happens in Tier B.)
-- **Status:** VALIDATED · sign-off pending
+- **Status:** VALIDATED · SIGNED OFF (operator, 2026-08-21)
 
 ## F5 — Anderson acceleration beats Picard exactly where theory predicts: stiff fixed points (VALIDATED, iteration 2)
 
@@ -57,7 +56,7 @@ operator sign-off.)
   empirically verified (max abs error ~2e-4).
 - **Evidence:** results/exp03_deq_solvers/ iteration 2, ρ∈{0.9,0.99,0.999}, 10 seeds.
 - **Tarka:** CONFIRM / CONFIRM_WITH_CORRECTION (wording adopted).
-- **Status:** VALIDATED · sign-off pending
+- **Status:** VALIDATED · SIGNED OFF (operator, 2026-08-21)
 
 ## F6 — Second-price token auction is exactly truthful; weighted aggregation is measurably manipulable (H4 groundwork: VALIDATED)
 
@@ -69,7 +68,7 @@ operator sign-off.)
 - **Evidence:** results/exp04_auction_truthfulness/ (config sha 5c458dac…, 10 seeds ×
   200 auctions × {3,5} agents).
 - **Tarka:** CONFIRM (both claims).
-- **Status:** VALIDATED · sign-off pending
+- **Status:** VALIDATED · SIGNED OFF (operator, 2026-08-21)
 
 ## F7 — Warm-started homotopy accelerates QRE path tracing (VALIDATED, iteration 3)
 
@@ -79,7 +78,7 @@ operator sign-off.)
   along the path is NOT globally monotone for these games (honest partial vs prereg);
   path strategy movement is smooth and small (0.015 < 0.05 prereg threshold).
 - **Evidence:** results/exp02_qre_homotopy/ iteration 3, λ∈logspace(0.01,100,50).
-- **Status:** VALIDATED (with two honest partials) · sign-off pending
+- **Status:** VALIDATED (with two honest partials) · SIGNED OFF (operator, 2026-08-21)
 
 ## F8 — Undamped logit-QRE fixed-point iteration requires damping beyond small λ (METHOD FINDING)
 
@@ -88,7 +87,7 @@ operator sign-off.)
   halve on residual increase) converges across λ∈{1,10,100} (21 / 700 / 42k iters).
 - **Evidence:** tests/test_qre.py::TestQREHighRationality; kinetic_ai/games/qre.py
   damped solver (default on, backward compatible).
-- **Status:** VALIDATED · sign-off pending · exposes future work: Anderson-accelerated
+- **Status:** VALIDATED · SIGNED OFF (operator, 2026-08-21) · exposes future work: Anderson-accelerated
   QRE solves (42k iters at λ=100 is the next bottleneck).
 
 ## F9 — Tier B pipeline validated end-to-end; EqLM trains but slowly; raw-MMD arm exposed an adaptivity confound (SMOKE, method finding)
@@ -104,7 +103,7 @@ operator sign-off.)
 - **Value:** data→tokenize→train→BLiMP pipeline proven on GB10; three concrete
   defects identified with fixes scheduled (init scale, MagneticAdamW, DEQ solver
   stats capture; data loader currently limited to first 1000 samples — noted).
-- **Status:** VALIDATED as method finding · sign-off pending
+- **Status:** VALIDATED as method finding · SIGNED OFF (operator, 2026-08-21)
 
 ## F10 — EqLM matches the explicit transformer at smoke scale after init fix (H1 signal; SMOKE)
 
@@ -120,7 +119,7 @@ operator sign-off.)
   vs 3.5GB — memory bug; (c) DEQ solver 0% convergence at max_iter=12/tol=1e-3
   during training yet training succeeds (phantom-gradient regime) — needs
   characterization before full run.
-- **Status:** VALIDATED (smoke scale) · sign-off pending
+- **Status:** VALIDATED (smoke scale) · SIGNED OFF (operator, 2026-08-21)
 
 ## F10-correction — exp05 token-budget description was wrong (data cap)
 
@@ -142,7 +141,7 @@ operator sign-off.)
   on a sparse-grad embedding now enforces equivalence.
 - **Lesson:** optimizer-equivalence tests must include sparse-gradient parameters;
   dense-Linear tests masked the defect.
-- **Status:** VALIDATED · fixed in kinetic_ai/optim/magnetic_adamw.py · sign-off pending
+- **Status:** VALIDATED · fixed in kinetic_ai/optim/magnetic_adamw.py · SIGNED OFF (operator, 2026-08-21)
 
 ## F12 — Magnetic pull (EMA anchor, τ≤1e-2) is loss-neutral at pretraining scale; solver budget beyond 12 iters buys nothing at 300 steps (exp06/exp06b)
 
@@ -157,7 +156,7 @@ operator sign-off.)
 - **Tier B decision:** pretraining arms use AdamW (A1/A2); MagneticAdamW with FIXED
   reference is reserved for H3 preference-phase (its theoretical home). DEQ
   max_iter stays 12 (cheapest; no loss penalty).
-- **Status:** VALIDATED · sign-off pending
+- **Status:** VALIDATED · SIGNED OFF (operator, 2026-08-21)
 
 ## F13 — H1 iteration 1: MISSED at scale; diagnosis points to non-contractive fixed-point map (Tier B full run)
 
@@ -178,7 +177,7 @@ operator sign-off.)
   contraction (spectral norm on block weights / pcDEQ constraints), verify >80%
   solver convergence, then rerun the matched comparison; secondary: solver-tol
   study (1e-2 vs 1e-3), solver-depth warmup.
-- **Status:** VALIDATED (honest miss + diagnosis) · sign-off pending
+- **Status:** VALIDATED (honest miss + diagnosis) · SIGNED OFF (operator, 2026-08-21)
 
 ## F14 — EqLM's map has no bona fide fixed point: it is a weight-tied iterated transformer, not yet an equilibrium model (DISCOVERY via exp07)
 
@@ -200,7 +199,7 @@ operator sign-off.)
   contraction empirically, then rerun the matched comparison.
 - **exp07 numbers (for the record):** losses A1 8.71 / v2 8.88 / v1 8.84 (300
   steps, real stream) — loss-parity prereg MET, convergence prereg NOT MET.
-- **Status:** VALIDATED (diagnosis reproducible in-repo) · sign-off pending
+- **Status:** VALIDATED (diagnosis reproducible in-repo) · SIGNED OFF (operator, 2026-08-21)
 
 ## F15 — EqLM-v3 (post-LN map): fixed points now exist but contraction is weak at LM width (H1 frontier identified)
 
@@ -217,6 +216,6 @@ operator sign-off.)
   schedules; solver-aware auxiliary loss penalizing ‖f(z*)−z*‖; tighter spectral
   budget on attention value/projection paths only; pcDEQ orthant constraints;
   tol relaxation study (does rel 0.1 suffice for representation quality?).
-- **Status:** VALIDATED · sign-off pending · H1 iteration 2 remains open — this is
+- **Status:** VALIDATED · SIGNED OFF (operator, 2026-08-21) · H1 iteration 2 remains open — this is
   the identified scientific frontier of the program, with the falsifiable next arms
   above.

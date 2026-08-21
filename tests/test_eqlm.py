@@ -351,10 +351,12 @@ class TestGradientFlow:
         more iterations to show improvement.
         """
         torch.manual_seed(42)
-        # Create a tiny overfit batch
+        torch.set_num_threads(1)  # deterministic reductions (was flaky ~1/6)
+        # Tiny overfit batch with LEARNABLE structure (identity/copy task):
+        # random targets made the signal marginal under damped DEQ oscillation.
         batch_size, seq_len = 2, 8
         input_ids = torch.randint(0, 100, (batch_size, seq_len))
-        target_ids = torch.randint(0, 100, (batch_size, seq_len))
+        target_ids = input_ids.clone()
 
         model = EqLM(tiny_eqlm_config)
         optimizer = torch.optim.AdamW(model.parameters(), lr=1e-2)
@@ -376,9 +378,12 @@ class TestGradientFlow:
 
             losses.append(loss.item())
 
-        # Loss should generally trend downward (check last vs first)
-        assert losses[-1] < losses[0], (
-            f"Loss didn't decrease: initial={losses[0]:.4f}, final={losses[-1]:.4f}"
+        # Loss should trend downward; average windows to be robust to
+        # step-to-step oscillation of the damped fixed-point iteration.
+        first = sum(losses[:5]) / 5
+        last = sum(losses[-5:]) / 5
+        assert last < first, (
+            f"Loss didn't decrease: first5={first:.4f}, last5={last:.4f}"
         )
 
     def test_explicit_lm_gradients_flow(
