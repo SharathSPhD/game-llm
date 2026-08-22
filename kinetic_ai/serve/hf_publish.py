@@ -118,10 +118,11 @@ def get_checkpoint_metadata(checkpoint_path: str | Path) -> dict[str, Any]:
     if not checkpoint_path.exists():
         raise FileNotFoundError(f"Checkpoint not found: {checkpoint_path}")
 
-    # Load with weights_only=False since we trust our own checkpoints
+    # SECURITY: weights_only=True always — these paths are enumerated by a
+    # glob in a web handler; pickle-loading them would be code execution.
     # but only extract metadata, not instantiate the model
     try:
-        ckpt = torch.load(checkpoint_path, map_location="cpu", weights_only=False)
+        ckpt = torch.load(checkpoint_path, map_location="cpu", weights_only=True)
     except Exception as e:
         raise RuntimeError(f"Failed to load checkpoint {checkpoint_path}: {e}") from e
 
@@ -129,7 +130,7 @@ def get_checkpoint_metadata(checkpoint_path: str | Path) -> dict[str, Any]:
         raise RuntimeError(f"Checkpoint is not a dict: {type(ckpt)}")
 
     # Extract metadata without instantiating model
-    config = ckpt.get("config")
+    config = ckpt.get("config_dict", ckpt.get("config"))
     model_class = ckpt.get("model_class")
 
     if config is None or model_class is None:

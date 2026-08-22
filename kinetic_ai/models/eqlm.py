@@ -613,9 +613,14 @@ def save_checkpoint(model: EqLM | ExplicitLM, path: str | Path) -> None:
     path = Path(path)
     path.parent.mkdir(parents=True, exist_ok=True)
 
+    # Config is stored as a primitives-only dict so checkpoints can ALWAYS be
+    # loaded with torch.load(weights_only=True) — never pickle-load model files
+    # (the registry enumerates them from disk; pickle would be code execution).
+    from dataclasses import asdict
+
     checkpoint: dict[str, object] = {
         "state_dict": model.state_dict(),
-        "config": model.config,
+        "config_dict": asdict(model.config),
         "model_class": type(model).__name__,
     }
     if isinstance(model, ExplicitLM):
@@ -636,17 +641,18 @@ def load_checkpoint(path: str | Path) -> EqLM | ExplicitLM:
         Reconstructed EqLM model with loaded weights.
     """
     path = Path(path)
-    # Note: weights_only=False needed for config (EqLMConfig dataclass).
-    # The checkpoint is trusted (we created it ourselves).
-    checkpoint = torch.load(str(path), map_location="cpu", weights_only=False)
+    # SECURITY: weights_only=True always — checkpoints are enumerated from
+    # disk by services; pickle-loading them would be code execution. The config
+    # is stored as a primitives-only dict for exactly this reason.
+    checkpoint = torch.load(str(path), map_location="cpu", weights_only=True)
 
-    checkpoint["config"]
+    cfg = EqLMConfig(**checkpoint["config_dict"])
     if checkpoint.get("model_class") == "ExplicitLM":
         model: EqLM | ExplicitLM = ExplicitLM(
-            config=checkpoint["config"], n_layers=int(checkpoint.get("n_layers", 4))
+            config=cfg, n_layers=int(checkpoint.get("n_layers", 4))
         )
     else:
-        model = EqLM(config=checkpoint["config"])
+        model = EqLM(config=cfg)
     model.load_state_dict(checkpoint["state_dict"])
 
     return model
