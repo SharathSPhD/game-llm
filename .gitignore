@@ -49,3 +49,7 @@ configs/local/
 .DS_Store
 .gateway.env
 data/cache/
+
+# Model checkpoints live on disk / Hugging Face, never in git
+results/**/checkpoints/
+*.pt

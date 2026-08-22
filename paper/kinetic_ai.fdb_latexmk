@@ -1,13 +1,13 @@
 # Fdb version 4
-["bibtex kinetic_ai"] 1787337420.20118 "kinetic_ai.aux" "kinetic_ai.bbl" "kinetic_ai" 1787337420.66797 0
+["bibtex kinetic_ai"] 1787370975.52405 "kinetic_ai.aux" "kinetic_ai.bbl" "kinetic_ai" 1787370975.9899 0
   "./references.bib" 1787260475.77052 2676 94c6c00de4d527e3dfda52c8fc2b1bbd ""
   "/home/sharaths/.TinyTeX/texmf-dist/bibtex/bst/natbib/plainnat.bst" 1233624470 26816 ffe5423d2019860bad9f54bc402fac15 ""
-  "kinetic_ai.aux" 1787337420.61019 9346 bf446bf885ee471974ba1ddb2ceb048a "pdflatex"
+  "kinetic_ai.aux" 1787370975.92853 10896 c65df05d32c8ba10dd597df93e918e97 "pdflatex"
   (generated)
   "kinetic_ai.bbl"
   "kinetic_ai.blg"
   (rewritten before read)
-["pdflatex"] 1787337420.22305 "kinetic_ai.tex" "kinetic_ai.pdf" "kinetic_ai" 1787337420.6681 0
+["pdflatex"] 1787370975.53853 "kinetic_ai.tex" "kinetic_ai.pdf" "kinetic_ai" 1787370975.99013 0
   "/home/sharaths/.TinyTeX/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc" 1136849721 2900 1537cc8184ad1792082cd229ecc269f4 ""
   "/home/sharaths/.TinyTeX/texmf-dist/fonts/tfm/jknappen/ec/tcrm1200.tfm" 1136768653 1536 74b7293ec3713bb7fdca8dd1bd1f469c ""
   "/home/sharaths/.TinyTeX/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex7.tfm" 1246382020 1004 54797486969f23fa377b128694d548df ""
@@ -231,16 +231,17 @@
   "/home/sharaths/.TinyTeX/texmf-var/fonts/map/pdftex/updmap/pdftex.map" 1786640993 391977 eab4f9a15152512a9c144630da56c0b4 ""
   "/home/sharaths/.TinyTeX/texmf-var/web2c/pdftex/pdflatex.fmt" 1786640481 2286336 54fab0f45d7d9d2c9144469eb3028156 ""
   "/home/sharaths/.TinyTeX/texmf.cnf" 1772302105.1762 637 edd806fb06a89761a6034e1968af9017 ""
-  "figures/fig_anderson_stiffness.pdf" 1787337413.78517 12413 683e2f9e93532212cf163b2fc21064cf ""
-  "figures/fig_auction_regret.pdf" 1787337413.91117 21191 fe8e7fe81a4a3be68c64a81f744fcf6d ""
-  "figures/fig_deq_memory.pdf" 1787337413.73917 15681 05147ef5c4f31f54d7a77c2a30320043 ""
-  "figures/fig_eqlm_loss_curves.pdf" 1787337413.96717 17012 cef8fac5cb9ddb737e22066a07200168 ""
-  "figures/fig_h1_iterations.pdf" 1787337414.04417 24955 0999c5a8e6141411509a890891e66ae9 ""
-  "figures/fig_mmd_convergence.pdf" 1787337413.68917 24712 cc15f01001ad5fed416dbeb03d3b1a13 ""
-  "kinetic_ai.aux" 1787337420.61019 9346 bf446bf885ee471974ba1ddb2ceb048a "pdflatex"
-  "kinetic_ai.bbl" 1787337420.21919 275 de5ffaf5b665b622658d80bed97ba2a5 "bibtex kinetic_ai"
-  "kinetic_ai.out" 1787337420.61019 8371 fb0495386576b02e72818ba522757d11 "pdflatex"
-  "kinetic_ai.tex" 1787337409.84615 34142 91307a3b22902ddebe396c10c449e8a8 ""
+  "figures/fig_anderson_stiffness.pdf" 1787370971.25151 12413 3c5291eb05511f612844d182676c253c ""
+  "figures/fig_auction_regret.pdf" 1787370971.37851 21191 82a6d228f4b0a327e49ae728e6f14263 ""
+  "figures/fig_deq_memory.pdf" 1787370971.20451 15681 526e9fb84ac280e787499add002de4a0 ""
+  "figures/fig_eqlm_loss_curves.pdf" 1787370971.43651 17012 2c071c8a78a19e79818af48fe9ac1edb ""
+  "figures/fig_h1_iterations.pdf" 1787370971.60851 24955 85ffb955681c55a78ddf5e1bbe908a5d ""
+  "figures/fig_mmd_convergence.pdf" 1787370971.15451 24712 ab68787f87d2f2b1cdb4e9d7ea8594a8 ""
+  "figures/fig_warm_start.pdf" 1787370971.51951 25603 af7f0ff3ce742d56c8e0899365b38df3 ""
+  "kinetic_ai.aux" 1787370975.92853 10896 c65df05d32c8ba10dd597df93e918e97 "pdflatex"
+  "kinetic_ai.bbl" 1787370975.53553 275 de5ffaf5b665b622658d80bed97ba2a5 "bibtex kinetic_ai"
+  "kinetic_ai.out" 1787370975.92853 10001 d2d910ae3962ee80811d1a37cff53caf "pdflatex"
+  "kinetic_ai.tex" 1787370931.97337 41144 27c75fd42a55a40fc5f0756fd5f9dc56 ""
   (generated)
   "kinetic_ai.aux"
   "kinetic_ai.log"

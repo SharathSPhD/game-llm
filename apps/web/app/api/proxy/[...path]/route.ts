@@ -30,12 +30,14 @@ const POST_ALLOWLIST = new Set([
   "/api/qre_path",
   "/api/auction",
   "/api/jobs",
+  "/api/models/publish",
 ]);
 const GET_ALLOWLIST_EXACT = new Set([
   "/api/results",
   "/api/jobs",
   "/api/experiments",
   "/api/runs",
+  "/api/models",
 ]);
 const GET_ALLOWLIST_PREFIX = ["/api/jobs/"];
 

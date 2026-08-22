@@ -1,0 +1,74 @@
+arms:
+  A1:
+    config:
+      d_ff: 3072
+      d_model: 768
+      dropout: 0.1
+      max_seq_len: 128
+      n_heads: 12
+      n_layers: 12
+      vocab_size: 50257
+    name: ExplicitLM-110M
+    optimizer: adamw
+  A2:
+    config:
+      aux_residual: true
+      d_ff: 3072
+      d_model: 768
+      deq_max_iter: 12
+      deq_tol: 1e-3
+      dropout: 0.1
+      jfb: false
+      map_form: postln
+      max_seq_len: 128
+      n_heads: 12
+      residual_damping: 0.2
+      solver: anderson
+      spectral_norm: true
+      vocab_size: 50257
+    lambda_aux: 0.01
+    name: EqLM-v4-110M
+    optimizer: adamw
+  A3:
+    config:
+      aux_residual: false
+      d_ff: 3072
+      d_model: 768
+      deq_max_iter: 12
+      deq_tol: 1e-3
+      dropout: 0.1
+      jfb: false
+      map_form: postln
+      max_seq_len: 128
+      n_heads: 12
+      residual_damping: 0.2
+      solver: anderson
+      spectral_norm: true
+      vocab_size: 50257
+    name: EqLM-v3-110M
+    optimizer: adamw
+data:
+  batch_size: 32
+  dataset: BabyLM-2026-Strict
+  seq_len: 128
+  subset_size: 35000000
+eval:
+  blimp:
+    cache_dir: ~/.cache/huggingface/hub
+    num_phenomena: 5
+    pairs_per_phenomenon: 200
+  blimp_pairs: 2000
+notes: 'exp10 FULL: 110M-class matched arms, 10k steps, full-scale H1 ratio + HF checkpoint
+  source'
+tokenizer:
+  prefer_gpt2: true
+  vocab_size: 50257
+training:
+  grad_clip: 1.0
+  log_every: 100
+  lr: 3e-4
+  num_epochs: 132
+  num_steps: 10000
+  seed: 42
+  warmup_steps: 0
+  weight_decay: 0.01

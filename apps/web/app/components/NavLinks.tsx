@@ -12,6 +12,7 @@ export function NavLinks() {
     { href: "/qre", label: "QRE" },
     { href: "/auction", label: "Auction" },
     { href: "/studio", label: "Studio" },
+    { href: "/models", label: "Models" },
     { href: "/findings", label: "Findings" },
   ];
 

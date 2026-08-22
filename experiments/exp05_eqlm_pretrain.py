@@ -33,12 +33,12 @@ from kinetic_ai.data import (
 )
 from kinetic_ai.eval.blimp import evaluate_blimp_subset, load_blimp_subset
 from kinetic_ai.models.eqlm import (
-    save_checkpoint,
     EqLM,
     EqLMConfig,
     ExplicitLM,
     count_params,
     match_explicit_width,
+    save_checkpoint,
 )
 from kinetic_ai.optim.magnetic_adamw import MagneticAdamW
 

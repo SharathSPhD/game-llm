@@ -161,3 +161,11 @@
   registry + HF push; EqLM-100M on GB10 before NeMo). Operator directives:
   registry+HF next, 100M first, paper continuously aligned.
 - next: backend restart; exp09 GPU smoke (H1'a/c); 100M timing probe; exp10.
+
+## [cycle 14 | 2026-08-22] EXP10 PROBE: memory advantage + loss lead appear at 110M scale
+- Probe (300 steps, 121-124M params matched): EqLM peak 6.2GB vs explicit 8.0GB
+  (-22% — O(1)-depth advantage first visible at LM scale); EqLM AHEAD on train
+  loss (6.79 vs 7.40 at step 275, same init) — width reverses the small-scale
+  pattern; cost 2.57 vs 0.46 s/step (5.6x; F19 warm-start is the decode answer).
+- exp10 full launched: 10k steps x 3 arms (~15.6 GPU-h), 35M-token stream,
+  checkpoints -> first HF publications.

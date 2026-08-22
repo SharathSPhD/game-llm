@@ -366,6 +366,61 @@ def fig_eqlm_loss_curves() -> None:
 # Config: 8a2fa16e (exp05_full), 8f3c8969 (exp05_full_v4), frozen from results
 # --------------------------------------------------------------------------- #
 
+def fig_warm_start() -> None:
+    """F19: Warm-started decoding reduces solver iterations 79% (7.91 -> 1.64 iters/token).
+
+    Per-prompt iteration counts (40 prompts × 25 tokens each):
+    - Cold baseline: max 12 iters/token (mean 7.91)
+    - Warm start: mean 1.64 iters/token (−79.3% reduction)
+
+    Frozen from results/exp09_adaptive/results.json H1a arrays (config sha 54698443, seed 7).
+    Shows per-prompt distribution with Okabe-Ito accessibility colors.
+    """
+    fig, ax = plt.subplots(figsize=(10, 5))
+
+    # Frozen data from exp09_adaptive/results.json (F19)
+    # 40 prompts, each generating up to 25 tokens
+    cold_iters = np.array([8.0, 8.08, 8.0, 8.0, 8.04, 8.32, 8.24, 8.24, 8.0, 8.12, 8.32, 8.36, 8.0, 8.28,
+                          8.12, 8.28, 8.0, 8.04, 8.0, 8.0, 5.44, 5.12, 8.0, 8.0, 8.04, 8.28, 8.04, 8.04,
+                          6.52, 8.16, 8.0, 8.0, 8.0, 8.0, 6.28, 8.28, 9.24, 8.04, 8.08, 8.28])
+    warm_iters = np.array([1.64, 1.56, 1.52, 1.4, 1.56, 1.68, 1.72, 1.52, 1.6, 1.76, 1.72, 1.8, 1.64, 1.72,
+                          1.6, 1.64, 1.6, 1.44, 1.6, 1.64, 1.64, 1.48, 1.6, 1.64, 1.44, 1.64, 1.68, 1.56,
+                          1.8, 1.6, 1.64, 1.64, 1.92, 1.56, 1.6, 1.72, 2.24, 1.68, 1.52, 1.56])
+
+    prompts = np.arange(1, len(cold_iters) + 1)
+
+    # Plot bars for cold vs warm
+    x = np.arange(len(prompts))
+    width = 0.35
+
+    bars1 = ax.bar(x - width/2, cold_iters, width, label="Cold start (max 12 iters)",
+                   color=C_CONTROL, alpha=0.75, edgecolor="black", linewidth=0.7)
+    bars2 = ax.bar(x + width/2, warm_iters, width, label="Warm start (z from prev token)",
+                   color=C_TREATMENT, alpha=0.75, edgecolor="black", linewidth=0.7)
+
+    # Add mean lines
+    cold_mean = cold_iters.mean()
+    warm_mean = warm_iters.mean()
+    ax.axhline(y=cold_mean, color=C_CONTROL, linestyle="--", linewidth=2.0, alpha=0.7,
+               label=f"Cold mean: {cold_mean:.2f}", zorder=2)
+    ax.axhline(y=warm_mean, color=C_TREATMENT, linestyle="--", linewidth=2.0, alpha=0.7,
+               label=f"Warm mean: {warm_mean:.2f}", zorder=2)
+
+    ax.set_xlabel("Prompt Index", fontsize=11)
+    ax.set_ylabel("Mean Iterations per Token (over 25 tokens)", fontsize=11)
+    ax.set_title("F19: Warm-Started Equilibrium Decoding (exp09, 40 prompts, −79.3% reduction)",
+                fontsize=12, fontweight="bold")
+    ax.set_xticks([0, 9, 19, 29, 39])
+    ax.set_xticklabels(["1", "10", "20", "30", "40"])
+    ax.set_ylim([0, 10])
+    ax.legend(loc="upper right", frameon=True, fontsize=10)
+    despine(ax)
+    ygrid(ax)
+
+    fig.tight_layout()
+    save(fig, "fig_warm_start.pdf")
+
+
 def fig_h1_iterations() -> None:
     """F18: H1 iteration trajectory showing BLiMP ratio progression.
 
@@ -459,6 +514,7 @@ if __name__ == "__main__":
         fig_anderson_stiffness()
         fig_auction_regret()
         fig_eqlm_loss_curves()
+        fig_warm_start()
         fig_h1_iterations()
         print("\n✓ All figures generated successfully.")
     except SystemExit as e:

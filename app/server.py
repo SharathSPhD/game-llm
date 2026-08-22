@@ -16,6 +16,7 @@ from __future__ import annotations
 
 import json
 import os
+import time
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
@@ -32,6 +33,11 @@ from kinetic_ai.mechanisms.auctions import AuctionConfig, AuctionType, TokenAuct
 from kinetic_ai.optim.bregman import NegativeEntropy
 from kinetic_ai.optim.mmd import mmd_strategy_update
 from kinetic_ai.serve.executor import JobInput, LocalExecutor
+from kinetic_ai.serve.hf_publish import (
+    get_checkpoint_metadata,
+    get_metrics_from_results_json,
+    publish_checkpoint_to_hf,
+)
 
 # ─── Config ──────────────────────────────────────────────────────────────────
 
@@ -956,6 +962,243 @@ async def get_runs_registry(
                 pass
 
     return {"runs": runs}
+
+
+# ─── Models Registry (Capability 2) ──────────────────────────────────────────
+
+
+# Cache state: (timestamp, result)
+_model_registry_cache: tuple[float, list[dict[str, Any]]] | None = None
+_CACHE_TTL_SECONDS = 30
+
+
+def scan_models_registry() -> list[dict[str, Any]]:
+    """Scan results/**/*.pt checkpoints and return metadata with caching.
+
+    Returns:
+        List of checkpoint metadata dicts with keys:
+          - path: relative path (e.g., "exp09/checkpoints/model.pt")
+          - size_mb: file size in MB
+          - config: checkpoint config dict
+          - model_class: "EqLM" or "ExplicitLM"
+          - params_estimate: estimated parameter count
+          - run: dict with config_sha and git_commit from sibling results.json
+    """
+    global _model_registry_cache
+
+    now = time.time()
+    if _model_registry_cache is not None:
+        timestamp, cached_result = _model_registry_cache
+        if now - timestamp < _CACHE_TTL_SECONDS:
+            return cached_result
+
+    results = []
+    results_dir = Path(get_results_dir())
+
+    if not results_dir.exists():
+        _model_registry_cache = (now, [])
+        return []
+
+    # Find all .pt files in results directory (bounded depth: max 4 levels)
+    # Pattern: results/exp*/checkpoints/*.pt or similar
+    for pt_file in sorted(results_dir.rglob("*.pt")):
+        # Security: ensure file is within results/
+        try:
+            relative_path = pt_file.relative_to(results_dir)
+        except ValueError:
+            continue  # Outside results/
+
+        # Skip if depth too deep (prevent traversal issues)
+        if len(relative_path.parts) > 4:
+            continue
+
+        # Skip if not in a reasonable checkpoint path
+        if "checkpoint" not in str(pt_file).lower() and "model" not in str(pt_file).lower():
+            continue
+
+        try:
+            # Get file size
+            size_bytes = pt_file.stat().st_size
+            size_mb = size_bytes / (1024 * 1024)
+
+            # Load metadata without instantiating model
+            metadata = get_checkpoint_metadata(pt_file)
+            config = metadata.get("config")
+            model_class = metadata.get("model_class", "unknown")
+
+            # Estimate parameters from config
+            params_estimate = 0
+            if (
+                config is not None
+                and hasattr(config, "d_model")
+                and hasattr(config, "n_heads")
+            ):
+                d = config.d_model
+                h = config.n_heads
+                # Rough estimate: emb + attention + FFN layers
+                # This is a lower bound; actual model may have more
+                if hasattr(config, "vocab_size"):
+                    params_estimate += config.vocab_size * d
+                if hasattr(config, "deq_max_iter"):
+                    # DEQ: single block repeated
+                    params_estimate += d * (d + h * d + 4 * d * d)
+                else:
+                    # Explicit: n_layers blocks
+                    n_layers = metadata.get("n_layers", 12)
+                    params_estimate += n_layers * (d * (d + h * d + 4 * d * d))
+
+            # Extract metrics from sibling results.json
+            run_dir = pt_file.parent.parent  # checkpoint is in run_dir/checkpoints/
+            run_metrics = get_metrics_from_results_json(run_dir)
+            config_sha = run_metrics.pop("config_sha", "unknown")
+            git_commit = run_metrics.pop("git_commit", "unknown")
+
+            results.append({
+                "path": str(relative_path),
+                "size_mb": round(size_mb, 2),
+                "config": {
+                    "d_model": getattr(config, "d_model", None),
+                    "n_heads": getattr(config, "n_heads", None),
+                    "d_ff": getattr(config, "d_ff", None),
+                    "vocab_size": getattr(config, "vocab_size", None),
+                    "map_form": getattr(config, "map_form", None),
+                },
+                "model_class": model_class,
+                "params_estimate": params_estimate,
+                "run": {
+                    "config_sha": config_sha,
+                    "git_commit": git_commit,
+                },
+            })
+        except Exception:
+            # Skip checkpoints that fail to load
+            continue
+
+    _model_registry_cache = (now, results)
+    return results
+
+
+@app.get("/api/models")
+async def get_models_registry(
+    authorization: str | None = Header(None),
+) -> list[dict[str, Any]]:
+    """Get models registry (cached, 30s TTL).
+
+    Returns:
+        [
+            {
+                "path": "exp09_adaptive/checkpoints/eqlm.pt",
+                "size_mb": 45.2,
+                "config": {
+                    "d_model": 768,
+                    "n_heads": 12,
+                    "d_ff": 3072,
+                    "vocab_size": 50257,
+                    "map_form": "residual"
+                },
+                "model_class": "EqLM",
+                "params_estimate": 12345678,
+                "run": {
+                    "config_sha": "abc123...",
+                    "git_commit": "def456..."
+                }
+            },
+            ...
+        ]
+    """
+    require_bearer_auth(authorization)
+    return scan_models_registry()
+
+
+@app.post("/api/models/publish")
+async def publish_models_endpoint(
+    body: dict,
+    authorization: str | None = Header(None),
+) -> dict:
+    """Publish a checkpoint to Hugging Face Hub.
+
+    Request body:
+        {
+            "checkpoint_path": "exp09_adaptive/checkpoints/eqlm.pt",
+            "repo_id": "kinetic-ai/eqlm-babylm-10m"
+        }
+
+    Returns:
+        {
+            "repo_url": "https://huggingface.co/kinetic-ai/eqlm-babylm-10m"
+        }
+
+    Raises:
+        400: checkpoint not found, traversal attempt, invalid repo_id
+        503: HF auth failed or upload failed
+    """
+    require_bearer_auth(authorization)
+
+    checkpoint_path = body.get("checkpoint_path", "")
+    repo_id = body.get("repo_id", "")
+
+    if not checkpoint_path:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="checkpoint_path required",
+        )
+
+    if not repo_id:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="repo_id required",
+        )
+
+    # Validate repo_id format
+    if "/" not in repo_id or len(repo_id.split("/")) != 2:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="repo_id must be in format 'owner/name'",
+        )
+
+    # Security: prevent traversal attacks
+    results_dir = Path(get_results_dir()).resolve()
+    full_path = (results_dir / checkpoint_path).resolve()
+
+    try:
+        full_path.relative_to(results_dir)
+    except ValueError as e:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Path traversal detected. checkpoint_path must be inside results/",
+        ) from e
+
+    if not full_path.exists():
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"Checkpoint not found: {checkpoint_path}",
+        )
+
+    # Attempt publish
+    try:
+        repo_url = publish_checkpoint_to_hf(full_path, repo_id)
+        return {"repo_url": repo_url}
+    except RuntimeError as e:
+        error_msg = str(e)
+        if "authentication" in error_msg.lower() or "token" in error_msg.lower():
+            raise HTTPException(
+                status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+                detail=f"Hugging Face authentication failed: {error_msg}",
+            ) from e
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail=f"Failed to publish: {error_msg}",
+        ) from e
+    except ValueError as e:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=str(e),
+        ) from e
+    except FileNotFoundError as e:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=str(e),
+        ) from e
 
 
 if __name__ == "__main__":

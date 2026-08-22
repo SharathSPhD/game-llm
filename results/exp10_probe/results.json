@@ -1,0 +1,250 @@
+{
+  "iteration": 3,
+  "refinement_reason": "Iteration 3: MagneticAdamW (tau=1e-2, ema mode) replaces raw MMD; EqLM/ExplicitLM init-scale fix (embeddings std=0.02, logits scaled by sqrt(d_model)); DEQ solver stats exposed cleanly",
+  "arms": {
+    "A1": {
+      "loss_curve": [
+        {
+          "step": 0,
+          "loss": 10.822502136230469
+        },
+        {
+          "step": 25,
+          "loss": 10.497172355651855
+        },
+        {
+          "step": 50,
+          "loss": 10.184220314025879
+        },
+        {
+          "step": 75,
+          "loss": 9.851083755493164
+        },
+        {
+          "step": 100,
+          "loss": 9.476333618164062
+        },
+        {
+          "step": 125,
+          "loss": 9.177679061889648
+        },
+        {
+          "step": 150,
+          "loss": 8.819113731384277
+        },
+        {
+          "step": 175,
+          "loss": 8.492032051086426
+        },
+        {
+          "step": 200,
+          "loss": 8.239740371704102
+        },
+        {
+          "step": 225,
+          "loss": 7.930018901824951
+        },
+        {
+          "step": 250,
+          "loss": 7.707038879394531
+        },
+        {
+          "step": 275,
+          "loss": 7.399112224578857
+        }
+      ],
+      "total_time_sec": 137.25517535209656,
+      "peak_memory_mb": 8177.603515625,
+      "total_steps": 300,
+      "num_params": 123760908,
+      "model_name": "ExplicitLM",
+      "config": {
+        "vocab_size": 50257,
+        "d_model": 768,
+        "n_heads": 12,
+        "d_ff": 3072,
+        "max_seq_len": 128,
+        "deq_max_iter": 12,
+        "deq_tol": 0.001,
+        "solver": "anderson",
+        "jfb": true,
+        "dropout": 0.1,
+        "spectral_norm": true,
+        "residual_damping": 0.2,
+        "map_form": "residual",
+        "aux_residual": false,
+        "lambda_aux": 0.1
+      },
+      "blimp_accuracy": 0.457,
+      "blimp_num_correct": 457,
+      "blimp_num_total": 1000
+    },
+    "A2": {
+      "loss_curve": [
+        {
+          "step": 0,
+          "loss": 10.8248872756958
+        },
+        {
+          "step": 25,
+          "loss": 10.46363353729248
+        },
+        {
+          "step": 50,
+          "loss": 10.075654983520508
+        },
+        {
+          "step": 75,
+          "loss": 9.636215209960938
+        },
+        {
+          "step": 100,
+          "loss": 9.137312889099121
+        },
+        {
+          "step": 125,
+          "loss": 8.74559497833252
+        },
+        {
+          "step": 150,
+          "loss": 8.283085823059082
+        },
+        {
+          "step": 175,
+          "loss": 7.883153915405273
+        },
+        {
+          "step": 200,
+          "loss": 7.611374378204346
+        },
+        {
+          "step": 225,
+          "loss": 7.274996757507324
+        },
+        {
+          "step": 250,
+          "loss": 7.080042362213135
+        },
+        {
+          "step": 275,
+          "loss": 6.7849955558776855
+        }
+      ],
+      "total_time_sec": 771.7227442264557,
+      "peak_memory_mb": 6330.86279296875,
+      "total_steps": 300,
+      "solver_mean_iterations": 12.0,
+      "solver_convergence_rate": 0.0,
+      "solver_max_iterations": 12,
+      "solver_min_iterations": 12,
+      "num_params": 120696016,
+      "model_name": "EqLM",
+      "config": {
+        "vocab_size": 50257,
+        "d_model": 1704,
+        "n_heads": 12,
+        "d_ff": 6807,
+        "max_seq_len": 128,
+        "deq_max_iter": 12,
+        "deq_tol": 0.001,
+        "solver": "anderson",
+        "jfb": false,
+        "dropout": 0.1,
+        "spectral_norm": true,
+        "residual_damping": 0.2,
+        "map_form": "postln",
+        "aux_residual": false,
+        "lambda_aux": 0.1
+      },
+      "blimp_accuracy": 0.443,
+      "blimp_num_correct": 443,
+      "blimp_num_total": 1000
+    },
+    "A3": {
+      "loss_curve": [
+        {
+          "step": 0,
+          "loss": 10.82439136505127
+        },
+        {
+          "step": 25,
+          "loss": 10.456719398498535
+        },
+        {
+          "step": 50,
+          "loss": 10.067059516906738
+        },
+        {
+          "step": 75,
+          "loss": 9.628692626953125
+        },
+        {
+          "step": 100,
+          "loss": 9.130881309509277
+        },
+        {
+          "step": 125,
+          "loss": 8.745832443237305
+        },
+        {
+          "step": 150,
+          "loss": 8.28864574432373
+        },
+        {
+          "step": 175,
+          "loss": 7.893692493438721
+        },
+        {
+          "step": 200,
+          "loss": 7.62461519241333
+        },
+        {
+          "step": 225,
+          "loss": 7.289302349090576
+        },
+        {
+          "step": 250,
+          "loss": 7.094773292541504
+        },
+        {
+          "step": 275,
+          "loss": 6.797177791595459
+        }
+      ],
+      "total_time_sec": 771.8582928180695,
+      "peak_memory_mb": 7804.11376953125,
+      "total_steps": 300,
+      "solver_mean_iterations": 12.0,
+      "solver_convergence_rate": 0.0,
+      "solver_max_iterations": 12,
+      "solver_min_iterations": 12,
+      "num_params": 120696016,
+      "model_name": "EqLM-v3-110M",
+      "config": {
+        "vocab_size": 50257,
+        "d_model": 1704,
+        "n_heads": 12,
+        "d_ff": 6807,
+        "max_seq_len": 128,
+        "deq_max_iter": 12,
+        "deq_tol": 0.001,
+        "solver": "anderson",
+        "jfb": false,
+        "dropout": 0.1,
+        "spectral_norm": true,
+        "residual_damping": 0.2,
+        "map_form": "postln",
+        "aux_residual": false,
+        "lambda_aux": 0.1
+      },
+      "optimizer": "adamw",
+      "blimp_accuracy": 0.439,
+      "blimp_num_correct": 439,
+      "blimp_num_total": 1000
+    }
+  },
+  "config_hash": "f7731f4fca0212972689ad08d2a4bd5871b004e539932f73b367bdeebb3a5f76",
+  "git_commit": "eb4703d41ef3ddc9aa684d631483a46912182695",
+  "tokenizer_choice": "gpt2",
+  "notes": "SMOKE test for SPEC 0004 Tier B; real token budget (~3.3M) per arm, parameter-matched arms within 5%, A3 now uses MagneticAdamW"
+}
