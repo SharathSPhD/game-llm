@@ -248,6 +248,51 @@ def measure_warm_start_decoding(
     return results
 
 
+
+
+def measure_budget_scaling(model, config: dict, device: str) -> dict:
+    """H1'c: BLiMP-subset accuracy as a function of eval-time solver budget.
+
+    Uses the SAME trained model; only deq.config.max_iter changes per arm.
+    """
+    from exp05_eqlm_pretrain import create_gpt2_tokenizer_fn
+
+    from kinetic_ai.eval.blimp import evaluate_blimp_subset, load_blimp_subset
+
+    eval_cfg = config.get("eval", {})
+    budgets = [int(b) for b in eval_cfg.get("max_iters", [12])]
+    n_pairs = int(eval_cfg.get("blim_pairs", eval_cfg.get("blimp_pairs", 200)))
+
+    tokenizer_fn = create_gpt2_tokenizer_fn("gpt2")
+    subset = load_blimp_subset(
+        num_phenomena=5, pairs_per_phenomenon=max(1, n_pairs // 5)
+    )
+    if subset is None:
+        return {"error": "blimp subset unavailable"}
+
+    model = model.to(device)
+    model.eval()
+    original_max_iter = model.deq.config.max_iter
+    out: dict = {"budgets": {}, "n_pairs": n_pairs}
+    try:
+        for budget in budgets:
+            model.deq.config.max_iter = budget
+            res = evaluate_blimp_subset(
+                model, subset, tokenizer_fn, device=device, max_samples=n_pairs
+            )
+            out["budgets"][str(budget)] = {
+                "accuracy": res.get("accuracy"),
+                "n": res.get("num_total", res.get("n")),
+            }
+            print(f"  H1'c budget={budget}: BLiMP {res.get('accuracy')}")
+    finally:
+        model.deq.config.max_iter = original_max_iter
+    accs = [v["accuracy"] for v in out["budgets"].values() if v["accuracy"] is not None]
+    out["monotone_nondecreasing"] = bool(
+        all(accs[i] <= accs[i + 1] + 1e-9 for i in range(len(accs) - 1))
+    ) if len(accs) > 1 else None
+    return out
+
 def main() -> None:
     """Main experiment runner."""
     parser = argparse.ArgumentParser(description="EXP09: H1′ Adaptive-Equilibrium")
@@ -280,13 +325,17 @@ def main() -> None:
     model_loaded = load_checkpoint(str(checkpoint_path))
     print("\nCheckpoint roundtrip: ✓ Verified")
 
-    # H1′a: Warm-start decoding
+    # H1′a: Warm-start decoding (probe sizes from config)
+    probe = config.get("decode_probe", {})
     results_h1a = measure_warm_start_decoding(
         model_loaded,
         args.device,
-        num_prompts=3,
-        max_new_tokens=5,
+        num_prompts=int(probe.get("num_prompts", 3)),
+        max_new_tokens=int(probe.get("max_new_tokens", 5)),
     )
+
+    # H1′c: eval-time solver budget scaling on BLiMP subset
+    results_h1c = measure_budget_scaling(model_loaded, config, args.device)
 
     # Compile final results
     final_results = {
@@ -294,6 +343,7 @@ def main() -> None:
         "device": args.device,
         "num_steps": config["training"]["num_steps"],
         "H1a_warm_start": results_h1a,
+        "H1c_budget_scaling": results_h1c,
     }
 
     # Save results

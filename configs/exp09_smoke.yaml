@@ -1,47 +1,41 @@
-# EXP09 SMOKE: Adaptive-Equilibrium Program (H1′)
-# Measures: (i) warm-start decoding iterations, (ii) per-token early-exit,
-# (iii) eval-time budget scaling, (iv) residual vs error correlation
-#
-# CPU dry-run config: minimal steps to verify end-to-end pipeline works
-
 data:
-  dataset: "BabyLM-2026-Strict-Small"
-  max_tokens: 20000  # Small for CPU smoke test (20k tokens)
+  dataset: BabyLM-2026-Strict-Small
+  max_tokens: 1300000
   seq_len: 128
-
+decode_probe:
+  max_new_tokens: 25
+  num_prompts: 40
+eval:
+  blim_pairs: 500
+  eval_tol: 0.01
+  max_iters:
+  - 6
+  - 12
+  - 24
+  - 48
+log_interval: 1
+model:
+  aux_residual: true
+  d_ff: 538
+  d_model: 204
+  deq_max_iter: 24
+  deq_tol: 1e-2
+  dropout: 0.1
+  lambda_aux: 0.01
+  map_form: postln
+  max_seq_len: 128
+  n_heads: 4
+  residual_damping: 0.2
+  solver: anderson
+  spectral_norm: true
+  vocab_size: 50257
+output_dir: results/exp09_adaptive
 tokenizer:
   vocab_size: 50257
-
 training:
-  seed: 42
-  num_steps: 3  # CPU smoke: just 3 steps to verify pipeline
-  batch_size: 2
+  batch_size: 32
+  grad_clip: 1.0
   log_every: 1
   lr: 1e-4
-  grad_clip: 1.0
-
-model:
-  vocab_size: 50257
-  d_model: 64      # Tiny for smoke test
-  n_heads: 2
-  d_ff: 256
-  max_seq_len: 128
-  deq_max_iter: 12
-  deq_tol: 1e-2
-  solver: "anderson"
-  dropout: 0.1
-  residual_damping: 0.2
-  map_form: "postln"
-  spectral_norm: true
-  aux_residual: true
-  lambda_aux: 0.01
-
-# Evaluation config: budget scaling for H1′c
-eval:
-  blim_pairs: 50  # Tiny eval set for smoke (50 pairs)
-  max_iters: [6, 12]  # Eval-time budget scaling: {6, 12} (not full {12,24,48} for smoke)
-  eval_tol: 1e-2
-
-# Output
-output_dir: "results/exp09_adaptive"
-log_interval: 1
+  num_steps: 500
+  seed: 42
