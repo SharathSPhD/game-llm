@@ -169,3 +169,13 @@
   pattern; cost 2.57 vs 0.46 s/step (5.6x; F19 warm-start is the decode answer).
 - exp10 full launched: 10k steps x 3 arms (~15.6 GPU-h), 35M-token stream,
   checkpoints -> first HF publications.
+
+## [cycle 14b | 2026-08-22] REGISTRY LIVE; git hygiene for weights
+- Models registry + HF publisher deployed to GB10 backend (3 probe checkpoints
+  listed); /models UI shipped; known minor bugs: params_estimate math, exp09
+  checkpoint missed by scan (fix with capability-3 pass).
+- Git hygiene: 1.4GB probe checkpoints were in unpushed commits (408 on push);
+  results/**/checkpoints/ + *.pt now gitignored, commits rewritten - HF is the
+  weights channel, git is the code/results channel.
+- exp10 full (10k steps x 3 arms) training; harvest closes H1-at-scale +
+  first HF publications.
