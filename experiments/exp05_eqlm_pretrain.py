@@ -33,6 +33,7 @@ from kinetic_ai.data import (
 )
 from kinetic_ai.eval.blimp import evaluate_blimp_subset, load_blimp_subset
 from kinetic_ai.models.eqlm import (
+    save_checkpoint,
     EqLM,
     EqLMConfig,
     ExplicitLM,
@@ -450,6 +451,11 @@ def main():
         log_every,
         grad_clip=grad_clip,
     )
+    try:
+        save_checkpoint(a1_model, output_dir / "checkpoints" / "a1.pt")
+        print(f"Saved checkpoint: {output_dir}/checkpoints/a1.pt")
+    except Exception as e:  # checkpointing must never kill a finished run
+        print(f"WARNING: checkpoint save failed for A1: {e}")
     results["arms"]["A1"] = {
         **a1_results,
         "num_params": a1_params,
@@ -476,6 +482,11 @@ def main():
         grad_clip=grad_clip,
         lambda_aux=float(cfg["arms"]["A2"].get("lambda_aux", 0.0)),
     )
+    try:
+        save_checkpoint(a2_model, output_dir / "checkpoints" / "a2.pt")
+        print(f"Saved checkpoint: {output_dir}/checkpoints/a2.pt")
+    except Exception as e:  # checkpointing must never kill a finished run
+        print(f"WARNING: checkpoint save failed for A2: {e}")
     results["arms"]["A2"] = {
         **a2_results,
         "num_params": a2_params,
@@ -519,6 +530,11 @@ def main():
         grad_clip=grad_clip,
         lambda_aux=float(cfg["arms"]["A3"].get("lambda_aux", 0.0)),
     )
+    try:
+        save_checkpoint(a3_model, output_dir / "checkpoints" / "a3.pt")
+        print(f"Saved checkpoint: {output_dir}/checkpoints/a3.pt")
+    except Exception as e:  # checkpointing must never kill a finished run
+        print(f"WARNING: checkpoint save failed for A3: {e}")
     results["arms"]["A3"] = {
         **a3_results,
         "num_params": a3_params,

@@ -1385,3 +1385,27 @@ class TestWarmStartActuallyWarm:
         # scored in exp09 — a contraction-trained toy sits at the 2-iteration
         # floor where warm-starting cannot help (documented in F19).
         assert len(info_w["iter_counts"]) == len(info_c["iter_counts"]) == 10
+
+
+class TestExplicitCheckpointRoundtrip:
+    """save/load_checkpoint must support ExplicitLM too (exp10 needs both)."""
+
+    def test_explicitlm_roundtrip(self, tmp_path) -> None:
+        from kinetic_ai.models.eqlm import (
+            ExplicitLM,
+            load_checkpoint,
+            save_checkpoint,
+        )
+
+        torch.manual_seed(0)
+        cfg = EqLMConfig(vocab_size=50, d_model=16, n_heads=2, d_ff=32, max_seq_len=16)
+        m = ExplicitLM(config=cfg, n_layers=3)
+        m.eval()  # spectral-norm power iteration mutates state in train mode
+        p = tmp_path / "explicit.pt"
+        save_checkpoint(m, p)
+        m2 = load_checkpoint(p)
+        m2.eval()
+        assert type(m2).__name__ == "ExplicitLM"
+        ids = torch.randint(0, 50, (2, 8))
+        with torch.no_grad():
+            assert torch.allclose(m(ids), m2(ids), atol=1e-5)

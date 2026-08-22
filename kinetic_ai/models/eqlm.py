@@ -600,28 +600,31 @@ class ExplicitLM(nn.Module):
 # ============================================================================
 
 
-def save_checkpoint(model: EqLM, path: str | Path) -> None:
-    """Save an EqLM model and its config to a checkpoint file.
+def save_checkpoint(model: EqLM | ExplicitLM, path: str | Path) -> None:
+    """Save an EqLM or ExplicitLM model and its config to a checkpoint file.
 
-    Saves both the state_dict and EqLMConfig in a single .pt file for easy
-    restoration. Enables checkpoint management for long pretraining runs.
+    Saves the state_dict, EqLMConfig, and the model class (plus n_layers for
+    ExplicitLM) in a single .pt file for easy restoration.
 
     Args:
-        model: EqLM model to save.
+        model: EqLM or ExplicitLM model to save.
         path: Path to save checkpoint to (typically ends in .pt).
     """
     path = Path(path)
     path.parent.mkdir(parents=True, exist_ok=True)
 
-    checkpoint = {
+    checkpoint: dict[str, object] = {
         "state_dict": model.state_dict(),
         "config": model.config,
+        "model_class": type(model).__name__,
     }
+    if isinstance(model, ExplicitLM):
+        checkpoint["n_layers"] = len(model.layers)
 
     torch.save(checkpoint, str(path))
 
 
-def load_checkpoint(path: str | Path) -> EqLM:
+def load_checkpoint(path: str | Path) -> EqLM | ExplicitLM:
     """Load an EqLM model from a checkpoint file.
 
     Reconstructs the model from saved state_dict and config.
@@ -637,8 +640,13 @@ def load_checkpoint(path: str | Path) -> EqLM:
     # The checkpoint is trusted (we created it ourselves).
     checkpoint = torch.load(str(path), map_location="cpu", weights_only=False)
 
-    config = checkpoint["config"]
-    model = EqLM(config)
+    checkpoint["config"]
+    if checkpoint.get("model_class") == "ExplicitLM":
+        model: EqLM | ExplicitLM = ExplicitLM(
+            config=checkpoint["config"], n_layers=int(checkpoint.get("n_layers", 4))
+        )
+    else:
+        model = EqLM(config=checkpoint["config"])
     model.load_state_dict(checkpoint["state_dict"])
 
     return model
