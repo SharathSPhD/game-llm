@@ -319,9 +319,11 @@ def main():
 
     try:
         from transformers import GPT2Tokenizer
-        tokenizer_fn = lambda text: GPT2Tokenizer.from_pretrained("gpt2", local_files_only=True).encode(text)
+        def tokenizer_fn(text):
+            return GPT2Tokenizer.from_pretrained("gpt2", local_files_only=True).encode(text)
     except Exception:
-        tokenizer_fn = lambda text: [int(t) if t.isdigit() else 0 for t in text.split()]
+        def tokenizer_fn(text):
+            return [int(t) if t.isdigit() else 0 for t in text.split()]
 
     dataset = load_babylm_dataset("BabyLM-2026-Strict-Small")
     token_tensor, num_seqs = build_token_stream(

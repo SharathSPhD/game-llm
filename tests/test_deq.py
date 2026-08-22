@@ -371,3 +371,31 @@ class TestPerPositionExit:
         )
         assert hasattr(config, "per_position_exit")
         assert config.per_position_exit is True
+
+
+class TestSolverZInit:
+    """DEQLayer must honor a provided z_init (warm start, H1'a plumbing)."""
+
+    def test_z_init_near_fixed_point_converges_faster(self) -> None:
+        torch.manual_seed(0)
+        W = torch.randn(16, 16)
+        W = 0.5 * W / torch.linalg.norm(W, 2)  # contraction
+        b = torch.randn(16)
+
+        def f(z: torch.Tensor, x: torch.Tensor) -> torch.Tensor:
+            return torch.tanh(z @ W.T + x + b)
+
+        config = DEQConfig(solver=SolverType.PICARD, max_iter=100, tol=1e-4)
+        deq = DEQLayer(f, config)
+        x = torch.randn(2, 16)
+
+        z_cold = deq(x)
+        cold_iters = deq.last_info["iterations"]
+
+        # Warm start from the converged solution: should exit almost instantly
+        z_warm = deq(x, z_init=z_cold.detach())
+        warm_iters = deq.last_info["iterations"]
+
+        assert isinstance(cold_iters, int) and isinstance(warm_iters, int)
+        assert warm_iters < cold_iters, (cold_iters, warm_iters)
+        assert torch.allclose(z_warm, z_cold, atol=1e-3)

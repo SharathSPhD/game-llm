@@ -448,22 +448,27 @@ class DEQLayer(nn.Module):
         self.config = config or DEQConfig()
         self.last_info: dict[str, object] = {}
 
-    def forward(self, x: Tensor) -> Tensor:
+    def forward(self, x: Tensor, z_init: Tensor | None = None) -> Tensor:
         """Find the equilibrium state z* = f(z*, x).
 
         Args:
             x: Input tensor. The fixed point z* will have the same batch
                 dimensions as x.
+            z_init: Optional warm-start initialization for the solver
+                (H1'a). Must match the fixed point's shape. When None,
+                the solver starts from zeros.
 
         Returns:
             The equilibrium state z*.
         """
-        # Initialize z with zeros
         with torch.no_grad():
-            z_init = torch.zeros_like(x)
-            # Determine output shape from a test forward
-            test_out = self.func(z_init, x)
-            z_init = torch.zeros_like(test_out)
+            if z_init is None:
+                # Initialize z with zeros (shape determined by a test forward)
+                probe = torch.zeros_like(x)
+                test_out = self.func(probe, x)
+                z_init = torch.zeros_like(test_out)
+            else:
+                z_init = z_init.detach()
 
             # Call solver directly to capture solver diagnostics
             if self.config.solver == SolverType.ANDERSON:

@@ -31,13 +31,16 @@ Example remote handler (RunPod serverless contract):
 
 from __future__ import annotations
 
+import hashlib
 import json
 import os
+import subprocess
 import threading
 import time
 import uuid
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
+from pathlib import Path
 from typing import Any
 
 import requests
@@ -149,6 +152,7 @@ class LocalExecutor(Executor):
         self,
         max_workers: int = 2,
         state_file: str | None = None,
+        mock_experiments: bool = False,
     ) -> None:
         self.max_workers = max_workers
         if state_file is None:
@@ -163,6 +167,7 @@ class LocalExecutor(Executor):
         self.state_file = state_file
         self._jobs: dict[str, dict[str, Any]] = {}
         self._lock = threading.Lock()
+        self.mock_experiments = mock_experiments
 
     def _is_gpu_locked(self) -> bool:
         """Check if GPU is locked in state.json."""
@@ -189,8 +194,126 @@ class LocalExecutor(Executor):
             # Demo job: sleep 5s and return a message
             time.sleep(5)
             return {"message": "noop_demo completed"}
+        elif job.type == "experiment":
+            return self._run_experiment_job(job)
         else:
             raise ValueError(f"Unknown job type: {job.type}")
+
+    def _run_experiment_job(self, job: JobInput) -> Any:
+        """Execute experiment via subprocess.
+
+        Expects job.params to contain:
+            - template_id: experiment template (exp05_eqlm_pretrain, exp08_solver_aware, ...)
+            - resolved_config_path: path to resolved config YAML
+            - output_dir: path to output directory
+
+        Returns dict with job_dir, config_hash, git_commit.
+        """
+        import shutil  # noqa: F401
+
+        template_id: str | None = job.params.get("template_id")
+        config_path: str | None = job.params.get("resolved_config_path")
+        output_dir: str | None = job.params.get("output_dir")
+
+        if not all([template_id, config_path, output_dir]):
+            raise ValueError(
+                f"Experiment job missing required params: template_id={template_id}, "
+                f"config_path={config_path}, output_dir={output_dir}"
+            )
+
+        # Type assertions after validation
+        assert isinstance(template_id, str)
+        assert isinstance(config_path, str)
+        assert isinstance(output_dir, str)
+
+        # Map template_id to experiment script
+        experiment_mapping = {
+            "exp05_eqlm_pretrain": "experiments/exp05_eqlm_pretrain.py",
+            "exp08_solver_aware": "experiments/exp08_solver_aware.py",
+        }
+
+        script_path = experiment_mapping.get(template_id)
+        if not script_path:
+            raise ValueError(
+                f"Unknown template_id: {template_id}. "
+                f"Allowed: {list(experiment_mapping.keys())}"
+            )
+
+        # Ensure output directory exists
+        Path(output_dir).mkdir(parents=True, exist_ok=True)
+
+        # Compute config hash
+        with open(config_path) as f:
+            config_yaml = f.read()
+        config_hash = hashlib.md5(config_yaml.encode()).hexdigest()
+
+        # Get current git commit
+        try:
+            git_commit = (
+                subprocess.run(
+                    ["git", "rev-parse", "HEAD"],
+                    cwd=Path(script_path).parent.parent,
+                    capture_output=True,
+                    text=True,
+                    timeout=5,
+                )
+                .stdout.strip()
+            )
+        except Exception:
+            git_commit = "unknown"
+
+        # Run experiment subprocess
+        cmd = [
+            str(Path(os.getcwd()) / ".venv" / "bin" / "python"),
+            str(Path(os.getcwd()) / script_path),
+            "--config",
+            str(Path(config_path).resolve()),
+            "--output",
+            str(Path(output_dir).resolve()),
+        ]
+
+        # Capture output to log file
+        log_file = Path(output_dir) / "run.log"
+
+        # For testing: mock mode skips actual execution. The env var is
+        # checked at submit time so behavior never depends on import order.
+        if self.mock_experiments or os.environ.get("KINETIC_MOCK_EXPERIMENTS") == "1":
+            with open(log_file, "w") as log_f:
+                log_f.write("Mock experiment execution (testing mode)\n")
+            # Write fake results
+            results_file = Path(output_dir) / "results.json"
+            with open(results_file, "w") as f:
+                json.dump({
+                    "experiment": template_id,
+                    "config_hash": config_hash,
+                    "git_commit": git_commit,
+                    "metrics": {"mock": True},
+                }, f)
+        else:
+            try:
+                with open(log_file, "w") as log_f:
+                    result = subprocess.run(
+                        cmd,
+                        cwd=Path(os.getcwd()),
+                        stdout=log_f,
+                        stderr=subprocess.STDOUT,
+                        text=True,
+                        timeout=3600 * 24,  # 24 hour timeout
+                    )
+                if result.returncode != 0:
+                    raise RuntimeError(f"Experiment failed with return code {result.returncode}")
+            except subprocess.TimeoutExpired as e:
+                raise RuntimeError("Experiment execution timed out (24h limit)") from e
+            except Exception as e:
+                raise RuntimeError(f"Experiment execution failed: {str(e)}") from e
+
+        # Return job metadata
+        return {
+            "job_dir": str(output_dir),
+            "config_hash": config_hash,
+            "git_commit": git_commit,
+            "log_file": str(log_file),
+        }
 
     def submit(self, job: JobInput) -> str:
         """Submit a job. Refuses if GPU is locked."""

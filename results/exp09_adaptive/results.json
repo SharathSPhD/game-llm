@@ -1,0 +1,22 @@
+{
+  "config_sha": "4c56228a93a1fd7787ddf1841a431669",
+  "device": "cpu",
+  "num_steps": 3,
+  "H1a_warm_start": {
+    "warm_iters": [
+      12.0,
+      12.0,
+      12.0
+    ],
+    "cold_iters": [
+      12.0,
+      12.0,
+      12.0
+    ],
+    "num_prompts": 3,
+    "max_new_tokens": 5,
+    "mean_cold_iters": 12.0,
+    "mean_warm_iters": 12.0,
+    "reduction_pct": 0.0
+  }
+}

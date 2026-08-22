@@ -25,8 +25,18 @@ import {
  *  - Replay mode (no GATEWAY_URL) serves canned demo data, no auth needed.
  */
 
-const POST_ALLOWLIST = new Set(["/api/solve", "/api/qre_path", "/api/auction", "/api/jobs"]);
-const GET_ALLOWLIST_EXACT = new Set(["/api/results", "/api/jobs"]);
+const POST_ALLOWLIST = new Set([
+  "/api/solve",
+  "/api/qre_path",
+  "/api/auction",
+  "/api/jobs",
+]);
+const GET_ALLOWLIST_EXACT = new Set([
+  "/api/results",
+  "/api/jobs",
+  "/api/experiments",
+  "/api/runs",
+]);
 const GET_ALLOWLIST_PREFIX = ["/api/jobs/"];
 
 function isAllowed(method: "GET" | "POST", endpoint: string): boolean {

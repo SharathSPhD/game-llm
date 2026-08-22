@@ -70,6 +70,10 @@ class DEQConfig:
         spectral_norm: Whether to apply spectral normalization for contraction.
         jfb: Jacobian-Free Backprop — use fixed-point iteration for backward
             pass instead of full implicit differentiation. Saves memory.
+        per_position_exit: If True, gate convergence per-position (H1′b).
+            Tracks relative residual per sequence position (norm over hidden dim only)
+            and freezes positions whose rel_residual < tol. Records position_iterations
+            [B,T] in info dict. Default False (batch-level convergence).
     """
 
     solver: SolverType = SolverType.ANDERSON
@@ -79,6 +83,7 @@ class DEQConfig:
     anderson_beta: float = 1.0
     spectral_norm: bool = True
     jfb: bool = False
+    per_position_exit: bool = False
 
 
 @dataclass

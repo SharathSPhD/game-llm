@@ -27,6 +27,7 @@ References:
 from __future__ import annotations
 
 from dataclasses import dataclass
+from pathlib import Path
 from typing import cast
 
 import torch
@@ -366,12 +367,16 @@ class EqLM(nn.Module):
 
         # Auxiliary residual loss (solver-aware): stores the last computed relative residual
         self.last_aux_residual: Tensor | None = None
+        self.last_z_star: Tensor | None = None
 
-    def forward(self, input_ids: Tensor) -> Tensor:
+    def forward(self, input_ids: Tensor, z_init: Tensor | None = None) -> Tensor:
         """Forward pass: compute logits for next-token prediction.
 
         Args:
             input_ids: Token indices [B, T].
+            z_init: Optional warm-start for the fixed-point solver [B, T, d]
+                (H1'a). The converged equilibrium of this forward is stored in
+                ``self.last_z_star`` for reuse by ``generate``.
 
         Returns:
             Logits [B, T, vocab_size].
@@ -388,7 +393,8 @@ class EqLM(nn.Module):
 
         # Solve fixed point: z* = f(z*) where f is the transformer block
         # Pass z as both z and x for DEQLayer interface (x is unused in this model)
-        z_star = self.deq(z)
+        z_star = self.deq(z, z_init=z_init)
+        self.last_z_star = z_star.detach()
 
         # ========== Auxiliary Residual Loss (Solver-Aware) ==========
         # If enabled, compute relative residual r = ||f(z*,x) − z*||/(||z*||+eps)
@@ -423,6 +429,91 @@ class EqLM(nn.Module):
         logits = logits / (self.config.d_model**0.5)
 
         return cast(Tensor, logits)
+
+    def generate(
+        self,
+        input_ids: Tensor,
+        max_new_tokens: int,
+        warm_start: bool = False,
+        return_iter_counts: bool = False,
+    ) -> Tensor | tuple[Tensor, dict[str, object]]:
+        """Greedy decoding with optional warm-start (H1′a).
+
+        Generates tokens one-at-a-time using greedy selection (argmax).
+        When warm_start=True, each decoding step initializes the DEQ solver
+        from the previous token's equilibrium state, reducing solver iterations.
+
+        Alignment choice for warm-start (H1′a specification):
+            Per-position state reuse: When solving for position T (new token),
+            we initialize z from the previous position T-1's converged z*.
+            Specifically:
+            - z_init_new = z_prev[..., -1:, :].expand(B, 1, d_model)
+            This reuses the last position's equilibrium as a warm start for the new position.
+            Rationale: The fixed-point map is smooth, so z*(x[T-1]) is a good starting
+            point for finding z*(x[T]) where x[T] is the new token embedding.
+
+        Args:
+            input_ids: Initial token sequence [B, T].
+            max_new_tokens: Number of tokens to generate.
+            warm_start: If True, reuse previous z* as initialization (H1′a).
+                       If False, start from zeros each step (baseline).
+            return_iter_counts: If True, return (output_ids, info_dict) with
+                               iteration counts per token.
+
+        Returns:
+            output_ids: Full sequence including new tokens [B, T + max_new_tokens].
+            info_dict (optional): If return_iter_counts=True, also returns
+                                 {"iter_counts": [max_new_tokens], "mean_iters": float}
+        """
+        batch_size, seq_len = input_ids.shape
+
+        output_ids = input_ids.clone()
+
+        iter_counts: list[int] = []
+
+        prev_z: Tensor | None = None
+        with torch.no_grad():
+            for _ in range(max_new_tokens):
+                z_init: Tensor | None = None
+                if warm_start and prev_z is not None:
+                    # Reuse converged equilibria of all prior positions; the new
+                    # position starts from the last position's equilibrium (the
+                    # map is smooth, so z*(t-1) is a good guess for z*(t)).
+                    z_init = torch.cat([prev_z, prev_z[:, -1:, :]], dim=1)
+
+                # Forward pass: predict logits for next token
+                logits = self(output_ids, z_init=z_init)  # [B, T, V]
+                prev_z = self.last_z_star
+
+                # Get logits for the last position
+                logits_last = logits[:, -1, :]  # [B, V]
+
+                # Greedy decoding: argmax
+                next_token = torch.argmax(logits_last, dim=-1, keepdim=True)  # [B, 1]
+
+                # Append to sequence
+                output_ids = torch.cat([output_ids, next_token], dim=1)
+
+                # Record iteration count from last forward (if available)
+                if (
+                    hasattr(self.deq, "last_info")
+                    and isinstance(self.deq.last_info, dict)
+                    and "iterations" in self.deq.last_info
+                ):
+                    iterations = self.deq.last_info["iterations"]
+                    if isinstance(iterations, int):
+                        iter_counts.append(iterations)
+
+        if return_iter_counts:
+            info = {
+                "iter_counts": iter_counts,
+                "mean_iters": (
+                    sum(iter_counts) / len(iter_counts) if iter_counts else 0.0
+                ),
+            }
+            return output_ids, info
+        else:
+            return output_ids
 
 
 # ============================================================================
@@ -503,6 +594,62 @@ class ExplicitLM(nn.Module):
 
         return cast(Tensor, logits)
 
+
+# ============================================================================
+# Checkpoint Saving/Loading (H1′ Task 3)
+# ============================================================================
+
+
+def save_checkpoint(model: EqLM, path: str | Path) -> None:
+    """Save an EqLM model and its config to a checkpoint file.
+
+    Saves both the state_dict and EqLMConfig in a single .pt file for easy
+    restoration. Enables checkpoint management for long pretraining runs.
+
+    Args:
+        model: EqLM model to save.
+        path: Path to save checkpoint to (typically ends in .pt).
+    """
+    path = Path(path)
+    path.parent.mkdir(parents=True, exist_ok=True)
+
+    checkpoint = {
+        "state_dict": model.state_dict(),
+        "config": model.config,
+    }
+
+    torch.save(checkpoint, str(path))
+
+
+def load_checkpoint(path: str | Path) -> EqLM:
+    """Load an EqLM model from a checkpoint file.
+
+    Reconstructs the model from saved state_dict and config.
+
+    Args:
+        path: Path to the checkpoint file.
+
+    Returns:
+        Reconstructed EqLM model with loaded weights.
+    """
+    path = Path(path)
+    # Note: weights_only=False needed for config (EqLMConfig dataclass).
+    # The checkpoint is trusted (we created it ourselves).
+    checkpoint = torch.load(str(path), map_location="cpu", weights_only=False)
+
+    config = checkpoint["config"]
+    model = EqLM(config)
+    model.load_state_dict(checkpoint["state_dict"])
+
+    return model
+
+
+# ============================================================================
+# Warm-Start Decoding (H1′ Task 2)
+# ============================================================================
+
+
+# (Will be added to EqLM.generate() method below)
 
 # ============================================================================
 # Helper Functions

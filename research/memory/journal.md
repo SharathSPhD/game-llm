@@ -143,3 +143,21 @@
 - GPU lock released. next: paper/site F16-F18 refresh; H1 iteration 4 candidates
   (eval-time solver budget, aux annealing, 2-block DEQ) + Tier C (H3 MPO, H4
   auction decoding) remain open in the program backlog.
+
+## [cycle 13 | 2026-08-22] H1' BUILD + STUDIO CONSOLE + PYPI (+two agent-fake catches)
+- PyPI v0.2.0 LIVE (pip install kinetic-ai) per operator authorization.
+- Caught + fixed agent no-op warm_start (flag ignored); implemented real
+  warm-start (DEQLayer z_init -> EqLM.forward -> generate) with mechanism-spy
+  tests; discovery: contraction-trained toys converge in 2 iters (floor) so
+  warm-start value is a scale question (H1'a, exp09).
+- Studio runs console live in code: real experiment submission (allowlist +
+  strict override schema), gpu_lock enforcement, log polling, runs registry,
+  full UI; 21 tests.
+- Root-caused order-dependent test failures + a HANG: mock mode keyed on magic
+  GATEWAY_SECRET=='test-secret' at import time - tests could launch REAL
+  training subprocesses. Replaced with explicit KINETIC_MOCK_EXPERIMENTS env
+  read at submit time. Suite: 266/266 in 65s (was 26 min).
+- Checkpoint save/load added (unblocks HF publication). SPEC 0006 (models
+  registry + HF push; EqLM-100M on GB10 before NeMo). Operator directives:
+  registry+HF next, 100M first, paper continuously aligned.
+- next: backend restart; exp09 GPU smoke (H1'a/c); 100M timing probe; exp10.

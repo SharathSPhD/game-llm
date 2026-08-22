@@ -1,0 +1,29 @@
+# Stub config for testing
+data:
+  dataset: "test"
+  subset_size: 1000
+  seq_len: 64
+  batch_size: 8
+
+training:
+  seed: 42
+  num_epochs: 1
+  num_steps: 1
+  warmup_steps: 0
+  log_every: 1
+  lr: 1e-3
+  weight_decay: 0.01
+  grad_clip: 1.0
+
+arms:
+  A1:
+    name: "TestModel"
+    config:
+      vocab_size: 1000
+      d_model: 64
+      n_heads: 2
+      d_ff: 256
+      max_seq_len: 64
+      n_layers: 2
+      dropout: 0.1
+    optimizer: "adamw"

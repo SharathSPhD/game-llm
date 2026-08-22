@@ -18,9 +18,11 @@ import json
 import os
 from dataclasses import dataclass
 from pathlib import Path
+from typing import Any
 
 import torch
 import torch.nn.functional as F
+import yaml
 from fastapi import FastAPI, Header, HTTPException, status
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -36,7 +38,41 @@ from kinetic_ai.serve.executor import JobInput, LocalExecutor
 __version__ = "0.1.0-phase3"
 
 # Executor for job queue
+# Enable mock mode for testing (when GATEWAY_SECRET is set to "test-secret")
+# Mock mode (tests/CI only) is controlled by an explicit env var, read
+# dynamically inside LocalExecutor at submit time — never by magic secrets.
 executor = LocalExecutor()
+
+# Allowed experiment templates (ALLOWLIST for security)
+EXPERIMENT_TEMPLATES = {
+    "exp05_eqlm_pretrain": {
+        "name": "EqLM Pretraining (EXP05)",
+        "script": "experiments/exp05_eqlm_pretrain.py",
+        "config_yaml": "configs/exp05_smoke.yaml",
+        "description": "Train EqLM vs ExplicitLM on BabyLM with parameter matching",
+    },
+    "exp08_solver_aware": {
+        "name": "Solver-Aware Loss (EXP08)",
+        "script": "experiments/exp08_solver_aware.py",
+        "config_yaml": "configs/exp08_smoke.yaml",
+        "description": "Test auxiliary loss for learning contraction in DEQ models",
+    },
+}
+
+# Schema for experiment overrides (numeric ranges, strict validation)
+EXPERIMENT_OVERRIDES_SCHEMA = {
+    "training.num_steps": {"type": "int", "min": 1, "max": 25000},
+    "training.seed": {"type": "int", "min": 1, "max": 2**31 - 1},
+    "data.subset_size": {"type": "int", "min": 1000, "max": 100000000},
+    "arms.A1.config.dropout": {"type": "float", "min": 0.0, "max": 0.5},
+    "arms.A2.config.dropout": {"type": "float", "min": 0.0, "max": 0.5},
+    "arms.A3.config.dropout": {"type": "float", "min": 0.0, "max": 0.5},
+    "arms.A2.config.deq_max_iter": {"type": "int", "min": 1, "max": 50},
+    "arms.A3.config.deq_max_iter": {"type": "int", "min": 1, "max": 50},
+    "arms.A1.lambda_aux": {"type": "float", "min": 0.0, "max": 10.0},
+    "arms.A2.lambda_aux": {"type": "float", "min": 0.0, "max": 10.0},
+    "arms.A3.lambda_aux": {"type": "float", "min": 0.0, "max": 10.0},
+}
 
 # ─── FastAPI App ─────────────────────────────────────────────────────────────
 
@@ -557,39 +593,6 @@ async def get_results(
     return {"results": results}
 
 
-@app.post("/api/jobs")
-async def submit_job(
-    body: dict,
-    authorization: str | None = Header(None),
-) -> dict:
-    """Submit a job to the Training Studio queue.
-
-    Request body:
-        {
-            "type": "noop_demo" | "solve" | "train" | ...,
-            "params": {...}
-        }
-
-    Returns:
-        {"job_id": str}
-    """
-    require_bearer_auth(authorization)
-
-    job_type = body.get("type", "noop_demo")
-    params = body.get("params", {})
-
-    job = JobInput(type=job_type, params=params)
-
-    try:
-        job_id = executor.submit(job)
-        return {"job_id": job_id}
-    except RuntimeError as e:
-        raise HTTPException(
-            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
-            detail=str(e),
-        ) from e
-
-
 @app.get("/api/jobs/{job_id}")
 async def get_job_status(
     job_id: str,
@@ -611,6 +614,348 @@ async def get_job_status(
         "result": output.result,
         "error": output.error,
     }
+
+
+# ─── Experiment Studio Endpoints ─────────────────────────────────────────────
+
+
+@app.get("/api/experiments")
+async def list_experiments(
+    authorization: str | None = Header(None),
+) -> dict:
+    """List available experiment templates.
+
+    Returns:
+        [
+            {
+                "id": "exp05_eqlm_pretrain",
+                "name": "EqLM Pretraining (EXP05)",
+                "description": "...",
+                "config_yaml": "configs/exp05_smoke.yaml",
+            },
+            ...
+        ]
+    """
+    require_bearer_auth(authorization)
+
+    templates = []
+    for template_id, info in EXPERIMENT_TEMPLATES.items():
+        # Find default config for this template
+        config_dir = Path(get_results_dir()).parent / "configs"
+        default_config = None
+        for candidate in ["smoke", "dry_run"]:
+            candidate_path = config_dir / f"{template_id}_{candidate}.yaml"
+            if candidate_path.exists():
+                default_config = str(candidate_path.relative_to(Path.cwd()))
+                break
+
+        if not default_config:
+            # Fallback: list first config matching template_id
+            for cfg_file in config_dir.glob(f"{template_id}*.yaml"):
+                default_config = str(cfg_file.relative_to(Path.cwd()))
+                break
+
+        templates.append({
+            "id": template_id,
+            "name": info["name"],
+            "description": info["description"],
+            "config_yaml": default_config,
+            "script": info["script"],
+        })
+
+    return {"templates": templates}
+
+
+def _validate_and_apply_overrides(
+    config: dict,  # type: ignore[type-arg]
+    overrides: dict[str, Any],
+) -> tuple[bool, str | None]:
+    """Validate overrides against schema and apply to config dict.
+
+    Returns:
+        (success: bool, error_msg: str | None)
+    """
+    # Validate: all override keys must be in schema
+    for key in overrides:
+        if key not in EXPERIMENT_OVERRIDES_SCHEMA:
+            return False, f"Unknown override key: {key}"
+
+    # Validate types and ranges
+    for key, value in overrides.items():
+        schema: dict[str, Any] = EXPERIMENT_OVERRIDES_SCHEMA[key]  # type: ignore[assignment]
+        value_type: str = schema["type"]  # type: ignore[index]
+
+        # Type check
+        if value_type == "int":
+            if not isinstance(value, int):
+                return False, f"{key}: expected int, got {type(value).__name__}"
+            if "min" in schema and value < schema["min"]:  # type: ignore[operator]
+                return False, f"{key}: {value} < minimum {schema['min']}"
+            if "max" in schema and value > schema["max"]:  # type: ignore[operator]
+                return False, f"{key}: {value} > maximum {schema['max']}"
+        elif value_type == "float":
+            if not isinstance(value, (int, float)):
+                return False, f"{key}: expected float, got {type(value).__name__}"
+            fval = float(value)
+            if "min" in schema and fval < schema["min"]:  # type: ignore[operator]
+                return False, f"{key}: {fval} < minimum {schema['min']}"
+            if "max" in schema and fval > schema["max"]:  # type: ignore[operator]
+                return False, f"{key}: {fval} > maximum {schema['max']}"
+
+    # Apply overrides to config
+    for key, value in overrides.items():
+        parts = key.split(".")
+        current = config
+        for part in parts[:-1]:
+            if part not in current:
+                current[part] = {}
+            current = current[part]
+        current[parts[-1]] = value
+
+    return True, None
+
+
+@app.post("/api/jobs")
+async def submit_job_experiment(
+    body: dict,
+    authorization: str | None = Header(None),
+) -> dict:
+    """Submit experiment job or generic job.
+
+    For experiment jobs:
+        {
+            "type": "experiment",
+            "template_id": "exp05_eqlm_pretrain" | "exp08_solver_aware",
+            "overrides": {
+                "training.num_steps": 1000,
+                "training.seed": 42,
+                ...
+            }
+        }
+
+    For generic jobs (legacy):
+        {
+            "type": "noop_demo" | ...,
+            "params": {...}
+        }
+
+    Returns:
+        {"job_id": str}
+
+    Raises:
+        400: Invalid overrides
+        409: GPU locked
+        503: Job submission failed
+    """
+    require_bearer_auth(authorization)
+
+    job_type = body.get("type", "noop_demo")
+
+    # Special handling for experiment jobs
+    if job_type == "experiment":
+        template_id = body.get("template_id")
+        overrides = body.get("overrides", {})
+
+        if not template_id or template_id not in EXPERIMENT_TEMPLATES:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=f"Invalid template_id. Allowed: {list(EXPERIMENT_TEMPLATES.keys())}",
+            )
+
+        # Validate overrides
+        valid, error = _validate_and_apply_overrides({}, overrides)
+        if not valid:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=f"Invalid overrides: {error}",
+            )
+
+        # Load base config
+        config_yaml_path = EXPERIMENT_TEMPLATES[template_id]["config_yaml"]
+        config_path = Path(config_yaml_path)
+
+        if not config_path.exists():
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=f"Base config not found: {config_yaml_path}",
+            )
+
+        with open(config_path) as f:
+            config = yaml.safe_load(f) or {}
+
+        # Apply overrides
+        _validate_and_apply_overrides(config, overrides)
+
+        # Create job output directory
+        results_dir = Path(get_results_dir())
+        job_id = str(__import__("uuid").uuid4())
+        job_output_dir = results_dir / "studio_runs" / job_id
+        job_output_dir.mkdir(parents=True, exist_ok=True)
+
+        # Write resolved config
+        resolved_config_path = job_output_dir / "config.yaml"
+        with open(resolved_config_path, "w") as f:
+            yaml.dump(config, f)
+
+        # Submit job with the same job_id
+        job = JobInput(
+            id=job_id,
+            type="experiment",
+            params={
+                "template_id": template_id,
+                "resolved_config_path": str(resolved_config_path),
+                "output_dir": str(job_output_dir),
+            },
+        )
+
+        try:
+            returned_job_id = executor.submit(job)
+            return {"job_id": returned_job_id}
+        except RuntimeError as e:
+            if "GPU is locked" in str(e):
+                raise HTTPException(
+                    status_code=status.HTTP_409_CONFLICT,
+                    detail=str(e),
+                ) from e
+            raise HTTPException(
+                status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+                detail=str(e),
+            ) from e
+
+    # Fall back to generic job submission
+    params = body.get("params", {})
+    job = JobInput(type=job_type, params=params)
+
+    try:
+        job_id = executor.submit(job)
+        return {"job_id": job_id}
+    except RuntimeError as e:
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail=str(e),
+        ) from e
+
+
+@app.get("/api/jobs/{job_id}/log")
+async def get_job_log(
+    job_id: str,
+    offset: int = 0,
+    authorization: str | None = Header(None),
+) -> dict:
+    """Get incremental log for a job (poll-based streaming).
+
+    Args:
+        job_id: Job ID
+        offset: Line offset (for incremental polling)
+
+    Returns:
+        {
+            "job_id": str,
+            "lines": [str],
+            "total_lines": int,
+            "offset": int
+        }
+    """
+    require_bearer_auth(authorization)
+
+    # Find log file
+    results_dir = Path(get_results_dir())
+    log_file = results_dir / "studio_runs" / job_id / "run.log"
+
+    if not log_file.exists():
+        # Try generic job dir
+        log_file = results_dir / job_id / "run.log"
+
+    if not log_file.exists():
+        return {
+            "job_id": job_id,
+            "lines": [],
+            "total_lines": 0,
+            "offset": offset,
+        }
+
+    try:
+        with open(log_file) as f:
+            all_lines = f.readlines()
+
+        # Return lines from offset onwards
+        lines_to_return = all_lines[offset : offset + 100]
+        lines_to_return = [line.rstrip("\n") for line in lines_to_return]
+
+        return {
+            "job_id": job_id,
+            "lines": lines_to_return,
+            "total_lines": len(all_lines),
+            "offset": offset,
+        }
+    except OSError:
+        return {
+            "job_id": job_id,
+            "lines": [],
+            "total_lines": 0,
+            "offset": offset,
+        }
+
+
+@app.get("/api/runs")
+async def get_runs_registry(
+    authorization: str | None = Header(None),
+) -> dict:
+    """Get registry of completed runs.
+
+    Walks results/ and studio_runs/ for results.json files.
+    Returns:
+        [
+            {
+                "dir": "results/exp05_...",
+                "experiment": "exp05_eqlm_pretrain",
+                "config_hash": "abc123...",
+                "git_commit": "deadbeef...",
+                "metrics": {...}
+            },
+            ...
+        ]
+    """
+    require_bearer_auth(authorization)
+
+    runs = []
+    results_dir = Path(get_results_dir())
+
+    if results_dir.exists():
+        # Scan results/ and studio_runs/
+        for results_json in results_dir.rglob("results.json"):
+            try:
+                with open(results_json) as f:
+                    data = json.load(f)
+
+                # Extract metadata
+                run_dir = results_json.parent
+                experiment = data.get("experiment", "unknown")
+                config_hash = data.get("config_hash", "unknown")
+                git_commit = data.get("git_commit", "unknown")
+                metrics = {}
+
+                # Defensively extract key metrics
+                if "metrics" in data:
+                    metrics = data["metrics"]
+
+                # Try to make path relative to cwd, fallback to absolute
+                try:
+                    rel_path = str(run_dir.relative_to(Path.cwd()))
+                except ValueError:
+                    rel_path = str(run_dir)
+
+                runs.append({
+                    "dir": rel_path,
+                    "experiment": experiment,
+                    "config_hash": config_hash,
+                    "git_commit": git_commit,
+                    "metrics": metrics,
+                })
+            except (json.JSONDecodeError, OSError):
+                pass
+
+    return {"runs": runs}
 
 
 if __name__ == "__main__":
