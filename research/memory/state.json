@@ -1,5 +1,5 @@
 {
-  "cycle": 13,
+  "cycle": 14,
   "phase": "h1prime-adaptive + kinetic-studio",
   "current_rq": "RQ-3b (H1-prime a/b/c per ADR 0004)",
   "gpu_lock": false,
@@ -15,5 +15,5 @@
     "RQ-3 (H1) iteration 3: formal miss at 0.930 [0.898,0.949] vs 0.95 (F18); program continues"
   ],
   "known_defects": [],
-  "next_action": "Harvest exp09 build -> GPU smoke -> score H1-prime preregs; PyPI release verify; Studio runs console E2E; then HF checkpoints + model cards"
+  "next_action": "exp10: 100M timing probe (1k steps) -> full checkpointed run; HF publication; Studio models registry"
 }

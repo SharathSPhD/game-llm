@@ -268,3 +268,22 @@ traces to a real run with config hash + seeds. All statuses: operator sign-off: 
   diagnostic arc (F13–F17) and the open gap as future work (eval-time solver
   budget, aux annealing, multi-block DEQ).
 - **Status:** VALIDATED (formal H1 miss) · closes RQ-3 iteration 3
+
+## F19 — Warm-started equilibrium decoding cuts solver cost 79% at 97.6% token agreement (H1′a: reduction PASS, agreement narrow miss; smoke scale)
+
+- **Evidence (exp09, 500-step aux-trained EqLM d=204, 40 prompts × 25 tokens,
+  config sha 54698443; agreement probe on the saved checkpoint, seed 7):**
+  cold 7.91 iters/token → warm 1.64 (−79.3%; prereg ≥50% PASS). Greedy token
+  agreement 97.6% (976/1000), 39/40 sequences exact — prereg ≥99% narrowly
+  missed (one divergent sequence). Knob for the scale run: slightly higher warm
+  budget/tighter tol should close agreement while retaining ≫50% savings.
+- **Meaning:** the TRIZ P10 prediction holds — sequential equilibria are close,
+  so equilibrium decoding pays ~1.6 block applications/token. This inverts the
+  wall-clock story: an explicit L-layer stack always pays L; a warm equilibrium
+  model pays ~1.6 at smoke scale. Full verdict needs the 100M run (exp10).
+- **H1′c (think-harder dial):** BLiMP flat across budgets 6→48
+  (0.594/0.600/0.600/0.600) at this training scale — honest null at 500 steps;
+  re-measured at 100M scale.
+- **Checkpoint saved** (results/exp09_adaptive/checkpoints/eqlm_smoke.pt) — the
+  checkpointing path for HF publication is proven.
+- **Status:** VALIDATED (smoke) · scale confirmation in exp10
