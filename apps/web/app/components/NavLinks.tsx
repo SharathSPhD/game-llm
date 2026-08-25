@@ -11,6 +11,7 @@ export function NavLinks() {
     { href: "/lab", label: "Lab" },
     { href: "/qre", label: "QRE" },
     { href: "/auction", label: "Auction" },
+    { href: "/playground", label: "Playground" },
     { href: "/studio", label: "Studio" },
     { href: "/models", label: "Models" },
     { href: "/findings", label: "Findings" },

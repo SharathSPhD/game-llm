@@ -70,7 +70,7 @@ def temp_results_dir(tmp_path):
         "n_layers": 2,
     }
     import torch
-    torch.save(checkpoint, ckpt_path, weights_only=False)
+    torch.save(checkpoint, ckpt_path)
 
     # Create a results.json with metrics
     results_json = results_dir / "exp99_test" / "results.json"
@@ -386,6 +386,186 @@ class TestRegistryScan:
 
         source = inspect.getsource(scan_models_registry)
         assert "cache" in source.lower() or "lru_cache" in source.lower()
+
+
+class TestExactParameterCounting:
+    """Tests for compute_exact_param_count function."""
+
+    def test_exact_param_count_known_model(self, temp_results_dir):
+        """Verify exact parameter count on a tiny known model."""
+        import torch
+
+        from kinetic_ai.models.eqlm import EqLMConfig, ExplicitLM
+        from kinetic_ai.serve.hf_publish import compute_exact_param_count
+
+        config = EqLMConfig(
+            vocab_size=100,
+            d_model=32,
+            n_heads=2,
+            d_ff=64,
+            max_seq_len=64,
+            deq_max_iter=2,
+            deq_tol=0.001,
+            solver="anderson",
+            jfb=True,
+            dropout=0.0,
+            spectral_norm=False,
+            residual_damping=0.1,
+            map_form="residual",
+            aux_residual=False,
+            lambda_aux=0.1,
+        )
+
+        # Create a 1-layer explicit model
+        model = ExplicitLM(config, n_layers=1)
+        state_dict = model.state_dict()
+
+        # Manually count parameters in state_dict (includes tied weights)
+        expected_params = sum(
+            t.numel() for t in state_dict.values()
+            if isinstance(t, torch.Tensor)
+        )
+
+        # Save checkpoint
+        results_dir = temp_results_dir
+        ckpt_path = results_dir / "test_exact_count.pt"
+        checkpoint = {
+            "state_dict": state_dict,
+            "config": config,
+            "model_class": "ExplicitLM",
+            "n_layers": 1,
+        }
+        torch.save(checkpoint, ckpt_path)
+
+        # Compute exact count
+        computed_params = compute_exact_param_count(ckpt_path)
+
+        # Should match exactly (state_dict includes tied weights)
+        assert computed_params == expected_params, \
+            f"Expected {expected_params} params, got {computed_params}"
+
+    def test_exact_param_count_not_wildly_off(self, temp_results_dir):
+        """Verify computed param count is reasonable (not 19.9B for 461MB file)."""
+        import torch
+
+        from kinetic_ai.models.eqlm import EqLMConfig, ExplicitLM
+        from kinetic_ai.serve.hf_publish import compute_exact_param_count
+
+        config = EqLMConfig(
+            vocab_size=50257,
+            d_model=768,
+            n_heads=12,
+            d_ff=3072,
+            max_seq_len=512,
+            deq_max_iter=6,
+            deq_tol=0.001,
+            solver="anderson",
+            jfb=True,
+            dropout=0.1,
+            spectral_norm=True,
+            residual_damping=0.2,
+            map_form="residual",
+            aux_residual=False,
+            lambda_aux=0.1,
+        )
+
+        model = ExplicitLM(config, n_layers=12)
+        state_dict = model.state_dict()
+
+        # Save checkpoint
+        results_dir = temp_results_dir
+        ckpt_path = results_dir / "test_reasonable_count.pt"
+        checkpoint = {
+            "state_dict": state_dict,
+            "config": config,
+            "model_class": "ExplicitLM",
+            "n_layers": 12,
+        }
+        torch.save(checkpoint, ckpt_path)
+
+        # Get file size
+        file_size_mb = ckpt_path.stat().st_size / (1024 * 1024)
+
+        # Compute exact count
+        computed_params = compute_exact_param_count(ckpt_path)
+
+        # For a 768d 12-head model with 12 layers:
+        # rough estimate: (50257 * 768) + 12 * (768^2 + 12*768*64 + 4*768^2) ≈ 100-200M params
+        # Should NOT be 19.9B (which would be 20 billion params, nonsense for 460MB)
+        assert computed_params < 1_000_000_000, \
+            f"Parameter count {computed_params} seems unreasonably high for {file_size_mb}MB file"
+
+        # For a 768d model with proper layers, expect ballpark 100-500M params
+        assert computed_params > 1_000_000, \
+            f"Parameter count {computed_params} seems unreasonably low"
+
+
+class TestCheckpointScanning:
+    """Tests for checkpoint scanning and discovery."""
+
+    def test_scan_finds_checkpoints_at_multiple_depths(self, tmp_path):
+        """Scan should find checkpoints at depth 3 (exp/checkpoints/model.pt)."""
+        import os
+
+        import torch
+
+        from kinetic_ai.models.eqlm import EqLMConfig, ExplicitLM
+
+        # Create results dir structure
+        results_dir = tmp_path / "results"
+        exp_dir = results_dir / "exp99_test" / "checkpoints"
+        exp_dir.mkdir(parents=True, exist_ok=True)
+
+        # Create a test checkpoint
+        config = EqLMConfig(
+            vocab_size=100,
+            d_model=32,
+            n_heads=2,
+            d_ff=64,
+            max_seq_len=64,
+            deq_max_iter=2,
+            deq_tol=0.001,
+            solver="anderson",
+            jfb=True,
+            dropout=0.0,
+            spectral_norm=False,
+            residual_damping=0.1,
+            map_form="residual",
+            aux_residual=False,
+            lambda_aux=0.1,
+        )
+
+        model = ExplicitLM(config, n_layers=1)
+        ckpt_path = exp_dir / "model.pt"
+        checkpoint = {
+            "state_dict": model.state_dict(),
+            "config": config,
+            "model_class": "ExplicitLM",
+            "n_layers": 1,
+        }
+        torch.save(checkpoint, ckpt_path)
+
+        # Create results.json
+        results_json = results_dir / "exp99_test" / "results.json"
+        import json
+        with open(results_json, "w") as f:
+            json.dump({"config_hash": "test", "git_commit": "test"}, f)
+
+        # Patch RESULTS_DIR and scan
+        os.environ["RESULTS_DIR"] = str(results_dir)
+
+        import app.server
+        from app.server import scan_models_registry
+
+        # Clear cache
+        app.server._model_registry_cache = None
+
+        models = scan_models_registry()
+
+        # Should find the checkpoint
+        assert len(models) > 0, "Should find checkpoint in exp99_test/checkpoints/"
+        assert any("exp99_test" in m["path"] for m in models), \
+            f"Should find exp99_test checkpoint, got: {[m['path'] for m in models]}"
 
 
 if __name__ == "__main__":

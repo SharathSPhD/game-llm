@@ -31,6 +31,7 @@ const POST_ALLOWLIST = new Set([
   "/api/auction",
   "/api/jobs",
   "/api/models/publish",
+  "/api/playground/generate",
 ]);
 const GET_ALLOWLIST_EXACT = new Set([
   "/api/results",

@@ -25,7 +25,60 @@ import json
 from pathlib import Path
 from typing import Any
 
+import torch
 from huggingface_hub import HfApi, upload_file
+
+
+def compute_exact_param_count(checkpoint_path: str | Path) -> int:
+    """Compute exact parameter count from checkpoint state_dict.
+
+    Loads checkpoint with weights_only=True and sums numel() over all tensors
+    in the state_dict. For checkpoints with custom config classes, allows them
+    in safe globals.
+
+    Args:
+        checkpoint_path: Path to checkpoint file.
+
+    Returns:
+        Total parameter count (sum of numel over all state_dict tensors).
+
+    Raises:
+        FileNotFoundError: Checkpoint not found.
+        RuntimeError: Failed to load checkpoint or missing state_dict.
+    """
+    from kinetic_ai.models.eqlm import EqLMConfig
+
+    checkpoint_path = Path(checkpoint_path)
+    if not checkpoint_path.exists():
+        raise FileNotFoundError(f"Checkpoint not found: {checkpoint_path}")
+
+    try:
+        # Allow known config classes in safe globals
+        with torch.serialization.safe_globals([EqLMConfig]):
+            ckpt = torch.load(checkpoint_path, map_location="cpu", weights_only=True)
+    except Exception as e:
+        raise RuntimeError(f"Failed to load checkpoint {checkpoint_path}: {e}") from e
+
+    if not isinstance(ckpt, dict):
+        raise RuntimeError(f"Checkpoint is not a dict: {type(ckpt)}")
+
+    # Find state_dict key (try common names)
+    state_dict = None
+    for key in ["state_dict", "model", "weights"]:
+        if key in ckpt:
+            state_dict = ckpt[key]
+            break
+
+    if state_dict is None or not isinstance(state_dict, dict):
+        raise RuntimeError("Checkpoint missing or malformed state_dict")
+
+    # Sum numel() over all tensors
+    total_params = 0
+    for param_tensor in state_dict.values():
+        if isinstance(param_tensor, torch.Tensor):
+            total_params += param_tensor.numel()
+
+    return total_params
 
 
 def generate_model_card(
@@ -112,7 +165,7 @@ def get_checkpoint_metadata(checkpoint_path: str | Path) -> dict[str, Any]:
         FileNotFoundError: Checkpoint does not exist.
         RuntimeError: Checkpoint load fails or config is malformed.
     """
-    import torch
+    from kinetic_ai.models.eqlm import EqLMConfig
 
     checkpoint_path = Path(checkpoint_path)
     if not checkpoint_path.exists():
@@ -122,7 +175,8 @@ def get_checkpoint_metadata(checkpoint_path: str | Path) -> dict[str, Any]:
     # glob in a web handler; pickle-loading them would be code execution.
     # but only extract metadata, not instantiate the model
     try:
-        ckpt = torch.load(checkpoint_path, map_location="cpu", weights_only=True)
+        with torch.serialization.safe_globals([EqLMConfig]):
+            ckpt = torch.load(checkpoint_path, map_location="cpu", weights_only=True)
     except Exception as e:
         raise RuntimeError(f"Failed to load checkpoint {checkpoint_path}: {e}") from e
 
@@ -130,11 +184,24 @@ def get_checkpoint_metadata(checkpoint_path: str | Path) -> dict[str, Any]:
         raise RuntimeError(f"Checkpoint is not a dict: {type(ckpt)}")
 
     # Extract metadata without instantiating model
-    config = ckpt.get("config_dict", ckpt.get("config"))
-    model_class = ckpt.get("model_class")
+    # Try multiple possible keys for config (different checkpoint formats)
+    config = ckpt.get("config_dict") or ckpt.get("config") or ckpt.get("model_config")
+    model_class = ckpt.get("model_class") or ckpt.get("model_type")
 
-    if config is None or model_class is None:
-        raise RuntimeError("Checkpoint missing 'config' or 'model_class' key")
+    # Some checkpoints may not have explicit model_class, try to infer from state_dict keys
+    if model_class is None:
+        state_dict = ckpt.get("state_dict", {})
+        if isinstance(state_dict, dict):
+            # Infer from state_dict structure (heuristic)
+            has_deq = any("f_block" in k or "deuq" in k.lower() for k in state_dict)
+            model_class = "EqLM" if has_deq else "ExplicitLM"
+
+    if config is None:
+        raise RuntimeError("Checkpoint missing 'config' key")
+
+    # Fallback model_class if still not found
+    if model_class is None:
+        model_class = "unknown"
 
     metadata = {"config": config, "model_class": model_class}
 

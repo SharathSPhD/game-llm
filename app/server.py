@@ -26,6 +26,7 @@ import torch.nn.functional as F
 import yaml
 from fastapi import FastAPI, Header, HTTPException, status
 from fastapi.middleware.cors import CORSMiddleware
+from transformers import GPT2Tokenizer
 
 from kinetic_ai.games.payoff import NormalFormGame
 from kinetic_ai.games.qre import nash_conv, qre_path
@@ -34,6 +35,7 @@ from kinetic_ai.optim.bregman import NegativeEntropy
 from kinetic_ai.optim.mmd import mmd_strategy_update
 from kinetic_ai.serve.executor import JobInput, LocalExecutor
 from kinetic_ai.serve.hf_publish import (
+    compute_exact_param_count,
     get_checkpoint_metadata,
     get_metrics_from_results_json,
     publish_checkpoint_to_hf,
@@ -48,6 +50,10 @@ __version__ = "0.1.0-phase3"
 # Mock mode (tests/CI only) is controlled by an explicit env var, read
 # dynamically inside LocalExecutor at submit time — never by magic secrets.
 executor = LocalExecutor()
+
+# Model cache for playground (ONE model in memory, keyed by checkpoint path)
+_playground_model_cache: tuple[str, Any, str] | None = None
+_playground_tokenizer: GPT2Tokenizer | None = None
 
 # Allowed experiment templates (ALLOWLIST for security)
 EXPERIMENT_TEMPLATES = {
@@ -189,6 +195,24 @@ class AuctionResponse:
     output_distribution: list[float]
     payments: list[float]
     sampled_token: int
+
+
+@dataclass
+class TokenInfo:
+    """Per-token info from playground generation."""
+
+    token_str: str
+    solver_iters: int | None
+
+
+@dataclass
+class PlaygroundGenerateResponse:
+    """Result from /api/playground/generate."""
+
+    text: str
+    tokens: list[TokenInfo]
+    mean_iters: float
+    wall_ms: float
 
 
 # ─── Helpers ─────────────────────────────────────────────────────────────────
@@ -568,6 +592,190 @@ async def auction(
         payments=result.payments.tolist(),
         sampled_token=int(result.sampled_token),
     )
+
+
+@app.post("/api/playground/generate")
+async def playground_generate(
+    body: dict,
+    authorization: str | None = Header(None),
+) -> dict:
+    """Generate text with playground model (equilibrium lens).
+
+    Request body:
+        {
+            "checkpoint_path": "exp10_probe/checkpoints/a2.pt",
+            "prompt": "The future of AI is",
+            "max_new_tokens": 32,
+            "warm_start": false,
+            "solver_budget": 6
+        }
+
+    Returns:
+        {
+            "text": "Generated text here",
+            "tokens": [
+                {"token_str": "The", "solver_iters": 6},
+                {"token_str": " future", "solver_iters": 4},
+                ...
+            ],
+            "mean_iters": 5.2,
+            "wall_ms": 234.5
+        }
+
+    Raises:
+        400: Invalid checkpoint_path, traversal attempt, prompt too long
+        401: Missing/invalid auth
+        503: Model load failed
+    """
+    require_bearer_auth(authorization)
+
+    checkpoint_path_str = body.get("checkpoint_path", "")
+    prompt = body.get("prompt", "")
+    max_new_tokens = min(int(body.get("max_new_tokens", 16)), 64)
+    warm_start = bool(body.get("warm_start", False))
+    solver_budget = min(max(int(body.get("solver_budget", 6)), 4), 64)
+
+    # Validate inputs
+    if not checkpoint_path_str:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="checkpoint_path required",
+        )
+
+    if not prompt:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="prompt required",
+        )
+
+    if len(prompt) > 500:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="prompt exceeds 500 characters",
+        )
+
+    # Security: prevent traversal attacks
+    results_dir = Path(get_results_dir()).resolve()
+    full_path = (results_dir / checkpoint_path_str).resolve()
+
+    try:
+        full_path.relative_to(results_dir)
+    except ValueError as e:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Path traversal detected. checkpoint_path must be inside results/",
+        ) from e
+
+    if not full_path.exists():
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"Checkpoint not found: {checkpoint_path_str}",
+        )
+
+    start_time = time.time()
+
+    try:
+        # Get tokenizer (load once)
+        global _playground_tokenizer
+        if _playground_tokenizer is None:
+            _playground_tokenizer = GPT2Tokenizer.from_pretrained("gpt2")
+
+        # Load model (cache ONE model)
+        global _playground_model_cache
+        device = "cuda" if torch.cuda.is_available() else "cpu"
+
+        if _playground_model_cache is None or _playground_model_cache[0] != str(full_path):
+            # Load via the canonical (weights_only-safe, tested) loader.
+            from kinetic_ai.models.eqlm import load_checkpoint
+
+            model = load_checkpoint(full_path)
+            model_class_name = type(model).__name__
+            model.eval()
+            model.to(device)
+
+            # Cache model (path, model, class name)
+            _playground_model_cache = (str(full_path), model, model_class_name)
+
+        model = _playground_model_cache[1]
+        model_class_name = _playground_model_cache[2]
+
+        # Tokenize prompt (cap sequence to the model's context window)
+        token_ids = _playground_tokenizer.encode(prompt, return_tensors="pt")[0]
+        max_ctx = int(getattr(model.config, "max_seq_len", 128))
+        budget_room = max_ctx - max_new_tokens - 1
+        if budget_room < 1:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="max_new_tokens too large for the model's context window",
+            )
+        token_ids = token_ids[-budget_room:].to(device)
+
+        solver_iters_list: list[int | None] = []
+        if model_class_name == "EqLM":
+            # Equilibrium path: the solver budget is the "think-harder" dial and
+            # warm_start reuses the previous token's equilibrium (H1'a).
+            original_max_iter = model.deq.config.max_iter
+            model.deq.config.max_iter = solver_budget
+            try:
+                output_ids, gen_info = model.generate(
+                    token_ids.unsqueeze(0),
+                    max_new_tokens,
+                    warm_start=warm_start,
+                    return_iter_counts=True,
+                )
+            finally:
+                model.deq.config.max_iter = original_max_iter
+            generated_ids = [int(t) for t in output_ids[0, token_ids.shape[0]:]]
+            iters = list(gen_info.get("iter_counts", []))
+            solver_iters_list = [int(i) for i in iters[: len(generated_ids)]]
+            solver_iters_list += [None] * (len(generated_ids) - len(solver_iters_list))
+        else:
+            # Explicit stack: fixed depth, no solver iterations to report.
+            generated_ids = []
+            current_ids = token_ids.clone()
+            for _ in range(max_new_tokens):
+                with torch.no_grad():
+                    logits = model(current_ids.unsqueeze(0))[0, -1, :]
+                next_token_id = int(torch.argmax(logits).item())
+                generated_ids.append(next_token_id)
+                current_ids = torch.cat(
+                    [current_ids, torch.tensor([next_token_id], device=device)]
+                )
+                solver_iters_list.append(None)
+
+        # Decode tokens
+        token_strings = []
+        for token_id in generated_ids:
+            token_str = _playground_tokenizer.decode([token_id])
+            token_strings.append(token_str)
+
+        # Compute stats
+        valid_iters = [it for it in solver_iters_list if it is not None]
+        mean_iters = sum(valid_iters) / len(valid_iters) if valid_iters else 0.0
+
+        wall_ms = (time.time() - start_time) * 1000
+
+        # Decode full output
+        output_ids = torch.cat([token_ids, torch.tensor(generated_ids, device=device)])
+        full_text = _playground_tokenizer.decode(output_ids.tolist())
+
+        return {
+            "text": full_text,
+            "tokens": [
+                {"token_str": ts, "solver_iters": it}
+                for ts, it in zip(token_strings, solver_iters_list, strict=True)
+            ],
+            "mean_iters": float(mean_iters),
+            "wall_ms": float(wall_ms),
+        }
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail=f"Generation failed: {str(e)}",
+        ) from e
 
 
 @app.get("/api/results")
@@ -1026,26 +1234,12 @@ def scan_models_registry() -> list[dict[str, Any]]:
             config = metadata.get("config")
             model_class = metadata.get("model_class", "unknown")
 
-            # Estimate parameters from config
-            params_estimate = 0
-            if (
-                config is not None
-                and hasattr(config, "d_model")
-                and hasattr(config, "n_heads")
-            ):
-                d = config.d_model
-                h = config.n_heads
-                # Rough estimate: emb + attention + FFN layers
-                # This is a lower bound; actual model may have more
-                if hasattr(config, "vocab_size"):
-                    params_estimate += config.vocab_size * d
-                if hasattr(config, "deq_max_iter"):
-                    # DEQ: single block repeated
-                    params_estimate += d * (d + h * d + 4 * d * d)
-                else:
-                    # Explicit: n_layers blocks
-                    n_layers = metadata.get("n_layers", 12)
-                    params_estimate += n_layers * (d * (d + h * d + 4 * d * d))
+            # Compute exact parameter count from state_dict
+            try:
+                params_estimate = compute_exact_param_count(pt_file)
+            except Exception:
+                # Fallback: 0 if computation fails
+                params_estimate = 0
 
             # Extract metrics from sibling results.json
             run_dir = pt_file.parent.parent  # checkpoint is in run_dir/checkpoints/

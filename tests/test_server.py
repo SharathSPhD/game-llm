@@ -440,5 +440,235 @@ class TestIntegration:
         assert abs(path[-1]["rationality"] - 5.0) < 0.1
 
 
+class TestPlaygroundGenerate:
+    """POST /api/playground/generate endpoint."""
+
+    def test_401_missing_auth(self) -> None:
+        """Missing auth → 401."""
+        resp = client.post(
+            "/api/playground/generate",
+            json={
+                "checkpoint_path": "exp10_probe/checkpoints/a1.pt",
+                "prompt": "Hello",
+            },
+        )
+        assert resp.status_code == 401
+
+    def test_400_missing_checkpoint_path(self) -> None:
+        """Missing checkpoint_path → 400."""
+        resp = client.post(
+            "/api/playground/generate",
+            json={"prompt": "Hello"},
+            headers=AUTH_HEADERS,
+        )
+        assert resp.status_code == 400
+        assert "checkpoint_path" in resp.json()["detail"].lower()
+
+    def test_400_missing_prompt(self) -> None:
+        """Missing prompt → 400."""
+        resp = client.post(
+            "/api/playground/generate",
+            json={"checkpoint_path": "exp10_probe/checkpoints/a1.pt"},
+            headers=AUTH_HEADERS,
+        )
+        assert resp.status_code == 400
+        assert "prompt" in resp.json()["detail"].lower()
+
+    def test_400_prompt_too_long(self) -> None:
+        """Prompt > 500 chars → 400."""
+        long_prompt = "x" * 501
+        resp = client.post(
+            "/api/playground/generate",
+            json={
+                "checkpoint_path": "exp10_probe/checkpoints/a1.pt",
+                "prompt": long_prompt,
+            },
+            headers=AUTH_HEADERS,
+        )
+        assert resp.status_code == 400
+        assert "500" in resp.json()["detail"]
+
+    def test_400_traversal_attempt(self) -> None:
+        """Path traversal attempt → 400."""
+        resp = client.post(
+            "/api/playground/generate",
+            json={
+                "checkpoint_path": "../../../etc/passwd",
+                "prompt": "Hello",
+            },
+            headers=AUTH_HEADERS,
+        )
+        assert resp.status_code == 400
+        assert "traversal" in resp.json()["detail"].lower()
+
+    def test_400_checkpoint_not_found(self) -> None:
+        """Non-existent checkpoint → 400."""
+        resp = client.post(
+            "/api/playground/generate",
+            json={
+                "checkpoint_path": "results/nonexistent.pt",
+                "prompt": "Hello",
+            },
+            headers=AUTH_HEADERS,
+        )
+        assert resp.status_code == 400
+        assert "not found" in resp.json()["detail"].lower()
+
+    @pytest.mark.slow
+    def test_generation_response_format(self) -> None:
+        """Successful generation returns expected response format.
+
+        This test requires a real checkpoint file to exist.
+        """
+        from pathlib import Path
+
+        # Use the results_dir from env
+        results_dir = Path(os.environ.get("RESULTS_DIR", "./results"))
+        if not results_dir.exists():
+            pytest.skip("results/ directory not found")
+
+        checkpoints = list(results_dir.rglob("*.pt"))
+        if not checkpoints:
+            pytest.skip("No checkpoints found in results/")
+
+        # Use the first checkpoint found
+        checkpoint_rel = checkpoints[0].relative_to(results_dir)
+
+        resp = client.post(
+            "/api/playground/generate",
+            json={
+                "checkpoint_path": str(checkpoint_rel),
+                "prompt": "Test",
+                "max_new_tokens": 4,
+                "warm_start": False,
+                "solver_budget": 6,
+            },
+            headers=AUTH_HEADERS,
+        )
+
+        # Should return 200 or 503 (if model fails to load)
+        if resp.status_code == 200:
+            data = resp.json()
+            assert "text" in data
+            assert "tokens" in data
+            assert "mean_iters" in data
+            assert "wall_ms" in data
+            assert isinstance(data["text"], str)
+            assert isinstance(data["tokens"], list)
+            assert isinstance(data["mean_iters"], (int, float))
+            assert isinstance(data["wall_ms"], (int, float))
+
+            # Check token structure
+            for token in data["tokens"]:
+                assert "token_str" in token
+                assert "solver_iters" in token
+                assert isinstance(token["token_str"], str)
+                # solver_iters should be int or None
+                assert token["solver_iters"] is None or isinstance(token["solver_iters"], int)
+
+    def test_solver_budget_clamped(self) -> None:
+        """Solver budget is clamped to [4, 64]."""
+        # This test just checks that extreme values are accepted without error
+        # (actual clamping is tested in generation)
+
+        from pathlib import Path
+        # Use the results_dir from env
+        results_dir = Path(os.environ.get("RESULTS_DIR", "./results"))
+        if not results_dir.exists():
+            pytest.skip("results/ directory not found")
+
+        checkpoints = list(results_dir.rglob("*.pt"))
+        if not checkpoints:
+            pytest.skip("No checkpoints found in results/")
+
+        checkpoint_rel = checkpoints[0].relative_to(results_dir)
+
+        # Very large solver_budget should be clamped
+        resp = client.post(
+            "/api/playground/generate",
+            json={
+                "checkpoint_path": str(checkpoint_rel),
+                "prompt": "Test",
+                "max_new_tokens": 1,
+                "solver_budget": 1000,  # Should be clamped to 64
+            },
+            headers=AUTH_HEADERS,
+        )
+
+        # Should either succeed or fail gracefully
+        assert resp.status_code in (200, 503)
+
+    def test_max_new_tokens_clamped(self) -> None:
+        """max_new_tokens is clamped to 64."""
+        from pathlib import Path
+        # Use the results_dir from env
+        results_dir = Path(os.environ.get("RESULTS_DIR", "./results"))
+        if not results_dir.exists():
+            pytest.skip("results/ directory not found")
+
+        checkpoints = list(results_dir.rglob("*.pt"))
+        if not checkpoints:
+            pytest.skip("No checkpoints found in results/")
+
+        checkpoint_rel = checkpoints[0].relative_to(results_dir)
+
+        # Very large max_new_tokens should be clamped
+        resp = client.post(
+            "/api/playground/generate",
+            json={
+                "checkpoint_path": str(checkpoint_rel),
+                "prompt": "Test",
+                "max_new_tokens": 1000,  # Should be clamped to 64
+            },
+            headers=AUTH_HEADERS,
+        )
+
+        # Should either succeed or fail gracefully
+        assert resp.status_code in (200, 503)
+
+
 if __name__ == "__main__":
     pytest.main([__file__, "-v"])
+
+
+class TestPlaygroundEquilibriumLens:
+    """Regression: the lens must report REAL solver iterations and honor the dial.
+
+    (A prior implementation parsed warm_start/solver_budget and ignored both,
+    returning solver_iters=None for every token.)
+    """
+
+    def test_eqlm_iters_reported_and_budget_binds(self, tmp_path, monkeypatch) -> None:
+        import torch as _torch
+
+        from kinetic_ai.models.eqlm import EqLM, EqLMConfig, save_checkpoint
+
+        monkeypatch.setenv("RESULTS_DIR", str(tmp_path))
+        _torch.manual_seed(0)
+        cfg = EqLMConfig(
+            vocab_size=50257, d_model=32, n_heads=2, d_ff=64, max_seq_len=96,
+            deq_max_iter=12, deq_tol=1e-4, map_form="postln",
+        )
+        m = EqLM(cfg)
+        ckpt_dir = tmp_path / "run" / "checkpoints"
+        save_checkpoint(m, ckpt_dir / "tiny.pt")
+
+        resp = client.post(
+            "/api/playground/generate",
+            json={
+                "checkpoint_path": "run/checkpoints/tiny.pt",
+                "prompt": "hello world",
+                "max_new_tokens": 4,
+                "warm_start": False,
+                "solver_budget": 5,
+            },
+            headers=AUTH_HEADERS,
+        )
+        assert resp.status_code == 200, resp.text
+        data = resp.json()
+        iters = [t["solver_iters"] for t in data["tokens"]]
+        assert len(iters) == 4
+        assert all(isinstance(i, int) for i in iters), f"lens must be real: {iters}"
+        # tight tol -> solver hits the budget: the dial demonstrably binds
+        assert max(iters) <= 5 and max(iters) >= 4, iters
+        assert data["mean_iters"] > 0

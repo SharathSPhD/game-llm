@@ -2,7 +2,7 @@
   "cycle": 14,
   "phase": "h1prime-adaptive + kinetic-studio",
   "current_rq": "RQ-3b (H1-prime a/b/c per ADR 0004)",
-  "gpu_lock": true,
+  "gpu_lock": false,
   "open_questions": [
     "RQ-3b (H1-prime): warm-start decoding / per-token early exit / think-harder dial (ADR 0004)",
     "RQ-4 (H3): MPO vs DPO",
