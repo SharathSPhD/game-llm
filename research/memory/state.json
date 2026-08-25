@@ -2,7 +2,7 @@
   "cycle": 14,
   "phase": "h1prime-adaptive + kinetic-studio",
   "current_rq": "RQ-3b (H1-prime a/b/c per ADR 0004)",
-  "gpu_lock": false,
+  "gpu_lock": true,
   "open_questions": [
     "RQ-3b (H1-prime): warm-start decoding / per-token early exit / think-harder dial (ADR 0004)",
     "RQ-4 (H3): MPO vs DPO",
@@ -16,5 +16,5 @@
   ],
   "known_defects": [],
   "next_action": "Harvest exp10_full -> H1-at-scale ratio + BLiMP; publish a1/a2 checkpoints to HF via registry; fix registry params/scan bugs; Studio cap-3 playground",
-  "gpu_lock_holder": "exp10 timing probe (110M-class, 300 steps x 3 arms)"
+  "gpu_lock_holder": "exp10_full resumed (A1 retrain + A2/A3; per-arm resume active)"
 }

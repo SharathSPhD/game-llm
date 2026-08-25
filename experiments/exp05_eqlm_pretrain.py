@@ -438,24 +438,51 @@ def main():
     print(f"Gradient clipping: {grad_clip}")
     print(f"Log every: {log_every} steps")
 
+
+    def _arm_done(tag: str) -> bool:
+        return (output_dir / f"arm_{tag}.json").exists() and (
+            output_dir / "checkpoints" / f"{tag}.pt"
+        ).exists()
+
+    def _load_arm(tag: str, model: torch.nn.Module) -> dict:
+        """Resume path: restore metrics + trained weights for a completed arm."""
+        from kinetic_ai.models.eqlm import load_checkpoint
+
+        loaded = load_checkpoint(output_dir / "checkpoints" / f"{tag}.pt")
+        model.load_state_dict(loaded.state_dict())
+        model.to(device)
+        with open(output_dir / f"arm_{tag}.json") as fh:
+            saved: dict = json.load(fh)
+        print(f"RESUME: {tag} already complete - skipped training, loaded weights")
+        return saved
+
+    def _persist_arm(tag: str, arm_results: dict) -> None:
+        """Crash safety: per-arm metrics written the moment the arm finishes."""
+        with open(output_dir / f"arm_{tag}.json", "w") as fh:
+            json.dump(arm_results, fh)
+
     # Arm A1
     print("\n--- Training A1 ---")
     a1_opt = torch.optim.AdamW(a1_model.parameters(), lr=cfg["training"]["lr"])
-    a1_results = train_arm(
-        "A1",
-        a1_model,
-        train_loader,
-        a1_opt,
-        device,
-        num_steps,
-        log_every,
-        grad_clip=grad_clip,
-    )
-    try:
-        save_checkpoint(a1_model, output_dir / "checkpoints" / "a1.pt")
-        print(f"Saved checkpoint: {output_dir}/checkpoints/a1.pt")
-    except Exception as e:  # checkpointing must never kill a finished run
-        print(f"WARNING: checkpoint save failed for A1: {e}")
+    if _arm_done("a1"):
+        a1_results = _load_arm("a1", a1_model)
+    else:
+        a1_results = train_arm(
+            "A1",
+            a1_model,
+            train_loader,
+            a1_opt,
+            device,
+            num_steps,
+            log_every,
+            grad_clip=grad_clip,
+        )
+        try:
+            save_checkpoint(a1_model, output_dir / "checkpoints" / "a1.pt")
+            print(f"Saved checkpoint: {output_dir}/checkpoints/a1.pt")
+        except Exception as e:  # checkpointing must never kill a finished run
+            print(f"WARNING: checkpoint save failed for A1: {e}")
+        _persist_arm("a1", a1_results)
     results["arms"]["A1"] = {
         **a1_results,
         "num_params": a1_params,
@@ -471,22 +498,26 @@ def main():
     # Arm A2
     print("\n--- Training A2 ---")
     a2_opt = torch.optim.AdamW(a2_model.parameters(), lr=cfg["training"]["lr"])
-    a2_results = train_arm(
-        "A2",
-        a2_model,
-        train_loader,
-        a2_opt,
-        device,
-        num_steps,
-        log_every,
-        grad_clip=grad_clip,
-        lambda_aux=float(cfg["arms"]["A2"].get("lambda_aux", 0.0)),
-    )
-    try:
-        save_checkpoint(a2_model, output_dir / "checkpoints" / "a2.pt")
-        print(f"Saved checkpoint: {output_dir}/checkpoints/a2.pt")
-    except Exception as e:  # checkpointing must never kill a finished run
-        print(f"WARNING: checkpoint save failed for A2: {e}")
+    if _arm_done("a2"):
+        a2_results = _load_arm("a2", a2_model)
+    else:
+        a2_results = train_arm(
+            "A2",
+            a2_model,
+            train_loader,
+            a2_opt,
+            device,
+            num_steps,
+            log_every,
+            grad_clip=grad_clip,
+            lambda_aux=float(cfg["arms"]["A2"].get("lambda_aux", 0.0)),
+        )
+        try:
+            save_checkpoint(a2_model, output_dir / "checkpoints" / "a2.pt")
+            print(f"Saved checkpoint: {output_dir}/checkpoints/a2.pt")
+        except Exception as e:  # checkpointing must never kill a finished run
+            print(f"WARNING: checkpoint save failed for A2: {e}")
+        _persist_arm("a2", a2_results)
     results["arms"]["A2"] = {
         **a2_results,
         "num_params": a2_params,
@@ -519,22 +550,26 @@ def main():
             ref_mode="ema",
             ref_beta=0.999,
         )
-    a3_results = train_arm(
-        "A3",
-        a3_model,
-        train_loader,
-        a3_opt,
-        device,
-        num_steps,
-        log_every,
-        grad_clip=grad_clip,
-        lambda_aux=float(cfg["arms"]["A3"].get("lambda_aux", 0.0)),
-    )
-    try:
-        save_checkpoint(a3_model, output_dir / "checkpoints" / "a3.pt")
-        print(f"Saved checkpoint: {output_dir}/checkpoints/a3.pt")
-    except Exception as e:  # checkpointing must never kill a finished run
-        print(f"WARNING: checkpoint save failed for A3: {e}")
+    if _arm_done("a3"):
+        a3_results = _load_arm("a3", a3_model)
+    else:
+        a3_results = train_arm(
+            "A3",
+            a3_model,
+            train_loader,
+            a3_opt,
+            device,
+            num_steps,
+            log_every,
+            grad_clip=grad_clip,
+            lambda_aux=float(cfg["arms"]["A3"].get("lambda_aux", 0.0)),
+        )
+        try:
+            save_checkpoint(a3_model, output_dir / "checkpoints" / "a3.pt")
+            print(f"Saved checkpoint: {output_dir}/checkpoints/a3.pt")
+        except Exception as e:  # checkpointing must never kill a finished run
+            print(f"WARNING: checkpoint save failed for A3: {e}")
+        _persist_arm("a3", a3_results)
     results["arms"]["A3"] = {
         **a3_results,
         "num_params": a3_params,
