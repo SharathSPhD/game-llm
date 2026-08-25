@@ -712,6 +712,9 @@ async def playground_generate(
 
         solver_iters_list: list[int | None] = []
         if model_class_name == "EqLM":
+            from kinetic_ai.models.eqlm import EqLM as _EqLM
+
+            assert isinstance(model, _EqLM)
             # Equilibrium path: the solver budget is the "think-harder" dial and
             # warm_start reuses the previous token's equilibrium (H1'a).
             original_max_iter = model.deq.config.max_iter
@@ -726,7 +729,8 @@ async def playground_generate(
             finally:
                 model.deq.config.max_iter = original_max_iter
             generated_ids = [int(t) for t in output_ids[0, token_ids.shape[0]:]]
-            iters = list(gen_info.get("iter_counts", []))
+            raw_iters = gen_info.get("iter_counts", [])
+            iters = list(raw_iters) if isinstance(raw_iters, (list, tuple)) else []
             solver_iters_list = [int(i) for i in iters[: len(generated_ids)]]
             solver_iters_list += [None] * (len(generated_ids) - len(solver_iters_list))
         else:
