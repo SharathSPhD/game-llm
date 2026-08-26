@@ -53,3 +53,4 @@ data/cache/
 # Model checkpoints live on disk / Hugging Face, never in git
 results/**/checkpoints/
 *.pt
+.claude/
