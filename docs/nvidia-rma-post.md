@@ -1,7 +1,16 @@
 # DGX Spark (GB10): hard power-off at ~91°C platform temp under sustained load — telemetry attached, FieldDiag blocked by Secure Boot on headless unit
 
-**Forum target:** https://forums.developer.nvidia.com/c/dgx/dgx-spark/
-**Related threads:** 349647 (thermal throttling), 363370 (auto shutdown), 373266 (FieldDiag PowerStress MODS-020000600139 → RMA), 380238 (silent hard-locks → RMA'd)
+**PRIMARY (official) channel — NVIDIA Customer Care ticket:**
+http://nvidia.custhelp.com/app/ask  (or Live Chat: http://nvidia.custhelp.com/app/chat/chat_launch/)
+Per the DGX Spark support docs (docs.nvidia.com/dgx/dgx-spark/support.html),
+this is the hardware-support path; FieldDiag is an RMA *pre-check*, not a
+prerequisite for opening the case. Warranty: 1 year (new units).
+
+**Secondary (optional, parallel): community forum**
+https://forums.developer.nvidia.com/c/dgx/dgx-spark/
+Related threads: 349647 (thermal throttling), 363370 (auto shutdown),
+373266 (FieldDiag PowerStress MODS-020000600139 → RMA), 380238 (silent
+hard-locks → RMA'd) — establishes this as a known defect pattern.
 
 ---
 
