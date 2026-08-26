@@ -23,6 +23,18 @@ os.environ["RESULTS_DIR"] = test_results_dir
 
 from app.server import app  # noqa: E402
 
+
+@pytest.fixture(autouse=True)
+def _studio_env(monkeypatch):
+    """Env is read at request time; other test modules mutate it at import.
+
+    Pin this module's env per-test so suite ordering cannot leak a different
+    RESULTS_DIR (or disable mock mode) into these requests.
+    """
+    monkeypatch.setenv("GATEWAY_SECRET", "test-secret")
+    monkeypatch.setenv("KINETIC_MOCK_EXPERIMENTS", "1")
+    monkeypatch.setenv("RESULTS_DIR", test_results_dir)
+
 client = TestClient(app)
 
 AUTH_HEADERS = {"Authorization": "Bearer test-secret"}
