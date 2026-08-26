@@ -224,3 +224,15 @@
   uploaded - archived first). 25 projects on ss@:~/gb10-archive, ~200GB freed
   (2.3T->2.1T), stubs + manifest in place. PSALM-integration/prabhasa pruning
   proposal awaits operator (Section D of ARCHIVE-MANIFEST.md).
+
+## [cycle 16c | 2026-08-26] THERMAL DEFECT RE-VERIFIED (controlled test) + FieldDiag blocker + dashboard fix
+- Controlled stress (safety abort 88C, no sudo needed): platform zones 79.6->
+  89.4C in 44 SECONDS at ~95W; GPU die read only 67-77C simultaneously (12C+
+  die-vs-platform gap = degraded TIM/heat path). DEFECT PRESENT on latest
+  kernel+EC. Evidence: results/thermal_verify.log.
+- FieldDiag fails under Secure Boot: mods.ko builds but insmod rejected ("Key
+  was rejected by service"); box is SSH-only so UEFI/MOK console paths need
+  care. Operator options handed over (sign mods.ko with enrolled shim MOK).
+- NVIDIA Sync DGX Dashboard down because FieldDiag prep stopped services and
+  failed runs never restored them: dgx-dashboard{,-admin} + nvidia-persistenced
+  inactive (enabled). One sudo line restores.

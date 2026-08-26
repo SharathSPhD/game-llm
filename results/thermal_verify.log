@@ -1,0 +1,7 @@
+=== thermal_verify start 2026-08-26T17:15:15
+    11s  maxzone=79.6C  gpu=[97.34 W, 67, 96 %]
+    22s  maxzone=83.8C  gpu=[94.36 W, 64, 82 %]
+    33s  maxzone=86.8C  gpu=[94.93 W, 75, 82 %]
+    44s  maxzone=89.4C  gpu=[92.19 W, 77, 96 %]
+SAFETY ABORT at 89.4C
+VERDICT: RUNAWAY  peak=89.4C  elapsed=44s
