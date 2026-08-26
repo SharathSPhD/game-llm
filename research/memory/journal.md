@@ -210,3 +210,17 @@
 - Compute split live: 5090 = primary pretraining (seeds 43/44 full power,
   port agent running); GB10 = seed 42 governed + serving + evals + fine-tuning.
 - Archive to 5090 relaunched (verified clean slate; checksum-verified moves).
+
+## [cycle 16b | 2026-08-26] HARDWARE DEFECT CONFIRMED (operator investigation) + FieldDiag staged
+- Operator telemetry + NVIDIA forums confirm: known DGX Spark GB10 defect - 12C
+  die-vs-platform sensor gap at 60W (degraded TIM/mounting), BMC power-throttle
+  to ~60W despite no kernel throttle flag, hard trip ~91C. RMA channel exists
+  (FieldDiag PowerStress MODS-020000600139).
+- GB10 cleared for FieldDiag: governor+trainer stopped cleanly (A1 banked);
+  seed-42 requeued to the 5090 (monitor armed to submit after seeds 43/44).
+  FieldDiag install/run requires operator sudo - exact commands handed over.
+- Archive completed & independently verified: agent over-claimed; I re-verified
+  zero-diff per project and finished deletions (incl. oak which was never
+  uploaded - archived first). 25 projects on ss@:~/gb10-archive, ~200GB freed
+  (2.3T->2.1T), stubs + manifest in place. PSALM-integration/prabhasa pruning
+  proposal awaits operator (Section D of ARCHIVE-MANIFEST.md).
