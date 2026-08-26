@@ -179,3 +179,18 @@
   weights channel, git is the code/results channel.
 - exp10 full (10k steps x 3 arms) training; harvest closes H1-at-scale +
   first HF publications.
+
+## [cycle 15 | 2026-08-26] DGX CRASH INVESTIGATION: platform-level, NOT session memory pressure
+- Reboot forensics: hard stops (journal cut mid-write, no shutdown, no panic, no
+  OOM-kills) at Aug 22 08:02 and Aug 26 02:15. sar shows ~20% memory used / 99GB
+  free at BOTH crash moments -> memory exhaustion ruled out. Crash 2 occurred
+  with none of our workloads running (services do not survive reboots).
+- Contributing observation: NVRM NV_ERR_NO_MEMORY storm Aug 21 01:47 during seed
+  runs (unified-memory pressure) - box survived it by a day; not the killer.
+- Verdict: DGX Spark platform instability on 6.17.0-1029-nvidia; the automatic
+  kernel update to 6.17.0-1031-nvidia this morning is likely the fix. Operator
+  recommendation: run full DGX OS/firmware updates (fwupdmgr / apt) when idle.
+- Proposed but NOT installed (needs operator authorization): systemd user units
+  for backend+tunnel auto-heal after reboots.
+- Recovery: backend + fresh quick tunnel + KV pointer updated (gateway E2E green);
+  exp10 relaunched (per-arm resume active); persistent monitor re-armed.
