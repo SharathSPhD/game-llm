@@ -194,3 +194,19 @@
   for backend+tunnel auto-heal after reboots.
 - Recovery: backend + fresh quick tunnel + KV pointer updated (gateway E2E green);
   exp10 relaunched (per-arm resume active); persistent monitor re-armed.
+
+## [cycle 16 | 2026-08-26] GB10 ROOT CAUSE CONFIRMED: THERMAL TRIP (~91C) + dual-GPU closure program
+- Blackbox caught the 15:48 crash: final synced samples show 96% GPU util,
+  63-67W, thermal zones climbing 89.9->90.3->91.2C, then instant power cut.
+  EC-level thermal trip explains every silent death (no OS logging possible).
+  91C at only ~65W = suspected COOLING DEFECT (fan/dust/contact) - operator
+  physical check requested; no fan RPM sensors exposed for software check.
+- Mitigation: thermal_governor.sh (SIGSTOP >85C / SIGCONT <78C) now guards the
+  GB10 seed-42 run; blackbox continues recording.
+- Alignment review recorded: H3/H4 starvation + seed discipline drift corrected;
+  SPEC 0007 (MPO vs DPO on BLiMP-pairs-as-preferences) + SPEC 0008 (auction
+  decoding of domain specialists) written; closure = full program + arXiv paper,
+  HF releases, PyPI v1.0+docs (operator).
+- Compute split live: 5090 = primary pretraining (seeds 43/44 full power,
+  port agent running); GB10 = seed 42 governed + serving + evals + fine-tuning.
+- Archive to 5090 relaunched (verified clean slate; checksum-verified moves).

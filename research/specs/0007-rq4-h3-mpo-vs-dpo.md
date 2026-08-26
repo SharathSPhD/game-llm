@@ -1,39 +1,28 @@
 # SPEC 0007 — RQ-4 (H3): Magnetic Preference Optimization vs DPO
 
-Status: ACTIVE · closure program · pre-registered before any run
+Status: ACTIVE (closure program) · GPU: GB10 (thermal-governed) after exp10 seed-42
 
-## The honest scale-appropriate design
+## Insight that makes H3 honest at our scale
 
-H3 as registered: "MMD-regularized preference optimization matches or exceeds DPO
-win-rate on a held-out preference set with lower reward-hacking drift
-(KL-to-reference)." At our 110M/BabyLM scale, human-preference chat data is
-meaningless — but **BLiMP minimal pairs are bona fide preference pairs**
-(sentence_good ≻ sentence_bad, linguist-annotated). This gives a real preference
-task our models can genuinely learn, with a held-out split for honest win-rate.
+BLiMP minimal pairs ARE preference pairs: (sentence_good ≻ sentence_bad). No
+reward model, no synthetic judge — linguistic acceptability is the preference.
 
-## Arms (all start from the SAME exp10 EqLM-v3 checkpoint = reference π_ref)
+## Design (pre-registered)
 
-- B0: reference model (no tuning) — floor.
-- B1: DPO (standard loss, β sweep {0.1, 0.5} in smoke → fix one) on train pairs.
-- B2: MPO = identical DPO loss, optimizer swapped to MagneticAdamW with FIXED
-  reference = π_ref weights (its theoretical home; τ sweep {1e-3, 1e-2} smoke).
-- Matched steps/batch/lr across B1/B2; 3 seeds for the headline pair.
+- Base: the trained 110M checkpoints from exp10 (EqLM postln + explicit baseline).
+- Train split: 60% of BLiMP phenomena (stratified); held-out: remaining 40%.
+- Arms (each on both base models, seed 42 + 2 more if time):
+  P1 DPO (standard loss, β=0.1, AdamW, reference = frozen base);
+  P2 MPO = identical DPO loss but optimizer MagneticAdamW with FIXED reference
+  = the frozen base weights (the magnet's theoretical home, per ADR 0003),
+  τ ∈ {1e-3, 1e-2} chosen by short sweep.
+- Matched budgets: same pairs, steps, lr per base model.
+- Metrics: held-out BLiMP accuracy (win-rate proxy); KL-to-reference drift
+  (mean per-token KL on a held-out text sample); catastrophic-drift check
+  (train-domain accuracy).
+- **H3 scoring:** MPO ≥ DPO on held-out accuracy AND lower KL drift ⇒ MET;
+  either half alone ⇒ PARTIAL; neither ⇒ MISSED. Honest either way.
 
-## Data
+## Runtime
 
-BLiMP (nyu-mll) split by phenomenon: train = 40 phenomena, held-out = 15 unseen
-phenomena (generalization, not memorization), ~100 pairs each. Fixed split file
-committed.
-
-## Metrics (pre-registered)
-
-- Win-rate: held-out pairs where log p(good) > log p(bad).
-- Drift: KL(π_tuned ‖ π_ref) estimated on a fixed 1M-token corpus sample
-  (mean per-token KL), plus BabyLM val loss delta (capability retention).
-- **H3 met** iff B2 win-rate ≥ B1 − 1pp AND B2 KL-drift < B1 KL-drift
-  (paired over 3 seeds, bootstrap CI).
-
-## Compute
-
-Runs on either box (small: 110M model, ~4k pref pairs, <1h/arm/seed). Smoke
-(1 seed, 500 steps) gates the full 3-seed run.
+~1-2h per arm on GB10 (fine-tuning is short); thermal governor active.

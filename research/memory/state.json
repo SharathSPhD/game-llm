@@ -1,6 +1,6 @@
 {
-  "cycle": 14,
-  "phase": "h1prime-adaptive + kinetic-studio",
+  "cycle": 16,
+  "phase": "closure-program (dual-GPU)",
   "current_rq": "RQ-3b (H1-prime a/b/c per ADR 0004)",
   "gpu_lock": true,
   "open_questions": [
@@ -15,6 +15,6 @@
     "RQ-3 (H1) iteration 3: formal miss at 0.930 [0.898,0.949] vs 0.95 (F18); program continues"
   ],
   "known_defects": [],
-  "next_action": "Harvest exp10_full -> H1-at-scale ratio + BLiMP; publish a1/a2 checkpoints to HF via registry; fix registry params/scan bugs; Studio cap-3 playground",
+  "next_action": "Harvest: 5090 seeds 43/44 + GB10 seed 42 -> 3-seed H1-at-scale verdict; then H3 (SPEC 0007) on GB10 + H4 specialists (SPEC 0008) on 5090; then arXiv/HF/PyPI-v1 artifact freeze",
   "gpu_lock_holder": "exp10_full resumed (A1 retrain + A2/A3; per-arm resume active)"
 }
