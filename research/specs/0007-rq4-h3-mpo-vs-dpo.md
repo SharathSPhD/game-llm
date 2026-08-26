@@ -1,6 +1,12 @@
 # SPEC 0007 — RQ-4 (H3): Magnetic Preference Optimization vs DPO
 
-Status: ACTIVE (closure program) · GPU: GB10 (thermal-governed) after exp10 seed-42
+Status: ACTIVE (closure program) · GPU: 5090 (after exp10 seed42/43/44 queue drains)
+— reassigned off GB10 (2026-08-26): GB10 has a confirmed hardware cooling
+defect (12C die-vs-platform sensor gap, BMC throttle to ~60W, hard trip ~91C;
+see cycle 16b/16c journal + results/thermal_governor.log,
+results/thermal_verify.log) and is excluded from ALL GPU workload per operator
+directive until RMA/repair. GB10 remains available for serving, evals, and
+CPU-bound work only.
 
 ## Insight that makes H3 honest at our scale
 
@@ -25,4 +31,6 @@ reward model, no synthetic judge — linguistic acceptability is the preference.
 
 ## Runtime
 
-~1-2h per arm on GB10 (fine-tuning is short); thermal governor active.
+~1-2h per arm on the 5090 (fine-tuning is short); no thermal governor needed
+off GB10. Queues behind the exp10 seed42/43/44 H1-at-scale runs on the same GPU
+(never two GPU jobs at once).

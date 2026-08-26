@@ -1,6 +1,9 @@
 # SPEC 0008 — RQ-5 (H4): truthful token-auction decoding of specialist models
 
-Status: ACTIVE (closure program) · GPU: 5090 (specialist training) + GB10 (decode eval)
+Status: ACTIVE (closure program) · GPU: 5090 (specialist training + decode eval)
+— decode eval moved off GB10 (2026-08-26): GB10 excluded from ALL GPU workload
+per operator directive pending its cooling-defect RMA/repair (see SPEC 0007
+for the reassignment rationale).
 
 ## Design (pre-registered)
 
@@ -20,4 +23,4 @@ Status: ACTIVE (closure program) · GPU: 5090 (specialist training) + GB10 (deco
 
 ## Runtime
 
-Specialists: ~1h total on 5090. Decode eval: CPU/GB10 minutes.
+Specialists: ~1h total on 5090. Decode eval: CPU or 5090 minutes (not GB10).

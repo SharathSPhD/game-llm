@@ -236,3 +236,27 @@
 - NVIDIA Sync DGX Dashboard down because FieldDiag prep stopped services and
   failed runs never restored them: dgx-dashboard{,-admin} + nvidia-persistenced
   inactive (enabled). One sudo line restores.
+
+## [cycle 16d | 2026-08-26] GB10 EXCLUDED FROM GPU WORKLOAD (operator directive); 5090-only closure program
+- FieldDiag PowerStress blocked for real this time: mods.ko builds+signs fine,
+  but `insmod` rejected under Secure Boot ("Key was rejected by service");
+  official user guide confirms Secure Boot must be disabled in UEFI first.
+  Box is SSH-only (no physical/console access), so the disable/re-enable UEFI
+  round trip is not safe to attempt remotely - deferred, not abandoned.
+  dgx-dashboard{,-admin}.service restarted (was stopped for the attempt).
+- Operator directive: leave GB10 out of ALL GPU workload going forward (until
+  RMA/repair). SPEC 0007 (H3) reassigned GB10->5090; SPEC 0008 (H4) decode-eval
+  reassigned GB10->5090. state.json known_defects[] now carries the GB10
+  hardware-defect record (was empty).
+- 5090 status verified directly (connect_check + status.sh + container
+  inspection, not assumed from memory): seed43 COMPLETE (all 3 arms,
+  results.json + loss_curves.pdf, finished 18:43); seed44 running arm A2
+  (~step 5800/10000 at check time), 100% util / 351W / 69C - healthy. No
+  seed42 monitor was actually alive (prior "monitor armed" note did not
+  survive) - built configs/exp10_seed42.yaml (seed44 config + seed:42) and
+  seed42_after.sh (polls for train.py exit, then launches seed42; enforces
+  never-two-GPU-jobs-at-once) directly in the existing kinetic_exp10 project
+  dir on the 5090; launched detached (PID 736), confirmed waiting correctly.
+- Next: poll 5090 for seed44 A3 completion + seed42 full run; harvest
+  3-seed H1-at-scale verdict (bootstrap CI / Wilcoxon per run.md gates);
+  then SPEC 0007 + SPEC 0008 on 5090 (sequential, same queue discipline).
