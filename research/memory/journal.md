@@ -260,3 +260,15 @@
 - Next: poll 5090 for seed44 A3 completion + seed42 full run; harvest
   3-seed H1-at-scale verdict (bootstrap CI / Wilcoxon per run.md gates);
   then SPEC 0007 + SPEC 0008 on 5090 (sequential, same queue discipline).
+
+## [cycle 17 | 2026-08-26] 110M SEEDS 43/44 HARVESTED (interim; seed 42 training on 5090)
+- 5090 delivered seeds 43/44 (A1 11min/arm, EqLM 92min/arm at batch 32 x 10k):
+  A1 BLiMP 0.675/0.693 (loss 3.07/2.73) vs A2 0.538/0.542, A3 0.532/0.544 -
+  ratios 0.78-0.80. The 300-step probe loss lead INVERTED by 10k steps.
+- Interim honest read (pending seed 42): matched-budget quality ratio DEGRADES
+  with scale (0.93 @ 11M -> ~0.79 @ 121M). Paper story sharpens: equilibrium
+  LMs buy O(1) depth-memory + 79% cheaper warm decoding at a scale-growing
+  matched-budget quality cost. F20 formalized after seed 42 + Tarka.
+- Port agent had pre-staged chained seed-42 on the 5090 (auto-started 22:01);
+  monitor re-armed. GB10 remains GPU-idle per cooling-defect directive; NVIDIA
+  case package delivered (3 PDFs, questionnaire answered from telemetry).
