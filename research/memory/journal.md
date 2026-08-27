@@ -370,3 +370,14 @@
   screen -> B1 seeds 43/44 -> budget sweeps. B4 note: Lipschitz penalty
   huge at init (loss 35k -> ~250 by step 600, grad-clip protected);
   running as registered; log-scale B4' is the fallback iteration.
+
+## [cycle 19d | 2026-08-27] H6 QUEUE 2 HARVESTED: PARITY AT WIDTH (F24)
+- B1 anytime 3 seeds: 0.662/0.697/0.672 -> ratio vs explicit 0.991 mean
+  (seed 43 EXCEEDS baseline). F20's widening-gap trend was a property of
+  solver-based training, not the architecture. Budget-sweep rider MET
+  (0.59-0.62 @4, graceful). B4 combo refuted (0.529, penalty drowned CE).
+  F24 recorded; Tarka running (like-for-like recipe deltas, anytime-vs-
+  Anderson eval-path mismatch, BLiMP set identity are its attack angles).
+- GPU queue drained again. Next: fold Tarka F24, paper H6 section + site
+  card + README, HF release of the parity checkpoint (B1 seed43), ralph
+  closure pass, sign-off request F23/F24.
