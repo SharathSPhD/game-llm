@@ -1,0 +1,30 @@
+arms:
+  P3a:
+    optimizer: magnetic
+    tau: 0.1
+  P3b:
+    optimizer: magnetic
+    tau: 1.0
+  P3c:
+    optimizer: magnetic
+    tau: 10.0
+bases:
+  eqlm:
+    checkpoint: results/exp10_seed43/checkpoints/a3.pt
+  explicit:
+    checkpoint: results/exp10_seed43/checkpoints/a1.pt
+device: cuda
+pairs:
+  json_file: data/blimp_subset.json
+  train_uids:
+  - adjunct_island
+  - anaphor_gender_agreement
+  - animate_subject_passive
+seed: 43
+training:
+  batch_size: 8
+  beta: 0.1
+  epochs: 3
+  lr: 1e-5
+  max_seq_len: 128
+

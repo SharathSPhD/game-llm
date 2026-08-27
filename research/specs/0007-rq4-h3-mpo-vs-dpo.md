@@ -47,3 +47,17 @@ reward model, no synthetic judge — linguistic acceptability is the preference.
 ~1-2h per arm on the 5090 (fine-tuning is short); no thermal governor needed
 off GB10. Queues behind the exp10 seed42/43/44 H1-at-scale runs on the same GPU
 (never two GPU jobs at once).
+
+## Rider (pre-registered 2026-08-27, BEFORE seeds 43/44 or any rider run):
+## tau dose-response
+
+Seed-42 interim shows the magnet's total displacement scales ~ lr*tau*T
+(~1e-4 relative at tau=1e-2, lr=1e-5, T~675 steps) — the pre-registered tau
+range cannot bind at this budget, so any MET at tau<=1e-2 is letter-only.
+Rider exp11b: identical protocol, arms tau in {0.1, 1.0, 10.0} (P3a/P3b/P3c)
+on both bases, same 3 seeds. Prediction (falsifiable): KL drift decreases
+monotonically in tau with visible magnitude by tau=1.0; held-out accuracy is
+maintained (magnet preserves generalization) until some tau* where training
+is suppressed entirely (train acc stops improving). H3 verdict will be
+scored on the pre-registered arms; the rider characterizes the mechanism's
+dose-response and informs the paper's honest interpretation.
