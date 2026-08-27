@@ -7,6 +7,7 @@ Tests the Phase 3 Equilibrium Lab server endpoints:
   - Job queue stub functionality
 """
 
+import json
 import os
 import time
 
@@ -672,3 +673,53 @@ class TestPlaygroundEquilibriumLens:
         # tight tol -> solver hits the budget: the dial demonstrably binds
         assert max(iters) <= 5 and max(iters) >= 4, iters
         assert data["mean_iters"] > 0
+
+
+class TestAuctionTraces:
+    """GET /api/auction/traces — real exp12 decode traces for the playground."""
+
+    def _seed_tracedir(self, tmp_path, monkeypatch):
+        monkeypatch.setenv("RESULTS_DIR", str(tmp_path))
+        exp12 = tmp_path / "exp12"
+        exp12.mkdir()
+        traces = [
+            {"position": 0, "bids": [0.9, 0.4], "winner": 0, "payment": 0.4,
+             "target_token": 11},
+            {"position": 1, "bids": [0.2, 0.7], "winner": 1, "payment": 0.2,
+             "target_token": 12},
+        ]
+        (exp12 / "traces_seed42.json").write_text(json.dumps(traces))
+        (exp12 / "results_seed42.json").write_text(json.dumps({
+            "seed": 42,
+            "domains": {"a": "childes", "b": "simple_wiki"},
+            "eval": {"perplexity_mixed": {"S_A": 30.0, "S_B": 40.0,
+                                          "ENS": 28.0, "AUC": 27.0},
+                     "auction_win_frac_a": 0.6},
+            "h4_score": "MET",
+        }))
+        return traces
+
+    def test_requires_auth(self):
+        assert client.get("/api/auction/traces").status_code in (401, 403)
+
+    def test_lists_available_trace_seeds(self, tmp_path, monkeypatch):
+        self._seed_tracedir(tmp_path, monkeypatch)
+        resp = client.get("/api/auction/traces", headers=AUTH_HEADERS)
+        assert resp.status_code == 200, resp.text
+        data = resp.json()
+        assert data["seeds"] == [42]
+
+    def test_returns_trace_with_summary(self, tmp_path, monkeypatch):
+        traces = self._seed_tracedir(tmp_path, monkeypatch)
+        resp = client.get("/api/auction/traces/42?limit=1", headers=AUTH_HEADERS)
+        assert resp.status_code == 200, resp.text
+        data = resp.json()
+        assert data["traces"] == traces[:1]
+        assert data["summary"]["h4_score"] == "MET"
+        assert data["summary"]["perplexity_mixed"]["AUC"] == 27.0
+        assert data["summary"]["domains"] == {"a": "childes", "b": "simple_wiki"}
+
+    def test_unknown_seed_404(self, tmp_path, monkeypatch):
+        self._seed_tracedir(tmp_path, monkeypatch)
+        resp = client.get("/api/auction/traces/99", headers=AUTH_HEADERS)
+        assert resp.status_code == 404

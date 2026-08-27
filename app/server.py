@@ -523,6 +523,49 @@ async def qre_path_endpoint(
     )
 
 
+@app.get("/api/auction/traces")
+async def auction_traces_list(
+    authorization: str | None = Header(None),
+) -> dict:
+    """List seeds with real exp12 auction decode traces available."""
+    require_bearer_auth(authorization)
+    exp12 = Path(get_results_dir()) / "exp12"
+    seeds = sorted(
+        int(p.stem.split("traces_seed")[1])
+        for p in exp12.glob("traces_seed*.json")
+        if p.stem.split("traces_seed")[1].isdigit()
+    ) if exp12.is_dir() else []
+    return {"seeds": seeds}
+
+
+@app.get("/api/auction/traces/{seed}")
+async def auction_traces_get(
+    seed: int,
+    limit: int = 200,
+    authorization: str | None = Header(None),
+) -> dict:
+    """Real per-token auction traces (bids/winner/payment) from exp12,
+    plus the run's summary metrics — feeds the Auction playground with
+    real model data (SPEC 0008 app tie-in)."""
+    require_bearer_auth(authorization)
+    exp12 = Path(get_results_dir()) / "exp12"
+    trace_file = exp12 / f"traces_seed{seed}.json"
+    if not trace_file.is_file():
+        raise HTTPException(status_code=404, detail=f"No traces for seed {seed}")
+    traces = json.loads(trace_file.read_text())[: max(0, min(limit, 1000))]
+    summary: dict = {}
+    results_file = exp12 / f"results_seed{seed}.json"
+    if results_file.is_file():
+        r = json.loads(results_file.read_text())
+        summary = {
+            "h4_score": r.get("h4_score"),
+            "domains": r.get("domains"),
+            "perplexity_mixed": (r.get("eval") or {}).get("perplexity_mixed"),
+            "auction_win_frac_a": (r.get("eval") or {}).get("auction_win_frac_a"),
+        }
+    return {"seed": seed, "traces": traces, "summary": summary}
+
+
 @app.post("/api/auction")
 async def auction(
     body: dict,
