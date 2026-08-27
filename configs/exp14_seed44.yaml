@@ -1,0 +1,16 @@
+# H5 (SPEC 0009): autoregressive auction decoding. 5090 job (eval-only).
+seed: 44
+device: cuda
+specialists:
+  a: results/exp12/checkpoints/specialist_a_seed44.pt
+  b: results/exp12/checkpoints/specialist_b_seed44.pt
+judge: results/exp10_seed42/checkpoints/a1.pt
+domains:
+  a: {file: data/childes.train.txt}
+  b: {file: data/simple_wiki.train.txt}
+data:
+  heldout_frac: 0.05
+generation:
+  prefix_len: 32
+  gen_len: 32
+  prompts_per_domain: 50
