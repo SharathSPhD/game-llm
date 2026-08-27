@@ -17,6 +17,6 @@
   "known_defects": [
     "GB10 cooling defect (hardware): 12C die-vs-platform sensor gap at ~60W, BMC power-throttle to ~60W despite no kernel throttle flag, hard trip ~91C. Confirmed via live telemetry + NVIDIA forum cross-reference (RMA channel: FieldDiag PowerStress MODS-020000600139). FieldDiag itself blocked here: mods.ko builds/signs but insmod rejected under Secure Boot ('Key was rejected by service'); box is SSH-only so the UEFI disable-Secure-Boot/re-enable round trip needs physical/console access not currently available. Operator directive (2026-08-26): GB10 excluded from ALL GPU workload until RMA/repair; GB10 stays available for serving/evals/CPU-bound work only."
   ],
-  "next_action": "exp13 screen -> harvest, pick winning arm, run seeds 43/44 -> F24 verdict vs SPEC 0010 gates. Tarka F23 in flight -> fold, paper H5 section. Then: paper H6 section, site cards F23/F24, ralph closure pass (paper/site/README refresh, sign-off request F23+). GB10 GPU-free (out of scope per operator).",
-  "gpu_lock_holder": "rtx5090: exp13 seed-42 screen (B1 anytime / B2 trajpen / B3 core), started 2026-08-27 ~12:15Z"
+  "next_action": "H6 queue 2 on 5090 -> harvest: B4 vs full MET gate; 3-seed B1 stats; budget-sweep anytime property -> F24 verdict per SPEC 0010 gates + Tarka -> paper H6 section + site card -> ralph closure pass -> sign-off F23/F24.",
+  "gpu_lock_holder": "rtx5090: H6 queue 2 (B4 screen -> B1 seeds 43/44 -> budget sweeps), ~4h"
 }

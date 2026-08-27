@@ -357,3 +357,16 @@
 - exp13 seed-42 screen (B1/B2/B3) training on 5090 (~5h). Ship hiccups
   fixed en route: unquoted YAML colon; exp14's 5s/seed verified real
   (batched greedy).
+
+## [cycle 19c | 2026-08-27] H6 SCREEN: each TRIZ arm cracked a different half
+- Seed-42 screen (vs A3 control 0.537 / conv 0.0): B1 anytime BLiMP 0.662
+  (86% gap closure!) but conv 0.0; B2 trajpen conv 1.00 at 4.0 iters (first
+  CERTIFIED 121M equilibrium, mem 5.5GB lowest) but BLiMP 0.577; B3 core
+  0.642, conv 0.20, fastest (24min). Bonus discovery: unrolled anytime
+  training BEATS IFT-solver training on wall-clock (44 vs 92 min) - the
+  solve dominates EqLM training cost, not backprop.
+- No arm meets both MET halves -> pre-registered B4 = B1+B2 combo (spec
+  amendment BEFORE run) + B1 budget-sweep rider. Queue 2 launched: B4
+  screen -> B1 seeds 43/44 -> budget sweeps. B4 note: Lipschitz penalty
+  huge at init (loss 35k -> ~250 by step 600, grad-clip protected);
+  running as registered; log-scale B4' is the fallback iteration.
