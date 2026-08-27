@@ -24,3 +24,16 @@ for the reassignment rationale).
 ## Runtime
 
 Specialists: ~1h total on 5090. Decode eval: CPU or 5090 minutes (not GB10).
+
+## Realization (2026-08-27)
+
+- Harness: experiments/exp12_auction_decoding.py (CPU smoke suite
+  tests/test_exp12.py, 5 green incl. vectorized-auction == TokenAuction
+  cross-check and second-price trace property).
+- Domains: childes.train.txt (child-directed speech, 15.2MB) vs
+  simple_wiki.train.txt (written/wiki, 8.9MB) from the BabyLM-2026
+  strict-small snapshot; 5% line-level held-out per seed; mixed stream =
+  alternating held-out windows (50/50), ~100k eval tokens.
+- Specialists: ~30M ExplicitLM (d=384, 6 layers, 6 heads), 3k steps,
+  batch 32, lr 3e-4. Seeds 42/43/44. Checkpoints saved for the playground/HF.
+- Queued on the 5090 behind exp11 (single-GPU discipline, wait-wrapper).

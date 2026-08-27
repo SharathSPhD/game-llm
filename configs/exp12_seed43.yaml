@@ -1,0 +1,27 @@
+# H4 (SPEC 0008): auction decoding of domain specialists. 5090 job.
+seed: 43
+device: cuda
+domains:
+  a:
+    name: childes            # child-directed speech
+    file: data/childes.train.txt
+  b:
+    name: simple_wiki        # written/wiki text
+    file: data/simple_wiki.train.txt
+data:
+  heldout_frac: 0.05
+  max_eval_windows: 400
+model:
+  vocab_size: 50257
+  d_model: 384
+  n_heads: 6
+  d_ff: 1536
+  max_seq_len: 128
+  n_layers: 6
+training:
+  steps: 3000
+  batch_size: 32
+  lr: 3e-4
+eval:
+  trace_positions: 200
+save_checkpoints: true
