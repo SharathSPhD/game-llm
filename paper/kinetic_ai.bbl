@@ -1,8 +1,103 @@
-\begin{thebibliography}{0}
+\begin{thebibliography}{19}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
 \expandafter\ifx\csname urlstyle\endcsname\relax
   \providecommand{\doi}[1]{doi: #1}\else
   \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Anderson(1965)]{Anderson1965}
+D.~G. Anderson.
+\newblock Iterative procedures for nonlinear integral equations.
+\newblock \emph{Journal of the Association for Computing Machinery (JACM)}, 12\penalty0 (4), 1965.
+
+\bibitem[Bai et~al.(2019)Bai, Kolter, and Koltun]{Bai2019}
+Shaojie Bai, J.~Zico Kolter, and Vladlen Koltun.
+\newblock Deep equilibrium models.
+\newblock In \emph{Advances in Neural Information Processing Systems 32 (NeurIPS 2019)}, 2019.
+
+\bibitem[Bai et~al.(2020)Bai, Koltun, and Kolter]{BaiKoltun2020}
+Shaojie Bai, Vladlen Koltun, and J.~Zico Kolter.
+\newblock Multiscale deep equilibrium models.
+\newblock In \emph{Advances in Neural Information Processing Systems}, 2020.
+
+\bibitem[Dehghani et~al.(2019)Dehghani, Gouws, Vinyals, Uszkoreit, and Kaiser]{Dehghani2019}
+Mostafa Dehghani, Stephan Gouws, Oriol Vinyals, Jakob Uszkoreit, and Lukasz Kaiser.
+\newblock Universal transformers.
+\newblock In \emph{International Conference on Learning Representations}, 2019.
+
+\bibitem[Duetting et~al.(2024)Duetting, Mirrokni, Paes~Leme, Xu, and Zuo]{Duetting2024}
+Paul Duetting, Vahab Mirrokni, Renato Paes~Leme, Haoming Xu, and Siqi Zuo.
+\newblock Mechanism design for large language models.
+\newblock In \emph{Proceedings of the Web Conference 2024 (WWW 2024)}, 2024.
+
+\bibitem[Fung et~al.(2022)Fung, Heaton, Li, McKenzie, Osher, and Yin]{Fung2022}
+Samy~Wu Fung, Howard Heaton, Qiuwei Li, Daniel McKenzie, Stanley Osher, and Wotao Yin.
+\newblock {JFB}: Jacobian-free backpropagation for implicit networks.
+\newblock In \emph{Proceedings of the AAAI Conference on Artificial Intelligence}, 2022.
+
+\bibitem[Hoda et~al.(2010)Hoda, Gilpin, Peña, and Sandholm]{Hoda2010}
+Samid Hoda, Andrew Gilpin, Javier Peña, and Tuomas Sandholm.
+\newblock Smoothing techniques for computing nash equilibria of sequential games.
+\newblock \emph{Mathematics of Operations Research}, 35\penalty0 (2), 2010.
+
+\bibitem[Jacob et~al.(2024)Jacob, Shen, Farina, and Andreas]{Jacob2023}
+Athul~Paul Jacob, Yikang Shen, Gabriele Farina, and Jacob Andreas.
+\newblock The consensus game: Language model generation via equilibrium search.
+\newblock In \emph{International Conference on Learning Representations}, 2024.
+
+\bibitem[Lanctot et~al.(2017)Lanctot, Zambaldi, Gruslys, Lazaridou, Tuyls, P{\'e}rolat, Silver, and Graepel]{Lanctot2017}
+Marc Lanctot, Vinicius Zambaldi, Audrunas Gruslys, Angeliki Lazaridou, Karl Tuyls, Julien P{\'e}rolat, David Silver, and Thore Graepel.
+\newblock A unified game-theoretic approach to multiagent reinforcement learning.
+\newblock \emph{Advances in Neural Information Processing Systems}, 2017.
+
+\bibitem[McKelvey and Palfrey(1995)]{McKelvey1995}
+Richard~D. McKelvey and Thomas~R. Palfrey.
+\newblock Quantal response equilibria for normal form games.
+\newblock \emph{Games and Economic Behavior}, 10\penalty0 (1), 1995.
+
+\bibitem[Munos et~al.(2023)Munos, Valko, Calandriello, Azar, Rowland, and et~al.]{Munos2023}
+R{\'e}mi Munos, Michal Valko, Daniele Calandriello, Mohammad~Gheshlaghi Azar, Mark Rowland, and et~al.
+\newblock Nash learning from human feedback, 2023.
+\newblock arXiv:2312.00886.
+
+\bibitem[P{\'e}rolat et~al.(2022)P{\'e}rolat, De~Vylder, Hennes, Tarassov, Strub, and et~al.]{Perolat2022}
+Julien P{\'e}rolat, Bart De~Vylder, Daniel Hennes, Eugene Tarassov, Florian Strub, and et~al.
+\newblock Mastering the game of {S}tratego with model-free multiagent reinforcement learning.
+\newblock \emph{Science}, 378\penalty0 (6623):\penalty0 990--996, 2022.
+
+\bibitem[Rafailov et~al.(2023)Rafailov, Sharma, Mitchell, Ermon, Manning, and Finn]{Rafailov2023}
+Rafael Rafailov, Archit Sharma, Eric Mitchell, Stefano Ermon, Christopher~D. Manning, and Chelsea Finn.
+\newblock Direct preference optimization: Your language model is secretly a reward model.
+\newblock In \emph{Advances in Neural Information Processing Systems 36 (NeurIPS 2023)}, 2023.
+
+\bibitem[Sokota et~al.(2023)Sokota, Perolat, Roux, Laurière, Perkins, Cen, Lecerf, and Briot]{Sokota2023}
+Samuel Sokota, Julien Perolat, Clément Roux, Mathieu Laurière, Will Perkins, Zhaohan Cen, Lucas Lecerf, and Nicolas Briot.
+\newblock A unified approach to reinforcement learning, quantal response equilibria, and two-player zero-sum games.
+\newblock In \emph{Proceedings of the 2023 International Conference on Learning Representations (ICLR)}, 2023.
+
+\bibitem[Vickrey(1961)]{Vickrey1961}
+William Vickrey.
+\newblock Counterspeculation, auctions, and competitive sealed tenders.
+\newblock \emph{The Journal of Finance}, 16\penalty0 (1):\penalty0 8--37, 1961.
+
+\bibitem[Warstadt et~al.(2020)Warstadt, Parrish, Liu, Mohananey, Peng, Wang, and Bowman]{Warstadt2020}
+Alex Warstadt, Alicia Parrish, Haokun Liu, Anhad Mohananey, Wei Peng, Sheng-Fu Wang, and Samuel~R. Bowman.
+\newblock {BLiMP}: The benchmark of linguistic minimal pairs for {E}nglish.
+\newblock \emph{Transactions of the Association for Computational Linguistics (TACL)}, 8, 2020.
+
+\bibitem[Warstadt et~al.(2023)Warstadt, Mueller, Choshen, Wilcox, Zhuang, and et~al.]{Warstadt2023babylm}
+Alex Warstadt, Aaron Mueller, Leshem Choshen, Ethan Wilcox, Chengxu Zhuang, and et~al.
+\newblock Findings of the {BabyLM} challenge: Sample-efficient pretraining on developmentally plausible corpora, 2023.
+\newblock Proceedings of the BabyLM Challenge at CoNLL.
+
+\bibitem[Winston and Kolter(2020)]{Winston2020}
+Ezra Winston and J.~Zico Kolter.
+\newblock Monotone operator equilibrium networks.
+\newblock In \emph{Advances in Neural Information Processing Systems}, 2020.
+
+\bibitem[Wu et~al.(2024)Wu, Joly, Karpukhin, Chung, and Aitchison]{Wu2024}
+Zhenggang Wu, Azaël Joly, Vladimir Karpukhin, Hyung~Won Chung, and Laurence Aitchison.
+\newblock Self-play preference optimization for language model alignment, 2024.
+\newblock arXiv:2405.00675.
 
 \end{thebibliography}
