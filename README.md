@@ -17,8 +17,11 @@ Kinetic AI implements the transition from **static optimization** to **dynamic e
 | **Magnetic Mirror Descent** | Simultaneous gradient play | Linear last-iterate convergence to its magnetic fixed point where GDA cycles (F1); RND resets reach Nash (F3); asymmetric-game attractor gap discovered (F2) |
 | **Deep Equilibrium Models** | Explicit transformer layers | O(1) activation memory vs O(N) measured (F4); Anderson wins on stiff fixed points (F5) |
 | **Token Auctions** | Winner-take-all generation | Second-price empirically truthful, regret exactly 0 (F6); weighted aggregation measurably manipulable |
-| **Self-Play (SPPO)** | RLHF / DPO | Policy-weighted self-play loop with convergence tests; LLM-scale runs pending |
-| **EqLM** (new architecture) | Stacked GPT-class LMs | Parity with a param-matched explicit baseline at smoke scale (F10); full BabyLM run in progress |
+| **Magnetic Preference Optimization** | DPO drift control | H3 PARTIAL: magnet provably applied but second-order to the DPO gradient across tau in [1e-3, 10] (F21 + rider); DPO shown to damage unseen phenomena (0.74 to 0.61 held-out); EqLM 1655x more drift-resistant than explicit under identical updates |
+| **Auction decoding** | Fixed model / uniform ensembling | H4 MET 3/3 seeds: second-price per-token auction of two 30M domain specialists beats the best single model by 23% and logit-average ensembling by 12% on mixed-domain perplexity (F22) |
+| **EqLM** (new architecture) | Stacked GPT-class LMs | H1 honestly missed: 93.0% of explicit-baseline BLiMP at 11M params (F18), 78.7% at 121M (F20) — the fixed-solver-budget truncation penalty widens with width. Confirmed at 121M: -23% peak memory (O(1) depth), 79% cheaper warm-started decoding (F19). Open problem named: contraction that survives width |
+
+Released 121M checkpoints: [kinetic-eqlm-121m-babylm](https://huggingface.co/qbz506/kinetic-eqlm-121m-babylm) · [kinetic-explicitlm-124m-babylm](https://huggingface.co/qbz506/kinetic-explicitlm-124m-babylm). Findings site: https://sharathsphd.github.io/game-llm/
 
 Everything above traces to committed runs under `results/` (config hashes + seeds).
 The research process is spec-driven and adversarially reviewed — see `CLAUDE.md`,

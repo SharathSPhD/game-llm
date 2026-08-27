@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "kinetic-ai"
-version = "0.2.0"
+version = "1.0.0"
 description = "Game-theoretic LLM training: Magnetic Mirror Descent, Quantal Response Equilibrium, Deep Equilibrium Models, token auctions, and magnetic optimizers."
 readme = "README.md"
 license = {text = "MIT"}
