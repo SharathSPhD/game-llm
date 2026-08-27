@@ -394,3 +394,25 @@
   for any future program: quality-preserving certification (B4' log-scale
   penalty pre-sketched in spec 0010).
 - AWAITING OPERATOR: sign-off F23 + F24 (both Tarka-resolved, staged).
+
+## [cycle 21 | 2026-08-27] PROJECT CLOSED — final elevation pass shipped
+- Operator signed off F23/F24 and directed final closure with two elevations.
+- PAPER (ActiveCircuitDiscovery-grade rewrite, 16pp): purged the early
+  draft's misdescriptions (MMD wrongly glossed as Maximum Mean Discrepancy;
+  a vocabulary-space architecture that was never built; Newton-Schulz;
+  three bib entries with fabricated author lists). New structure: abstract
+  with the six-verdict ledger, contributions, corrected Background with the
+  real MMD closed form and post-LN map, methodology section on
+  pre-registration + Tarka audit, results as arcs (convergence, mechanism,
+  the full H1 diagnostic, parity F24, MPO, auctions), related work over a
+  24-entry VERIFIED bibliography, threats-to-validity, reproducibility,
+  per-seed appendix tables, new parity+budget figure. Builds clean.
+- APP (SAGE-grade): design-token system + dark theme, 7-explainer Learn
+  section, findings gallery from results.json, landing stat tiles, full
+  nav. Agent draft AUDITED: three Learn sections contained fabricated
+  science (magnet credited for F21's 1655x; invented "logic/arithmetic"
+  domains; invented F23 story) — rewritten from findings.md verbatim; nav
+  restored after agent orphaned five pages. tsc + build green; deploys
+  via Vercel on push.
+- Suite 330 green. All artifacts final: paper 16pp, site F1-F24, app,
+  PyPI 1.0.0, HF x3 checkpoints, findings ledger fully signed off.

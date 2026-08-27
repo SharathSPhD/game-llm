@@ -1,6 +1,6 @@
 {
-  "cycle": 20,
-  "phase": "closure: follow-on programs complete",
+  "cycle": 21,
+  "phase": "CLOSED",
   "current_rq": "RQ-3b (H1-prime a/b/c per ADR 0004)",
   "gpu_lock": false,
   "open_questions": [
@@ -17,6 +17,6 @@
   "known_defects": [
     "GB10 cooling defect (hardware): 12C die-vs-platform sensor gap at ~60W, BMC power-throttle to ~60W despite no kernel throttle flag, hard trip ~91C. Confirmed via live telemetry + NVIDIA forum cross-reference (RMA channel: FieldDiag PowerStress MODS-020000600139). FieldDiag itself blocked here: mods.ko builds/signs but insmod rejected under Secure Boot ('Key was rejected by service'); box is SSH-only so the UEFI disable-Secure-Boot/re-enable round trip needs physical/console access not currently available. Operator directive (2026-08-26): GB10 excluded from ALL GPU workload until RMA/repair; GB10 stays available for serving/evals/CPU-bound work only."
   ],
-  "next_action": "AWAITING OPERATOR: sign-off F23/F24. All six hypothesis programs adjudicated, Tarka-resolved, artifacts frozen (paper 6 hypothesis sections, site F1-F24, PyPI 1.0.0, HF 3 checkpoints incl. parity model). Optional next: B4-prime log-scale penalty (quality-preserving certification), external-judge H5 re-eval.",
+  "next_action": "PROJECT CLOSED (operator-directed, 2026-08-27). All six hypothesis programs adjudicated and signed off (F1-F24); paper at publication grade; app at SAGE grade; PyPI/HF/site/repo frozen. Reopening hooks if ever directed: quality-preserving certification (B4-prime log penalty), external-judge H5 re-eval, RunPod serving tier.",
   "gpu_lock_holder": null
 }
