@@ -196846,5 +196846,13 @@ m- **Scale trend (rescoped per Tarka):** ratio 0.930 [0.898, 0.949] at
   parameter-space movement. Double-edged and reported as such: stability
   against preference-induced drift, but also insensitivity to preference
   fine-tuning at matched lr.
-- **Status:** VALIDATED (pre-registered arms) · verdict PARTIAL ·
-  SIGN-OFF PENDING · rider exp11b pending for dose-response characterization
+- **Tarka review (resolved 2026-08-27):** all claims CONFIRMED. Bug
+  hypothesis (tau ignored) excluded: KL trajectories diverge across arms
+  (P2b-P1 deltas at 1e-3 scale) and final losses differ per arm; exact
+  accuracy tie is explained by identical pair-win sets under a 2.25e-5
+  relative displacement. Drift-resistance mechanism confirmed as damped
+  gradients through the 12-iteration weight-tied solve (eqlm base train acc
+  is LOW, 0.493, ruling out already-satisfied preferences; loss reduction
+  0.1-3.9% vs 30-40% explicit). Refined ratio: 1655x lower KL drift.
+- **Status:** VALIDATED (pre-registered arms, Tarka-resolved) · verdict
+  PARTIAL · SIGN-OFF PENDING · rider exp11b pending for dose-response

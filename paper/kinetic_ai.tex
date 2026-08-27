@@ -543,6 +543,20 @@ The probe's 300-step loss lead inverted well before 10k steps (final loss: A1 2.
 
 Results frozen from results/exp10\_5090/exp10\_seed\{42,43,44\}/results.json (config hashes 2a92f4f1\ldots, 9b2f58ad\ldots, 8944b1f3\ldots; RTX 5090).
 
+\subsection{Magnetic Preference Optimization vs.\ DPO (H3, F21)}
+
+H3 asked whether MMD's magnetic anchor improves preference optimization: does DPO with a magnetic pull toward the frozen base model (MPO) match DPO's win-rate at lower reward-hacking drift? Our testbed makes the preference signal exact: BLiMP minimal pairs \emph{are} preference pairs ($\text{sentence}_\text{good} \succ \text{sentence}_\text{bad}$), with no reward model or synthetic judge. We fine-tune each seed's own 121M checkpoints (explicit and EqLM) on 600 pairs from three phenomena and hold out 400 pairs from two unseen phenomena; the DPO loss, $\beta$, learning rate, and steps are identical across arms, which differ \emph{only} in the optimizer's magnet strength $\tau$ (the DPO arm is MagneticAdamW with $\tau=0$, mathematically decoupled AdamW in the same code path — a controlled comparison a torch-AdamW baseline would confound at small drift).
+
+\textbf{Pre-registered verdict: PARTIAL.} At the pre-registered $\tau \in \{10^{-3}, 10^{-2}\}$, MPO's held-out accuracy equals DPO's exactly (all seeds, both bases) and the KL reduction is directionally present but not significant. The diagnosis, adversarially verified: total magnetic displacement scales as $\text{lr}\cdot\tau\cdot T \approx 2\times 10^{-5}$ relative at this budget — the magnet is real (KL trajectories diverge across arms; per-arm losses differ) but under-dosed. A dose-response rider ($\tau \in \{0.1, 1, 10\}$), pre-registered before the remaining seeds ran, characterizes where the magnet binds.
+
+\textbf{Two secondary findings survive adversarial review:}
+
+\emph{(a) Preference optimization damages unseen phenomena.} On the explicit base, DPO lifts trained-phenomena accuracy $0.646 \to 0.877$ while held-out phenomena \emph{drop} $0.740 \to 0.612$ (3 seeds), with $\approx 1.24$ nats/token KL drift from the base. The direction reverses the pre-training picture (held-out phenomena were the \emph{easier} ones before fine-tuning) — the drift H3 worried about, observed directly in the linguistic domain.
+
+\emph{(b) The equilibrium architecture is intrinsically drift-resistant.} Under the identical loss, learning rate, and step count, EqLM moves its train accuracy only $0.493 \to 0.516$ with $1655\times$ less KL drift than the explicit model ($0.00075$ vs $1.24$ nats/token). Verification excluded the trivial explanation (its base accuracy is low, so preferences were \emph{not} already satisfied): the cause is damped gradients through the 12-iteration weight-tied solve. We report this as double-edged — stability against preference-induced drift, and insensitivity to preference fine-tuning at matched learning rate.
+
+Results frozen from results/exp11\_seed\{42,43,44\}/results.json.
+
 \section{Related Work}
 
 \textbf{Equilibrium dynamics for learning.} Sokota et al.\ \citep{Sokota2023} unify mirror-descent methods for QRE and zero-sum games and give the magnetic mirror descent update we implement; McKelvey and Palfrey \citep{McKelvey1995} introduced quantal response equilibria; Hoda et al.\ \citep{Hoda2010} developed smoothing for sequential games. Large-scale game solvers such as unified PSRO \citep{Lanctot2017} and R-NaD in DeepNash \citep{Perolat2022} demonstrate that regularized equilibrium dynamics scale; our F3 periodic-reference-reset result is a small-scale instance of the same principle.

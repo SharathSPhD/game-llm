@@ -530,6 +530,23 @@
    },
    "status": "VALIDATED (sign-off pending)",
    "artifact_path": "results/exp10_5090/"
+  },
+  {
+   "id": "F21",
+   "title": "H3 PARTIAL: the magnet under-doses at pre-registered tau \u2014 but DPO damages unseen phenomena, and EqLM is 1655x more drift-resistant",
+   "claim": "MPO (DPO + magnetic pull to the frozen base) exactly matches DPO's held-out accuracy at pre-registered tau (displacement ~2e-5, under-dosed; dose-response rider running). Secondary: DPO lifts trained phenomena 0.646->0.877 while unseen phenomena drop 0.740->0.612 (KL 1.24 nats/token); the equilibrium model under identical updates drifts 1655x less (0.00075 nats/token) via damped gradients through the weight-tied solve.",
+   "evidence": {
+    "exp": "exp11 (RTX 5090)",
+    "seeds": 3,
+    "heldout_drop_explicit": [
+     0.74,
+     0.612
+    ],
+    "kl_explicit": 1.24,
+    "kl_eqlm": 0.00075
+   },
+   "status": "VALIDATED (Tarka-resolved, sign-off pending)",
+   "artifact_path": "results/exp11_seed42/"
   }
  ]
 }
