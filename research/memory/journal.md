@@ -316,3 +316,20 @@
   H3 (PARTIAL, F21+rider), H4 (MET, F22). Remaining: Tarka F22, paper
   H4 section, artifact freeze (PyPI v1.0, HF done, arXiv polish),
   operator sign-off pass F16-F22.
+
+## [cycle 18 | 2026-08-27] EMPIRICAL PROGRAM CLOSED — all four hypotheses adjudicated
+- F22 Tarka-resolved: MET confirmed (paired t=4.98); rescoped to teacher-
+  forced scoring-time SELECTION (autoregressive auction decoding = future
+  work); childes-overlap caveat; traces labeled as 200-position sample.
+  Paper H4 section + site card shipped.
+- Final ledger: H1 MISSED with mechanism (F18 0.930 @ 11M, F20 0.787 @ 121M,
+  truncation penalty widens with width; -23% memory + 79% warm-decode win
+  retained). H2 VALIDATED (F1-F3). H3 PARTIAL letter / missed spirit (F21 +
+  rider; DPO damages unseen phenomena; EqLM 1655x drift-resistant). H4 MET
+  (F22, +23% over best single).
+- Artifacts frozen: PyPI kinetic-ai 1.0.0; HF 121M checkpoint releases;
+  paper builds clean with all four hypothesis sections + expanded related
+  work; site rebuilt with F20/F21/F22 cards; app serves real 121M playground
+  + real auction traces through the gateway.
+- OPEN: operator sign-off F16-F22 (contract layer 6); NVIDIA ticket
+  submission (operator); optional autoregressive-auction follow-up.

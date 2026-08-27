@@ -1,6 +1,6 @@
 {
-  "cycle": 17,
-  "phase": "closure-program (5090-only; GB10 excluded from GPU workload)",
+  "cycle": 18,
+  "phase": "closure: empirical program complete",
   "current_rq": "RQ-3b (H1-prime a/b/c per ADR 0004)",
   "gpu_lock": false,
   "open_questions": [
@@ -17,6 +17,6 @@
   "known_defects": [
     "GB10 cooling defect (hardware): 12C die-vs-platform sensor gap at ~60W, BMC power-throttle to ~60W despite no kernel throttle flag, hard trip ~91C. Confirmed via live telemetry + NVIDIA forum cross-reference (RMA channel: FieldDiag PowerStress MODS-020000600139). FieldDiag itself blocked here: mods.ko builds/signs but insmod rejected under Secure Boot ('Key was rejected by service'); box is SSH-only so the UEFI disable-Secure-Boot/re-enable round trip needs physical/console access not currently available. Operator directive (2026-08-26): GB10 excluded from ALL GPU workload until RMA/repair; GB10 stays available for serving/evals/CPU-bound work only."
   ],
-  "next_action": "Empirical program complete (H1 miss / H2 validated / H3 partial / H4 MET). Await Tarka F22 -> paper H4 section + site card -> artifact freeze: PyPI v1.0 + docs, arXiv-ready pass, README refresh -> operator sign-off F16-F22 -> final milestone push. 5090 queue drained; GB10 GPU-free pending RMA.",
+  "next_action": "AWAITING OPERATOR: sign-off pass on F16-F22 (all Tarka-resolved; staged SIGN-OFF PENDING in findings.md) \u2014 then flip statuses to SIGNED-OFF and final milestone push. Optional follow-ups if directed: autoregressive auction decoding, contraction-at-width program (H1 open problem), NVIDIA RMA ticket (PDFs ready in docs/). GB10 GPU-free pending RMA; 5090 idle.",
   "gpu_lock_holder": null
 }
