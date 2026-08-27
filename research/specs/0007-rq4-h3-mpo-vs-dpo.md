@@ -17,11 +17,24 @@ reward model, no synthetic judge — linguistic acceptability is the preference.
 
 - Base: the trained 110M checkpoints from exp10 (EqLM postln + explicit baseline).
 - Train split: 60% of BLiMP phenomena (stratified); held-out: remaining 40%.
-- Arms (each on both base models, seed 42 + 2 more if time):
+- Arms (each on both base models, seeds 42/43/44, each seed fine-tuning its
+  own exp10 checkpoints):
   P1 DPO (standard loss, β=0.1, AdamW, reference = frozen base);
   P2 MPO = identical DPO loss but optimizer MagneticAdamW with FIXED reference
   = the frozen base weights (the magnet's theoretical home, per ADR 0003),
-  τ ∈ {1e-3, 1e-2} chosen by short sweep.
+  τ ∈ {1e-3, 1e-2} both run (P2a/P2b), both reported.
+- **Amendment (2026-08-27, controlled comparison):** P1 is implemented as
+  MagneticAdamW with τ=0 — mathematically identical to decoupled AdamW but
+  the SAME code path as P2, so the arms differ only in magnet strength. A
+  CPU smoke test showed torch.optim.AdamW vs MagneticAdamW implementation
+  deltas dominate at small drift, which would confound the KL comparison.
+- **Amendment (2026-08-27, split realization):** the shipped pairs file
+  (data/blimp_subset.json, 1000 pairs) spans 5 phenomena UIDs; train UIDs =
+  {adjunct_island, anaphor_gender_agreement, animate_subject_passive} (600
+  pairs), held-out = {anaphor_number_agreement, animate_subject_trans} (400
+  pairs) — a phenomenon-level split (unseen phenomena at eval), stricter
+  than a within-phenomenon split. KL drift measured on held-out good
+  sentences.
 - Matched budgets: same pairs, steps, lr per base model.
 - Metrics: held-out BLiMP accuracy (win-rate proxy); KL-to-reference drift
   (mean per-token KL on a held-out text sample); catastrophic-drift check

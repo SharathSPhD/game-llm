@@ -1,0 +1,27 @@
+# H3 (SPEC 0007): MPO vs DPO on the exp10 seed-42 checkpoints. 5090 job.
+seed: 42
+device: cuda
+bases:
+  explicit:
+    checkpoint: results/exp10_seed42/checkpoints/a1.pt
+  eqlm:
+    checkpoint: results/exp10_seed42/checkpoints/a3.pt
+pairs:
+  json_file: data/blimp_subset.json
+  train_uids: [adjunct_island, anaphor_gender_agreement, animate_subject_passive]
+training:
+  beta: 0.1
+  lr: 1e-5
+  epochs: 3
+  batch_size: 8
+  max_seq_len: 128
+arms:
+  P1:
+    optimizer: magnetic   # tau=0 == decoupled AdamW, same code path as P2 (spec amendment)
+    tau: 0.0
+  P2a:
+    optimizer: magnetic
+    tau: 1e-3
+  P2b:
+    optimizer: magnetic
+    tau: 1e-2

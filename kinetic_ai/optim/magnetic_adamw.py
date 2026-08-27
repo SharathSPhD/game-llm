@@ -80,8 +80,10 @@ class MagneticAdamW(Optimizer):
             raise ValueError(f"Invalid weight_decay value: {weight_decay}")
         if tau < 0.0:
             raise ValueError(f"Invalid tau value: {tau}")
-        if ref_mode not in ("ema", "periodic"):
-            raise ValueError(f"Invalid ref_mode: {ref_mode}. Must be 'ema' or 'periodic'.")
+        if ref_mode not in ("ema", "periodic", "fixed"):
+            raise ValueError(
+                f"Invalid ref_mode: {ref_mode}. Must be 'ema', 'periodic', or 'fixed'."
+            )
         if not (0.0 <= ref_beta < 1.0):
             raise ValueError(f"Invalid ref_beta: {ref_beta}")
         if ref_interval <= 0:
@@ -202,7 +204,9 @@ class MagneticAdamW(Optimizer):
                         # This pulls the updated parameter back toward the reference
                         p_new = p_new.add(p_new - ref, alpha=-group["lr"] * tau)
 
-                        # Update reference based on mode (in-place to save memory)
+                        # Update reference based on mode (in-place to save memory).
+                        # "fixed" never updates: the magnet stays at the weights
+                        # seen on the first step (the frozen base model in MPO).
                         if group["ref_mode"] == "ema":
                             # EMA: ref ← β·ref + (1−β)·p_new
                             ref.mul_(group["ref_beta"]).add_(p_new, alpha=1 - group["ref_beta"])

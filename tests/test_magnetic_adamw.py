@@ -455,3 +455,47 @@ class TestDecoupledWeightDecay:
             assert torch.allclose(pa, pb, atol=1e-5), (
                 f"{na} diverged: max diff {(pa - pb).abs().max().item():.2e}"
             )
+
+
+class TestFixedRefMode:
+    """ref_mode='fixed' pins the magnet to the initial (frozen base) weights.
+
+    SPEC 0007 (H3/MPO): the magnetic reference must be the frozen base model
+    for the whole run — never updated by EMA or periodic snapshots.
+    """
+
+    def test_fixed_mode_accepted(self) -> None:
+        p = torch.nn.Parameter(torch.ones(3))
+        MagneticAdamW([p], lr=0.1, tau=0.1, ref_mode="fixed")
+
+    def test_reference_never_moves(self) -> None:
+        torch.manual_seed(0)
+        p = torch.nn.Parameter(torch.ones(4))
+        init = p.data.clone()
+        opt = MagneticAdamW([p], lr=0.05, tau=0.5, ref_mode="fixed")
+        for _ in range(20):
+            opt.zero_grad()
+            (p * torch.randn(4)).sum().backward()
+            opt.step()
+        ref = opt.ref_state[id(p)]
+        assert torch.equal(ref, init), "fixed reference must stay at init weights"
+        assert not torch.equal(p.data, init), "parameters must still train"
+
+    def test_fixed_pulls_toward_init(self) -> None:
+        """With a huge tau, params should stay closer to init than with tau=0."""
+        torch.manual_seed(0)
+        grads = [torch.randn(4) for _ in range(30)]
+
+        def run(tau: float) -> torch.Tensor:
+            torch.manual_seed(1)
+            p = torch.nn.Parameter(torch.ones(4))
+            opt = MagneticAdamW([p], lr=0.1, tau=tau, ref_mode="fixed")
+            for g in grads:
+                opt.zero_grad()
+                (p * g).sum().backward()
+                opt.step()
+            return p.data
+
+        drift_free = (run(0.0) - torch.ones(4)).norm()
+        drift_magnet = (run(5.0) - torch.ones(4)).norm()
+        assert drift_magnet < drift_free
