@@ -202,6 +202,8 @@ def main() -> None:
             auc_traces = traces
         jnll = judge_nll(judge, seqs, prefix_len, device)
         judge_scores[system] = jnll
+        jnll_a = judge_nll(judge, seqs[domains_tensor == 0], prefix_len, device)
+        jnll_b = judge_nll(judge, seqs[domains_tensor == 1], prefix_len, device)
         cons_a = domain_consistency(
             model_a, model_b, seqs[domains_tensor == 0], prefix_len, device
         )
@@ -210,6 +212,8 @@ def main() -> None:
         )
         runs[system] = {
             "judge_nll_per_token": jnll,
+            "judge_nll_domain_a": jnll_a,
+            "judge_nll_domain_b": jnll_b,
             "domain_consistency": {"a": cons_a, "b": cons_b},
             "repetition_3gram": repetition_rate(seqs, prefix_len),
         }

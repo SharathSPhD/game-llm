@@ -1,0 +1,51 @@
+{
+  "experiment": "exp14_autoregressive_auction",
+  "spec": "0009",
+  "seed": 44,
+  "config_hash": "fe06754554fc06904f6141fcd8adba49743c8374f14f575097c6bf2f93562e61",
+  "git_commit": "2801820885bdf4379cfb675474b356713606b388",
+  "n_prompts": 100,
+  "systems": {
+    "S_A": {
+      "judge_nll_per_token": 3.688878059387207,
+      "judge_nll_domain_a": 3.6022417545318604,
+      "judge_nll_domain_b": 3.7755117416381836,
+      "domain_consistency": {
+        "a": 1.0,
+        "b": 0.0
+      },
+      "repetition_3gram": 0.5173333333333333
+    },
+    "S_B": {
+      "judge_nll_per_token": 5.512713432312012,
+      "judge_nll_domain_a": 5.925556659698486,
+      "judge_nll_domain_b": 5.099870681762695,
+      "domain_consistency": {
+        "a": 0.3400000035762787,
+        "b": 0.8799999952316284
+      },
+      "repetition_3gram": 0.6173333333333333
+    },
+    "ENS": {
+      "judge_nll_per_token": 5.699985504150391,
+      "judge_nll_domain_a": 6.292154312133789,
+      "judge_nll_domain_b": 5.107814788818359,
+      "domain_consistency": {
+        "a": 0.8199999928474426,
+        "b": 0.5
+      },
+      "repetition_3gram": 0.7796666666666666
+    },
+    "AUC": {
+      "judge_nll_per_token": 4.596585273742676,
+      "judge_nll_domain_a": 4.571210861206055,
+      "judge_nll_domain_b": 4.621959209442139,
+      "domain_consistency": {
+        "a": 1.0,
+        "b": 0.0
+      },
+      "repetition_3gram": 0.483
+    }
+  },
+  "h5_score": "MISSED"
+}

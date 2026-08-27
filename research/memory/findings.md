@@ -409,30 +409,54 @@ traces to a real run with config hash + seeds. All statuses: operator sign-off: 
   held-out mixed prefixes (50/50 childes/simple_wiki, 32 tokens), 32
   generated tokens, greedy; judge = frozen exp10 seed-42 124M explicit LM,
   NLL/token of generated text only. results/exp14/results_seed4{2,3,4}.json.
-- **Verdict: MISSED (3/3).** Judge NLL: best single S_A 3.37/3.37/3.69 <
-  auction 4.74/4.23/4.60 < ensemble 5.37/5.19/5.70 < S_B 5.73/5.75/5.51.
-  The auction still beats the uniform ensemble and the worse specialist,
-  but loses to the best single model once each system generates its own
-  context — per-token model switching creates style hand-offs that the
-  fixed model never pays.
+- **Verdict: MISSED (3/3).** Judge NLL: best single S_A 3.39/3.37/3.69 <
+  auction 4.74/4.23/4.60 on every seed — the pre-registered comparison.
+  Ordering beyond that is variable (seeds 42/43: AUC < ENS < S_B; seed 44:
+  S_B 5.51 < ENS 5.70). The auction beats the uniform ensemble on 2/3
+  seeds and the worse specialist on 2/3, but loses to the best single
+  model once each system generates its own context — per-token model
+  switching creates style hand-offs that the fixed model never pays.
 - **Why (from secondaries):** the auction drifts toward S_A everywhere
   (domain consistency ~1.0 on childes prompts but ~0.02 on wiki prompts —
   on wiki prefixes its continuations end up S_A-flavored), while under
   teacher forcing the TRUE context kept pulling selection back to the
   right specialist each token. Closed-loop removes that anchor. Notable
   positive: the auction has the LOWEST degeneration of all systems
-  (3-gram repetition 0.39-0.48 vs S_A 0.52-0.60; the ensemble collapses
+  (3-gram repetition 0.387-0.483 vs S_A 0.517-0.601; the ensemble collapses
   to 0.78-0.83) — bid competition acts as an implicit anti-repetition
   regularizer, worth its own study.
-- **Caveats (self-declared for Tarka):** judge is trained on the BabyLM mix
-  (child-speech heavy), which may favor S_A-style text; both metrics agree
-  in DIRECTION with the mechanism story, but the judge-bias magnitude is
-  unquantified. Greedy-only decoding; sampling could change hand-off
+- **Per-domain judge decomposition (Tarka-required; CPU rerun on GB10
+  reproduced the 5090 aggregates to 4 decimals, results/exp14_local/):**
+  on wiki-only prompts S_A still scores best (3.27/3.34/3.78 vs AUC
+  4.58/4.54/4.62) — but so does everything childes-flavored: S_B generating
+  its own home style on its own domain scores 5.10-5.49, worse than S_A
+  off-domain. The judge (trained on child-speech-heavy BabyLM strict-small)
+  carries a ~2-nat style prior for childes-flavored text regardless of
+  prompt — larger than any between-system effect measured. The primary
+  metric is therefore style-dominated: the pre-registered MISSED verdict
+  stands as registered, but the mechanism claim is RESCOPED to
+  judge-relative — "the closed-loop auction advantage is NOT demonstrated
+  under a BabyLM-distribution judge"; whether it exists under a
+  style-neutral judge is untested (no unbiased judge exists at this
+  scale in-repo; external-LM judging = future work).
+- **What survives cleanly regardless of judge:** (a) the auction's output
+  distribution genuinely diverges from its teacher-forced behavior (drift
+  to S_A style measured independently of the judge); (b) the auction has
+  the lowest degeneration of all systems and the ensemble collapses (
+  repetition is judge-free); (c) the pre-registered closed-loop claim
+  failed to be met — F22 remains correctly scoped to scoring time.
+- **Caveats:** domain-consistency uses the specialists themselves as
+  scorers (self-aware circularity; appropriate for drift detection, noted
+  for transparency). Greedy-only decoding; sampling could change hand-off
   dynamics.
 - **Meaning for the program:** F22 (scoring-time selection wins) and F23
   (closed-loop generation loses) are BOTH true; the F22 Tarka rescoping
   that insisted on the distinction is empirically vindicated. Auction
   aggregation belongs at scoring/reranking time, or needs context-aware
   bids (bid on the PREFIX's domain, not own confidence) as future work.
-- **Status:** VALIDATED (3 seeds) · verdict MISSED (honest) · Tarka pending
-  · SIGN-OFF PENDING
+- **Tarka review (resolved 2026-08-27):** core MISSED CONFIRMED all seeds;
+  ordering-tail and repetition ranges corrected; judge-bias confound
+  investigated via the per-domain decomposition above and the finding
+  rescoped to judge-relative accordingly.
+- **Status:** VALIDATED (3 seeds, Tarka-resolved with rescoping) · verdict
+  MISSED under the pre-registered judge · SIGN-OFF PENDING

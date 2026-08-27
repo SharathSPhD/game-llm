@@ -67,6 +67,7 @@ def test_results_structure(exp14_setup) -> None:
     assert set(r["systems"]) == {"S_A", "S_B", "ENS", "AUC"}
     for s in r["systems"].values():
         assert s["judge_nll_per_token"] > 0
+        assert s["judge_nll_domain_a"] > 0 and s["judge_nll_domain_b"] > 0
         assert 0.0 <= s["repetition_3gram"] <= 1.0
     assert r["h5_score"] in ("MET", "MISSED")
 
