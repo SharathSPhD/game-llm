@@ -381,3 +381,16 @@
 - GPU queue drained again. Next: fold Tarka F24, paper H6 section + site
   card + README, HF release of the parity checkpoint (B1 seed43), ralph
   closure pass, sign-off request F23/F24.
+
+## [cycle 20 | 2026-08-27] NEW PROGRAMS CLOSED — H5 (F23) and H6 (F24) adjudicated
+- F24 Tarka-resolved: all claims confirmed, like-for-like audited clean;
+  Anderson-vs-plain eval-path rescoping + unrolled-memory attribution
+  applied. Paper H5+H6 sections in; site F23/F24 cards; README refreshed.
+- HF release: qbz506/kinetic-eqlm-anytime-121m-babylm (the parity model,
+  B1 seed 43, ratio 1.033 vs its baseline).
+- Program state: H1 arc CLOSED-SUPERSEDED (F18/F20 solver-trained gap ->
+  F24 anytime parity); H2 validated; H3 partial; H4 met (scoring-time);
+  H5 missed (judge-relative, honest); H6 partial-with-parity. Open problem
+  for any future program: quality-preserving certification (B4' log-scale
+  penalty pre-sketched in spec 0010).
+- AWAITING OPERATOR: sign-off F23 + F24 (both Tarka-resolved, staged).
