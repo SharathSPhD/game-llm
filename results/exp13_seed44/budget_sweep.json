@@ -1,0 +1,17 @@
+{
+  "4": {
+    "accuracy": 0.587,
+    "num_correct": 587,
+    "num_total": 1000
+  },
+  "8": {
+    "accuracy": 0.655,
+    "num_correct": 655,
+    "num_total": 1000
+  },
+  "12": {
+    "accuracy": 0.672,
+    "num_correct": 672,
+    "num_total": 1000
+  }
+}

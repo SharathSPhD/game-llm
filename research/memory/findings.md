@@ -460,3 +460,47 @@ traces to a real run with config hash + seeds. All statuses: operator sign-off: 
   rescoped to judge-relative accordingly.
 - **Status:** VALIDATED (3 seeds, Tarka-resolved with rescoping) · verdict
   MISSED under the pre-registered judge · SIGN-OFF PENDING
+
+## F24 — H6 verdict (3 seeds): PARTIAL, with the quality half met at PARITY — anytime-unrolled training closes the entire width gap (ratio 0.991), certification achieved only in a separate arm, and the naive combination refuted
+
+- **Protocol (SPEC 0010 + amendment, exp13 on RTX 5090):** TRIZ arms vs the
+  exp10 A3 control (0.537/0.532/0.544 per seed; explicit A1 0.682/0.675/
+  0.693), identical data/steps/batch (10k x 32, exp10 token cache), 121M
+  param-matched. results/exp13_seed4{2,3,4}, exp13b_seed42.
+- **B1 anytime (3 seeds): BLiMP 0.662/0.697/0.672, ratio vs explicit
+  0.971/1.033/0.970 — mean 0.991.** Gap closure 86%/115%/86% (mean 96%);
+  seed 43 EXCEEDS its explicit baseline. The weight-tied single block,
+  trained unrolled with CE on iterates z4/z8/z12 and evaluated with the
+  standard 12-iteration solver, reaches statistical parity with a
+  12-layer explicit transformer at matched budget. This supersedes F20's
+  pessimistic scale trend: the widening gap was a property of
+  IFT-solver-based training, not of the weight-tied architecture.
+- **Budget-sweep rider: MET as predicted** (pre-registered: >=0.60 @8,
+  >=0.55 @4): budgets 4/8/12 -> 0.62/0.64/0.66 (s42), 0.60/0.67/0.70
+  (s43), 0.59/0.66/0.67 (s44). One model serves three compute budgets
+  with graceful degradation — the P11 anytime property demonstrated.
+- **B2 (seed 42, from the screen): certified convergence 1.00 at 4.0 mean
+  iterations** — the program's first certified 121M equilibrium — at a
+  quality cost (0.577, still above control) and the lowest memory (5.5GB).
+- **B4 combination: pre-registered prediction REFUTED.** Anytime + raw
+  trajectory penalty scored 0.529 (below control) with conv 0.0 and
+  L-hat stuck ~2.5-3.9; the un-normalized penalty (3.5e4 at init) drowned
+  the CE signal under grad-clip. Recorded as a documented failed
+  intervention; a log-scale penalty is the natural next iteration (not
+  run — program timeboxed at the operator's closure directive).
+- **Verdict vs pre-registered gates: PARTIAL** — no single arm has BLiMP
+  >= 0.610 AND certified convergence > 0.5 (B1: quality without
+  certification; B2: certification without sufficient quality). Both
+  PARTIAL criteria are individually exceeded. The open problem is now
+  sharper and better-posed: QUALITY-PRESERVING certification — the two
+  halves are separately solved and their naive sum provably fails.
+- **Honest costs:** B1's unrolled training pays explicit-like activation
+  memory (16.4GB vs A3's 7.8GB) — the training-memory advantage is traded
+  for quality; the serving-time properties (O(1) depth-memory, warm-start
+  decoding F19, think-harder dial) are unchanged since eval still runs
+  the solver. Training wall-clock BONUS: unrolled is 2.1x faster than
+  IFT-solver training (44 vs 92 min/arm) — the solve, not backprop,
+  dominates EqLM training cost.
+- **Status:** VALIDATED (3 seeds for B1; screen-level for B2/B3/B4) ·
+  verdict PARTIAL (quality half at parity) · Tarka pending · SIGN-OFF
+  PENDING
