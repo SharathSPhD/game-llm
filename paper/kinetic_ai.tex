@@ -567,6 +567,16 @@ H4 tests the mechanism-design leg of the program at the token level: can a truth
 
 Results frozen from results/exp12/results\_seed\{42,43,44\}.json; the same runs' bid/winner/payment traces feed the researcher app's Auction playground.
 
+\subsection{Closed-Loop Auction Decoding and the Limits of Judge-Based Evaluation (H5, F23)}
+
+H5 closed the gap our own adversarial review named in H4: does auction selection survive \emph{closed-loop} generation, where each system's sampled token becomes its next input? Reusing the H4 specialists, we generated 32-token continuations of 100 held-out mixed-domain prefixes per seed (greedy, deterministic) and scored the generated text under a frozen independent judge (the 124M explicit LM from the H1 experiments), a pre-registered metric.
+
+\textbf{Pre-registered verdict: MISSED (3/3 seeds).} The best single specialist scores 3.39/3.37/3.69 judge-NLL against the auction's 4.74/4.23/4.60. Teacher forcing re-anchors selection to the true context at every position; closed-loop generation removes that anchor, and the auction drifts toward one specialist's style regardless of the prompt's domain. H4's scoring-time scoping — insisted on by adversarial review before this experiment ran — is thereby empirically vindicated: selection wins at scoring time (F22) and fails to win in closed loop (F23), and both are true.
+
+\textbf{The deeper finding is about the metric.} A Tarka-required per-domain decomposition (reproduced deterministically on a second machine) showed the childes specialist scoring best \emph{even on wiki-only prompts} (3.27--3.78), while the wiki specialist generating its own home style on its own domain scores 5.10--5.49. The judge, trained on the child-speech-heavy BabyLM corpus, carries a $\approx$2-nat style prior that dwarfs every between-system effect measured. We therefore scope the verdict as judge-relative: the closed-loop auction advantage is not demonstrated under a BabyLM-distribution judge, and no style-neutral judge exists at this scale in-repo. Two observations survive independently of the judge: the auction's output distribution measurably diverges from its teacher-forced behavior, and the auction exhibits the \emph{lowest} degeneration of all systems (3-gram repetition $0.39$--$0.48$) while the uniform logit-average ensemble collapses ($0.78$--$0.83$) — bid competition acts as an implicit anti-repetition regularizer, which we flag as future work alongside context-aware bidding.
+
+Results frozen from results/exp14/results\_seed\{42,43,44\}.json and results/exp14\_local/ (decomposition).
+
 \section{Related Work}
 
 \textbf{Equilibrium dynamics for learning.} Sokota et al.\ \citep{Sokota2023} unify mirror-descent methods for QRE and zero-sum games and give the magnetic mirror descent update we implement; McKelvey and Palfrey \citep{McKelvey1995} introduced quantal response equilibria; Hoda et al.\ \citep{Hoda2010} developed smoothing for sequential games. Large-scale game solvers such as unified PSRO \citep{Lanctot2017} and R-NaD in DeepNash \citep{Perolat2022} demonstrate that regularized equilibrium dynamics scale; our F3 periodic-reference-reset result is a small-scale instance of the same principle.

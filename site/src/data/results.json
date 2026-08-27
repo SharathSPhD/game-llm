@@ -565,6 +565,29 @@
    },
    "status": "VALIDATED (Tarka-resolved, sign-off pending)",
    "artifact_path": "results/exp12/"
+  },
+  {
+   "id": "F23",
+   "title": "H5 MISSED (3/3): the auction's teacher-forced advantage inverts in closed-loop generation - and the judge metric itself is style-dominated",
+   "claim": "Closed-loop greedy generation from mixed prefixes: best single specialist 3.4-3.7 judge-NLL beats auction 4.2-4.7 on all seeds (F22's scoring-time rescoping empirically vindicated). Per-domain decomposition reveals the BabyLM-trained judge carries a ~2-nat childes style prior larger than any between-system effect, so the verdict is scoped judge-relative. Judge-free observations: the auction has the lowest repetition of all systems (0.39-0.48); the uniform ensemble degenerates (0.78-0.83).",
+   "evidence": {
+    "exp": "exp14 (RTX 5090 + GB10 CPU reproduction)",
+    "seeds": 3,
+    "judge_nll": {
+     "best_single": [
+      3.39,
+      3.37,
+      3.69
+     ],
+     "auction": [
+      4.74,
+      4.23,
+      4.6
+     ]
+    }
+   },
+   "status": "VALIDATED (Tarka-resolved with rescoping, sign-off pending)",
+   "artifact_path": "results/exp14/"
   }
  ]
 }
