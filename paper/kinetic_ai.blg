@@ -3,44 +3,44 @@ Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
 The top-level auxiliary file: kinetic_ai.aux
 The style file: plainnat.bst
 Database file #1: references.bib
-You've used 19 entries,
+You've used 24 entries,
             2773 wiz_defined-function locations,
-            703 strings with 8766 characters,
-and the built_in function-call counts, 9842 in all, are:
-= -- 759
-> -- 845
-< -- 4
-+ -- 283
-- -- 264
-* -- 851
-:= -- 1568
-add.period$ -- 57
-call.type$ -- 19
-change.case$ -- 145
-chr.to.int$ -- 19
-cite$ -- 38
-duplicate$ -- 402
-empty$ -- 702
-format.name$ -- 287
-if$ -- 2004
+            728 strings with 9740 characters,
+and the built_in function-call counts, 12737 in all, are:
+= -- 984
+> -- 1072
+< -- 7
++ -- 360
+- -- 336
+* -- 1087
+:= -- 2013
+add.period$ -- 72
+call.type$ -- 24
+change.case$ -- 185
+chr.to.int$ -- 24
+cite$ -- 48
+duplicate$ -- 530
+empty$ -- 938
+format.name$ -- 366
+if$ -- 2606
 int.to.chr$ -- 1
 int.to.str$ -- 1
-missing$ -- 16
-newline$ -- 103
-num.names$ -- 76
-pop$ -- 328
+missing$ -- 21
+newline$ -- 128
+num.names$ -- 96
+pop$ -- 431
 preamble$ -- 1
-purify$ -- 126
+purify$ -- 160
 quote$ -- 0
-skip$ -- 325
+skip$ -- 405
 stack$ -- 0
-substring$ -- 79
-swap$ -- 28
+substring$ -- 155
+swap$ -- 39
 text.length$ -- 0
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 209
+type$ -- 264
 warning$ -- 0
-while$ -- 61
+while$ -- 82
 width$ -- 0
-write$ -- 241
+write$ -- 301

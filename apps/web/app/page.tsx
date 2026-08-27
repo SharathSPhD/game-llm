@@ -1,58 +1,52 @@
 import Link from "next/link";
 
+export const metadata = {
+  title: "EqLM — Equilibrium Learning Mechanisms",
+};
+
 export default function Home() {
   return (
-    <div className="wrap">
+    <div className="page wrap">
       <section className="landing-hero">
         <div>
           <p className="eyebrow">Equilibrium Learning Mechanisms (EqLM)</p>
           <h1>When both players optimize, convergence matters.</h1>
           <p className="lede">
-            Game-theoretic learning dynamics lie at the core of multi-agent systems: from mechanism design
-            to neural network training. EqLM provides a research platform to study convergence via
-            Magnetic Mirror Descent (MMD), Quantal Response Equilibria (QRE), mechanism truthfulness,
-            and GPU-accelerated job orchestration — with full reproducibility tracking.
+            Game-theoretic learning dynamics reach equilibrium where standard methods cycle. EqLM is a research platform
+            for Magnetic Mirror Descent, Quantal Response Equilibria, token auctions, and GPU-accelerated training —
+            with full reproducibility tracking and Tarka verification.
           </p>
           <div className="hero-actions">
             <Link href="/lab" className="btn" data-primary="true">
               Open Equilibrium Lab
             </Link>
-            <Link href="/findings" className="btn">
-              View Research Findings
+            <Link href="/learn" className="btn">
+              Learn the Science
             </Link>
-            <Link href="/studio" className="btn">
-              Launch Training Studio
+            <Link href="/findings" className="btn">
+              Research Findings
             </Link>
           </div>
           <div className="hero-stats">
             <div className="hero-stat">
-              <div className="panel-label">Core Games</div>
-              <div className="reading">4</div>
+              <div className="panel-label">Parity Ratio (EqLM vs Explicit)</div>
+              <div className="reading">0.991</div>
             </div>
             <div className="hero-stat">
-              <div className="panel-label">Validated Findings</div>
-              <div className="reading">8</div>
+              <div className="panel-label">Memory Reduction (DEQ)</div>
+              <div className="reading">16.8<span className="unit">×</span></div>
             </div>
             <div className="hero-stat">
-              <div className="panel-label">Reproducibility</div>
-              <div className="reading">
-                <Link href="/findings">Tarka</Link>
-              </div>
+              <div className="panel-label">Signed-Off Findings</div>
+              <div className="reading">24</div>
             </div>
           </div>
         </div>
       </section>
 
-      <section style={{ marginTop: "4rem" }}>
-        <h2>The EqLM thesis</h2>
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
-            gap: "2rem",
-            marginTop: "2rem",
-          }}
-        >
+      <section style={{ marginTop: "var(--space-8)" }}>
+        <h2>The Research Program</h2>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "var(--space-5)", marginTop: "var(--space-5)" }}>
           <div className="card">
             <h3>Convergence to Equilibrium</h3>
             <p>

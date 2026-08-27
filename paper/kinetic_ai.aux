@@ -2,102 +2,145 @@
 \providecommand\hyper@newdestlabel[2]{}
 \providecommand\HyField@AuxAddToFields[1]{}
 \providecommand\HyField@AuxAddToCoFields[2]{}
+\citation{Sokota2023}
+\citation{Bai2019}
+\citation{Duetting2024}
 \providecommand \oddpage@label [2]{}
 \@writefile{toc}{\contentsline {section}{\numberline {1}Introduction}{1}{section.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {2}Background}{2}{section.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {2.1}Quantal Response Equilibrium}{2}{subsection.2.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {2.2}Maximum Mean Discrepancy}{2}{subsection.2.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {2.3}Deep Equilibrium Models}{2}{subsection.2.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {2.4}Mechanism Design for Language Models}{2}{subsection.2.4}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {3}The EqLM Architecture}{3}{section.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.1}Core Design}{3}{subsection.3.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.2}Fixed-Point Iteration}{3}{subsection.3.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {4}Convergence Analysis}{3}{section.4}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.1}MMD vs.\ GDA on Symmetric Games (F1)}{3}{subsection.4.1}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces \textbf  {F1: MMD Convergence.} Distance-to-fixed-point on log scale showing linear (geometric) decay (R²=0.9948 for matching pennies, R²=0.9015 for RPS) over final 50\% of trajectory. GDA cycles, bounded away at NashConv ≈ 1.9–1.8.}}{4}{figure.caption.1}\protected@file@percent }
-\providecommand*\caption@xref[2]{\@setref\relax\@undefined{#1}}
-\newlabel{fig:mmd_convergence}{{1}{4}{\textbf {F1: MMD Convergence.} Distance-to-fixed-point on log scale showing linear (geometric) decay (R²=0.9948 for matching pennies, R²=0.9015 for RPS) over final 50\% of trajectory. GDA cycles, bounded away at NashConv ≈ 1.9–1.8}{figure.caption.1}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.2}Asymmetric-Game Fixed Points (F2)}{4}{subsection.4.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.3}Regularized Nash via Periodic Reference Resets (F3)}{4}{subsection.4.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {5}Experiments}{4}{section.5}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.1}Matrix Game Convergence}{4}{subsection.5.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.2}Deep Equilibrium Memory and Computational Cost}{4}{subsection.5.2}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces \textbf  {F4: DEQ Memory Scaling.} Implicit DEQ (blue, O(1)) maintains flat 0.032 MB across depths; explicit stacks (orange, O(N)) scale linearly at 0.0168 MB/layer. At N=32, DEQ achieves $\approx 17\times $ reduction.}}{5}{figure.caption.2}\protected@file@percent }
-\newlabel{fig:deq_memory}{{2}{5}{\textbf {F4: DEQ Memory Scaling.} Implicit DEQ (blue, O(1)) maintains flat 0.032 MB across depths; explicit stacks (orange, O(N)) scale linearly at 0.0168 MB/layer. At N=32, DEQ achieves $\approx 17\times $ reduction}{figure.caption.2}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces \textbf  {F5: Anderson Acceleration.} Anderson achieves $< 0.95 \times $ Picard iterations on stiff contractions ($\rho =0.999$), validating theory. No advantage at easy $\rho $ (0.9), as expected.}}{6}{figure.caption.3}\protected@file@percent }
-\newlabel{fig:anderson_stiffness}{{3}{6}{\textbf {F5: Anderson Acceleration.} Anderson achieves $< 0.95 \times $ Picard iterations on stiff contractions ($\rho =0.999$), validating theory. No advantage at easy $\rho $ (0.9), as expected}{figure.caption.3}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.3}QRE Path Tracing with Warm-Start (F7)}{6}{subsection.5.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.4}Damped QRE Solver for High Rationality (F8)}{6}{subsection.5.4}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.5}Token Auction Truthfulness (F6)}{6}{subsection.5.5}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces \textbf  {F6: Auction Truthfulness.} Second-price (green) achieves zero regret (95\% CI [0,0]) across $n \in \{3,5\}$ agents. Weighted aggregation (orange) shows positive regret (0.0773 at n=3, 0.0683 at n=5), confirming non-truthfulness.}}{7}{figure.caption.4}\protected@file@percent }
-\newlabel{fig:auction_regret}{{4}{7}{\textbf {F6: Auction Truthfulness.} Second-price (green) achieves zero regret (95\% CI [0,0]) across $n \in \{3,5\}$ agents. Weighted aggregation (orange) shows positive regret (0.0773 at n=3, 0.0683 at n=5), confirming non-truthfulness}{figure.caption.4}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.6}EqLM Pretraining on BabyLM: From Smoke to Scale (F9--F13)}{7}{subsection.5.6}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.6.1}Smoke Pipeline Validation (F9)}{7}{subsubsection.5.6.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.6.2}Smoke Parity After Init Fix (F10)}{7}{subsubsection.5.6.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.6.3}Optimizer Debugging: Coupled-WD Bug (F11)}{8}{subsubsection.5.6.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.6.4}Magnetic Neutrality and Solver Budget (F12)}{8}{subsubsection.5.6.4}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.6.5}H1 Iteration 1: Missed Threshold at Scale (F13)}{8}{subsubsection.5.6.5}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces \textbf  {F13: EqLM Full-Run Loss Curves.} 20k-step training over full strict-small corpus. A1 (ExplicitLM, orange) reaches 3.90 loss; A2 (EqLM, blue) reaches 4.41; A3 (EqLM+MagneticAdamW, purple) reaches 4.68. Frozen from results/exp05\_full/results.json (config sha 8a2fa16e, commit 385f5d4).}}{9}{figure.caption.5}\protected@file@percent }
-\newlabel{fig:eqlm_loss_curves}{{5}{9}{\textbf {F13: EqLM Full-Run Loss Curves.} 20k-step training over full strict-small corpus. A1 (ExplicitLM, orange) reaches 3.90 loss; A2 (EqLM, blue) reaches 4.41; A3 (EqLM+MagneticAdamW, purple) reaches 4.68. Frozen from results/exp05\_full/results.json (config sha 8a2fa16e, commit 385f5d4)}{figure.caption.5}{}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.6.6}Discovery: EqLM Has No Fixed Point—Weight-Tied Iteration, Not Equilibrium (F14)}{10}{subsubsection.5.6.6}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.6.7}EqLM-v3: Post-LN Map Restores Fixed Points, But Contraction Is Weak (F15—H1 Frontier Identified)}{10}{subsubsection.5.6.7}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.6.8}Solver-Aware Auxiliary Loss Teaches Contraction (F16—Breakthrough)}{11}{subsubsection.5.6.8}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.6.9}H1 Iteration 2: Post-LN EqLM Reaches 94.4\% (F17—Near-Miss Within Noise)}{11}{subsubsection.5.6.9}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.6.10}H1 Verdict: 3 Seeds Confirm Formal Miss at 93\% (F18—Honest Result With Tight CI)}{12}{subsubsection.5.6.10}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces \textbf  {F18: H1 Iteration Trajectory.} EqLM BLiMP ratio (vs ExplicitLM baseline) progresses 0.78 (iter 1, exp05\_full v1/v2) → 0.944 (iter 2, exp05\_full\_v4 single seed) → 0.9303 mean (iter 3, 3-seed verdict). Ratio CI at iter 3: [0.8979, 0.9492] (upper bound < 0.95 threshold, formal miss). Frozen constants; sources: results/exp05\_full (F13), exp05\_full\_v4 (F17), results/exp05\_full\_v4{,\_s43,\_s44} (F18).}}{13}{figure.caption.6}\protected@file@percent }
-\newlabel{fig:h1_iterations}{{6}{13}{\textbf {F18: H1 Iteration Trajectory.} EqLM BLiMP ratio (vs ExplicitLM baseline) progresses 0.78 (iter 1, exp05\_full v1/v2) → 0.944 (iter 2, exp05\_full\_v4 single seed) → 0.9303 mean (iter 3, 3-seed verdict). Ratio CI at iter 3: [0.8979, 0.9492] (upper bound < 0.95 threshold, formal miss). Frozen constants; sources: results/exp05\_full (F13), exp05\_full\_v4 (F17), results/exp05\_full\_v4{,\_s43,\_s44} (F18)}{figure.caption.6}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.7}Adaptive-Equilibrium Decoding: H1' Program (F19, exp10 probe)}{13}{subsection.5.7}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.7.1}F19: Warm-Started Decoding (H1'a—Reduction Threshold PASS)}{13}{subsubsection.5.7.1}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces \textbf  {F19: Warm-Started Decoding.} Per-prompt iteration counts (cold vs warm start, 40 prompts × 25 tokens). Cold baseline: max 12 iters/token (blue bars). Warm start: 1.64 mean iters/token (orange bars), −79.3\% reduction. Frozen from results/exp09\_adaptive/results.json H1a arrays; Okabe-Ito palette for accessibility.}}{14}{figure.caption.7}\protected@file@percent }
-\newlabel{fig:warm_start}{{7}{14}{\textbf {F19: Warm-Started Decoding.} Per-prompt iteration counts (cold vs warm start, 40 prompts × 25 tokens). Cold baseline: max 12 iters/token (blue bars). Warm start: 1.64 mean iters/token (orange bars), −79.3\% reduction. Frozen from results/exp09\_adaptive/results.json H1a arrays; Okabe-Ito palette for accessibility}{figure.caption.7}{}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.7.2}H1'c: Think-Harder Dial (Solver Budget Scaling—Honest Null)}{14}{subsubsection.5.7.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.7.3}exp10 Probe: Memory and Loss at 110M-Scale Parameters (Early Observations)}{15}{subsubsection.5.7.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.7.4}H1 at 121M Parameters: The Truncation Penalty Widens with Width (F20—Full Run, 3 Seeds)}{15}{subsubsection.5.7.4}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.8}Magnetic Preference Optimization vs.\ DPO (H3, F21)}{16}{subsection.5.8}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.9}Token-Auction Selection of Domain Specialists (H4, F22)}{17}{subsection.5.9}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.10}Closed-Loop Auction Decoding and the Limits of Judge-Based Evaluation (H5, F23)}{17}{subsection.5.10}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.11}Contraction at Width: Anytime Training Reaches Parity (H6, F24)}{18}{subsection.5.11}\protected@file@percent }
-\citation{Sokota2023}
+\@writefile{toc}{\contentsline {paragraph}{Contributions.}{2}{section*.1}\protected@file@percent }
 \citation{McKelvey1995}
-\citation{Hoda2010}
-\citation{Lanctot2017}
-\citation{Perolat2022}
+\citation{Sokota2023}
+\citation{Mertikopoulos2018}
+\citation{Perolat2021}
+\citation{Loshchilov2019}
 \citation{Bai2019}
-\citation{BaiKoltun2020}
+\citation{Anderson1965}
+\citation{Broyden1965}
+\citation{Geng2021}
+\citation{Miyato2018}
 \citation{Winston2020}
-\citation{Fung2022}
+\citation{Dehghani2019,Lan2020}
+\@writefile{toc}{\contentsline {section}{\numberline {2}Background}{3}{section.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.1}Quantal Response Equilibrium}{3}{subsection.2.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.2}Magnetic Mirror Descent}{3}{subsection.2.2}\protected@file@percent }
+\newlabel{eq:mmd}{{1}{3}{Magnetic Mirror Descent}{equation.1}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.3}Deep Equilibrium Models}{3}{subsection.2.3}\protected@file@percent }
+\citation{Duetting2024}
+\citation{Vickrey1961}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.4}Mechanism Design for Model Aggregation}{4}{subsection.2.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {3}The EqLM Architecture}{4}{section.3}\protected@file@percent }
+\newlabel{sec:arch}{{3}{4}{The EqLM Architecture}{section.3}{}}
+\@writefile{toc}{\contentsline {paragraph}{The fixed-point map.}{4}{section*.2}\protected@file@percent }
+\newlabel{eq:postln}{{3}{4}{The fixed-point map}{equation.3}{}}
+\@writefile{toc}{\contentsline {paragraph}{Solvers and training modes.}{4}{section*.3}\protected@file@percent }
+\citation{Perolat2021}
+\@writefile{toc}{\contentsline {paragraph}{Equilibrium-native inference.}{5}{section*.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {4}Methodology: Pre-registration and Adversarial Audit}{5}{section.4}\protected@file@percent }
+\newlabel{sec:method}{{4}{5}{Methodology: Pre-registration and Adversarial Audit}{section.4}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {5}Convergence Results: Magnetic Dynamics}{5}{section.5}\protected@file@percent }
+\newlabel{sec:convergence}{{5}{5}{Convergence Results: Magnetic Dynamics}{section.5}{}}
+\@writefile{toc}{\contentsline {paragraph}{Linear last-iterate convergence where GDA cycles (F1).}{5}{section*.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{A discovery on asymmetric games (F2).}{5}{section*.6}\protected@file@percent }
+\citation{Vickrey1961}
+\citation{Warstadt2023}
+\citation{Warstadt2020}
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Fixed-magnet MMD converges linearly (log scale) where simultaneous GDA cycles at the same step size (matching pennies shown; 10 seeds).}}{6}{figure.caption.9}\protected@file@percent }
+\providecommand*\caption@xref[2]{\@setref\relax\@undefined{#1}}
+\newlabel{fig:mmd}{{1}{6}{Fixed-magnet MMD converges linearly (log scale) where simultaneous GDA cycles at the same step size (matching pennies shown; 10 seeds)}{figure.caption.9}{}}
+\@writefile{toc}{\contentsline {paragraph}{Nash via reference resets (F3).}{6}{section*.7}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{QRE solver engineering (F7, F8).}{6}{section*.8}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {6}Mechanism Results: Token Auctions Are Exactly Truthful}{6}{section.6}\protected@file@percent }
+\newlabel{sec:mechanism}{{6}{6}{Mechanism Results: Token Auctions Are Exactly Truthful}{section.6}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {7}EqLM at Scale: the Full Diagnostic Arc}{6}{section.7}\protected@file@percent }
+\newlabel{sec:eqlm}{{7}{6}{EqLM at Scale: the Full Diagnostic Arc}{section.7}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.1}From Pipeline to First Miss (F9--F13)}{7}{subsection.7.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.2}Discovery: No Fixed Point, then Learned Contraction (F14--F16)}{7}{subsection.7.2}\protected@file@percent }
+\newlabel{sec:diagnostic}{{7.2}{7}{Discovery: No Fixed Point, then Learned Contraction (F14--F16)}{subsection.7.2}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.3}The 11M Verdict: an Honest Miss at 93.0\% (F17--F18)}{7}{subsection.7.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.4}Warm-Started Decoding (F19)}{7}{subsection.7.4}\protected@file@percent }
+\citation{Lee2015}
+\citation{Graves2016}
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.5}The 121M Verdict and a Refuted Mechanism (F20)}{8}{subsection.7.5}\protected@file@percent }
+\newlabel{sec:scale}{{7.5}{8}{The 121M Verdict and a Refuted Mechanism (F20)}{subsection.7.5}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.6}Anytime Training Reaches Parity (F24)}{8}{subsection.7.6}\protected@file@percent }
+\newlabel{sec:parity}{{7.6}{8}{Anytime Training Reaches Parity (F24)}{subsection.7.6}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.7}Certification, and the Open Problem (F24, arms B2--B4)}{8}{subsection.7.7}\protected@file@percent }
+\newlabel{sec:h6}{{7.7}{8}{Certification, and the Open Problem (F24, arms B2--B4)}{subsection.7.7}{}}
+\citation{Rafailov2023}
+\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces Main pretraining results at 121M parameters (BabyLM strict-small, batch 32 $\times $ 10k steps, 3 seeds; BLiMP subset of 1000 pairs). Ratio is per-seed EqLM/explicit. The anytime-unrolled regime closes the gap solver-based training had widened.}}{9}{table.caption.10}\protected@file@percent }
+\newlabel{tab:main}{{1}{9}{Main pretraining results at 121M parameters (BabyLM strict-small, batch 32 $\times $ 10k steps, 3 seeds; BLiMP subset of 1000 pairs). Ratio is per-seed EqLM/explicit. The anytime-unrolled regime closes the gap solver-based training had widened}{table.caption.10}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Left: the width gap belongs to the training regime, not the architecture --- per-seed BLiMP ratio against the explicit baseline at 121M under implicit (F20) vs.\ anytime-unrolled (F24) training. Right: the anytime checkpoint evaluated at Anderson budgets $\{4,8,12\}$ degrades gracefully; dashes mark the explicit baseline's mean.}}{9}{figure.caption.11}\protected@file@percent }
+\newlabel{fig:parity}{{2}{9}{Left: the width gap belongs to the training regime, not the architecture --- per-seed BLiMP ratio against the explicit baseline at 121M under implicit (F20) vs.\ anytime-unrolled (F24) training. Right: the anytime checkpoint evaluated at Anderson budgets $\{4,8,12\}$ degrades gracefully; dashes mark the explicit baseline's mean}{figure.caption.11}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {8}Magnetic Preference Optimization vs.\ DPO}{10}{section.8}\protected@file@percent }
+\newlabel{sec:mpo}{{8}{10}{Magnetic Preference Optimization vs.\ DPO}{section.8}{}}
+\@writefile{toc}{\contentsline {paragraph}{Verdict: \textsc  {partial} on the letter, missed in spirit.}{10}{section*.12}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Two secondary findings survive audit.}{10}{section*.13}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {9}Auction Decoding: Where Selection Wins and Where It Does Not}{10}{section.9}\protected@file@percent }
+\newlabel{sec:auction}{{9}{10}{Auction Decoding: Where Selection Wins and Where It Does Not}{section.9}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {9.1}Scoring-Time Selection: \textsc  {met} (F22)}{10}{subsection.9.1}\protected@file@percent }
+\citation{Holtzman2020}
+\citation{Bengio2015}
+\citation{Sokota2023}
+\citation{Mertikopoulos2018}
+\citation{Perolat2021}
+\citation{McKelvey1995}
+\citation{Bai2019}
+\citation{Anderson1965}
+\citation{Broyden1965}
+\citation{Geng2021}
+\citation{Winston2020}
 \citation{Dehghani2019}
-\citation{Jacob2023}
-\citation{Munos2023}
+\citation{Lan2020}
+\citation{Lee2015}
+\citation{Graves2016}
+\@writefile{toc}{\contentsline {subsection}{\numberline {9.2}Closed-Loop Generation: \textsc  {missed}, and a Metric Lesson (F23)}{11}{subsection.9.2}\protected@file@percent }
+\newlabel{sec:closedloop}{{9.2}{11}{Closed-Loop Generation: \textsc {missed}, and a Metric Lesson (F23)}{subsection.9.2}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {10}Related Work}{11}{section.10}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Equilibria in learning dynamics.}{11}{section*.14}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Implicit depth and weight tying.}{11}{section*.15}\protected@file@percent }
 \citation{Rafailov2023}
 \citation{Wu2024}
 \citation{Duetting2024}
-\citation{Vickrey1961}
-\citation{Warstadt2023babylm}
 \citation{Warstadt2020}
-\citation{Anderson1965}
-\@writefile{toc}{\contentsline {section}{\numberline {6}Related Work}{19}{section.6}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {7}Limitations}{20}{section.7}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {8}Conclusion}{20}{section.8}\protected@file@percent }
+\citation{Warstadt2023}
+\citation{Radford2019}
+\@writefile{toc}{\contentsline {paragraph}{Preference optimization.}{12}{section*.16}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Model aggregation as mechanism design.}{12}{section*.17}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Benchmarks.}{12}{section*.18}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {11}Threats to Validity and Limitations}{12}{section.11}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {12}Reproducibility}{12}{section.12}\protected@file@percent }
 \bibstyle{plainnat}
 \bibdata{references}
 \bibcite{Anderson1965}{{1}{1965}{{Anderson}}{{}}}
 \bibcite{Bai2019}{{2}{2019}{{Bai et~al.}}{{Bai, Kolter, and Koltun}}}
-\bibcite{BaiKoltun2020}{{3}{2020}{{Bai et~al.}}{{Bai, Koltun, and Kolter}}}
-\bibcite{Dehghani2019}{{4}{2019}{{Dehghani et~al.}}{{Dehghani, Gouws, Vinyals, Uszkoreit, and Kaiser}}}
-\bibcite{Duetting2024}{{5}{2024}{{Duetting et~al.}}{{Duetting, Mirrokni, Paes~Leme, Xu, and Zuo}}}
-\bibcite{Fung2022}{{6}{2022}{{Fung et~al.}}{{Fung, Heaton, Li, McKenzie, Osher, and Yin}}}
-\bibcite{Hoda2010}{{7}{2010}{{Hoda et~al.}}{{Hoda, Gilpin, Peña, and Sandholm}}}
-\bibcite{Jacob2023}{{8}{2024}{{Jacob et~al.}}{{Jacob, Shen, Farina, and Andreas}}}
-\bibcite{Lanctot2017}{{9}{2017}{{Lanctot et~al.}}{{Lanctot, Zambaldi, Gruslys, Lazaridou, Tuyls, P{\'e}rolat, Silver, and Graepel}}}
-\bibcite{McKelvey1995}{{10}{1995}{{McKelvey and Palfrey}}{{}}}
-\bibcite{Munos2023}{{11}{2023}{{Munos et~al.}}{{Munos, Valko, Calandriello, Azar, Rowland, and et~al.}}}
-\bibcite{Perolat2022}{{12}{2022}{{P{\'e}rolat et~al.}}{{P{\'e}rolat, De~Vylder, Hennes, Tarassov, Strub, and et~al.}}}
-\bibcite{Rafailov2023}{{13}{2023}{{Rafailov et~al.}}{{Rafailov, Sharma, Mitchell, Ermon, Manning, and Finn}}}
-\bibcite{Sokota2023}{{14}{2023}{{Sokota et~al.}}{{Sokota, Perolat, Roux, Laurière, Perkins, Cen, Lecerf, and Briot}}}
-\bibcite{Vickrey1961}{{15}{1961}{{Vickrey}}{{}}}
-\bibcite{Warstadt2020}{{16}{2020}{{Warstadt et~al.}}{{Warstadt, Parrish, Liu, Mohananey, Peng, Wang, and Bowman}}}
-\bibcite{Warstadt2023babylm}{{17}{2023}{{Warstadt et~al.}}{{Warstadt, Mueller, Choshen, Wilcox, Zhuang, and et~al.}}}
-\bibcite{Winston2020}{{18}{2020}{{Winston and Kolter}}{{}}}
-\bibcite{Wu2024}{{19}{2024}{{Wu et~al.}}{{Wu, Joly, Karpukhin, Chung, and Aitchison}}}
-\gdef \@abspage@last{23}
+\bibcite{Bengio2015}{{3}{2015}{{Bengio et~al.}}{{Bengio, Vinyals, Jaitly, and Shazeer}}}
+\bibcite{Broyden1965}{{4}{1965}{{Broyden}}{{}}}
+\bibcite{Dehghani2019}{{5}{2019}{{Dehghani et~al.}}{{Dehghani, Gouws, Vinyals, Uszkoreit, and Kaiser}}}
+\bibcite{Duetting2024}{{6}{2024}{{D{\"u}tting et~al.}}{{D{\"u}tting, Mirrokni, Paes~Leme, Xu, and Zuo}}}
+\bibcite{Geng2021}{{7}{2021}{{Geng et~al.}}{{Geng, Zhang, Bai, Wang, and Lin}}}
+\bibcite{Graves2016}{{8}{2016}{{Graves}}{{}}}
+\bibcite{Holtzman2020}{{9}{2020}{{Holtzman et~al.}}{{Holtzman, Buys, Du, Forbes, and Choi}}}
+\bibcite{Lan2020}{{10}{2020}{{Lan et~al.}}{{Lan, Chen, Goodman, Gimpel, Sharma, and Soricut}}}
+\@writefile{toc}{\contentsline {section}{\numberline {13}Conclusion}{13}{section.13}\protected@file@percent }
+\bibcite{Lee2015}{{11}{2015}{{Lee et~al.}}{{Lee, Xie, Gallagher, Zhang, and Tu}}}
+\bibcite{Loshchilov2019}{{12}{2019}{{Loshchilov and Hutter}}{{}}}
+\bibcite{McKelvey1995}{{13}{1995}{{McKelvey and Palfrey}}{{}}}
+\bibcite{Mertikopoulos2018}{{14}{2018}{{Mertikopoulos et~al.}}{{Mertikopoulos, Papadimitriou, and Piliouras}}}
+\bibcite{Miyato2018}{{15}{2018}{{Miyato et~al.}}{{Miyato, Kataoka, Koyama, and Yoshida}}}
+\bibcite{Perolat2021}{{16}{2021}{{Perolat et~al.}}{{Perolat, Munos, Lespiau, Omidshafiei, Rowland, Ortega, Burch, Anthony, Balduzzi, De~Vylder, Piliouras, Lanctot, and Tuyls}}}
+\bibcite{Radford2019}{{17}{2019}{{Radford et~al.}}{{Radford, Wu, Child, Luan, Amodei, and Sutskever}}}
+\bibcite{Rafailov2023}{{18}{2023}{{Rafailov et~al.}}{{Rafailov, Sharma, Mitchell, Ermon, Manning, and Finn}}}
+\bibcite{Sokota2023}{{19}{2023}{{Sokota et~al.}}{{Sokota, D'Orazio, Kolter, Loizou, Lanctot, Mitliagkas, Brown, and Kroer}}}
+\bibcite{Vickrey1961}{{20}{1961}{{Vickrey}}{{}}}
+\bibcite{Warstadt2020}{{21}{2020}{{Warstadt et~al.}}{{Warstadt, Parrish, Liu, Mohananey, Peng, Wang, and Bowman}}}
+\bibcite{Warstadt2023}{{22}{2023}{{Warstadt et~al.}}{{Warstadt, Mueller, Choshen, Wilcox, Zhuang, Ciro, Mosquera, Paranjabe, Williams, Linzen, and Cotterell}}}
+\bibcite{Winston2020}{{23}{2020}{{Winston and Kolter}}{{}}}
+\bibcite{Wu2024}{{24}{2024}{{Wu et~al.}}{{Wu, Sun, Yuan, Ji, Yang, and Gu}}}
+\@writefile{toc}{\contentsline {section}{\numberline {A}Per-Seed Results}{15}{appendix.A}\protected@file@percent }
+\newlabel{app:tables}{{A}{15}{Per-Seed Results}{appendix.A}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces H1/H6 pretraining, all seeds (BLiMP on the 1000-pair subset; conv.\ = solver convergence rate at eval, rel-tol $10^{-3}$, budget 12).}}{15}{table.caption.20}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {3}{\ignorespaces H3 preference optimization (400 held-out pairs from unseen phenomena; KL in nats/token to the frozen base).}}{15}{table.caption.21}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {B}Hyperparameters}{15}{appendix.B}\protected@file@percent }
+\newlabel{app:hparams}{{B}{15}{Hyperparameters}{appendix.B}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {4}{\ignorespaces H4/H5 auction systems. Left: teacher-forced mixed-domain perplexity (F22). Right: closed-loop generation judge NLL/token (F23; judge-relative, see \S  \ref {sec:closedloop}).}}{16}{table.caption.22}\protected@file@percent }
+\gdef \@abspage@last{16}

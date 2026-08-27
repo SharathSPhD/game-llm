@@ -504,7 +504,50 @@ def fig_h1_iterations() -> None:
     save(fig, "fig_h1_iterations.pdf")
 
 
+def fig_parity_and_budget() -> None:
+    """F24: the training-regime effect on the width gap, plus the anytime
+    budget sweep. Frozen from results/exp10_5090 (implicit, 3 seeds),
+    results/exp13_seed42/43/44 (anytime, 3 seeds + budget sweeps).
+    """
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(11, 4.6))
+
+    # Left: ratio vs explicit baseline by training regime at 121M (per seed)
+    implicit = [0.7874, 0.7881, 0.7850]           # F20
+    anytime = [0.9707, 1.0326, 0.9697]            # F24 (0.662/.682, .697/.675, .672/.693)
+    for i, (imp, anyt) in enumerate(zip(implicit, anytime)):
+        ax1.plot([0, 1], [imp, anyt], color=C_NEUTRAL, linewidth=1.2, alpha=0.6, zorder=1)
+    ax1.scatter([0] * 3, implicit, s=90, color=C_CONTROL, zorder=2, label="Implicit (IFT) training")
+    ax1.scatter([1] * 3, anytime, s=90, color=C_TREATMENT, zorder=2, label="Anytime-unrolled training")
+    ax1.axhline(1.0, color=C_NEUTRAL, linestyle="--", linewidth=1.2)
+    ax1.text(1.02, 1.0, "parity", va="center", fontsize=9, color=C_NEUTRAL)
+    ax1.set_xticks([0, 1])
+    ax1.set_xticklabels(["implicit\n(F20)", "anytime\n(F24)"])
+    ax1.set_xlim(-0.4, 1.5)
+    ax1.set_ylabel("BLiMP ratio vs. explicit baseline")
+    ax1.set_title("Training regime decides the width gap (121M, 3 seeds)")
+    ax1.legend(frameon=False, fontsize=9, loc="lower right")
+    despine(ax1); ygrid(ax1)
+
+    # Right: anytime budget sweep (Anderson budgets, per seed)
+    budgets = [4, 8, 12]
+    sweeps = {42: [0.621, 0.638, 0.662], 43: [0.601, 0.674, 0.697], 44: [0.587, 0.655, 0.672]}
+    for seed, vals in sweeps.items():
+        ax2.plot(budgets, vals, marker="o", linewidth=2, markersize=7, label=f"seed {seed}")
+    ax2.axhline(0.683, color=C_CONTROL, linestyle="--", linewidth=1.4)
+    ax2.text(4.1, 0.686, "explicit baseline (mean)", fontsize=9, color=C_CONTROL)
+    ax2.set_xticks(budgets)
+    ax2.set_xlabel("Anderson solver budget (iterations)")
+    ax2.set_ylabel("BLiMP")
+    ax2.set_title("One checkpoint, three inference budgets")
+    ax2.legend(frameon=False, fontsize=9, loc="lower right")
+    despine(ax2); ygrid(ax2)
+
+    save(fig, "fig_parity_budget.pdf")
+
+
 if __name__ == "__main__":
+
+
     apply_style()
     print("Generating publication figures from validated findings...")
 
@@ -516,6 +559,7 @@ if __name__ == "__main__":
         fig_eqlm_loss_curves()
         fig_warm_start()
         fig_h1_iterations()
+        fig_parity_and_budget()
         print("\n✓ All figures generated successfully.")
     except SystemExit as e:
         print(f"✗ Figure generation failed: {e}")

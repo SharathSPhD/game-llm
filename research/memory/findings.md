@@ -459,7 +459,7 @@ traces to a real run with config hash + seeds. All statuses: operator sign-off: 
   investigated via the per-domain decomposition above and the finding
   rescoped to judge-relative accordingly.
 - **Status:** VALIDATED (3 seeds, Tarka-resolved with rescoping) · verdict
-  MISSED under the pre-registered judge · SIGN-OFF PENDING
+  MISSED under the pre-registered judge · SIGNED-OFF (operator, 2026-08-27)
 
 ## F24 — H6 verdict (3 seeds): PARTIAL, with the quality half met at PARITY — anytime-unrolled training closes the entire width gap (ratio 0.991), certification achieved only in a separate arm, and the naive combination refuted
 
@@ -513,4 +513,4 @@ traces to a real run with config hash + seeds. All statuses: operator sign-off: 
   wording (Anderson vs plain iteration) and the memory attribution as
   applied above.
 - **Status:** VALIDATED (3 seeds for B1; screen-level for B2/B3/B4) ·
-  verdict PARTIAL (quality half at parity) · SIGN-OFF PENDING
+  verdict PARTIAL (quality half at parity) · SIGNED-OFF (operator, 2026-08-27)
