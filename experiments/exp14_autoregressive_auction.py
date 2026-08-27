@@ -33,13 +33,22 @@ import yaml
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from experiments.exp12_auction_decoding import (  # noqa: E402
-    compute_config_hash,
-    create_tokenizer_fn,
-    get_git_commit,
-    load_and_split_domain,
-    text_to_windows,
-)
+try:  # repo layout
+    from experiments.exp12_auction_decoding import (  # noqa: E402
+        compute_config_hash,
+        create_tokenizer_fn,
+        get_git_commit,
+        load_and_split_domain,
+        text_to_windows,
+    )
+except ImportError:  # flat remote job layout
+    from exp12_auction_decoding import (  # type: ignore[no-redef]  # noqa: E402
+        compute_config_hash,
+        create_tokenizer_fn,
+        get_git_commit,
+        load_and_split_domain,
+        text_to_windows,
+    )
 from kinetic_ai.models.eqlm import load_checkpoint  # noqa: E402
 
 

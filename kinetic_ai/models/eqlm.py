@@ -430,6 +430,86 @@ class EqLM(nn.Module):
 
         return cast(Tensor, logits)
 
+    def forward_unrolled(
+        self, input_ids: Tensor, supervise_at: list[int]
+    ) -> list[tuple[int, Tensor]]:
+        """B1 (SPEC 0010, ADR 0005): unrolled forward with anytime supervision.
+
+        Applies the fixed-point map k times with full backprop and returns
+        logits at each requested depth, so training can supervise truncated
+        iterates directly (P11 beforehand-cushioning: every budget is a
+        usable model).
+
+        Args:
+            input_ids: Token indices [B, T].
+            supervise_at: Iteration depths to emit logits for (1-indexed,
+                each in [1, deq_max_iter]).
+
+        Returns:
+            List of (depth, logits) sorted by depth.
+        """
+        if not supervise_at:
+            raise ValueError("supervise_at must be non-empty")
+        depths = sorted(set(int(k) for k in supervise_at))
+        if depths[0] < 1 or depths[-1] > self.config.deq_max_iter:
+            raise ValueError(
+                f"supervise_at must lie in [1, {self.config.deq_max_iter}], "
+                f"got {supervise_at}"
+            )
+
+        batch_size, seq_len = input_ids.shape
+        x = self.embedding(input_ids)
+        positions = torch.arange(seq_len, device=input_ids.device, dtype=torch.long)
+        x = x + self.pos_embedding(positions)
+
+        z = x
+        outs: list[tuple[int, Tensor]] = []
+        for k in range(1, depths[-1] + 1):
+            z = self.block(z, x)
+            if k in depths:
+                h = self.ln_final(z)
+                logits = self.lm_head(h) / (self.config.d_model**0.5)
+                outs.append((k, logits))
+        self.last_z_star = z.detach()
+        return outs
+
+    def local_lipschitz(
+        self, input_ids: Tensor, alpha: float = 1.0, eps: float = 1e-3
+    ) -> Tensor:
+        """B2 (SPEC 0010, ADR 0005): trajectory-local contraction probe.
+
+        Finite-difference estimate of the map's local Lipschitz constant at
+        a point on the solve ray z = alpha * z_star (z0 = 0 for the unrolled
+        map, so the ray interpolates the trajectory's span). Differentiable
+        w.r.t. block parameters; penalizing max(0, L_hat - gamma) trains
+        contraction only where the solver travels (separation by condition).
+
+        Args:
+            input_ids: Token indices [B, T] (must match the batch of the
+                preceding forward; if no forward has run, one is executed).
+            alpha: Position on the ray from origin to equilibrium.
+            eps: Finite-difference step size.
+
+        Returns:
+            Scalar L_hat >= 0 with grad to block parameters.
+        """
+        if self.last_z_star is None or self.last_z_star.shape[:2] != input_ids.shape:
+            with torch.no_grad():
+                self(input_ids)
+        assert self.last_z_star is not None
+
+        batch_size, seq_len = input_ids.shape
+        x = self.embedding(input_ids)
+        positions = torch.arange(seq_len, device=input_ids.device, dtype=torch.long)
+        x = x + self.pos_embedding(positions)
+
+        z_pt = (alpha * self.last_z_star).detach()
+        v = torch.randn_like(z_pt)
+        v = v / (v.norm() + 1e-12)
+        f0 = self.block(z_pt, x)
+        f1 = self.block(z_pt + eps * v, x)
+        return cast(Tensor, (f1 - f0).norm() / eps)
+
     def generate(
         self,
         input_ids: Tensor,
@@ -595,12 +675,115 @@ class ExplicitLM(nn.Module):
         return cast(Tensor, logits)
 
 
+class EqLMCore(nn.Module):
+    """B3 (SPEC 0010, ADR 0005): bottleneck-core equilibrium LM.
+
+    Space-separated design (TRIZ P24 intermediary): capacity lives in wide
+    EXPLICIT encoder/decoder layers at d_model; the equilibrium is solved in
+    a small d_core space where contraction is cheap to certify and each
+    solver iteration costs O(d_core^2) instead of O(d_model^2).
+
+        tokens -> embed(d_model) -> n_enc explicit blocks -> W_down ->
+        [DEQ solve in d_core] -> W_up (+ residual) -> n_dec explicit blocks
+        -> tied lm_head
+
+    Same external interface as EqLM/ExplicitLM (forward(input_ids) -> logits,
+    last_z_star, deq.last_info telemetry).
+    """
+
+    def __init__(
+        self,
+        config: EqLMConfig,
+        d_core: int = 256,
+        n_heads_core: int = 4,
+        d_ff_core: int = 1024,
+        n_enc: int = 2,
+        n_dec: int = 2,
+    ) -> None:
+        super().__init__()
+        self.config = config
+        self.d_core = d_core
+        self.n_heads_core = n_heads_core
+        self.d_ff_core = d_ff_core
+        self.n_enc = n_enc
+        self.n_dec = n_dec
+
+        self.embedding = nn.Embedding(config.vocab_size, config.d_model)
+        nn.init.normal_(self.embedding.weight, mean=0.0, std=0.02)
+        self.pos_embedding = nn.Embedding(config.max_seq_len, config.d_model)
+        nn.init.normal_(self.pos_embedding.weight, mean=0.0, std=0.02)
+
+        self.encoder = nn.ModuleList([EqLMBlock(config) for _ in range(n_enc)])
+        self.decoder = nn.ModuleList([EqLMBlock(config) for _ in range(n_dec)])
+
+        self.core_config = EqLMConfig(
+            vocab_size=config.vocab_size,
+            d_model=d_core,
+            n_heads=n_heads_core,
+            d_ff=d_ff_core,
+            max_seq_len=config.max_seq_len,
+            deq_max_iter=config.deq_max_iter,
+            deq_tol=config.deq_tol,
+            solver=config.solver,
+            dropout=config.dropout,
+            spectral_norm=config.spectral_norm,
+            residual_damping=config.residual_damping,
+            map_form=config.map_form,
+        )
+        self.core_block = EqLMBlock(self.core_config)
+        self.w_down = nn.Linear(config.d_model, d_core, bias=False)
+        self.w_up = nn.Linear(d_core, config.d_model, bias=False)
+
+        deq_config = DEQConfig(
+            solver=SolverType(config.solver),
+            max_iter=config.deq_max_iter,
+            tol=config.deq_tol,
+            anderson_m=5,
+            anderson_beta=1.0,
+            spectral_norm=config.spectral_norm,
+            jfb=False,
+        )
+
+        def core_map(z: Tensor, x: Tensor) -> Tensor:
+            return cast(Tensor, self.core_block(z, x))
+
+        self.deq = DEQLayer(core_map, config=deq_config)
+
+        self.ln_final = nn.LayerNorm(config.d_model)
+        self.lm_head = nn.Linear(config.d_model, config.vocab_size, bias=False)
+        self.lm_head.weight = self.embedding.weight
+
+        self.last_z_star: Tensor | None = None
+
+    def forward(self, input_ids: Tensor) -> Tensor:
+        batch_size, seq_len = input_ids.shape
+        h = self.embedding(input_ids)
+        positions = torch.arange(seq_len, device=input_ids.device, dtype=torch.long)
+        h = h + self.pos_embedding(positions)
+
+        x_zero = torch.zeros_like(h)
+        for layer in self.encoder:
+            h = layer(h, x_zero)
+
+        x_core = self.w_down(h)
+        z_star = self.deq(x_core)
+        self.last_z_star = z_star.detach()
+
+        h = h + self.w_up(z_star)
+        for layer in self.decoder:
+            h = layer(h, x_zero)
+
+        h = self.ln_final(h)
+        logits = self.lm_head(h) / (self.config.d_model**0.5)
+        return cast(Tensor, logits)
+
+
 # ============================================================================
 # Checkpoint Saving/Loading (H1′ Task 3)
 # ============================================================================
 
 
-def save_checkpoint(model: EqLM | ExplicitLM, path: str | Path) -> None:
+def save_checkpoint(model: EqLM | ExplicitLM | EqLMCore, path: str | Path) -> None:
     """Save an EqLM or ExplicitLM model and its config to a checkpoint file.
 
     Saves the state_dict, EqLMConfig, and the model class (plus n_layers for
@@ -625,11 +808,19 @@ def save_checkpoint(model: EqLM | ExplicitLM, path: str | Path) -> None:
     }
     if isinstance(model, ExplicitLM):
         checkpoint["n_layers"] = len(model.layers)
+    if isinstance(model, EqLMCore):
+        checkpoint["core_dims"] = {
+            "d_core": model.d_core,
+            "n_heads_core": model.n_heads_core,
+            "d_ff_core": model.d_ff_core,
+            "n_enc": model.n_enc,
+            "n_dec": model.n_dec,
+        }
 
     torch.save(checkpoint, str(path))
 
 
-def load_checkpoint(path: str | Path) -> EqLM | ExplicitLM:
+def load_checkpoint(path: str | Path) -> EqLM | ExplicitLM | EqLMCore:
     """Load an EqLM model from a checkpoint file.
 
     Reconstructs the model from saved state_dict and config.
@@ -648,9 +839,12 @@ def load_checkpoint(path: str | Path) -> EqLM | ExplicitLM:
 
     cfg = EqLMConfig(**checkpoint["config_dict"])
     if checkpoint.get("model_class") == "ExplicitLM":
-        model: EqLM | ExplicitLM = ExplicitLM(
+        model: EqLM | ExplicitLM | EqLMCore = ExplicitLM(
             config=cfg, n_layers=int(checkpoint.get("n_layers", 4))
         )
+    elif checkpoint.get("model_class") == "EqLMCore":
+        dims = {k: int(v) for k, v in checkpoint["core_dims"].items()}
+        model = EqLMCore(config=cfg, **dims)
     else:
         model = EqLM(config=cfg)
     model.load_state_dict(checkpoint["state_dict"])
