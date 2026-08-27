@@ -196812,3 +196812,39 @@ m- **Scale trend (rescoped per Tarka):** ratio 0.930 [0.898, 0.949] at
   caveat: peak_memory_mb is bit-identical across seeds (deterministic
   allocator peak for a fixed graph, not per-run noise) — treated as an
   architecture-level measurement.
+
+## F21 — H3 verdict (3 seeds): PARTIAL — at the pre-registered tau range MPO is
+## indistinguishable from DPO; the magnet is real but under-dosed. Two strong
+## secondary findings: DPO damages unseen phenomena, and EqLM is ~1500x more
+## drift-resistant than the explicit model under identical preference updates
+
+- **Protocol (SPEC 0007 + amendments):** DPO loss on BLiMP preference pairs
+  (600 train / 400 held-out, phenomenon-level split), bases = each seed's own
+  exp10 121M checkpoints, arms differ ONLY in MagneticAdamW tau (P1 tau=0 ==
+  decoupled AdamW; P2a 1e-3; P2b 1e-2; ref_mode="fixed" = frozen base),
+  beta=0.1, lr=1e-5, 3 epochs (~675 steps). Seeds 42/43/44; bases md5-distinct
+  (verified); results/exp11_seed4{2,3,4}/results.json.
+- **Pre-registered verdict: PARTIAL.** Held-out accuracy: P2 == P1 exactly
+  (all seeds, both bases) — the ">= DPO" half holds by equality. Lower KL
+  drift: NOT demonstrated — P2b-P1 on the explicit base is -0.0018/-0.0009/
+  +0.0004 (mean -0.0008, paired t ~ -1.2, ns); P2a mixed. Cause (diagnosed,
+  then pre-registered as the exp11b rider BEFORE seeds 43/44 landed): total
+  magnetic displacement scales ~ lr*tau*T ~ 1e-4 relative at tau=1e-2 — the
+  pre-registered tau range cannot bind at this budget. Dose-response rider
+  (tau in {0.1, 1, 10}) running.
+- **Secondary finding A (clean, 3 seeds): preference optimization damages
+  unseen phenomena.** Explicit base: train-phenomena accuracy 0.64->0.88 while
+  held-out phenomena DROP 0.740->0.610/0.600/0.625, with KL-to-base ~1.2-1.3
+  nats/token. DPO gains on trained preference types are paid for by
+  generalization loss on untrained ones at this scale — the reward-hacking
+  drift H3 worried about, observed directly in the linguistic domain.
+- **Secondary finding B (unexpected): the equilibrium architecture is
+  intrinsically drift-resistant.** Under the IDENTICAL loss, lr, and steps,
+  EqLM moves train acc only 0.49->0.52 with KL drift 0.0005-0.0009 — three
+  orders of magnitude less than the explicit model (1.2 vs 0.0008). The
+  backward pass through 12 weight-tied post-LN iterations evidently damps
+  parameter-space movement. Double-edged and reported as such: stability
+  against preference-induced drift, but also insensitivity to preference
+  fine-tuning at matched lr.
+- **Status:** VALIDATED (pre-registered arms) · verdict PARTIAL ·
+  SIGN-OFF PENDING · rider exp11b pending for dose-response characterization

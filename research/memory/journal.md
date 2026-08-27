@@ -285,3 +285,18 @@
   arm), spec 0007 amended (controlled comparison + phenomenon-level split),
   3 seed configs; container preflight (local kinetic_ai shadows stale wheel,
   offline tokenizer, checkpoint load) then chained seeds launched. ~2h est.
+
+## [cycle 17c | 2026-08-27] H3 HARVESTED (F21 PARTIAL) · exp12 crash diagnosed · queue reordered
+- exp11 all 3 seeds green (17 min/seed). F21 recorded: pre-registered verdict
+  PARTIAL (accuracy parity exact; KL reduction ns at under-dosed tau).
+  Secondary: DPO damages unseen phenomena (0.74->0.61 heldout, KL 1.2);
+  EqLM ~1500x drift-resistant under identical updates. Tarka running.
+- exp12 first launch crashed instantly on ALL seeds: rsync -a copied HF
+  snapshot SYMLINKS (dangling on 5090); AND run-script "exit code $?" lied
+  because $(date -Is) reset $? (both now noted as ops lessons). Re-shipped
+  with rsync -L (real 15MB/8.9MB files verified by content), relaunched
+  chained behind exp11b (which grabbed the GPU when exp12 crashed out).
+- Queue now: exp11b tau rider (running) -> exp12 relaunch. Monitors re-armed.
+- HF releases live: qbz506/kinetic-eqlm-121m-babylm,
+  qbz506/kinetic-explicitlm-124m-babylm. Backend+tunnel restored on GB10;
+  registry serves 121M checkpoints end-to-end through the worker.
