@@ -1,0 +1,6 @@
+[Thu Aug 27 10:45:01 2026] mods [1]: driver closed
+[Thu Aug 27 10:45:02 2026] mods [1]: driver opened, pid=48338
+[Thu Aug 27 10:45:02 2026] mods [1]: set dma mask 41 for dev 000f:01:00.0
+[Thu Aug 27 10:45:02 2026] mods [1]: enabled dev 000f:01:00.0
+[Thu Aug 27 10:45:08 2026] mods [1]: disabled dev 000f:01:00.0
+[Thu Aug 27 10:45:08 2026] mods [1]: driver closed

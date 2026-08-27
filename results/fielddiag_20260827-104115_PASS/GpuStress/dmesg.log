@@ -1,0 +1,6 @@
+[Thu Aug 27 10:41:42 2026] mods: driver loaded, version 4.31
+[Thu Aug 27 10:41:42 2026] mods [1]: driver opened, pid=47607
+[Thu Aug 27 10:41:42 2026] mods [1]: set dma mask 41 for dev 000f:01:00.0
+[Thu Aug 27 10:41:42 2026] mods [1]: enabled dev 000f:01:00.0
+[Thu Aug 27 10:45:01 2026] mods [1]: disabled dev 000f:01:00.0
+[Thu Aug 27 10:45:01 2026] mods [1]: driver closed

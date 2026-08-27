@@ -1,0 +1,74 @@
+[
+[
+ { "__tag__" : "MODS_Start"
+  ,"timestamp" : "Thu Aug 27 10:45:08 2026 "
+ }
+,{ "__tag__" : "found_gpu"
+  ,"dev_inst" : 0
+  ,"pci_location" : "0x0f, 0x01, 0x00, 0x00"
+}
+,{ "__tag__" : "nvlink_topology"
+}
+,{ "__tag__" : "carrier_fru_info"
+}
+,{ "__tag__" : "gpu"
+  ,"rom_version" : "9a.0b.2d.00.00"
+}
+,{ "__tag__" : "pcie_chipset"
+  ,"downstream_nodes" : []
+  ,"depth_from_root" : 0
+}
+,{ "__tag__" : "enter"
+  ,"tnum" : 43
+  ,"dev_insts" : [0]
+}
+,{ "__tag__" : "exit"
+  ,"tnum" : 43
+  ,"dev_insts" : [0]
+  ,"rc" : 0
+}
+,{ "__tag__" : "enter"
+  ,"tnum" : 501
+  ,"dev_insts" : [0]
+}
+,{ "__tag__" : "enter"
+  ,"tnum" : 43
+  ,"dev_insts" : [0]
+}
+,{ "__tag__" : "exit"
+  ,"tnum" : 501
+  ,"dev_insts" : [0]
+  ,"rc" : 0
+}
+,{ "__tag__" : "enter"
+  ,"tnum" : 600
+  ,"dev_insts" : [0]
+}
+,{ "__tag__" : "exit"
+  ,"tnum" : 600
+  ,"dev_insts" : [0]
+  ,"rc" : 0
+}
+,{ "__tag__" : "enter"
+  ,"tnum" : 502
+  ,"dev_insts" : [0]
+}
+,{ "__tag__" : "exit"
+  ,"tnum" : 43
+  ,"dev_insts" : [0]
+  ,"rc" : 0
+}
+,{ "__tag__" : "exit"
+  ,"tnum" : 502
+  ,"dev_insts" : [0]
+  ,"rc" : 0
+}
+,{ "__tag__" : "final_rc"
+  ,"rc" : "000000000000"
+ }
+,{ "__tag__" : "MODS_end"
+  ,"timestamp" : "Thu Aug 27 10:45:17 2026 "
+  ,"elapsedSeconds" : 9.325 
+ }
+]
+]

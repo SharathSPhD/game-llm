@@ -1,0 +1,147 @@
++ local LOCKFILE=/tmp/mods_driver_lock
++ local LOCK_FD=200
++ local INSTALLED_DRIVER_VERSION=
++ local PKG_DRIVER_VERSION=
++ local RM_MODS=0
++ local MOD_PROBE=0
++ local INSTALL_MODS=0
++ local MODS_DRIVER_BUILD_ARGS=
++ local MODS_DRIVER_EXTRA_CFLAGS=
++ local MODS_DRIVER_KBUILD_EXTRA_SYMBOLS=
++ local FFA_SUPPORT=false
+++ dmesg -T
+++ wc -l
++ DMESG_OFFSET=1627
++ LOG_DMESG=/opt/nvidia/dgx-spark-fieldiag/dgx/logs-20260827-104115/dmesg_driver.log
++ trap collect_dmesg RETURN
+++ uname -m
++ [[ aarch64 == \a\a\r\c\h\6\4 ]]
++ [[ false == false ]]
+++ uname -r
++ grep ffa-module /lib/modules/6.17.0-1031-nvidia/modules.builtin
+kernel/drivers/firmware/arm_ffa/ffa-module.ko
++ FFA_SUPPORT=true
++ echo 'The ffa_module is built-in'
+The ffa_module is built-in
++ modinfo einj
+name:           einj
+filename:       (builtin)
+license:        GPL
+file:           drivers/acpi/apei/einj
+description:    APEI Error INJection support
+author:         Huang Ying
+parm:           param_extension:bool
++ modprobe einj
++ eval exec '200>"$LOCKFILE"'
+++ exec
++ flock -x 200
++ lsmod
++ grep mods
++ sudo modprobe mods multi_instance=1
++ modprobe mods multi_instance=1
+++ modinfo mods
+++ grep -w version
+++ awk '{print $2}'
++ INSTALLED_DRIVER_VERSION=4.31
++ [[ false == false ]]
++ [[ true == true ]]
++ INSTALL_MODS=1
++ [[ ! -z 4.31 ]]
++ RM_MODS=1
++ which make
++ cd /opt/nvidia/dgx-spark-fieldiag/dgx/tests/driver
++ [[ false != false ]]
++ [[ '' != '' ]]
++ make clean
+make -C /lib/modules/6.17.0-1031-nvidia/build M=/opt/nvidia/dgx-spark-fieldiag/dgx/tests/driver clean
+make[1]: Entering directory '/usr/src/linux-headers-6.17.0-1031-nvidia'
+make[2]: Entering directory '/opt/nvidia/dgx-spark-fieldiag/dgx/tests/driver'
+  CLEAN   Module.symvers
+make[2]: Leaving directory '/opt/nvidia/dgx-spark-fieldiag/dgx/tests/driver'
+make[1]: Leaving directory '/usr/src/linux-headers-6.17.0-1031-nvidia'
++ make -j 4 EXTRA_CFLAGS+= KBUILD_EXTRA_SYMBOLS+=
+make -C /lib/modules/6.17.0-1031-nvidia/build M=/opt/nvidia/dgx-spark-fieldiag/dgx/tests/driver modules
+make[1]: Entering directory '/usr/src/linux-headers-6.17.0-1031-nvidia'
+make[2]: Entering directory '/opt/nvidia/dgx-spark-fieldiag/dgx/tests/driver'
+warning: the compiler differs from the one used to build the kernel
+  The kernel was built by: aarch64-linux-gnu-gcc-13 (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0
+  You are using:           gcc-13 (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0
+  CC [M]  mods_krnl.o
+  CC [M]  mods_mem.o
+  CC [M]  mods_irq.o
+  CC [M]  mods_pci.o
+  CC [M]  mods_acpi.o
+  CC [M]  mods_arm_ffa.o
+  CC [M]  mods_debugfs.o
+  CC [M]  mods_bpmpipc.o
+  LD [M]  mods.o
+  MODPOST Module.symvers
+WARNING: modpost: missing MODULE_DESCRIPTION() in mods.o
+  CC [M]  mods.mod.o
+  CC [M]  .module-common.o
+  LD [M]  mods.ko
+  BTF [M] mods.ko
+Skipping BTF generation for mods.ko due to unavailability of vmlinux
+make[2]: Leaving directory '/opt/nvidia/dgx-spark-fieldiag/dgx/tests/driver'
+make[1]: Leaving directory '/usr/src/linux-headers-6.17.0-1031-nvidia'
+++ modinfo /opt/nvidia/dgx-spark-fieldiag/dgx/tests/driver/mods.ko
+++ grep -w version
+++ awk '{print $2}'
++ PKG_DRIVER_VERSION=4.31
++ cd ../../../
++ [[ -z 4.31 ]]
++ [[ -z 4.31 ]]
++ [[ ! -z 4.31 ]]
++ [[ 4.31 != \4\.\3\1 ]]
++ [[ 1 -eq 0 ]]
++ [[ 1 -eq 1 ]]
++ sudo killall -9 mods
++ killall -9 mods
+mods: no process found
++ true
++ sudo rmmod mods
++ rmmod mods
++ [[ 0 -eq 1 ]]
++ [[ 1 -eq 1 ]]
++ cd /opt/nvidia/dgx-spark-fieldiag/dgx/tests/driver
++ sudo bash -c ' make install >> /opt/nvidia/dgx-spark-fieldiag/dgx/logs-20260827-104115/driver.log 2>&1'
++ bash -c ' make install >> /opt/nvidia/dgx-spark-fieldiag/dgx/logs-20260827-104115/driver.log 2>&1'
+make -C /lib/modules/6.17.0-1031-nvidia/build M=/opt/nvidia/dgx-spark-fieldiag/dgx/tests/driver modules_install
+make[1]: Entering directory '/usr/src/linux-headers-6.17.0-1031-nvidia'
+make[2]: Entering directory '/opt/nvidia/dgx-spark-fieldiag/dgx/tests/driver'
+  INSTALL /lib/modules/6.17.0-1031-nvidia/updates/mods.ko
+  SIGN    /lib/modules/6.17.0-1031-nvidia/updates/mods.ko
+  DEPMOD  /lib/modules/6.17.0-1031-nvidia
+Warning: modules_install: missing 'System.map' file. Skipping depmod.
+make[2]: Leaving directory '/opt/nvidia/dgx-spark-fieldiag/dgx/tests/driver'
+make[1]: Leaving directory '/usr/src/linux-headers-6.17.0-1031-nvidia'
++ sudo depmod -a
++ depmod -a
++ sudo insmod mods.ko multi_instance=1
++ insmod mods.ko multi_instance=1
++ cd ../../..
++ setup_mods_module_permissions /opt/nvidia/dgx-spark-fieldiag/dgx/logs-20260827-104115/driver.log
++ local LOG=/opt/nvidia/dgx-spark-fieldiag/dgx/logs-20260827-104115/driver.log
+++ id -g
++ local GROUP=0
++ [[ -e /dev/mods ]]
++ [[ 0 != 0 ]]
++ flock -u 200
++ lsmod
++ grep mods
+mods                  200704  0
++ modinfo mods
+filename:       /lib/modules/6.17.0-1031-nvidia/updates/mods.ko
+version:        4.31
+license:        GPL
+srcversion:     EEF00964B1F85832B3E441F
+depends:        
+name:           mods
+vermagic:       6.17.0-1031-nvidia SMP preempt mod_unload modversions aarch64
+parm:           debug:debug bitflags (2=ioctl 4=pci 8=acpi 16=irq 32=mem 64=fun +256=detailed) (int)
+parm:           multi_instance:allows more than one client to simultaneously open the driver (int)
++ sudo modprobe mods multi_instance=1
++ modprobe mods multi_instance=1
++ echo 'MODS driver installed successfully.'
+MODS driver installed successfully.
++ set +x

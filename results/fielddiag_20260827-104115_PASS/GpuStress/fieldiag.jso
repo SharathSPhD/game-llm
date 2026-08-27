@@ -1,0 +1,335 @@
+[
+[
+ { "__tag__" : "MODS_Start"
+  ,"timestamp" : "Thu Aug 27 10:41:42 2026 "
+ }
+,{ "__tag__" : "found_gpu"
+  ,"dev_inst" : 0
+  ,"pci_location" : "0x0f, 0x01, 0x00, 0x00"
+}
+,{ "__tag__" : "nvlink_topology"
+}
+,{ "__tag__" : "carrier_fru_info"
+}
+,{ "__tag__" : "gpu"
+  ,"rom_version" : "9a.0b.2d.00.00"
+}
+,{ "__tag__" : "pcie_chipset"
+  ,"downstream_nodes" : []
+  ,"depth_from_root" : 0
+}
+,{ "__tag__" : "enter"
+  ,"tnum" : 0
+  ,"dev_insts" : [0]
+}
+,{ "__tag__" : "exit"
+  ,"tnum" : 0
+  ,"dev_insts" : [0]
+  ,"rc" : 0
+}
+,{ "__tag__" : "enter"
+  ,"tnum" : 9
+  ,"dev_insts" : [0]
+}
+,{ "__tag__" : "exit"
+  ,"tnum" : 9
+  ,"dev_insts" : [0]
+  ,"rc" : 0
+}
+,{ "__tag__" : "enter"
+  ,"tnum" : 360
+  ,"dev_insts" : [0]
+}
+,{ "__tag__" : "exit"
+  ,"tnum" : 360
+  ,"dev_insts" : [0]
+  ,"rc" : 0
+}
+,{ "__tag__" : "enter"
+  ,"tnum" : 363
+  ,"dev_insts" : [0]
+}
+,{ "__tag__" : "exit"
+  ,"tnum" : 363
+  ,"dev_insts" : [0]
+  ,"rc" : 0
+}
+,{ "__tag__" : "enter"
+  ,"tnum" : 362
+  ,"dev_insts" : [0]
+}
+,{ "__tag__" : "exit"
+  ,"tnum" : 362
+  ,"dev_insts" : [0]
+  ,"rc" : 0
+}
+,{ "__tag__" : "enter"
+  ,"tnum" : 0
+  ,"dev_insts" : [0]
+}
+,{ "__tag__" : "exit"
+  ,"tnum" : 0
+  ,"dev_insts" : [0]
+  ,"rc" : 0
+}
+,{ "__tag__" : "enter"
+  ,"tnum" : 315
+  ,"dev_insts" : [0]
+}
+,{ "__tag__" : "exit"
+  ,"tnum" : 315
+  ,"dev_insts" : [0]
+  ,"rc" : 0
+}
+,{ "__tag__" : "enter"
+  ,"tnum" : 343
+  ,"dev_insts" : [0]
+}
+,{ "__tag__" : "exit"
+  ,"tnum" : 343
+  ,"dev_insts" : [0]
+  ,"rc" : 0
+}
+,{ "__tag__" : "enter"
+  ,"tnum" : 351
+  ,"dev_insts" : [0]
+}
+,{ "__tag__" : "exit"
+  ,"tnum" : 351
+  ,"dev_insts" : [0]
+  ,"rc" : 0
+}
+,{ "__tag__" : "enter"
+  ,"tnum" : 242
+  ,"dev_insts" : [0]
+}
+,{ "__tag__" : "exit"
+  ,"tnum" : 242
+  ,"dev_insts" : [0]
+  ,"rc" : 0
+}
+,{ "__tag__" : "enter"
+  ,"tnum" : 600
+  ,"dev_insts" : [0]
+}
+,{ "__tag__" : "exit"
+  ,"tnum" : 600
+  ,"dev_insts" : [0]
+  ,"rc" : 0
+}
+,{ "__tag__" : "enter"
+  ,"tnum" : 610
+  ,"dev_insts" : [0]
+}
+,{ "__tag__" : "exit"
+  ,"tnum" : 610
+  ,"dev_insts" : [0]
+  ,"rc" : 0
+}
+,{ "__tag__" : "enter"
+  ,"tnum" : 600
+  ,"dev_insts" : [0]
+}
+,{ "__tag__" : "exit"
+  ,"tnum" : 600
+  ,"dev_insts" : [0]
+  ,"rc" : 0
+}
+,{ "__tag__" : "enter"
+  ,"tnum" : 602
+  ,"dev_insts" : [0]
+}
+,{ "__tag__" : "exit"
+  ,"tnum" : 602
+  ,"dev_insts" : [0]
+  ,"rc" : 0
+}
+,{ "__tag__" : "enter"
+  ,"tnum" : 604
+  ,"dev_insts" : [0]
+}
+,{ "__tag__" : "exit"
+  ,"tnum" : 604
+  ,"dev_insts" : [0]
+  ,"rc" : 0
+}
+,{ "__tag__" : "enter"
+  ,"tnum" : 606
+  ,"dev_insts" : [0]
+}
+,{ "__tag__" : "exit"
+  ,"tnum" : 606
+  ,"dev_insts" : [0]
+  ,"rc" : 0
+}
+,{ "__tag__" : "enter"
+  ,"tnum" : 610
+  ,"dev_insts" : [0]
+}
+,{ "__tag__" : "exit"
+  ,"tnum" : 610
+  ,"dev_insts" : [0]
+  ,"rc" : 0
+}
+,{ "__tag__" : "enter"
+  ,"tnum" : 612
+  ,"dev_insts" : [0]
+}
+,{ "__tag__" : "exit"
+  ,"tnum" : 612
+  ,"dev_insts" : [0]
+  ,"rc" : 0
+}
+,{ "__tag__" : "enter"
+  ,"tnum" : 614
+  ,"dev_insts" : [0]
+}
+,{ "__tag__" : "exit"
+  ,"tnum" : 614
+  ,"dev_insts" : [0]
+  ,"rc" : 0
+}
+,{ "__tag__" : "enter"
+  ,"tnum" : 634
+  ,"dev_insts" : [0]
+}
+,{ "__tag__" : "exit"
+  ,"tnum" : 634
+  ,"dev_insts" : [0]
+  ,"rc" : 0
+}
+,{ "__tag__" : "enter"
+  ,"tnum" : 337
+  ,"dev_insts" : [0]
+}
+,{ "__tag__" : "enter"
+  ,"tnum" : 600
+  ,"dev_insts" : [0]
+}
+,{ "__tag__" : "exit"
+  ,"tnum" : 600
+  ,"dev_insts" : [0]
+  ,"rc" : 0
+}
+,{ "__tag__" : "exit"
+  ,"tnum" : 337
+  ,"dev_insts" : [0]
+  ,"rc" : 0
+}
+,{ "__tag__" : "enter"
+  ,"tnum" : 340
+  ,"dev_insts" : [0]
+}
+,{ "__tag__" : "exit"
+  ,"tnum" : 340
+  ,"dev_insts" : [0]
+  ,"rc" : 0
+}
+,{ "__tag__" : "enter"
+  ,"tnum" : 255
+  ,"dev_insts" : [0]
+}
+,{ "__tag__" : "exit"
+  ,"tnum" : 255
+  ,"dev_insts" : [0]
+  ,"rc" : 0
+}
+,{ "__tag__" : "enter"
+  ,"tnum" : 9
+  ,"dev_insts" : [0]
+}
+,{ "__tag__" : "exit"
+  ,"tnum" : 9
+  ,"dev_insts" : [0]
+  ,"rc" : 0
+}
+,{ "__tag__" : "enter"
+  ,"tnum" : 32
+  ,"dev_insts" : [0]
+}
+,{ "__tag__" : "enter"
+  ,"tnum" : 32
+  ,"dev_insts" : [0]
+}
+,{ "__tag__" : "exit"
+  ,"tnum" : 32
+  ,"dev_insts" : [0]
+  ,"rc" : 0
+}
+,{ "__tag__" : "exit"
+  ,"tnum" : 32
+  ,"dev_insts" : [0]
+  ,"rc" : 0
+}
+,{ "__tag__" : "enter"
+  ,"tnum" : 21
+  ,"dev_insts" : [0]
+}
+,{ "__tag__" : "exit"
+  ,"tnum" : 21
+  ,"dev_insts" : [0]
+  ,"rc" : 0
+}
+,{ "__tag__" : "enter"
+  ,"tnum" : 25
+  ,"dev_insts" : [0]
+}
+,{ "__tag__" : "exit"
+  ,"tnum" : 25
+  ,"dev_insts" : [0]
+  ,"rc" : 0
+}
+,{ "__tag__" : "enter"
+  ,"tnum" : 2
+  ,"dev_insts" : [0]
+}
+,{ "__tag__" : "exit"
+  ,"tnum" : 2
+  ,"dev_insts" : [0]
+  ,"rc" : 0
+}
+,{ "__tag__" : "enter"
+  ,"tnum" : 267
+  ,"dev_insts" : [0]
+}
+,{ "__tag__" : "exit"
+  ,"tnum" : 267
+  ,"dev_insts" : [0]
+  ,"rc" : 0
+}
+,{ "__tag__" : "enter"
+  ,"tnum" : 360
+  ,"dev_insts" : [0]
+}
+,{ "__tag__" : "exit"
+  ,"tnum" : 360
+  ,"dev_insts" : [0]
+  ,"rc" : 0
+}
+,{ "__tag__" : "enter"
+  ,"tnum" : 363
+  ,"dev_insts" : [0]
+}
+,{ "__tag__" : "exit"
+  ,"tnum" : 363
+  ,"dev_insts" : [0]
+  ,"rc" : 0
+}
+,{ "__tag__" : "enter"
+  ,"tnum" : 362
+  ,"dev_insts" : [0]
+}
+,{ "__tag__" : "exit"
+  ,"tnum" : 362
+  ,"dev_insts" : [0]
+  ,"rc" : 0
+}
+,{ "__tag__" : "final_rc"
+  ,"rc" : "000000000000"
+ }
+,{ "__tag__" : "MODS_end"
+  ,"timestamp" : "Thu Aug 27 10:45:01 2026 "
+  ,"elapsedSeconds" : 199.943 
+ }
+]
+]

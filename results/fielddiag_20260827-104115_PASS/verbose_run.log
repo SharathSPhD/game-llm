@@ -1,0 +1,54 @@
+2026-08-27 10:41:42,197 - Not running on Diag OS. Failures due to custom OS environment can occur
+2026-08-27 10:41:42,197 - BMC monitoring is not supported
+2026-08-27 10:41:42,199 - Unable to get slot ID from L10 testspec
+2026-08-27 10:41:42,203 - Testing GpuStress 
+2026-08-27 10:45:02,062 - [DumpSummaryJson] Processing MODS tests: {'GpuStress'}
+2026-08-27 10:45:02,062 - Unable to find mla executable
+2026-08-27 10:45:02,067 - Testing C2CStress 
+2026-08-27 10:45:08,688 - [DumpSummaryJson] Processing MODS tests: {'GpuStress', 'C2CStress'}
+2026-08-27 10:45:08,688 - Unable to find mla executable
+2026-08-27 10:45:08,688 - Unable to find mla executable
+2026-08-27 10:45:08,693 - Testing CpuStress1 
+2026-08-27 10:45:17,393 - [DumpSummaryJson] Processing MODS tests: {'GpuStress', 'C2CStress', 'CpuStress1'}
+2026-08-27 10:45:17,393 - Unable to find mla executable
+2026-08-27 10:45:17,393 - Unable to find mla executable
+2026-08-27 10:45:17,393 - Unable to find mla executable
+2026-08-27 10:45:17,401 - Testing CpuStress2 
+2026-08-27 10:55:36,584 - [DumpSummaryJson] Processing MODS tests: {'GpuStress', 'C2CStress', 'CpuStress1'}
+2026-08-27 10:55:36,584 - Unable to find mla executable
+2026-08-27 10:55:36,584 - Unable to find mla executable
+2026-08-27 10:55:36,584 - Unable to find mla executable
+2026-08-27 10:55:36,591 - Testing PowerStress 
+2026-08-27 11:03:47,215 - [DumpSummaryJson] Processing MODS tests: {'PowerStress', 'GpuStress', 'C2CStress', 'CpuStress1'}
+2026-08-27 11:03:47,215 - Unable to find mla executable
+2026-08-27 11:03:47,215 - Unable to find mla executable
+2026-08-27 11:03:47,215 - Unable to find mla executable
+2026-08-27 11:03:47,215 - Unable to find mla executable
+2026-08-27 11:03:47,222 - Testing ThermalStress 
+2026-08-27 11:04:30,122 - [DumpSummaryJson] Processing MODS tests: {'ThermalStress', 'GpuStress', 'C2CStress', 'PowerStress', 'CpuStress1'}
+2026-08-27 11:04:30,122 - Unable to find mla executable
+2026-08-27 11:04:30,122 - Unable to find mla executable
+2026-08-27 11:04:30,122 - Unable to find mla executable
+2026-08-27 11:04:30,122 - Unable to find mla executable
+2026-08-27 11:04:30,122 - Unable to find mla executable
+2026-08-27 11:04:30,129 - Testing FioSSD 
+2026-08-27 11:04:41,743 - [DumpSummaryJson] Processing MODS tests: {'ThermalStress', 'GpuStress', 'C2CStress', 'PowerStress', 'CpuStress1'}
+2026-08-27 11:04:41,743 - Unable to find mla executable
+2026-08-27 11:04:41,743 - Unable to find mla executable
+2026-08-27 11:04:41,743 - Unable to find mla executable
+2026-08-27 11:04:41,743 - Unable to find mla executable
+2026-08-27 11:04:41,743 - Unable to find mla executable
+2026-08-27 11:04:41,747 - Testing MemStress 
+2026-08-27 11:11:48,336 - [DumpSummaryJson] Processing MODS tests: {'ThermalStress', 'GpuStress', 'C2CStress', 'PowerStress', 'CpuStress1'}
+2026-08-27 11:11:48,336 - Unable to find mla executable
+2026-08-27 11:11:48,336 - Unable to find mla executable
+2026-08-27 11:11:48,336 - Unable to find mla executable
+2026-08-27 11:11:48,336 - Unable to find mla executable
+2026-08-27 11:11:48,336 - Unable to find mla executable
+2026-08-27 11:11:48,336 - [DumpSummaryJson] Processing MODS tests: {'ThermalStress', 'GpuStress', 'C2CStress', 'PowerStress', 'CpuStress1'}
+2026-08-27 11:11:48,336 - Unable to find mla executable
+2026-08-27 11:11:48,336 - Unable to find mla executable
+2026-08-27 11:11:48,336 - Unable to find mla executable
+2026-08-27 11:11:48,336 - Unable to find mla executable
+2026-08-27 11:11:48,336 - Unable to find mla executable
+2026-08-27 11:11:48,345 - fail_count before banner print: 0

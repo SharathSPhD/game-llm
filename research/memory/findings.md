@@ -196855,7 +196855,7 @@ m- **Scale trend (rescoped per Tarka):** ratio 0.930 [0.898, 0.949] at
   is LOW, 0.493, ruling out already-satisfied preferences; loss reduction
   0.1-3.9% vs 30-40% explicit). Refined ratio: 1655x lower KL drift.
 - **Status:** VALIDATED (pre-registered arms, Tarka-resolved) · verdict
-  PARTIAL · SIGN-OFF PENDING · rider exp11b pending for dose-response
+  PARTIAL · SIGNED-OFF (operator, 2026-08-27) · rider exp11b pending for dose-response
 
 ### F21 rider result (exp11b, 3 seeds, recorded 2026-08-27)
 
@@ -196915,4 +196915,4 @@ is pretraining stability, not preference-phase drift control.)
   first 200 positions (win-frac_A ~0.80 there vs 0.61 over the full
   stream) — labeled as such, not representative of the full distribution.
 - **Status:** VALIDATED (3 seeds, Tarka-resolved with rescoping) · verdict
-  MET · SIGN-OFF PENDING
+  MET · SIGNED-OFF (operator, 2026-08-27)

@@ -333,3 +333,10 @@
   + real auction traces through the gateway.
 - OPEN: operator sign-off F16-F22 (contract layer 6); NVIDIA ticket
   submission (operator); optional autoregressive-auction follow-up.
+
+## [cycle 19 | 2026-08-27] OPERATOR SIGN-OFF F16-F22 · NEW /goal: next programs
+- Operator signed off all staged findings; GB10/NVIDIA thread explicitly out
+  of scope for now. New goal: complete the follow-on programs autonomously
+  (TRIZ inventive step + EFE autoresearch + ralph closure):
+  RQ-6/H5 autoregressive auction decoding (closes F22's scoping gap);
+  RQ-7/H6 contraction-at-width (attacks F20's open problem).

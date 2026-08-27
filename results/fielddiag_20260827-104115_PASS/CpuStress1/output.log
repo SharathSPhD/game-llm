@@ -1,0 +1,22 @@
+Worst case timeout for custommods = 1200 seconds
+[cmd-9] $ /opt/nvidia/dgx-spark-fieldiag/dgx/tests/mods.580/fieldiag spec=CpuStressSpec max_file_size=500 specfile=dgxfielddiag.spe diag_type=field product_name=spark post_reset_delay_ms=0 row_remap_on_error append_log json pex_verbose
+[cmd-9] 
+[cmd-9] DiagType: field
+[cmd-9] MODS start: Thu Aug 27 10:45:08 2026
+[cmd-9] 
+[cmd-9] Error Code = 000000000000 (ok)
+[cmd-9] 
+[cmd-9]  #######     ####     ######    ######
+[cmd-9]  ########   ######   ########  ########
+[cmd-9]  ##    ##  ##    ##  ##     #  ##     #
+[cmd-9]  ##    ##  ##    ##   ###       ###
+[cmd-9]  ########  ########    ####      ####
+[cmd-9]  #######   ########      ###       ###
+[cmd-9]  ##        ##    ##  #     ##  #     ##
+[cmd-9]  ##        ##    ##  ########  ########
+[cmd-9]  ##        ##    ##   ######    ######
+[cmd-9] 
+[cmd-9] MODS end  : Thu Aug 27 10:45:17 2026  [9.325 seconds (00:00:09.325 h:m:s)]
+[cmd-9] MODS end  : Thu Aug 27 10:45:17 2026  [9.379 seconds (00:00:09.379 h:m:s)]
+[2026-08-27 10:45:08.694057] ('Timeout Handler logs:',)
+[2026-08-27 10:45:08.694125] ('[2026-08-27 10:45:08.694122] Initial timeout duration configured = 600000 ms',)

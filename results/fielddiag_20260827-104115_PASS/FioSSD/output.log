@@ -1,0 +1,45 @@
+Worst case timeout for custom = 3600 seconds
+[cmd-21] $ fio -name=mytest -filename=/media/nvme0n1p2/test.img -ioengine=psync -direct=1 -rw=read -size=10GB -bs=256KB -iodepth=32 -numjobs=8 -group_reporting
+[cmd-21] mytest: (g=0): rw=read, bs=(R) 256KiB-256KiB, (W) 256KiB-256KiB, (T) 256KiB-256KiB, ioengine=psync, iodepth=32
+[cmd-21] ...
+[cmd-21] fio-3.36
+[cmd-21] Starting 8 processes
+[cmd-21] mytest: Laying out IO file (1 file / 10240MiB)
+[cmd-21] note: both iodepth >= 1 and synchronous I/O engine are selected, queue depth will be capped at 1
+[cmd-21] note: both iodepth >= 1 and synchronous I/O engine are selected, queue depth will be capped at 1
+[cmd-21] note: both iodepth >= 1 and synchronous I/O engine are selected, queue depth will be capped at 1
+[cmd-21] note: both iodepth >= 1 and synchronous I/O engine are selected, queue depth will be capped at 1
+[cmd-21] note: both iodepth >= 1 and synchronous I/O engine are selected, queue depth will be capped at 1
+[cmd-21] note: both iodepth >= 1 and synchronous I/O engine are selected, queue depth will be capped at 1
+[cmd-21] note: both iodepth >= 1 and synchronous I/O engine are selected, queue depth will be capped at 1
+[cmd-21] note: both iodepth >= 1 and synchronous I/O engine are selected, queue depth will be capped at 1
+[cmd-21] 
+[cmd-21] mytest: (groupid=0, jobs=8): err= 0: pid=133625: Thu Aug 27 11:04:41 2026
+[cmd-21]   read: IOPS=38.2k, BW=9553MiB/s (10.0GB/s)(80.0GiB/8575msec)
+[cmd-21]     clat (usec): min=31, max=3889, avg=199.56, stdev=109.35
+[cmd-21]      lat (usec): min=31, max=3889, avg=199.72, stdev=109.41
+[cmd-21]     clat percentiles (usec):
+[cmd-21]      |  1.00th=[   40],  5.00th=[   96], 10.00th=[  104], 20.00th=[  118],
+[cmd-21]      | 30.00th=[  133], 40.00th=[  153], 50.00th=[  196], 60.00th=[  215],
+[cmd-21]      | 70.00th=[  229], 80.00th=[  249], 90.00th=[  297], 95.00th=[  363],
+[cmd-21]      | 99.00th=[  619], 99.50th=[  750], 99.90th=[ 1004], 99.95th=[ 1139],
+[cmd-21]      | 99.99th=[ 1844]
+[cmd-21]    bw (  MiB/s): min= 8249, max=11191, per=100.00%, avg=9838.14, stdev=124.67, samples=128
+[cmd-21]    iops        : min=32998, max=44764, avg=39352.56, stdev=498.68, samples=128
+[cmd-21]   lat (usec)   : 50=1.77%, 100=5.85%, 250=72.50%, 500=17.49%, 750=1.90%
+[cmd-21]   lat (usec)   : 1000=0.39%
+[cmd-21]   lat (msec)   : 2=0.09%, 4=0.01%
+[cmd-21]   cpu          : usr=1.40%, sys=14.99%, ctx=327687, majf=0, minf=584
+[cmd-21]   IO depths    : 1=100.0%, 2=0.0%, 4=0.0%, 8=0.0%, 16=0.0%, 32=0.0%, >=64=0.0%
+[cmd-21]      submit    : 0=0.0%, 4=100.0%, 8=0.0%, 16=0.0%, 32=0.0%, 64=0.0%, >=64=0.0%
+[cmd-21]      complete  : 0=0.0%, 4=100.0%, 8=0.0%, 16=0.0%, 32=0.0%, 64=0.0%, >=64=0.0%
+[cmd-21]      issued rwts: total=327680,0,0,0 short=0,0,0,0 dropped=0,0,0,0
+[cmd-21]      latency   : target=0, window=0, percentile=100.00%, depth=32
+[cmd-21] 
+[cmd-21] Run status group 0 (all jobs):
+[cmd-21]    READ: bw=9553MiB/s (10.0GB/s), 9553MiB/s-9553MiB/s (10.0GB/s-10.0GB/s), io=80.0GiB (85.9GB), run=8575-8575msec
+[cmd-21] 
+[cmd-21] Disk stats (read/write):
+[cmd-21]   nvme0n1: ios=649300/2, sectors=166220800/64, merge=0/6, ticks=108646/3, in_queue=108650, util=75.88%
+[2026-08-27 11:04:30.129866] ('Timeout Handler logs:',)
+[2026-08-27 11:04:30.129923] ('[2026-08-27 11:04:30.129920] Initial timeout duration configured = 1800000 ms',)
