@@ -340,3 +340,20 @@
   (TRIZ inventive step + EFE autoresearch + ralph closure):
   RQ-6/H5 autoregressive auction decoding (closes F22's scoping gap);
   RQ-7/H6 contraction-at-width (attacks F20's open problem).
+
+## [cycle 19b | 2026-08-27] NEW PROGRAMS RUNNING: H5 harvested (MISSED 3/3), H6 screen training
+- Ledger repair: findings.md had ballooned to 13.7MB (duplicated F20 blocks
+  from a replace-script bug); rebuilt clean from the F19 base + final
+  amended F20/F21/F22. All F16-F22 SIGNED-OFF per operator.
+- TRIZ session (ADR 0005): contraction-at-width -> physical contradiction
+  (Lipschitz small AND large) -> separation by condition/space -> three
+  arms: B1 anytime (P11), B2 trajectory-local penalty (P35), B3
+  bottleneck-core (P24). Model additions TDD'd (11 tests): forward_unrolled,
+  local_lipschitz, EqLMCore (+checkpoint support).
+- exp14 (H5) ran first on the 5090: MISSED 3/3 — teacher-forced auction
+  advantage inverts in closed-loop generation (F23 recorded, Tarka
+  running). F22's rescoping empirically vindicated. Auction still lowest
+  repetition; ensemble degenerates.
+- exp13 seed-42 screen (B1/B2/B3) training on 5090 (~5h). Ship hiccups
+  fixed en route: unquoted YAML colon; exp14's 5s/seed verified real
+  (batched greedy).
