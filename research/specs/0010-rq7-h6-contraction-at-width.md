@@ -36,3 +36,24 @@ open-problem section with mechanisms, not speculation).
 
 ~1.6h per arm per seed on the 5090 (batch 32 x 10k, from exp10 timing);
 seed-42 screen of B1/B2/B3 (~5h), then 2 more seeds of the best arm (~3.2h).
+
+## Amendment (2026-08-27, pre-registered AFTER seed-42 screen, BEFORE any B4 run)
+
+Seed-42 screen: B1 0.662 BLiMP / conv 0.0 (86% gap closure, no certification);
+B2 0.577 / conv 1.00 at 4.0 iters (first certified 121M equilibrium, quality
+cost); B3 0.642 / conv 0.20 / fastest. No arm meets both MET halves.
+
+- **B4 (combination arm, prediction pre-registered):** anytime supervision
+  (B1) + trajectory-local Lipschitz penalty (B2, lambda_c=0.1, gamma=0.9,
+  probe at the final unrolled iterate). Prediction: BLiMP >= 0.610 AND
+  eval-time certified convergence rate >= 0.5 — i.e., B4 MEETS the full H6
+  gate at seed 42. If met at seed 42, B4 runs seeds 43/44 for the verdict;
+  else B1 (best quality arm) runs seeds 43/44 and H6 scores on the
+  PARTIAL criteria.
+- **B1 budget-sweep rider:** the anytime checkpoint evaluated at solver
+  budgets {4, 8, 12}. Prediction: BLiMP degrades gracefully (>= 0.60 at
+  budget 8, >= 0.55 at budget 4), demonstrating the anytime property that
+  motivated P11. Eval-only.
+- Screen observation recorded as a finding regardless: unrolled anytime
+  training is FASTER than IFT solver training at this scale (44 vs 92 min)
+  — the solve, not backprop, dominates EqLM's training cost.

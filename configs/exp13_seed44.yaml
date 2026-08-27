@@ -1,0 +1,46 @@
+seed: 44
+device: cuda
+data:
+  token_cache_file: data/cache/tokstream_e2284a399b14d54ff8c1e192.pt
+  batch_size: 32
+training:
+  num_steps: 10000
+  lr: 3e-4
+  weight_decay: 0.01
+  grad_clip: 1.0
+  log_every: 200
+eval:
+  telemetry_batches: 25
+  blimp:
+    num_phenomena: 5
+    pairs_per_phenomenon: 200
+control:
+  note: exp10 seed42 A3 (identical data/steps/batch) blimp 0.537, conv 0.0
+  blimp_accuracy: 0.537
+  explicit_a1_blimp: 0.682
+save_checkpoints: true
+arms:
+  B1:
+    kind: anytime
+    supervise_at:
+    - 4
+    - 8
+    - 12
+    supervise_weights:
+    - 0.15
+    - 0.3
+    - 1.0
+    model_config:
+      vocab_size: 50257
+      d_model: 1704
+      n_heads: 12
+      d_ff: 6807
+      max_seq_len: 128
+      deq_max_iter: 12
+      deq_tol: 1e-3
+      solver: anderson
+      jfb: false
+      dropout: 0.1
+      spectral_norm: true
+      residual_damping: 0.2
+      map_form: postln

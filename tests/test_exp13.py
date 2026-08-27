@@ -42,6 +42,10 @@ def exp13_setup(tmp_path_factory) -> dict:
                    "supervise_weights": [0.15, 0.3, 1.0]},
             "B2": {"kind": "trajpen", "model_config": dict(TINY_MC),
                    "lambda_c": 0.1, "gamma": 0.9},
+            "B4": {"kind": "anytime_trajpen", "model_config": dict(TINY_MC),
+                   "supervise_at": [2, 4, 6],
+                   "supervise_weights": [0.15, 0.3, 1.0],
+                   "lambda_c": 0.1, "gamma": 0.9},
             "B3": {"kind": "core",
                    "model_config": {**TINY_MC, "d_core": 8, "n_heads_core": 2,
                                     "d_ff_core": 16, "n_enc": 1, "n_dec": 1}},
@@ -66,7 +70,7 @@ def test_cli_runs_green(exp13_setup) -> None:
 def test_all_arms_present_with_metrics(exp13_setup) -> None:
     r = json.loads((exp13_setup["out"] / "results.json").read_text())
     assert r["spec"] == "0010"
-    assert set(r["arms"]) == {"B1", "B2", "B3"}
+    assert set(r["arms"]) == {"B1", "B2", "B3", "B4"}
     for arm in r["arms"].values():
         assert 0.0 <= arm["blimp_accuracy"] <= 1.0
         assert 0.0 <= arm["solver_convergence_rate"] <= 1.0
@@ -76,8 +80,9 @@ def test_all_arms_present_with_metrics(exp13_setup) -> None:
 
 def test_trajpen_records_lipschitz(exp13_setup) -> None:
     r = json.loads((exp13_setup["out"] / "results.json").read_text())
-    tail = r["arms"]["B2"]["lipschitz_curve_tail"]
-    assert tail and all(v > 0 for v in tail)
+    for arm in ("B2", "B4"):
+        tail = r["arms"][arm]["lipschitz_curve_tail"]
+        assert tail and all(v > 0 for v in tail)
 
 
 def test_core_arm_uses_core_model(exp13_setup) -> None:
@@ -91,4 +96,4 @@ def test_resume_skips(exp13_setup) -> None:
          "--config", str(exp13_setup["cfg_path"]), "--output", str(exp13_setup["out"])],
         capture_output=True, text=True, timeout=300, cwd=str(REPO),
     )
-    assert proc.returncode == 0 and proc.stdout.count("[resume]") == 3
+    assert proc.returncode == 0 and proc.stdout.count("[resume]") == 4

@@ -78,7 +78,7 @@ def load_config(path: str) -> dict:
 def build_model(arm_cfg: dict, device: str) -> Any:
     mc = dict(arm_cfg["model_config"])
     kind = arm_cfg["kind"]
-    if kind in ("anytime", "trajpen"):
+    if kind in ("anytime", "trajpen", "anytime_trajpen"):
         return EqLM(config=EqLMConfig(**mc)).to(device)
     if kind == "core":
         core_keys = {"d_core", "n_heads_core", "d_ff_core", "n_enc", "n_dec"}
@@ -142,6 +142,20 @@ def train_arm(
             loss = torch.stack(parts).sum() / sum(sup_w)
         elif kind == "trajpen":
             loss = ce_loss(model(batch), batch)
+            alpha = torch.rand(1, generator=alpha_rng).item()
+            lhat = model.local_lipschitz(batch, alpha=alpha)
+            pen = torch.relu(lhat - arm_cfg["gamma"])
+            pen_curve.append(lhat.item())
+            loss = loss + arm_cfg["lambda_c"] * pen
+        elif kind == "anytime_trajpen":
+            # B4: B1's unrolled anytime loss + B2's contraction penalty at the
+            # final unrolled iterate (last_z_star is set by forward_unrolled).
+            outs = model.forward_unrolled(batch, supervise_at=sup)
+            parts = [
+                w * ce_loss(lg, batch)
+                for w, (_, lg) in zip(sup_w, outs, strict=True)
+            ]
+            loss = torch.stack(parts).sum() / sum(sup_w)
             alpha = torch.rand(1, generator=alpha_rng).item()
             lhat = model.local_lipschitz(batch, alpha=alpha)
             pen = torch.relu(lhat - arm_cfg["gamma"])

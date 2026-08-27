@@ -1,0 +1,42 @@
+# H6 B4 combination screen (SPEC 0010 amendment). 5090 job.
+seed: 42
+device: cuda
+data:
+  token_cache_file: data/cache/tokstream_e2284a399b14d54ff8c1e192.pt
+  batch_size: 32
+training:
+  num_steps: 10000
+  lr: 3e-4
+  weight_decay: 0.01
+  grad_clip: 1.0
+  log_every: 200
+eval:
+  telemetry_batches: 25
+  blimp:
+    num_phenomena: 5
+    pairs_per_phenomenon: 200
+control:
+  note: "screen results: B1 0.662/conv0.0, B2 0.577/conv1.0@4it, B3 0.642/conv0.2; A3 control 0.537"
+  blimp_accuracy: 0.537
+save_checkpoints: true
+arms:
+  B4:
+    kind: anytime_trajpen
+    supervise_at: [4, 8, 12]
+    supervise_weights: [0.15, 0.3, 1.0]
+    lambda_c: 0.1
+    gamma: 0.9
+    model_config:
+      vocab_size: 50257
+      d_model: 1704
+      n_heads: 12
+      d_ff: 6807
+      max_seq_len: 128
+      deq_max_iter: 12
+      deq_tol: 1e-3
+      solver: anderson
+      jfb: false
+      dropout: 0.1
+      spectral_norm: true
+      residual_damping: 0.2
+      map_form: postln
