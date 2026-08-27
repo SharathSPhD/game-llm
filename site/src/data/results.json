@@ -588,6 +588,33 @@
    },
    "status": "VALIDATED (Tarka-resolved with rescoping, sign-off pending)",
    "artifact_path": "results/exp14/"
+  },
+  {
+   "id": "F24",
+   "title": "H6 PARTIAL - with parity: anytime-unrolled training closes the ENTIRE width gap (ratio 0.991 vs explicit at 121M); certification achieved separately; naive combination refuted",
+   "claim": "B1 (CE supervision on plain iterates z4/z8/z12, Anderson-solver eval) hits BLiMP 0.662/0.697/0.672 - ratio 0.991 vs the explicit baseline, one seed above it - and trains 2.1x FASTER than solver-based training. Budget-sweep rider MET (graceful degradation at Anderson budgets 4/8/12). B2's trajectory-local penalty delivers the first certified 121M equilibrium (conv 1.0 at 4.0 iters) at a quality cost. B4 (naive combo) refuted at 0.529. Open problem sharpened: quality-preserving certification.",
+   "evidence": {
+    "exp": "exp13/exp13b (RTX 5090)",
+    "seeds": 3,
+    "b1_blimp": [
+     0.662,
+     0.697,
+     0.672
+    ],
+    "ratio_vs_explicit": 0.991,
+    "b2_certified": {
+     "conv": 1.0,
+     "iters": 4.0,
+     "blimp": 0.577
+    },
+    "budget_sweep_s43": {
+     "4": 0.601,
+     "8": 0.674,
+     "12": 0.697
+    }
+   },
+   "status": "VALIDATED (Tarka-resolved, sign-off pending)",
+   "artifact_path": "results/exp13_seed43/"
   }
  ]
 }
