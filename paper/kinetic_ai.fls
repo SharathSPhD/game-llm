@@ -399,11 +399,11 @@ INPUT ./figures/fig_parity_budget.pdf
 INPUT ./figures/fig_parity_budget.pdf
 INPUT ./figures/fig_parity_budget.pdf
 INPUT ./figures/fig_parity_budget.pdf
+INPUT /home/sharaths/.TinyTeX/texmf-dist/fonts/tfm/jknappen/ec/tcrm1200.tfm
+INPUT /home/sharaths/.TinyTeX/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc
 INPUT ./kinetic_ai.bbl
 INPUT ./kinetic_ai.bbl
 INPUT kinetic_ai.bbl
-INPUT /home/sharaths/.TinyTeX/texmf-dist/fonts/tfm/jknappen/ec/tcrm1200.tfm
-INPUT /home/sharaths/.TinyTeX/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc
 INPUT kinetic_ai.aux
 INPUT ./kinetic_ai.out
 INPUT ./kinetic_ai.out
