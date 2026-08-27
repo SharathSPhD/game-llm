@@ -2,7 +2,7 @@ import Link from "next/link";
 import { learnSections } from "@/lib/learn-content";
 
 export const metadata = {
-  title: "Learn — EqLM",
+  title: "Learn",
   description: "Understanding equilibrium learning dynamics, convergence theory, and reproducible research.",
 };
 

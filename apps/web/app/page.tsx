@@ -1,7 +1,7 @@
 import Link from "next/link";
 
 export const metadata = {
-  title: "EqLM — Equilibrium Learning Mechanisms",
+  title: "EqLM — Equilibrium Language Model",
 };
 
 export default function Home() {
@@ -9,7 +9,7 @@ export default function Home() {
     <div className="page wrap">
       <section className="landing-hero">
         <div>
-          <p className="eyebrow">Equilibrium Learning Mechanisms (EqLM)</p>
+          <p className="eyebrow">Equilibrium Language Model (EqLM)</p>
           <h1>When both players optimize, convergence matters.</h1>
           <p className="lede">
             Game-theoretic learning dynamics reach equilibrium where standard methods cycle. EqLM is a research platform
@@ -146,7 +146,7 @@ export default function Home() {
           <Link href="/findings" className="card" style={{ textDecoration: "none" }}>
             <h3>Research Findings</h3>
             <p>
-              Browse validated findings (F1–F8): convergence claims, mechanism properties,
+              Browse all 24 validated findings (F1–F24): convergence, mechanism, scaling,
               solver accelerations. All Tarka-reviewed with artifact paths and key numbers.
             </p>
           </Link>
@@ -161,7 +161,7 @@ export default function Home() {
             /api/auction, /api/jobs endpoints. Authentication via bearer token (GATEWAY_SECRET).
           </li>
           <li>
-            <strong>Frontend:</strong> Next.js 14 (app router) + React 18 + TailwindCSS. API proxy routes
+            <strong>Frontend:</strong> Next.js 14 (app router) + React 18, token-based CSS design system. API proxy routes
             forward requests to gateway; replay mode serves canned demo data when offline.
           </li>
           <li>

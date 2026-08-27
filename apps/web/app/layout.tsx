@@ -7,7 +7,7 @@ import { HealthDot } from "./components/HealthDot";
 
 export const metadata: Metadata = {
   title: {
-    default: "EqLM — Equilibrium Lab & Research Platform",
+    default: "EqLM — Equilibrium Language Model Research Platform",
     template: "%s — EqLM",
   },
   description:

@@ -14,6 +14,7 @@ export function NavLinks() {
     { href: "/studio", label: "Studio" },
     { href: "/models", label: "Models" },
     { href: "/findings", label: "Findings" },
+    { href: "/login", label: "Sign in" },
   ];
 
   const isActive = (href: string) => {

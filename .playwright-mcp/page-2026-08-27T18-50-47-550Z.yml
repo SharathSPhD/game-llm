@@ -1,0 +1,114 @@
+- generic [active] [ref=f1e1]:
+  - link "Skip to main content" [ref=f1e2] [cursor=pointer]:
+    - /url: "#main"
+  - navigation "Primary" [ref=f1e3]:
+    - link "EqLM" [ref=f1e4] [cursor=pointer]:
+      - /url: /
+    - generic [ref=f1e10]:
+      - link "Lab" [ref=f1e11] [cursor=pointer]:
+        - /url: /lab
+      - link "Learn" [ref=f1e12] [cursor=pointer]:
+        - /url: /learn
+      - link "Playground" [ref=f1e13] [cursor=pointer]:
+        - /url: /playground
+      - link "Auction" [ref=f1e14] [cursor=pointer]:
+        - /url: /auction
+      - link "Studio" [ref=f1e15] [cursor=pointer]:
+        - /url: /studio
+      - link "Models" [ref=f1e16] [cursor=pointer]:
+        - /url: /models
+      - link "Findings" [ref=f1e17] [cursor=pointer]:
+        - /url: /findings
+    - generic [ref=f1e18]:
+      - 'generic "Backend online (v0.1.0-demo, GPU: no)" [ref=f1e19]': Live
+      - button "Toggle theme" [ref=f1e21] [cursor=pointer]
+  - main [ref=f1e28]:
+    - generic [ref=f1e29]:
+      - generic [ref=f1e30]:
+        - heading "Learn EqLM" [level=1] [ref=f1e31]
+        - paragraph [ref=f1e32]: Seven short explainers that bridge game theory, equilibrium computation, and practical training. Every number comes from validated findings. Start anywhere.
+      - generic [ref=f1e33]:
+        - 'link "Why Game-Theoretic Training The foundational thesis: equilibrium learning dynamics in multi-agent systems. Read more →" [ref=f1e34] [cursor=pointer]':
+          - /url: /learn/why-game-theory
+          - heading "Why Game-Theoretic Training" [level=3] [ref=f1e35]
+          - paragraph [ref=f1e36]: "The foundational thesis: equilibrium learning dynamics in multi-agent systems."
+          - generic [ref=f1e37]: Read more →
+        - link "Magnetic Mirror Descent and Last-Iterate Convergence How MMD reaches equilibrium where standard GDA cycles. Read more →" [ref=f1e38] [cursor=pointer]:
+          - /url: /learn/mmd-convergence
+          - heading "Magnetic Mirror Descent and Last-Iterate Convergence" [level=3] [ref=f1e39]
+          - paragraph [ref=f1e40]: How MMD reaches equilibrium where standard GDA cycles.
+          - generic [ref=f1e41]: Read more →
+        - link "Equilibrium Language Models — Depth as a Fixed Point How DEQ transformers enable equilibrium computation inside the model. Read more →" [ref=f1e42] [cursor=pointer]:
+          - /url: /learn/eq-depth
+          - heading "Equilibrium Language Models — Depth as a Fixed Point" [level=3] [ref=f1e43]
+          - paragraph [ref=f1e44]: How DEQ transformers enable equilibrium computation inside the model.
+          - generic [ref=f1e45]: Read more →
+        - 'link "The Honest Scaling Story: Two Misses, Then Parity How the width gap appeared, widened, and was closed by changing the training regime. Read more →" [ref=f1e46] [cursor=pointer]':
+          - /url: /learn/honest-scaling
+          - 'heading "The Honest Scaling Story: Two Misses, Then Parity" [level=3] [ref=f1e47]'
+          - paragraph [ref=f1e48]: How the width gap appeared, widened, and was closed by changing the training regime.
+          - generic [ref=f1e49]: Read more →
+        - 'link "Token Auctions: Where They Win and Where They Don''t Truthful per-token model selection — a scoring-time win with an honest closed-loop boundary. Read more →" [ref=f1e50] [cursor=pointer]':
+          - /url: /learn/token-auctions
+          - 'heading "Token Auctions: Where They Win and Where They Don''t" [level=3] [ref=f1e51]'
+          - paragraph [ref=f1e52]: Truthful per-token model selection — a scoring-time win with an honest closed-loop boundary.
+          - generic [ref=f1e53]: Read more →
+        - 'link "Preference Optimization: an Under-Dosed Magnet and an Unexpectedly Stable Architecture What DPO does to unseen phenomena, and why the equilibrium model barely moves. Read more →" [ref=f1e54] [cursor=pointer]':
+          - /url: /learn/preference-optimization
+          - 'heading "Preference Optimization: an Under-Dosed Magnet and an Unexpectedly Stable Architecture" [level=3] [ref=f1e55]'
+          - paragraph [ref=f1e56]: What DPO does to unseen phenomena, and why the equilibrium model barely moves.
+          - generic [ref=f1e57]: Read more →
+        - link "The Closure Contract and Reproducibility How findings are verified and signed off. Read more →" [ref=f1e58] [cursor=pointer]:
+          - /url: /learn/closure-contract
+          - heading "The Closure Contract and Reproducibility" [level=3] [ref=f1e59]
+          - paragraph [ref=f1e60]: How findings are verified and signed off.
+          - generic [ref=f1e61]: Read more →
+      - generic [ref=f1e62]:
+        - heading "How to Read" [level=2] [ref=f1e63]
+        - generic [ref=f1e64]:
+          - paragraph [ref=f1e65]: Each section pairs a real finding (or set of findings) with its meaning. We don't explain the theory first and then show the evidence; instead, we start with the discovery and build backward.
+          - paragraph [ref=f1e66]:
+            - strong [ref=f1e67]: "What you'll find:"
+            - text: The claim, the numbers (with experiment IDs like F1, F22), and the implication for future work or understanding. No invented examples. Every number is traceable to research/memory/findings.md.
+          - paragraph [ref=f1e68]:
+            - strong [ref=f1e69]: "One sentence per section:"
+            - text: Each ends with a takeaway—the one thing that should stick. Use these to navigate and decide where to dive deeper.
+  - contentinfo [ref=f1e70]:
+    - generic [ref=f1e71]:
+      - paragraph [ref=f1e73]:
+        - strong [ref=f1e74]: EqLM
+        - text: is a research platform for equilibrium learning dynamics, quantal response equilibria, mechanism design verification, and GPU-accelerated training. All results include reproducible configs and are tracked via Tarka verification.
+      - generic [ref=f1e75]:
+        - heading "Lab" [level=3] [ref=f1e76]
+        - list [ref=f1e77]:
+          - listitem [ref=f1e78]:
+            - link "Equilibrium Lab" [ref=f1e79] [cursor=pointer]:
+              - /url: /lab
+          - listitem [ref=f1e80]:
+            - link "QRE Explorer" [ref=f1e81] [cursor=pointer]:
+              - /url: /qre
+          - listitem [ref=f1e82]:
+            - link "Auction Playground" [ref=f1e83] [cursor=pointer]:
+              - /url: /auction
+      - generic [ref=f1e84]:
+        - heading "Research" [level=3] [ref=f1e85]
+        - list [ref=f1e86]:
+          - listitem [ref=f1e87]:
+            - link "Training Studio" [ref=f1e88] [cursor=pointer]:
+              - /url: /studio
+          - listitem [ref=f1e89]:
+            - link "Findings" [ref=f1e90] [cursor=pointer]:
+              - /url: /findings
+          - listitem [ref=f1e91]:
+            - link "Source" [ref=f1e92] [cursor=pointer]:
+              - /url: https://github.com/sharaths/game-llm
+      - generic [ref=f1e93]:
+        - heading "Info" [level=3] [ref=f1e94]
+        - list [ref=f1e95]:
+          - listitem [ref=f1e96]:
+            - link "Overview" [ref=f1e97] [cursor=pointer]:
+              - /url: /
+          - listitem [ref=f1e98]:
+            - link "Contact" [ref=f1e99] [cursor=pointer]:
+              - /url: mailto:sharath.ai.colab@gmail.com
+  - alert [ref=f1e100]

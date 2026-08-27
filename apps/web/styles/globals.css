@@ -597,3 +597,14 @@ table { border-collapse: collapse; width: 100%; }
 .data-table th:first-child, .data-table td:first-child { text-align: left; }
 .data-table tbody th { font-weight: 600; text-align: left; }
 .data-table tbody tr:last-child th, .data-table tbody tr:last-child td { border-bottom: none; }
+
+/* Forms (login) */
+input[type="email"], input[type="password"], input[type="text"] {
+  padding: 0.55rem 0.7rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--text);
+  font: inherit;
+}
+input:focus { outline: 2px solid var(--accent-mid); outline-offset: 1px; }

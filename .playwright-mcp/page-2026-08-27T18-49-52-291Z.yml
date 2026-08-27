@@ -1,0 +1,149 @@
+- generic [active] [ref=e1]:
+  - link "Skip to main content" [ref=e2] [cursor=pointer]:
+    - /url: "#main"
+  - navigation "Primary" [ref=e3]:
+    - link "EqLM" [ref=e4] [cursor=pointer]:
+      - /url: /
+    - generic [ref=e10]:
+      - link "Lab" [ref=e11] [cursor=pointer]:
+        - /url: /lab
+      - link "Learn" [ref=e12] [cursor=pointer]:
+        - /url: /learn
+      - link "Playground" [ref=e13] [cursor=pointer]:
+        - /url: /playground
+      - link "Auction" [ref=e14] [cursor=pointer]:
+        - /url: /auction
+      - link "Studio" [ref=e15] [cursor=pointer]:
+        - /url: /studio
+      - link "Models" [ref=e16] [cursor=pointer]:
+        - /url: /models
+      - link "Findings" [ref=e17] [cursor=pointer]:
+        - /url: /findings
+    - generic [ref=e18]:
+      - generic "Backend offline — using replay demo data" [ref=e19]: Demo
+      - button "Toggle theme" [ref=e21] [cursor=pointer]
+  - main [ref=e28]:
+    - generic [ref=e29]:
+      - generic [ref=e31]:
+        - paragraph [ref=e32]: Equilibrium Learning Mechanisms (EqLM)
+        - heading "When both players optimize, convergence matters." [level=1] [ref=e33]
+        - paragraph [ref=e34]: Game-theoretic learning dynamics reach equilibrium where standard methods cycle. EqLM is a research platform for Magnetic Mirror Descent, Quantal Response Equilibria, token auctions, and GPU-accelerated training — with full reproducibility tracking and Tarka verification.
+        - generic [ref=e35]:
+          - link "Open Equilibrium Lab" [ref=e36] [cursor=pointer]:
+            - /url: /lab
+          - link "Learn the Science" [ref=e37] [cursor=pointer]:
+            - /url: /learn
+          - link "Research Findings" [ref=e38] [cursor=pointer]:
+            - /url: /findings
+        - generic [ref=e39]:
+          - generic [ref=e40]:
+            - generic [ref=e41]: Parity Ratio (EqLM vs Explicit)
+            - generic [ref=e42]: "0.991"
+          - generic [ref=e43]:
+            - generic [ref=e44]: Memory Reduction (DEQ)
+            - generic [ref=e45]: 16.8×
+          - generic [ref=e46]:
+            - generic [ref=e47]: Signed-Off Findings
+            - generic [ref=e48]: "24"
+      - generic [ref=e49]:
+        - heading "The Research Program" [level=2] [ref=e50]
+        - generic [ref=e51]:
+          - generic [ref=e52]:
+            - heading "Convergence to Equilibrium" [level=3] [ref=e53]
+            - paragraph [ref=e54]: "Beyond GDA's cycling behavior: Magnetic Mirror Descent with fixed or adaptive references reaches equilibrium on symmetric and asymmetric games. We trace the geometry of fixed points and validate log-linear convergence."
+          - generic [ref=e55]:
+            - heading "QRE Homotopy" [level=3] [ref=e56]
+            - paragraph [ref=e57]: Quantal response equilibria interpolate between randomness and perfect rationality. Warm-started homotopy paths accelerate solver convergence; adaptive damping handles high-rationality limits.
+          - generic [ref=e58]:
+            - heading "Mechanism Truthfulness" [level=3] [ref=e59]
+            - paragraph [ref=e60]: "Token auctions studied via second-price vs. weighted aggregation. Empirical regret validates truthfulness: second-price is VCG-exact, weighted aggregation enables profitable manipulation."
+          - generic [ref=e61]:
+            - heading "Reproducible Science" [level=3] [ref=e62]
+            - paragraph [ref=e63]: Every result includes config hash, seed, git commit. Tarka verification gates findings; intermediate artifacts are stored and indexed. Full audit trail from hypothesis to sign-off.
+          - generic [ref=e64]:
+            - heading "GPU Acceleration" [level=3] [ref=e65]
+            - paragraph [ref=e66]: Training Studio orchestrates long-running jobs on CUDA. Experiments marshal PyTorch tensors, leverage implicit differentiation (DEQ), and track memory-efficient solver stacks.
+          - generic [ref=e67]:
+            - heading "Interactive Exploration" [level=3] [ref=e68]
+            - paragraph [ref=e69]: "Tune hyperparameters in real time: method, learning rate, magnetic strength, rationality range. Animated convergence plots and strategy simplexes bring game dynamics to life."
+      - generic [ref=e70]:
+        - heading "Explore EqLM" [level=2] [ref=e71]
+        - paragraph [ref=e72]: "Choose your path below to dive into equilibrium learning:"
+        - generic [ref=e73]:
+          - link [ref=e74] [cursor=pointer]:
+            - /url: /lab
+            - heading "Equilibrium Lab" [level=3] [ref=e75]
+            - paragraph [ref=e76]: Run MMD, GDA, and QRE solvers on RPS, matching pennies, and biased games. Tune learning rate, magnetic strength, and step count; watch strategies converge.
+          - link [ref=e77] [cursor=pointer]:
+            - /url: /qre
+            - heading "QRE Explorer" [level=3] [ref=e78]
+            - paragraph [ref=e79]: Trace quantal response paths as rationality varies. See how agents shift from uniform randomness to best-response play; measure exploitability along the path.
+          - link [ref=e80] [cursor=pointer]:
+            - /url: /auction
+            - heading "Auction Playground" [level=3] [ref=e81]
+            - paragraph [ref=e82]: Design multi-agent token auctions. Compare second-price (truthful) vs. weighted aggregation; measure manipulation regret and output distributions.
+          - link [ref=e83] [cursor=pointer]:
+            - /url: /studio
+            - heading "Training Studio" [level=3] [ref=e84]
+            - paragraph [ref=e85]: "Submit long-running jobs: solve-and-audit, ablations, hyperparameter sweeps. Monitor status, download results, and trace config hashes to reproducible runs."
+          - link [ref=e86] [cursor=pointer]:
+            - /url: /findings
+            - heading "Research Findings" [level=3] [ref=e87]
+            - paragraph [ref=e88]: "Browse validated findings (F1–F8): convergence claims, mechanism properties, solver accelerations. All Tarka-reviewed with artifact paths and key numbers."
+      - generic [ref=e89]:
+        - heading "Technical Notes" [level=2] [ref=e90]
+        - list [ref=e91]:
+          - listitem [ref=e92]:
+            - strong [ref=e93]: "Backend:"
+            - text: FastAPI server (app/server.py) handles /api/solve, /api/qre_path, /api/auction, /api/jobs endpoints. Authentication via bearer token (GATEWAY_SECRET).
+          - listitem [ref=e94]:
+            - strong [ref=e95]: "Frontend:"
+            - text: Next.js 14 (app router) + React 18 + TailwindCSS. API proxy routes forward requests to gateway; replay mode serves canned demo data when offline.
+          - listitem [ref=e96]:
+            - strong [ref=e97]: "Auth:"
+            - text: Supabase SSR (optional). When NEXT_PUBLIC_SUPABASE_URL is set, sessions are maintained; otherwise auth softly disables and all pages are readable.
+          - listitem [ref=e98]:
+            - strong [ref=e99]: "Reproducibility:"
+            - text: Results stored in results/ directory; each experiment includes config hash, seed, and git commit. Tarka verification gates sign-off.
+          - listitem [ref=e100]:
+            - strong [ref=e101]: "Deployment:"
+            - text: "Vercel (root dir apps/web). Environment variables: NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_ANON_KEY, GATEWAY_URL, GATEWAY_SECRET."
+  - contentinfo [ref=e102]:
+    - generic [ref=e103]:
+      - paragraph [ref=e105]:
+        - strong [ref=e106]: EqLM
+        - text: is a research platform for equilibrium learning dynamics, quantal response equilibria, mechanism design verification, and GPU-accelerated training. All results include reproducible configs and are tracked via Tarka verification.
+      - generic [ref=e107]:
+        - heading "Lab" [level=3] [ref=e108]
+        - list [ref=e109]:
+          - listitem [ref=e110]:
+            - link "Equilibrium Lab" [ref=e111] [cursor=pointer]:
+              - /url: /lab
+          - listitem [ref=e112]:
+            - link "QRE Explorer" [ref=e113] [cursor=pointer]:
+              - /url: /qre
+          - listitem [ref=e114]:
+            - link "Auction Playground" [ref=e115] [cursor=pointer]:
+              - /url: /auction
+      - generic [ref=e116]:
+        - heading "Research" [level=3] [ref=e117]
+        - list [ref=e118]:
+          - listitem [ref=e119]:
+            - link "Training Studio" [ref=e120] [cursor=pointer]:
+              - /url: /studio
+          - listitem [ref=e121]:
+            - link "Findings" [ref=e122] [cursor=pointer]:
+              - /url: /findings
+          - listitem [ref=e123]:
+            - link "Source" [ref=e124] [cursor=pointer]:
+              - /url: https://github.com/sharaths/game-llm
+      - generic [ref=e125]:
+        - heading "Info" [level=3] [ref=e126]
+        - list [ref=e127]:
+          - listitem [ref=e128]:
+            - link "Overview" [ref=e129] [cursor=pointer]:
+              - /url: /
+          - listitem [ref=e130]:
+            - link "Contact" [ref=e131] [cursor=pointer]:
+              - /url: mailto:sharath.ai.colab@gmail.com
+  - alert [ref=e132]

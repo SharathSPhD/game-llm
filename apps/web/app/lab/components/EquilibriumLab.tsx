@@ -33,7 +33,11 @@ export function EquilibriumLab() {
       });
 
       if (!response.ok) {
-        throw new Error(`HTTP ${response.status}`);
+        throw new Error(
+          response.status === 401
+            ? "Sign in required: live solver runs execute on the research backend. Use the Sign in page."
+            : `HTTP ${response.status}`
+        );
       }
 
       const data = (await response.json()) as SolveResponse & { replay?: boolean };

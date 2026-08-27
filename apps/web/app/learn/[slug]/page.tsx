@@ -3,7 +3,7 @@ import { learnSections } from "@/lib/learn-content";
 import { notFound } from "next/navigation";
 
 export const metadata = {
-  title: "Learn — EqLM",
+  title: "Learn",
 };
 
 export async function generateStaticParams() {
@@ -53,36 +53,47 @@ export default function LearnArticle({ params }: { params: { slug: string } }) {
             marginBottom: "var(--space-7)",
           }}
         >
-          {section.content.split("\n\n").map((paragraph, idx) => (
-            <p key={idx} style={{ marginBottom: "var(--space-4)" }}>
-              {paragraph.split("\n").map((line, lineIdx) => {
-                if (line.startsWith("**") && line.endsWith(":**")) {
-                  return (
-                    <div key={lineIdx}>
-                      <strong style={{ fontSize: "var(--text-md)" }}>{line.replace(/\*\*/g, "")}</strong>
-                    </div>
-                  );
+          {section.content.split("\n\n").map((paragraph, idx) => {
+            // Re-flow: hard-wrapped source lines join into one flow unless the
+            // line is a bullet. Emphasis: **bold** and *em* inline.
+            const lines = paragraph.split("\n");
+            const blocks: { kind: "text" | "bullet"; text: string }[] = [];
+            for (const raw of lines) {
+              const line = raw.trimEnd();
+              if (line.startsWith("- ")) {
+                blocks.push({ kind: "bullet", text: line.slice(2) });
+              } else if (blocks.length > 0 && blocks[blocks.length - 1].kind === "text") {
+                blocks[blocks.length - 1].text += " " + line.trim();
+              } else {
+                blocks.push({ kind: "text", text: line.trim() });
+              }
+            }
+            const renderInline = (text: string) =>
+              text.split(/(\*\*[^*]+\*\*|\*[^*\s][^*]*\*)/g).map((part, i) => {
+                if (part.startsWith("**") && part.endsWith("**")) {
+                  return <strong key={i}>{part.slice(2, -2)}</strong>;
                 }
-                if (line.startsWith("- ")) {
-                  return (
-                    <div key={lineIdx} style={{ marginLeft: "1rem", marginBottom: "0.5rem" }}>
-                      {line.slice(2)}
-                    </div>
-                  );
+                if (part.startsWith("*") && part.endsWith("*") && part.length > 2) {
+                  return <em key={i}>{part.slice(1, -1)}</em>;
                 }
-                return (
-                  <div key={lineIdx}>
-                    {line.split(/(\*\*[^*]+\*\*)/g).map((part, partIdx) => {
-                      if (part.startsWith("**") && part.endsWith("**")) {
-                        return <strong key={partIdx}>{part.slice(2, -2)}</strong>;
-                      }
-                      return <span key={partIdx}>{part}</span>;
-                    })}
-                  </div>
-                );
-              })}
-            </p>
-          ))}
+                return <span key={i}>{part}</span>;
+              });
+            return (
+              <div key={idx} style={{ marginBottom: "var(--space-4)" }}>
+                {blocks.map((block, bIdx) =>
+                  block.kind === "bullet" ? (
+                    <div key={bIdx} style={{ marginLeft: "1rem", marginBottom: "0.5rem" }}>
+                      {renderInline(block.text)}
+                    </div>
+                  ) : (
+                    <p key={bIdx} style={{ marginBottom: "var(--space-3)" }}>
+                      {renderInline(block.text)}
+                    </p>
+                  )
+                )}
+              </div>
+            );
+          })}
         </div>
       </article>
 
