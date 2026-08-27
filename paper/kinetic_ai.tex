@@ -39,7 +39,7 @@
 \maketitle
 
 \begin{abstract}
-We propose Kinetic AI, a framework that reconceptualizes language model inference and training as solutions to equilibrium-seeking dynamical systems. Drawing on quantal response equilibrium theory, mechanism design, and deep equilibrium models, we ground language modeling in the language of game theory and economic theory. We implement the EqLM architecture, which computes equilibrium solutions implicitly via fixed-point iteration. We analyze convergence properties using maximum mean discrepancy, validate the approach on synthetic matrix games, and benchmark on pretraining (BabyLM strict-small). We demonstrate a solver-aware auxiliary loss that teaches contraction almost for free (16× residual reduction at ≤1.8\% CE cost), and report a weight-tied equilibrium LM at 93\% of a parameter-matched explicit transformer's BLiMP with O(1) depth-memory overhead. Beyond pretraining, we show warm-started equilibrium decoding cuts solver iterations 79\% (7.91 → 1.64 iters/token, 97.6\% token agreement) at smoke scale, inverting the wall-clock story: decode cost drops from 2.9× to near-parity with explicit stacks. At 110M parameters, EqLM shows 22\% peak-memory reduction and loss advantage (6.79 vs 7.40 at step 275). The gap for pretraining is diagnosed: effective contraction factor ≈ 1 at language-model width prevents tight-tolerance convergence and full capacity recovery. We report the full diagnostic arc with enumerated next steps (eval-time solver budget, auxiliary annealing, multi-block DEQ) as future work.
+We propose Kinetic AI, a framework that reconceptualizes language model inference and training as solutions to equilibrium-seeking dynamical systems. Drawing on quantal response equilibrium theory, mechanism design, and deep equilibrium models, we ground language modeling in the language of game theory and economic theory. We implement the EqLM architecture, which computes equilibrium solutions implicitly via fixed-point iteration. We analyze convergence properties using maximum mean discrepancy, validate the approach on synthetic matrix games, and benchmark on pretraining (BabyLM strict-small). We demonstrate a solver-aware auxiliary loss that teaches contraction almost for free (16× residual reduction at ≤1.8\% CE cost), and report a weight-tied equilibrium LM at 93\% of a parameter-matched explicit transformer's BLiMP with O(1) depth-memory overhead. Beyond pretraining, we show warm-started equilibrium decoding cuts solver iterations 79\% (7.91 → 1.64 iters/token, 97.6\% token agreement) at smoke scale, inverting the wall-clock story: decode cost drops from 2.9× to near-parity with explicit stacks. At 121M parameters (3 seeds), the O(1)-depth memory advantage is confirmed (−23\% peak memory), while the matched-budget quality ratio falls to 0.787 [0.785, 0.788]: under a fixed solver budget, the truncation penalty widens with width. The gap is diagnosed as graded loss of contraction at language-model width—the solver exhausts its budget at every scale tested, and width raises the price of that truncation. We report the full diagnostic arc honestly and hand future work a precisely named open problem: contraction that survives width.
 \end{abstract}
 
 \section{Introduction}
@@ -496,7 +496,7 @@ This is an \textbf{honest null at smoke scale}. At 500 training steps, solver bu
 
 \subsubsection{exp10 Probe: Memory and Loss at 110M-Scale Parameters (Early Observations)}
 
-\textbf{Status: In progress — probe observations only (300 steps, 121–124M matched params). Full 10k-step run in progress.}
+\textbf{Status: superseded by the full 10k-step run (next subsubsection); retained as the record of the early-loss signal that the full run inverted.}
 
 A preliminary probe (300 steps, full stream, parametrically matched EqLM vs ExplicitLM) reveals the O(1)-depth memory advantage for the first time at realistic model scale:
 
@@ -516,6 +516,33 @@ A2 (EqLM) & 120.7 & $6.2$ & $−22\%$ & $6.79$ \\
 
 Results frozen from results/exp10\_probe/results.json (config hash f7731f4fca0212972689ad08d2a4bd5871b004e539932f73b367bdeebb3a5f76, git commit eb4703d41ef3ddc9aa684d631483a46912182695).
 
+\subsubsection{H1 at 121M Parameters: The Truncation Penalty Widens with Width (F20—Full Run, 3 Seeds)}
+
+The full 121M-scale run (seeds 42/43/44, batch 32, 10{,}000 steps, full BabyLM stream, parametrically matched: EqLM 120.7M vs ExplicitLM 123.8M) settles the question the probe raised—and reverses its early signal:
+
+\begin{center}
+\begin{tabular}{lccc}
+\toprule
+ & A1 ExplicitLM & A2 EqLM-v1 & A3 EqLM-v3 \\
+\midrule
+BLiMP (mean of 3 seeds) & $0.6833$ & $0.5383$ & $0.5377$ \\
+Ratio to A1 & — & $0.788$ & $\mathbf{0.787}$ \\
+Ratio 95\% CI (bootstrap) & — & — & $[0.785, 0.788]$ \\
+Peak memory (GB) & $8.13$ & $\mathbf{6.29}$ ($-23\%$) & $7.76$ \\
+Wall-clock (min/arm) & $\mathbf{11}$ & $92$ & $92$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\noindent
+The probe's 300-step loss lead inverted well before 10k steps (final loss: A1 2.73--3.07 vs EqLM 3.29--4.00). Per-seed ratios are remarkably tight (0.7874/0.7881/0.7850; paired $t=-82.6$, df$=2$), and the v1 and v3 maps are statistically indistinguishable at this scale.
+
+\textbf{Mechanism (adversarially corrected).} Solver telemetry shows the fixed-point solve exhausted its 12-iteration budget on \emph{every} step at both $d=204$ (F18) and $d=1704$ (F20)—the equilibrium was budget-truncated at both scales. What changes with width is the \emph{price} of truncation: the quality gap widens from 7\% ($d=204$, 20k steps) to 21\% ($d=1704$, 10k steps). We initially attributed this to convergence failing ``at scale''; adversarial review refuted that reading, since the telemetry is identical at both widths. The correct statement is graded: under a fixed iteration budget the map becomes progressively less contractive per iteration as width grows, so truncation costs more capacity. (The two operating points also differ in step budget, 20k vs 10k applied identically to both arms, so the width effect is not fully isolated; the direction of the trend is robust, the magnitude is confounded.)
+
+\textbf{The honest frontier.} Equilibrium LMs buy a measured $-23\%$ peak-memory advantage at 121M parameters and 79\%-cheaper warm-started decoding (F19), and pay for it with a quality gap that grows as width outruns the solver's contraction budget, plus $8.4\times$ wall-clock per matched step. The open problem this program hands to future work is therefore not ``more parameters'' but \emph{contraction that survives width}: fixed-point maps or adaptive iteration budgets whose certified convergence does not degrade as $d$ grows.
+
+Results frozen from results/exp10\_5090/exp10\_seed\{42,43,44\}/results.json (config hashes 2a92f4f1\ldots, 9b2f58ad\ldots, 8944b1f3\ldots; RTX 5090).
+
 \section{Related Work}
 
 The connection between language modeling and equilibrium is implicit in much recent work. Sokota et al.\ (2023) provides a unified framework connecting RL, QRE, and zero-sum games. Bai, Kolter, and Koltun (2019) pioneered DEQ models. Duetting et al.\ (2024) frame LLM alignment as mechanism design. Direct Preference Optimization (Rafailov et al., 2023) and Self-Play Preference Optimization (Wu et al., 2024) can be reinterpreted as equilibrium-seeking in preference space.
@@ -525,20 +552,20 @@ We also build on classical results: McKelvey and Palfrey (1995) on quantal respo
 \section{Limitations}
 
 \begin{itemize}
-\item \textbf{Pretraining capacity (H1, F13–F18):} EqLM-v1/v2 had no fixed point (F14 discovery); iterates drifted linearly with damping $\alpha$. EqLM-v3 with post-LN map restores genuine fixed points (F15), and F16 solver-aware auxiliary loss achieves 16× residual reduction at ≤1.8\% CE cost (smoke scale). Full-scale H1 iteration 3 (3 seeds) confirms EqLM at 93.0\% of explicit-baseline BLiMP (ratio CI [0.8979, 0.9492], upper bound < 0.95 threshold), missing the pre-registered H1 threshold (F18). Root cause: effective contraction factor $\approx 1$ at LM width prevents tight-tolerance convergence and capacity recovery. At 110M scale (exp10 probe), EqLM shows loss advantage (6.79 vs 7.40) but capacity trade-off at 300 steps suggests longer schedules are needed to validate scaling behavior. Candidate solutions include eval-time solver budget studies, auxiliary-loss annealing schedules, multi-block DEQ chaining, and tolerance-sufficiency studies (does rel residual 0.1 suffice?).
-\item \textbf{Decode wall-clock (H1'a, F19):} while warm-started decoding cuts solver iterations 79\% (7.91 → 1.64 iters/token, exp09), agreement reaches 97.6\% vs 99\% threshold (39/40 sequences exact). Full-scale decode cost benefits from exp10 full run completion; current estimate suggests near-parity with explicit stacks but confirmation pending.
+\item \textbf{Pretraining capacity (H1, F13–F18):} EqLM-v1/v2 had no fixed point (F14 discovery); iterates drifted linearly with damping $\alpha$. EqLM-v3 with post-LN map restores genuine fixed points (F15), and F16 solver-aware auxiliary loss achieves 16× residual reduction at ≤1.8\% CE cost (smoke scale). Full-scale H1 iteration 3 (3 seeds) confirms EqLM at 93.0\% of explicit-baseline BLiMP (ratio CI [0.8979, 0.9492], upper bound < 0.95 threshold), missing the pre-registered H1 threshold (F18). Root cause: effective contraction factor $\approx 1$ at LM width prevents tight-tolerance convergence and capacity recovery. The full 121M run (F20, 3 seeds) shows the matched-budget quality ratio falling to 0.787 [0.785, 0.788]: under a fixed 12-iteration budget the truncation penalty widens with width. Candidate solutions include eval-time solver budget studies, auxiliary-loss annealing schedules, multi-block DEQ chaining, and tolerance-sufficiency studies (does rel residual 0.1 suffice?).
+\item \textbf{Decode wall-clock (H1'a, F19):} while warm-started decoding cuts solver iterations 79\% (7.91 → 1.64 iters/token, exp09), agreement reaches 97.6\% vs 99\% threshold (39/40 sequences exact). The 121M memory advantage is confirmed ($-23\%$, F20), but the matched-step wall-clock cost is $8.4\times$; warm-started decoding is the path that could amortize it at inference.
 \item Asymmetric-game theory: MMD-to-QRE identity holds only on symmetric games; asymmetric cases show context-dependent attractors (F2, research question open).
 \item Single-machine deployment: all Tier A/B work on GB10 (RTX 5090); scaling to multi-GPU/cloud requires serverless containerization (RunPod executor infrastructure in progress).
 \item Phantom-gradient regime (F12): DEQ solver convergence is 0\% at tol $1e-3$ during training, yet gradients flow and training succeeds. This regime requires characterization (solver-tolerance study, depth warmup) before production use.
 \item Auxiliary-loss capacity trade-off (F17–F18): solver-aware loss with $\lambda=0.01$ improves residual 16× but costs ~4.6pp BLiMP at 20k steps. Even $\lambda=1e-3$ shows no capacity recovery; $\lambda$ tuning or annealing schedules remain open.
-\item Think-harder dial (H1'c, F19): solver budget scaling shows null effect at smoke scale (6–48 iters, 0.594–0.600 BLiMP flat). Re-measurement at 100M scale (exp10 full run) will determine whether this changes with model capacity.
+\item Think-harder dial (H1'c, F19): solver budget scaling shows null effect at smoke scale (6–48 iters, 0.594–0.600 BLiMP flat). The full 121M run did not include a budget-scaling arm, so this remains an open question at scale.
 \end{itemize}
 
 \section{Conclusion}
 
 We have proposed Kinetic AI, a framework for language modeling grounded in game theory and equilibrium computation. The EqLM architecture makes this concrete. Experiments validate the game-theoretic optimization results (F1–F8), discover architectural insights (F13–F15), and demonstrate a solver-aware auxiliary loss that teaches contraction (F16). The H1 hypothesis—that a weight-tied equilibrium LM can reach ≥95\% of an explicit transformer's capability—is formally missed: 3-seed result is 93.0\% (ratio 95\% CI [0.8979, 0.9492], upper bound < 0.95 threshold; F18). The gap is precisely diagnosed: effective contraction factor $\approx 1$ at language-model width prevents tight-tolerance convergence and capacity recovery.
 
-Beyond pretraining, the H1' adaptive-equilibrium program (ADR 0004) reveals a genuine architectural advantage. Warm-started equilibrium decoding cuts solver cost 79\% (7.91 → 1.64 iters/token, F19, exp09 smoke scale), with 97.6\% token agreement and native checkpoint saveable for Hugging Face. This inverts the wall-clock story: an explicit L-layer stack always pays L fixed applications per token; warm equilibrium decoding pays $\sim 1.6$, unique to implicit layers. At 110M parameters (exp10 probe), EqLM shows 22\% peak-memory reduction and training-loss advantage (6.79 vs 7.40 at step 275), validating the O(1)-depth scaling theory (F4) at realistic model scale. These results suggest the equilibrium framework's value lies not in matching explicit-model pretraining (H1), but in exploiting native architectural properties for efficient inference—a different but significant design point. The ``think-harder dial'' (H1'c, budget scaling) is an honest null at smoke scale but re-measured at 100M scale via the exp10 full run (in progress).
+Beyond pretraining, the H1' adaptive-equilibrium program (ADR 0004) reveals a genuine architectural advantage. Warm-started equilibrium decoding cuts solver cost 79\% (7.91 → 1.64 iters/token, F19, exp09 smoke scale), with 97.6\% token agreement and native checkpoint saveable for Hugging Face. This inverts the wall-clock story: an explicit L-layer stack always pays L fixed applications per token; warm equilibrium decoding pays $\sim 1.6$, unique to implicit layers. At 121M parameters (F20, 3 seeds), the O(1)-depth memory advantage is confirmed ($6.29$ vs $8.13$ GB, $-23\%$), while the matched-budget quality ratio falls to $0.787$ $[0.785, 0.788]$—the truncation penalty of a fixed solver budget grows with width. Together these results locate the equilibrium framework's value not in matching explicit-model pretraining quality per step (H1, formally missed at both scales), but in its native architectural properties—constant-depth memory and warm-startable inference—purchased at a quality cost that current fixed-point maps do not yet control at width. The ``think-harder dial'' (H1'c) remains an honest null at smoke scale and untested at 121M.
 
 The program's open frontier is now precise: (1) pretraining capacity—achieve tight-tolerance convergence at LM width through contraction enforcement, auxiliary-loss scheduling, or multi-block DEQ; (2) decode efficiency—confirm warm-start gains at scale and measure full-pipeline wall-clock improvement; (3) uncertainty quantification—develop solver-budget scaling into a principled per-token confidence estimate. We enumerate these next steps with frozen thresholds (Tier C, H3 preference learning; H4 auction decoding), enabling reproducible progress toward the EqLM frontier.
 

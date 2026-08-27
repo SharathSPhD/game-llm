@@ -413,6 +413,9 @@ INPUT ./figures/fig_warm_start.pdf
 INPUT ./figures/fig_warm_start.pdf
 INPUT ./figures/fig_warm_start.pdf
 INPUT ./figures/fig_warm_start.pdf
+INPUT /home/sharaths/.TinyTeX/texmf-dist/tex/latex/base/omscmr.fd
+INPUT /home/sharaths/.TinyTeX/texmf-dist/tex/latex/base/omscmr.fd
+INPUT /home/sharaths/.TinyTeX/texmf-dist/tex/latex/base/omscmr.fd
 INPUT ./kinetic_ai.bbl
 INPUT ./kinetic_ai.bbl
 INPUT kinetic_ai.bbl

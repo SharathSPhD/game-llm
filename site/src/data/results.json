@@ -1,376 +1,535 @@
 {
-  "findings": [
-    {
-      "id": "F1",
-      "title": "MMD converges linearly to its magnetic fixed point where GDA cycles",
-      "claim": "On symmetric zero-sum matrix games, fixed-magnet MMD exhibits linear (geometric) last-iterate convergence to its fixed point, while simultaneous GDA cycles, bounded away from equilibrium.",
-      "evidence": {
-        "exp": "exp01",
-        "config_hash": "e1c1efdd",
-        "seeds": 10,
-        "games": [
-          {"name": "Matching Pennies", "mmd_fp_r2": 0.9948, "gda_nash_conv": "1.93 ± [1.90, 1.96]"},
-          {"name": "Rock-Paper-Scissors", "mmd_fp_r2": 0.9015, "gda_nash_conv": "1.76 ± [1.62, 1.88]"}
-        ]
-      },
-      "status": "VALIDATED",
-      "artifact_path": "results/exp01_mmd_vs_gda/"
-    },
-    {
-      "id": "F2",
-      "title": "Uniform-anchor MMD fixed points differ from logit-QRE for asymmetric games",
-      "claim": "For asymmetric games, MMD dynamics converge to an attractor distinct from logit-QRE(λ=1/τ), exhibiting context-dependent attractors.",
-      "status": "VALIDATED",
-      "artifact_path": "results/exp01_mmd_vs_gda/"
-    },
-    {
-      "id": "F3",
-      "title": "Regularized Nash Dynamics reach Nash universally",
-      "claim": "MMD with periodic reference resets converges to Nash (NashConv < 0.05) on symmetric AND asymmetric games.",
-      "status": "VALIDATED",
-      "artifact_path": "results/exp01_mmd_vs_gda/"
-    },
-    {
-      "id": "F4",
-      "title": "DEQ peak activation memory is O(1) in effective depth",
-      "claim": "DEQ implicit block: 0.032±0.000 MB peak activation memory, flat across effective depth; explicit stack: linear at 0.0168 MB/layer. At N=32: DEQ 0.032 MB vs explicit 0.539 MB (~17× reduction).",
-      "evidence": {
-        "exp": "exp03",
-        "config_hash": "a0f8f5c0",
-        "seeds": 5,
-        "deq_memory_mb": "0.032±0.000",
-        "explicit_slope": "0.0168 MB/layer"
-      },
-      "status": "VALIDATED",
-      "artifact_path": "results/exp03_deq_solvers/"
-    },
-    {
-      "id": "F5",
-      "title": "Anderson acceleration beats Picard on stiff fixed points",
-      "claim": "Anderson achieves <0.95× Picard iterations at ρ=0.999 (0.888 at dim 32; 0.940 at dim 128), validating theory. No advantage at easy ρ.",
-      "status": "VALIDATED",
-      "artifact_path": "results/exp03_deq_solvers/"
-    },
-    {
-      "id": "F6",
-      "title": "Second-price auction is exactly truthful; weighted aggregation is manipulable",
-      "claim": "Second-price: regret 0.0 (CI [0.0,0.0]). Weighted aggregation: regret 0.0773 (n=3), 0.0683 (n=5) — non-truthful.",
-      "evidence": {
-        "exp": "exp04",
-        "config_hash": "5c458dac",
-        "observations": "6000 (n=3) + 10000 (n=5)",
-        "second_price_regret": 0.0,
-        "weighted_agg_regret_n3": 0.0773,
-        "weighted_agg_regret_n5": 0.0683
-      },
-      "status": "VALIDATED",
-      "artifact_path": "results/exp04_auction_truthfulness/"
-    },
-    {
-      "id": "F7",
-      "title": "Warm-started homotopy accelerates QRE path tracing",
-      "claim": "Warm-starting reduces solver iterations: 25.2% on asymmetric 2×2, 2.6% on biased RPS; matching pennies flat (degenerate control).",
-      "evidence": {
-        "exp": "exp02",
-        "config_hash": "b52d1e0b",
-        "asymmetric_2x2_reduction": "25.2%",
-        "biased_rps_reduction": "2.6%"
-      },
-      "status": "VALIDATED",
-      "artifact_path": "results/exp02_qre_homotopy/"
-    },
-    {
-      "id": "F8",
-      "title": "Undamped logit-QRE requires damping for high rationality",
-      "claim": "Plain softmax(λAs) diverges at λ>0.32 on biased RPS. Adaptive damping converges across λ∈{1,10,100} in 21/700/42k iterations.",
-      "status": "VALIDATED",
-      "implementation": "kinetic_ai/games/qre.py"
-    },
-    {
-      "id": "F9",
-      "title": "Tier B EqLM pipeline validated end-to-end (SMOKE)",
-      "claim": "ExplicitLM+AdamW learns (125→4.39 loss); EqLM+AdamW learns slowly (132→28.5); EqLM+raw-MMD stalls (128→125) due to optimizer confound. BLiMP scores are noise at this scale; pipeline works.",
-      "evidence": {
-        "exp": "exp05",
-        "config_hash": "1398dc8f",
-        "steps": 800,
-        "arms": [
-          {"name": "A1 (ExplicitLM+AdamW)", "loss": "125→4.39", "blimp": 0.459, "status": "Learning"},
-          {"name": "A2 (EqLM+AdamW)", "loss": "132→28.5", "blimp": 0.513, "status": "Learning (~10x slower)"},
-          {"name": "A3 (EqLM+raw-MMD)", "loss": "128→125", "blimp": 0.537, "status": "No learning (confound)"}
-        ]
-      },
-      "status": "VALIDATED (method finding)",
-      "artifact_path": "results/exp05_eqlm_pretrain/"
-    },
-    {
-      "id": "F10",
-      "title": "EqLM matches explicit transformer at smoke scale after init fix",
-      "claim": "With correct init (all arms start at CE 10.82–10.83 = ln|V|), EqLM+AdamW reaches final loss 5.94 vs ExplicitLM 5.99 over identical 800-step budgets — parity — with 6.2% fewer parameters, at 2.7x wall time.",
-      "evidence": {
-        "exp": "exp05",
-        "iteration": 3,
-        "config_hash": "3ed6e8fc",
-        "steps": 800,
-        "arms": [
-          {"name": "A1 (ExplicitLM+AdamW)", "loss": "10.82→5.99", "blimp": 0.465, "time_s": 66.8, "params": 11060292},
-          {"name": "A2 (EqLM+AdamW)", "loss": "10.83→5.94", "blimp": 0.452, "time_s": 177.6, "params": 10667495},
-          {"name": "A3 (EqLM+MagneticAdamW τ=0.01)", "loss": "10.83→9.91", "blimp": 0.481, "time_s": 196.6, "params": 10667495}
-        ]
-      },
-      "caveats": [
-        "MagneticAdamW arm throttled learning (10.83→9.91) — tau/EMA coupling mis-tuned",
-        "MagneticAdamW peak memory 97.7GB vs 3.5GB — memory bug",
-        "DEQ solver 0% convergence at max_iter=12/tol=1e-3 during training yet training succeeds — phantom-gradient regime"
-      ],
-      "status": "VALIDATED (smoke scale) · sign-off pending",
-      "artifact_path": "results/exp05_eqlm_pretrain/results.json"
-    },
-    {
-      "id": "F10-correction",
-      "title": "exp05 token-budget description was wrong (data cap)",
-      "claim": "exp05 iterations 2–3 cycled a 22,703-unique-token corpus (the 1000-sample cap, F9 blocker) for ~3.3M token-PRESENTATIONS — not 3.3M unique tokens. The F10 parity claim remains valid as a like-for-like comparison, but describes an overfitting-regime corpus.",
-      "status": "VALIDATED",
-      "note": "Cap fixed in kinetic_ai/data/dataset.py; exp06 onward uses real stream"
-    },
-    {
-      "id": "F11",
-      "title": "MagneticAdamW coupled-weight-decay bug",
-      "claim": "Folding weight decay into the gradient before Adam normalization makes wd·θ act as a ~lr-magnitude decay on parameters whose gradients are mostly zero (tied embedding rows). Decoupling wd restores EXACT AdamW equivalence.",
-      "evidence": {
-        "before_fix": "EqLM+MagneticAdamW(τ=0) reached 10.46 vs torch AdamW 8.82",
-        "after_fix": "8.8236 ≡ 8.8236 (machine precision equivalence)",
-        "regression_test": "sparse-grad embedding enforcement added"
-      },
-      "lesson": "optimizer-equivalence tests must include sparse-gradient parameters; dense-Linear tests masked defect",
-      "status": "VALIDATED · fixed in kinetic_ai/optim/magnetic_adamw.py",
-      "type": "METHOD FINDING"
-    },
-    {
-      "id": "F12",
-      "title": "Magnetic pull (τ≤1e-2) is loss-neutral at pretraining scale; solver budget beyond 12 iters buys nothing",
-      "claim": "On real data stream (300 steps), magnetic arms (τ∈{1e-4,1e-3}) reached 8.52–8.61 vs explicit baseline 8.51 (within 10% prereg: MET). Solver budgets {12,24,48} → loss {8.60,8.67,8.67}; 0% convergence at tol 1e-3 in all budgets — phantom-gradient regime is loss-neutral.",
-      "evidence": {
-        "exp": "exp06/exp06b",
-        "config_hash": "2e7cc76",
-        "magnetic_arms_loss": "8.52–8.61",
-        "explicit_baseline": 8.51,
-        "solver_convergence": "0% at tol 1e-3",
-        "max_iter_study": [
-          {"max_iter": 12, "loss": 8.60},
-          {"max_iter": 24, "loss": 8.67},
-          {"max_iter": 48, "loss": 8.67}
-        ]
-      },
-      "drift_prereg": "MIS-DESIGNED (compared EqLM arms to explicit-architecture baseline) — recorded as invalid, not 'missed'",
-      "tier_b_decision": "pretraining arms use AdamW (A1/A2); MagneticAdamW with FIXED reference reserved for H3 (preference-phase)",
-      "status": "VALIDATED · sign-off pending",
-      "type": "METHOD FINDING"
-    },
-    {
-      "id": "F13",
-      "title": "H1 iteration 1: MISSED at scale; diagnosis points to non-contractive fixed-point map",
-      "claim": "Full-run (20k steps, param-matched, 2000-pair BLiMP on 1000 scored pairs): A1 ExplicitLM loss 3.90/BLiMP 0.734; A2 EqLM 4.42/0.571; A3 EqLM+MagneticAdamW(1e-3) 4.68/0.584. EqLM = 78–80% of baseline BLiMP vs pre-registered ≥95% → **H1 iter-1 MISSED**. DEQ solver converged 0% at tol 1e-3 across all budgets ⇒ non-contractive fixed-point map (spectral norm never wired into EqLM).",
-      "evidence": {
-        "exp": "exp05_full",
-        "iteration": 3,
-        "config_hash": "8a2fa16e",
-        "commit": "385f5d4",
-        "steps": 20000,
-        "arms": [
-          {"name": "A1 (ExplicitLM)", "loss": 3.90, "blimp": 0.734, "params": 11060292},
-          {"name": "A2 (EqLM)", "loss": 4.41, "blimp": 0.571, "params": 10667495},
-          {"name": "A3 (EqLM+MagneticAdamW 1e-3)", "loss": 4.68, "blimp": 0.584, "params": 10667495}
-        ]
-      },
-      "diagnosis": "DEQ solver converged 0% of forward passes at tol 1e-3 across all budgets (exp06b) ⇒ block's fixed-point map is not contractive. Smoke 'parity' (F10) held only in 22.7k-token cycled corpus (memorization regime). At scale, lack of contraction-enforcement breaks learning signal propagation.",
-      "wall_time": "EqLM 3.5 hours vs ExplicitLM 1.2 hours (2.9x slower); peak memory comparable (~3.5–4.7 GB)",
-      "next_iteration": "EqLM-v2: enforce contraction via spectral norm on block weights / pcDEQ constraints; verify >80% solver convergence; rerun matched comparison. Secondary: solver-tol study (1e-2 vs 1e-3), solver depth warmup.",
-      "status": "VALIDATED (honest miss + diagnosis) · sign-off pending",
-      "result": "H1 iter-1 missed — iterating"
-    },
-    {
-      "id": "F14",
-      "title": "EqLM's map has no bona fide fixed point: weight-tied iterated transformer, not equilibrium model",
-      "claim": "Solver residual plateaus at constant value with tail-ratio ≈0.99. Residual magnitude scales LINEARLY with damping α: 32.65 → 5.41 → 1.35 at α = 1 / 0.2 / 0.05. Signature of z ← z + α·g(z) with ‖g‖ constant: iterates drift at speed α‖g‖, no fixed point approached. Trained 'EqLM' models are 12-iteration weight-tied transformers, not equilibrium computation.",
-      "evidence": {
-        "exp": "exp07",
-        "config_path": "results/exp07_contraction_check/results.json",
-        "steps": 300,
-        "data": "real stream",
-        "damping_study": [
-          {"alpha": 1.0, "residual_v1": 32.65, "residual_v2": 32.89},
-          {"alpha": 0.2, "residual_v1": 5.41, "residual_v2": 5.50},
-          {"alpha": 0.05, "residual_v1": 1.35, "residual_v2": 1.40}
-        ],
-        "tail_ratio": 0.99,
-        "losses_300steps": {"a1_explicit": 8.71, "v2": 8.88, "v1": 8.84}
-      },
-      "discovery": "Absolute global norm convergence criterion was unsatisfiable at batch scale. Root cause: outer LayerNorm placed after the implicit map, not within it. Iterates not bounded, fixed points do not exist. Reframing F13: BLiMP 0.571/0.584 quantify weight-tying at matched parameters, not equilibrium.",
-      "status": "VALIDATED · sign-off pending · discovery via exp07",
-      "type": "DISCOVERY"
-    },
-    {
-      "id": "F15",
-      "title": "EqLM-v3 (post-LN map): fixed points now exist but contraction is weak at LM width (H1 frontier identified)",
-      "claim": "v3 with f(z,x)=LN(z + Attn + MLP + inj(x)) (Bai et al. DEQ-Transformer form) restores bona fide fixed points. Direct probe at full smoke width (d=204, T=127, 80 iters): relative residual decays 1.0 → 0.105 monotonically then creeps (0.1078 → 0.1053 over last 24 iters). F14 constant-speed-drift signature ELIMINATED (bounded iterates, genuine approach), but effective contraction factor ≈1 at width, so tol 1e-2 is unreachable in practical iteration budgets.",
-      "evidence": {
-        "exp": "exp07",
-        "config_path": "results/exp07_contraction_check/results.json",
-        "smoke_losses": {
-          "a0_explicit": 8.72,
-          "a1_v1_original": 8.82,
-          "a2_v2_spectral": 8.86,
-          "a3_v3_post_ln": 8.84
-        },
-        "probe_full_width": {
-          "d": 204,
-          "T": 127,
-          "iterations": 80,
-          "initial_residual": 1.0,
-          "residual_at_80": 0.105,
-          "creep_final": 0.1053
-        }
-      },
-      "interpretation": "Architecture question H1 poses is now precise: make the post-LN transformer map strongly contractive at width WITHOUT destroying capacity. This is the identified scientific frontier of the program.",
-      "candidate_v4_directions": [
-        "Damping/α annealing schedules during training",
-        "Solver-aware auxiliary loss penalizing ‖f(z*) − z*‖",
-        "Tighter spectral budget on attention value/projection paths only",
-        "pcDEQ orthant constraints on activation magnitudes",
-        "Tolerance-sufficiency study: does rel 0.1 suffice for representation quality?"
-      ],
-      "status": "VALIDATED · sign-off pending · H1 iteration 2 remains open — this is the identified scientific frontier",
-      "type": "VALIDATED"
-    },
-    {
-      "id": "F16",
-      "title": "Solver-aware auxiliary loss teaches contraction almost for free (BREAKTHROUGH; resolves F15 frontier)",
-      "claim": "Adding L = CE + λ·r with r = ‖f(z*,x)−z*‖/‖z*‖ (one tracked application after no-grad solve) reduces exit relative residual 16× (0.1277 → 0.0076–0.0078) for every λ ∈ {0.01, 0.1, 1.0}, at ≤1.8% CE cost (8.92–8.99 vs control 8.77) and zero wall-time overhead (0.99–1.00×). The post-LN map becomes a genuine equilibrium computation (rel residual ≪ 1e-2 target) — the model LEARNS to be contractive.",
-      "evidence": {
-        "exp": "exp08_solver_aware",
-        "config_path": "results/exp08_solver_aware/results.json",
-        "steps": 300,
-        "data": "real stream",
-        "arms": [
-          {"lambda": 0.01, "loss": 8.92, "residual": 0.0076, "wall_time_ratio": 0.99},
-          {"lambda": 0.1, "loss": 8.95, "residual": 0.0078, "wall_time_ratio": 0.99},
-          {"lambda": 1.0, "loss": 8.99, "residual": 0.0077, "wall_time_ratio": 1.00}
-        ],
-        "control": {"loss": 8.77, "residual": 0.1277}
-      },
-      "consequence": "H1 iteration 2 unlocked: full 20k-step matched comparison with EqLM-v4 (post-LN + aux λ=0.01) now possible.",
-      "status": "VALIDATED (smoke scale) · pending full-run confirmation",
-      "type": "VALIDATED"
-    },
-    {
-      "id": "F17",
-      "title": "H1 iteration 2: post-LN EqLM reaches 94.4% of baseline BLiMP (near-miss, within noise); aux loss trades capacity for contraction at scale",
-      "claim": "EqLM-v4 post-LN no-aux reaches 0.704 BLiMP = 94.4% of ExplicitLM baseline 0.746 (loss 4.45 vs 3.75). This is 0.6pp below pre-registered 95% threshold, but within 1σ (binomial σ ≈ 1.4pp at n=1000 pairs): statistically a TIE with threshold, seeds required to adjudicate. EqLM-v4 with aux λ=0.01: 0.658 BLiMP (loss 4.43) — solver-aware loss, ≤1.8% CE cost at 300 steps (F16), costs ~4.6pp BLiMP compounded over 20k steps: contraction and task capacity trade off at fixed λ. Iteration-1→2 progress: EqLM 0.571 → 0.704 via arch fixes alone (post-LN map + init scaling). Wall time 2.9×; memory parity.",
-      "evidence": {
-        "exp": "exp05_full_v4",
-        "config_hash": "8f3c8969",
-        "steps": 20000,
-        "data": "full strict-small stream",
-        "arms": [
-          {"arm": "A1", "model": "ExplicitLM", "loss": 3.75, "blimpn": 0.746, "params_m": 11.06},
-          {"arm": "A2", "model": "EqLM-v4 post-LN no-aux", "loss": 4.45, "blimpn": 0.704, "params_m": 10.67},
-          {"arm": "A3", "model": "EqLM-v4 post-LN aux λ=0.01", "loss": 4.43, "blimpn": 0.658, "params_m": 10.67}
-        ],
-        "ratio_a2_to_a1": 0.944,
-        "wall_time_ratio": 2.9
-      },
-      "next_step": "2 more seeds of A1/A3 to resolve near-miss with mean±CI (CLAUDE.md ≥3-seed gate)",
-      "status": "VALIDATED · seeds pending for H1 verdict",
-      "type": "VALIDATED"
-    },
-    {
-      "id": "F18",
-      "title": "H1 verdict (3 seeds): EqLM reaches 93.0% of the explicit baseline's BLiMP — formally below the 95% threshold (HONEST MISS with a tight CI)",
-      "claim": "Seeds 42/43/44, 20k steps each, full stream, param-matched: A1 explicit BLiMP 0.7133±0.0294 (0.746/0.689/0.705); A3 EqLM post-LN 0.6637±0.0365 (0.704/0.654/0.633). Per-seed ratio 0.944/0.949/0.898; mean 0.9303, 95% bootstrap CI [0.8979, 0.9492] — upper bound < 0.95 ⇒ pre-registered H1 threshold MISSED. Paired bootstrap: Δ=+4.97pp for explicit, p<1e-3, effect size 1.84. Trajectory of program: iteration 1 ratio 0.78 → iteration 3 ratio 0.93 via diagnosed fixes (init scale, post-LN fixed-point map). Memory parity at this scale; wall time 2.9×; O(1) depth-memory advantage retained (F4).",
-      "evidence": {
-        "exp": "exp05_full_v4{,_s43,_s44}",
-        "seeds": [42, 43, 44],
-        "steps": 20000,
-        "data": "full strict-small stream",
-        "results": [
-          {"seed": 42, "blimpn_a1": 0.746, "blimpn_a3": 0.704, "ratio": 0.944},
-          {"seed": 43, "blimpn_a1": 0.689, "blimpn_a3": 0.654, "ratio": 0.949},
-          {"seed": 44, "blimpn_a1": 0.705, "blimpn_a3": 0.633, "ratio": 0.898}
-        ],
-        "mean_a1": 0.7133,
-        "std_a1": 0.0294,
-        "mean_a3": 0.6637,
-        "std_a3": 0.0365,
-        "mean_ratio": 0.9303,
-        "ratio_ci_lower": 0.8979,
-        "ratio_ci_upper": 0.9492,
-        "paired_delta": 4.97,
-        "paired_p_value": "<1e-3",
-        "effect_size": 1.84
-      },
-      "paper_position": "A weight-tied equilibrium LM attains 93% of a param-matched explicit transformer's BLiMP at equal token budget — reported with the full diagnostic arc (F13–F17) and the open gap as future work (eval-time solver budget, aux annealing, multi-block DEQ).",
-      "status": "VALIDATED (formal H1 miss) · closes RQ-3 iteration 3",
-      "type": "VALIDATED"
-    },
-    {
-      "id": "F19",
-      "title": "Warm-started equilibrium decoding cuts solver cost 79% at 97.6% token agreement (H1'a: reduction PASS, agreement narrow miss; smoke scale)",
-      "claim": "Initializing each decode step's solver from the previous token's equilibrium reduces mean iterations-per-token by 79.3% (7.91 → 1.64, target ≥50% PASS) at 97.6% token agreement (976/1000), 39/40 sequences exact. Greedy agreement narrowly misses ≥99% prereg (one divergent sequence); knob for scale run available.",
-      "evidence": {
-        "exp": "exp09_adaptive",
-        "config_sha": "54698443",
-        "seed": 7,
-        "num_prompts": 40,
-        "max_new_tokens": 25,
-        "mean_cold_iters": 7.906999999999999,
-        "mean_warm_iters": 1.638,
-        "reduction_pct": 79.28417857594536,
-        "token_agreement": 0.976,
-        "token_agreement_count": "976/1000",
-        "sequence_exact_match": "39/40",
-        "checkpoint_status": "Saved for HF publication"
-      },
-      "significance": "Validates TRIZ P10 prediction: sequential equilibria are geometrically close. This INVERTS wall-clock story — explicit L-layer stack always pays L applications/token; warm equilibrium model pays ~1.6 at smoke scale. Unique architectural advantage impossible for explicit stacks.",
-      "status": "VALIDATED (smoke scale)",
-      "artifact_path": "results/exp09_adaptive/results.json"
-    },
-    {
-      "id": "exp10_probe",
-      "title": "exp10 Probe: Memory advantage and loss lead appear at 110M matched parameters (early observations, full run in progress)",
-      "claim": "Early probe (300 steps, 121–124M params matched): EqLM peak memory 6.2GB vs explicit 8.0GB (−22% — O(1)-depth advantage first visible at LM scale); EqLM AHEAD on training loss (6.79 vs 7.40 at step 275, same random init). Wall-clock 5.6× slower (2.57 vs 0.46 s/step). Full 10k-step run in progress.",
-      "evidence": {
-        "exp": "exp10_probe",
-        "iteration": 3,
-        "steps": 300,
-        "config_hash": "f7731f4fca0212972689ad08d2a4bd5871b004e539932f73b367bdeebb3a5f76",
-        "git_commit": "eb4703d41ef3ddc9aa684d631483a46912182695",
-        "arms": [
-          {
-            "arm": "A1",
-            "model": "ExplicitLM",
-            "params_m": 123.76,
-            "peak_memory_gb": 8.0,
-            "loss_at_275": 7.40,
-            "time_per_step_sec": 0.46
-          },
-          {
-            "arm": "A2",
-            "model": "EqLM",
-            "params_m": 120.70,
-            "peak_memory_gb": 6.2,
-            "loss_at_275": 6.79,
-            "time_per_step_sec": 2.57
-          }
-        ],
-        "memory_reduction_pct": -22.0,
-        "loss_advantage": "6.79 vs 7.40 (−8.2%)"
-      },
-      "observations": "Loss reverses small-scale pattern (EqLM ahead, not capacity-traded). O(1)-depth memory advantage proven at scale. Wall-clock driven by 12 fixed-point iters/forward — F19 warm-start will be critical for decode efficiency.",
-      "status": "PROBE — early observations only · full 10k-step run in progress",
-      "type": "PROBE",
-      "artifact_path": "results/exp10_probe/results.json"
+ "findings": [
+  {
+   "id": "F1",
+   "title": "MMD converges linearly to its magnetic fixed point where GDA cycles",
+   "claim": "On symmetric zero-sum matrix games, fixed-magnet MMD exhibits linear (geometric) last-iterate convergence to its fixed point, while simultaneous GDA cycles, bounded away from equilibrium.",
+   "evidence": {
+    "exp": "exp01",
+    "config_hash": "e1c1efdd",
+    "seeds": 10,
+    "games": [
+     {
+      "name": "Matching Pennies",
+      "mmd_fp_r2": 0.9948,
+      "gda_nash_conv": "1.93 \u00b1 [1.90, 1.96]"
+     },
+     {
+      "name": "Rock-Paper-Scissors",
+      "mmd_fp_r2": 0.9015,
+      "gda_nash_conv": "1.76 \u00b1 [1.62, 1.88]"
+     }
+    ]
+   },
+   "status": "VALIDATED",
+   "artifact_path": "results/exp01_mmd_vs_gda/"
+  },
+  {
+   "id": "F2",
+   "title": "Uniform-anchor MMD fixed points differ from logit-QRE for asymmetric games",
+   "claim": "For asymmetric games, MMD dynamics converge to an attractor distinct from logit-QRE(\u03bb=1/\u03c4), exhibiting context-dependent attractors.",
+   "status": "VALIDATED",
+   "artifact_path": "results/exp01_mmd_vs_gda/"
+  },
+  {
+   "id": "F3",
+   "title": "Regularized Nash Dynamics reach Nash universally",
+   "claim": "MMD with periodic reference resets converges to Nash (NashConv < 0.05) on symmetric AND asymmetric games.",
+   "status": "VALIDATED",
+   "artifact_path": "results/exp01_mmd_vs_gda/"
+  },
+  {
+   "id": "F4",
+   "title": "DEQ peak activation memory is O(1) in effective depth",
+   "claim": "DEQ implicit block: 0.032\u00b10.000 MB peak activation memory, flat across effective depth; explicit stack: linear at 0.0168 MB/layer. At N=32: DEQ 0.032 MB vs explicit 0.539 MB (~17\u00d7 reduction).",
+   "evidence": {
+    "exp": "exp03",
+    "config_hash": "a0f8f5c0",
+    "seeds": 5,
+    "deq_memory_mb": "0.032\u00b10.000",
+    "explicit_slope": "0.0168 MB/layer"
+   },
+   "status": "VALIDATED",
+   "artifact_path": "results/exp03_deq_solvers/"
+  },
+  {
+   "id": "F5",
+   "title": "Anderson acceleration beats Picard on stiff fixed points",
+   "claim": "Anderson achieves <0.95\u00d7 Picard iterations at \u03c1=0.999 (0.888 at dim 32; 0.940 at dim 128), validating theory. No advantage at easy \u03c1.",
+   "status": "VALIDATED",
+   "artifact_path": "results/exp03_deq_solvers/"
+  },
+  {
+   "id": "F6",
+   "title": "Second-price auction is exactly truthful; weighted aggregation is manipulable",
+   "claim": "Second-price: regret 0.0 (CI [0.0,0.0]). Weighted aggregation: regret 0.0773 (n=3), 0.0683 (n=5) \u2014 non-truthful.",
+   "evidence": {
+    "exp": "exp04",
+    "config_hash": "5c458dac",
+    "observations": "6000 (n=3) + 10000 (n=5)",
+    "second_price_regret": 0.0,
+    "weighted_agg_regret_n3": 0.0773,
+    "weighted_agg_regret_n5": 0.0683
+   },
+   "status": "VALIDATED",
+   "artifact_path": "results/exp04_auction_truthfulness/"
+  },
+  {
+   "id": "F7",
+   "title": "Warm-started homotopy accelerates QRE path tracing",
+   "claim": "Warm-starting reduces solver iterations: 25.2% on asymmetric 2\u00d72, 2.6% on biased RPS; matching pennies flat (degenerate control).",
+   "evidence": {
+    "exp": "exp02",
+    "config_hash": "b52d1e0b",
+    "asymmetric_2x2_reduction": "25.2%",
+    "biased_rps_reduction": "2.6%"
+   },
+   "status": "VALIDATED",
+   "artifact_path": "results/exp02_qre_homotopy/"
+  },
+  {
+   "id": "F8",
+   "title": "Undamped logit-QRE requires damping for high rationality",
+   "claim": "Plain softmax(\u03bbAs) diverges at \u03bb>0.32 on biased RPS. Adaptive damping converges across \u03bb\u2208{1,10,100} in 21/700/42k iterations.",
+   "status": "VALIDATED",
+   "implementation": "kinetic_ai/games/qre.py"
+  },
+  {
+   "id": "F9",
+   "title": "Tier B EqLM pipeline validated end-to-end (SMOKE)",
+   "claim": "ExplicitLM+AdamW learns (125\u21924.39 loss); EqLM+AdamW learns slowly (132\u219228.5); EqLM+raw-MMD stalls (128\u2192125) due to optimizer confound. BLiMP scores are noise at this scale; pipeline works.",
+   "evidence": {
+    "exp": "exp05",
+    "config_hash": "1398dc8f",
+    "steps": 800,
+    "arms": [
+     {
+      "name": "A1 (ExplicitLM+AdamW)",
+      "loss": "125\u21924.39",
+      "blimp": 0.459,
+      "status": "Learning"
+     },
+     {
+      "name": "A2 (EqLM+AdamW)",
+      "loss": "132\u219228.5",
+      "blimp": 0.513,
+      "status": "Learning (~10x slower)"
+     },
+     {
+      "name": "A3 (EqLM+raw-MMD)",
+      "loss": "128\u2192125",
+      "blimp": 0.537,
+      "status": "No learning (confound)"
+     }
+    ]
+   },
+   "status": "VALIDATED (method finding)",
+   "artifact_path": "results/exp05_eqlm_pretrain/"
+  },
+  {
+   "id": "F10",
+   "title": "EqLM matches explicit transformer at smoke scale after init fix",
+   "claim": "With correct init (all arms start at CE 10.82\u201310.83 = ln|V|), EqLM+AdamW reaches final loss 5.94 vs ExplicitLM 5.99 over identical 800-step budgets \u2014 parity \u2014 with 6.2% fewer parameters, at 2.7x wall time.",
+   "evidence": {
+    "exp": "exp05",
+    "iteration": 3,
+    "config_hash": "3ed6e8fc",
+    "steps": 800,
+    "arms": [
+     {
+      "name": "A1 (ExplicitLM+AdamW)",
+      "loss": "10.82\u21925.99",
+      "blimp": 0.465,
+      "time_s": 66.8,
+      "params": 11060292
+     },
+     {
+      "name": "A2 (EqLM+AdamW)",
+      "loss": "10.83\u21925.94",
+      "blimp": 0.452,
+      "time_s": 177.6,
+      "params": 10667495
+     },
+     {
+      "name": "A3 (EqLM+MagneticAdamW \u03c4=0.01)",
+      "loss": "10.83\u21929.91",
+      "blimp": 0.481,
+      "time_s": 196.6,
+      "params": 10667495
+     }
+    ]
+   },
+   "caveats": [
+    "MagneticAdamW arm throttled learning (10.83\u21929.91) \u2014 tau/EMA coupling mis-tuned",
+    "MagneticAdamW peak memory 97.7GB vs 3.5GB \u2014 memory bug",
+    "DEQ solver 0% convergence at max_iter=12/tol=1e-3 during training yet training succeeds \u2014 phantom-gradient regime"
+   ],
+   "status": "VALIDATED (smoke scale) \u00b7 sign-off pending",
+   "artifact_path": "results/exp05_eqlm_pretrain/results.json"
+  },
+  {
+   "id": "F10-correction",
+   "title": "exp05 token-budget description was wrong (data cap)",
+   "claim": "exp05 iterations 2\u20133 cycled a 22,703-unique-token corpus (the 1000-sample cap, F9 blocker) for ~3.3M token-PRESENTATIONS \u2014 not 3.3M unique tokens. The F10 parity claim remains valid as a like-for-like comparison, but describes an overfitting-regime corpus.",
+   "status": "VALIDATED",
+   "note": "Cap fixed in kinetic_ai/data/dataset.py; exp06 onward uses real stream"
+  },
+  {
+   "id": "F11",
+   "title": "MagneticAdamW coupled-weight-decay bug",
+   "claim": "Folding weight decay into the gradient before Adam normalization makes wd\u00b7\u03b8 act as a ~lr-magnitude decay on parameters whose gradients are mostly zero (tied embedding rows). Decoupling wd restores EXACT AdamW equivalence.",
+   "evidence": {
+    "before_fix": "EqLM+MagneticAdamW(\u03c4=0) reached 10.46 vs torch AdamW 8.82",
+    "after_fix": "8.8236 \u2261 8.8236 (machine precision equivalence)",
+    "regression_test": "sparse-grad embedding enforcement added"
+   },
+   "lesson": "optimizer-equivalence tests must include sparse-gradient parameters; dense-Linear tests masked defect",
+   "status": "VALIDATED \u00b7 fixed in kinetic_ai/optim/magnetic_adamw.py",
+   "type": "METHOD FINDING"
+  },
+  {
+   "id": "F12",
+   "title": "Magnetic pull (\u03c4\u22641e-2) is loss-neutral at pretraining scale; solver budget beyond 12 iters buys nothing",
+   "claim": "On real data stream (300 steps), magnetic arms (\u03c4\u2208{1e-4,1e-3}) reached 8.52\u20138.61 vs explicit baseline 8.51 (within 10% prereg: MET). Solver budgets {12,24,48} \u2192 loss {8.60,8.67,8.67}; 0% convergence at tol 1e-3 in all budgets \u2014 phantom-gradient regime is loss-neutral.",
+   "evidence": {
+    "exp": "exp06/exp06b",
+    "config_hash": "2e7cc76",
+    "magnetic_arms_loss": "8.52\u20138.61",
+    "explicit_baseline": 8.51,
+    "solver_convergence": "0% at tol 1e-3",
+    "max_iter_study": [
+     {
+      "max_iter": 12,
+      "loss": 8.6
+     },
+     {
+      "max_iter": 24,
+      "loss": 8.67
+     },
+     {
+      "max_iter": 48,
+      "loss": 8.67
+     }
+    ]
+   },
+   "drift_prereg": "MIS-DESIGNED (compared EqLM arms to explicit-architecture baseline) \u2014 recorded as invalid, not 'missed'",
+   "tier_b_decision": "pretraining arms use AdamW (A1/A2); MagneticAdamW with FIXED reference reserved for H3 (preference-phase)",
+   "status": "VALIDATED \u00b7 sign-off pending",
+   "type": "METHOD FINDING"
+  },
+  {
+   "id": "F13",
+   "title": "H1 iteration 1: MISSED at scale; diagnosis points to non-contractive fixed-point map",
+   "claim": "Full-run (20k steps, param-matched, 2000-pair BLiMP on 1000 scored pairs): A1 ExplicitLM loss 3.90/BLiMP 0.734; A2 EqLM 4.42/0.571; A3 EqLM+MagneticAdamW(1e-3) 4.68/0.584. EqLM = 78\u201380% of baseline BLiMP vs pre-registered \u226595% \u2192 **H1 iter-1 MISSED**. DEQ solver converged 0% at tol 1e-3 across all budgets \u21d2 non-contractive fixed-point map (spectral norm never wired into EqLM).",
+   "evidence": {
+    "exp": "exp05_full",
+    "iteration": 3,
+    "config_hash": "8a2fa16e",
+    "commit": "385f5d4",
+    "steps": 20000,
+    "arms": [
+     {
+      "name": "A1 (ExplicitLM)",
+      "loss": 3.9,
+      "blimp": 0.734,
+      "params": 11060292
+     },
+     {
+      "name": "A2 (EqLM)",
+      "loss": 4.41,
+      "blimp": 0.571,
+      "params": 10667495
+     },
+     {
+      "name": "A3 (EqLM+MagneticAdamW 1e-3)",
+      "loss": 4.68,
+      "blimp": 0.584,
+      "params": 10667495
+     }
+    ]
+   },
+   "diagnosis": "DEQ solver converged 0% of forward passes at tol 1e-3 across all budgets (exp06b) \u21d2 block's fixed-point map is not contractive. Smoke 'parity' (F10) held only in 22.7k-token cycled corpus (memorization regime). At scale, lack of contraction-enforcement breaks learning signal propagation.",
+   "wall_time": "EqLM 3.5 hours vs ExplicitLM 1.2 hours (2.9x slower); peak memory comparable (~3.5\u20134.7 GB)",
+   "next_iteration": "EqLM-v2: enforce contraction via spectral norm on block weights / pcDEQ constraints; verify >80% solver convergence; rerun matched comparison. Secondary: solver-tol study (1e-2 vs 1e-3), solver depth warmup.",
+   "status": "VALIDATED (honest miss + diagnosis) \u00b7 sign-off pending",
+   "result": "H1 iter-1 missed \u2014 iterating"
+  },
+  {
+   "id": "F14",
+   "title": "EqLM's map has no bona fide fixed point: weight-tied iterated transformer, not equilibrium model",
+   "claim": "Solver residual plateaus at constant value with tail-ratio \u22480.99. Residual magnitude scales LINEARLY with damping \u03b1: 32.65 \u2192 5.41 \u2192 1.35 at \u03b1 = 1 / 0.2 / 0.05. Signature of z \u2190 z + \u03b1\u00b7g(z) with \u2016g\u2016 constant: iterates drift at speed \u03b1\u2016g\u2016, no fixed point approached. Trained 'EqLM' models are 12-iteration weight-tied transformers, not equilibrium computation.",
+   "evidence": {
+    "exp": "exp07",
+    "config_path": "results/exp07_contraction_check/results.json",
+    "steps": 300,
+    "data": "real stream",
+    "damping_study": [
+     {
+      "alpha": 1.0,
+      "residual_v1": 32.65,
+      "residual_v2": 32.89
+     },
+     {
+      "alpha": 0.2,
+      "residual_v1": 5.41,
+      "residual_v2": 5.5
+     },
+     {
+      "alpha": 0.05,
+      "residual_v1": 1.35,
+      "residual_v2": 1.4
+     }
+    ],
+    "tail_ratio": 0.99,
+    "losses_300steps": {
+     "a1_explicit": 8.71,
+     "v2": 8.88,
+     "v1": 8.84
     }
-  ]
+   },
+   "discovery": "Absolute global norm convergence criterion was unsatisfiable at batch scale. Root cause: outer LayerNorm placed after the implicit map, not within it. Iterates not bounded, fixed points do not exist. Reframing F13: BLiMP 0.571/0.584 quantify weight-tying at matched parameters, not equilibrium.",
+   "status": "VALIDATED \u00b7 sign-off pending \u00b7 discovery via exp07",
+   "type": "DISCOVERY"
+  },
+  {
+   "id": "F15",
+   "title": "EqLM-v3 (post-LN map): fixed points now exist but contraction is weak at LM width (H1 frontier identified)",
+   "claim": "v3 with f(z,x)=LN(z + Attn + MLP + inj(x)) (Bai et al. DEQ-Transformer form) restores bona fide fixed points. Direct probe at full smoke width (d=204, T=127, 80 iters): relative residual decays 1.0 \u2192 0.105 monotonically then creeps (0.1078 \u2192 0.1053 over last 24 iters). F14 constant-speed-drift signature ELIMINATED (bounded iterates, genuine approach), but effective contraction factor \u22481 at width, so tol 1e-2 is unreachable in practical iteration budgets.",
+   "evidence": {
+    "exp": "exp07",
+    "config_path": "results/exp07_contraction_check/results.json",
+    "smoke_losses": {
+     "a0_explicit": 8.72,
+     "a1_v1_original": 8.82,
+     "a2_v2_spectral": 8.86,
+     "a3_v3_post_ln": 8.84
+    },
+    "probe_full_width": {
+     "d": 204,
+     "T": 127,
+     "iterations": 80,
+     "initial_residual": 1.0,
+     "residual_at_80": 0.105,
+     "creep_final": 0.1053
+    }
+   },
+   "interpretation": "Architecture question H1 poses is now precise: make the post-LN transformer map strongly contractive at width WITHOUT destroying capacity. This is the identified scientific frontier of the program.",
+   "candidate_v4_directions": [
+    "Damping/\u03b1 annealing schedules during training",
+    "Solver-aware auxiliary loss penalizing \u2016f(z*) \u2212 z*\u2016",
+    "Tighter spectral budget on attention value/projection paths only",
+    "pcDEQ orthant constraints on activation magnitudes",
+    "Tolerance-sufficiency study: does rel 0.1 suffice for representation quality?"
+   ],
+   "status": "VALIDATED \u00b7 sign-off pending \u00b7 H1 iteration 2 remains open \u2014 this is the identified scientific frontier",
+   "type": "VALIDATED"
+  },
+  {
+   "id": "F16",
+   "title": "Solver-aware auxiliary loss teaches contraction almost for free (BREAKTHROUGH; resolves F15 frontier)",
+   "claim": "Adding L = CE + \u03bb\u00b7r with r = \u2016f(z*,x)\u2212z*\u2016/\u2016z*\u2016 (one tracked application after no-grad solve) reduces exit relative residual 16\u00d7 (0.1277 \u2192 0.0076\u20130.0078) for every \u03bb \u2208 {0.01, 0.1, 1.0}, at \u22641.8% CE cost (8.92\u20138.99 vs control 8.77) and zero wall-time overhead (0.99\u20131.00\u00d7). The post-LN map becomes a genuine equilibrium computation (rel residual \u226a 1e-2 target) \u2014 the model LEARNS to be contractive.",
+   "evidence": {
+    "exp": "exp08_solver_aware",
+    "config_path": "results/exp08_solver_aware/results.json",
+    "steps": 300,
+    "data": "real stream",
+    "arms": [
+     {
+      "lambda": 0.01,
+      "loss": 8.92,
+      "residual": 0.0076,
+      "wall_time_ratio": 0.99
+     },
+     {
+      "lambda": 0.1,
+      "loss": 8.95,
+      "residual": 0.0078,
+      "wall_time_ratio": 0.99
+     },
+     {
+      "lambda": 1.0,
+      "loss": 8.99,
+      "residual": 0.0077,
+      "wall_time_ratio": 1.0
+     }
+    ],
+    "control": {
+     "loss": 8.77,
+     "residual": 0.1277
+    }
+   },
+   "consequence": "H1 iteration 2 unlocked: full 20k-step matched comparison with EqLM-v4 (post-LN + aux \u03bb=0.01) now possible.",
+   "status": "VALIDATED (smoke scale) \u00b7 pending full-run confirmation",
+   "type": "VALIDATED"
+  },
+  {
+   "id": "F17",
+   "title": "H1 iteration 2: post-LN EqLM reaches 94.4% of baseline BLiMP (near-miss, within noise); aux loss trades capacity for contraction at scale",
+   "claim": "EqLM-v4 post-LN no-aux reaches 0.704 BLiMP = 94.4% of ExplicitLM baseline 0.746 (loss 4.45 vs 3.75). This is 0.6pp below pre-registered 95% threshold, but within 1\u03c3 (binomial \u03c3 \u2248 1.4pp at n=1000 pairs): statistically a TIE with threshold, seeds required to adjudicate. EqLM-v4 with aux \u03bb=0.01: 0.658 BLiMP (loss 4.43) \u2014 solver-aware loss, \u22641.8% CE cost at 300 steps (F16), costs ~4.6pp BLiMP compounded over 20k steps: contraction and task capacity trade off at fixed \u03bb. Iteration-1\u21922 progress: EqLM 0.571 \u2192 0.704 via arch fixes alone (post-LN map + init scaling). Wall time 2.9\u00d7; memory parity.",
+   "evidence": {
+    "exp": "exp05_full_v4",
+    "config_hash": "8f3c8969",
+    "steps": 20000,
+    "data": "full strict-small stream",
+    "arms": [
+     {
+      "arm": "A1",
+      "model": "ExplicitLM",
+      "loss": 3.75,
+      "blimpn": 0.746,
+      "params_m": 11.06
+     },
+     {
+      "arm": "A2",
+      "model": "EqLM-v4 post-LN no-aux",
+      "loss": 4.45,
+      "blimpn": 0.704,
+      "params_m": 10.67
+     },
+     {
+      "arm": "A3",
+      "model": "EqLM-v4 post-LN aux \u03bb=0.01",
+      "loss": 4.43,
+      "blimpn": 0.658,
+      "params_m": 10.67
+     }
+    ],
+    "ratio_a2_to_a1": 0.944,
+    "wall_time_ratio": 2.9
+   },
+   "next_step": "2 more seeds of A1/A3 to resolve near-miss with mean\u00b1CI (CLAUDE.md \u22653-seed gate)",
+   "status": "VALIDATED \u00b7 seeds pending for H1 verdict",
+   "type": "VALIDATED"
+  },
+  {
+   "id": "F18",
+   "title": "H1 verdict (3 seeds): EqLM reaches 93.0% of the explicit baseline's BLiMP \u2014 formally below the 95% threshold (HONEST MISS with a tight CI)",
+   "claim": "Seeds 42/43/44, 20k steps each, full stream, param-matched: A1 explicit BLiMP 0.7133\u00b10.0294 (0.746/0.689/0.705); A3 EqLM post-LN 0.6637\u00b10.0365 (0.704/0.654/0.633). Per-seed ratio 0.944/0.949/0.898; mean 0.9303, 95% bootstrap CI [0.8979, 0.9492] \u2014 upper bound < 0.95 \u21d2 pre-registered H1 threshold MISSED. Paired bootstrap: \u0394=+4.97pp for explicit, p<1e-3, effect size 1.84. Trajectory of program: iteration 1 ratio 0.78 \u2192 iteration 3 ratio 0.93 via diagnosed fixes (init scale, post-LN fixed-point map). Memory parity at this scale; wall time 2.9\u00d7; O(1) depth-memory advantage retained (F4).",
+   "evidence": {
+    "exp": "exp05_full_v4{,_s43,_s44}",
+    "seeds": [
+     42,
+     43,
+     44
+    ],
+    "steps": 20000,
+    "data": "full strict-small stream",
+    "results": [
+     {
+      "seed": 42,
+      "blimpn_a1": 0.746,
+      "blimpn_a3": 0.704,
+      "ratio": 0.944
+     },
+     {
+      "seed": 43,
+      "blimpn_a1": 0.689,
+      "blimpn_a3": 0.654,
+      "ratio": 0.949
+     },
+     {
+      "seed": 44,
+      "blimpn_a1": 0.705,
+      "blimpn_a3": 0.633,
+      "ratio": 0.898
+     }
+    ],
+    "mean_a1": 0.7133,
+    "std_a1": 0.0294,
+    "mean_a3": 0.6637,
+    "std_a3": 0.0365,
+    "mean_ratio": 0.9303,
+    "ratio_ci_lower": 0.8979,
+    "ratio_ci_upper": 0.9492,
+    "paired_delta": 4.97,
+    "paired_p_value": "<1e-3",
+    "effect_size": 1.84
+   },
+   "paper_position": "A weight-tied equilibrium LM attains 93% of a param-matched explicit transformer's BLiMP at equal token budget \u2014 reported with the full diagnostic arc (F13\u2013F17) and the open gap as future work (eval-time solver budget, aux annealing, multi-block DEQ).",
+   "status": "VALIDATED (formal H1 miss) \u00b7 closes RQ-3 iteration 3",
+   "type": "VALIDATED"
+  },
+  {
+   "id": "F19",
+   "title": "Warm-started equilibrium decoding cuts solver cost 79% at 97.6% token agreement (H1'a: reduction PASS, agreement narrow miss; smoke scale)",
+   "claim": "Initializing each decode step's solver from the previous token's equilibrium reduces mean iterations-per-token by 79.3% (7.91 \u2192 1.64, target \u226550% PASS) at 97.6% token agreement (976/1000), 39/40 sequences exact. Greedy agreement narrowly misses \u226599% prereg (one divergent sequence); knob for scale run available.",
+   "evidence": {
+    "exp": "exp09_adaptive",
+    "config_sha": "54698443",
+    "seed": 7,
+    "num_prompts": 40,
+    "max_new_tokens": 25,
+    "mean_cold_iters": 7.906999999999999,
+    "mean_warm_iters": 1.638,
+    "reduction_pct": 79.28417857594536,
+    "token_agreement": 0.976,
+    "token_agreement_count": "976/1000",
+    "sequence_exact_match": "39/40",
+    "checkpoint_status": "Saved for HF publication"
+   },
+   "significance": "Validates TRIZ P10 prediction: sequential equilibria are geometrically close. This INVERTS wall-clock story \u2014 explicit L-layer stack always pays L applications/token; warm equilibrium model pays ~1.6 at smoke scale. Unique architectural advantage impossible for explicit stacks.",
+   "status": "VALIDATED (smoke scale)",
+   "artifact_path": "results/exp09_adaptive/results.json"
+  },
+  {
+   "id": "exp10_probe",
+   "title": "exp10 Probe: Memory advantage and loss lead appear at 110M matched parameters (early observations, full run in progress)",
+   "claim": "Early probe (300 steps, 121\u2013124M params matched): EqLM peak memory 6.2GB vs explicit 8.0GB (\u221222% \u2014 O(1)-depth advantage first visible at LM scale); EqLM AHEAD on training loss (6.79 vs 7.40 at step 275, same random init). Wall-clock 5.6\u00d7 slower (2.57 vs 0.46 s/step). Full 10k-step run in progress.",
+   "evidence": {
+    "exp": "exp10_probe",
+    "iteration": 3,
+    "steps": 300,
+    "config_hash": "f7731f4fca0212972689ad08d2a4bd5871b004e539932f73b367bdeebb3a5f76",
+    "git_commit": "eb4703d41ef3ddc9aa684d631483a46912182695",
+    "arms": [
+     {
+      "arm": "A1",
+      "model": "ExplicitLM",
+      "params_m": 123.76,
+      "peak_memory_gb": 8.0,
+      "loss_at_275": 7.4,
+      "time_per_step_sec": 0.46
+     },
+     {
+      "arm": "A2",
+      "model": "EqLM",
+      "params_m": 120.7,
+      "peak_memory_gb": 6.2,
+      "loss_at_275": 6.79,
+      "time_per_step_sec": 2.57
+     }
+    ],
+    "memory_reduction_pct": -22.0,
+    "loss_advantage": "6.79 vs 7.40 (\u22128.2%)"
+   },
+   "observations": "Loss reverses small-scale pattern (EqLM ahead, not capacity-traded). O(1)-depth memory advantage proven at scale. Wall-clock driven by 12 fixed-point iters/forward \u2014 F19 warm-start will be critical for decode efficiency.",
+   "status": "PROBE \u2014 early observations only \u00b7 full 10k-step run in progress",
+   "type": "PROBE",
+   "artifact_path": "results/exp10_probe/results.json"
+  },
+  {
+   "id": "F20",
+   "title": "At 121M parameters the truncation penalty widens with width: quality ratio 0.787, memory \u221223%",
+   "claim": "Across 3 seeds at 121M matched params (10k steps, full BabyLM stream), EqLM reaches 78.7% of the explicit baseline's BLiMP (CI [0.785, 0.788]) while confirming the O(1)-depth memory advantage (6.29 vs 8.13 GB). The fixed-point solver exhausts its 12-iteration budget at every width tested; width raises the price of that truncation (7% gap at d=204 vs 21% at d=1704). Adversarial review corrected the initial 'convergence fails at scale' reading \u2014 the effect is graded contraction loss, not binary failure.",
+   "evidence": {
+    "exp": "exp10 (RTX 5090)",
+    "seeds": 3,
+    "blimp_ratio": 0.787,
+    "ratio_ci": [
+     0.785,
+     0.788
+    ],
+    "peak_memory_gb": {
+     "explicit": 8.13,
+     "eqlm": 6.29
+    },
+    "wall_clock_min_per_arm": {
+     "explicit": 11,
+     "eqlm": 92
+    }
+   },
+   "status": "VALIDATED (sign-off pending)",
+   "artifact_path": "results/exp10_5090/"
+  }
+ ]
 }
-

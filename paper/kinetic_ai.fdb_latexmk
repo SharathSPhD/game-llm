@@ -1,13 +1,13 @@
 # Fdb version 4
-["bibtex kinetic_ai"] 1787370975.52405 "kinetic_ai.aux" "kinetic_ai.bbl" "kinetic_ai" 1787370975.9899 0
+["bibtex kinetic_ai"] 1787795179.24542 "kinetic_ai.aux" "kinetic_ai.bbl" "kinetic_ai" 1787795209.88381 0
   "./references.bib" 1787260475.77052 2676 94c6c00de4d527e3dfda52c8fc2b1bbd ""
   "/home/sharaths/.TinyTeX/texmf-dist/bibtex/bst/natbib/plainnat.bst" 1233624470 26816 ffe5423d2019860bad9f54bc402fac15 ""
-  "kinetic_ai.aux" 1787370975.92853 10896 c65df05d32c8ba10dd597df93e918e97 "pdflatex"
+  "kinetic_ai.aux" 1787795209.829 11103 59e836cffeb0df29e27c250bf1e59f72 "pdflatex"
   (generated)
   "kinetic_ai.bbl"
   "kinetic_ai.blg"
   (rewritten before read)
-["pdflatex"] 1787370975.53853 "kinetic_ai.tex" "kinetic_ai.pdf" "kinetic_ai" 1787370975.99013 0
+["pdflatex"] 1787795209.44041 "kinetic_ai.tex" "kinetic_ai.pdf" "kinetic_ai" 1787795209.88392 0
   "/home/sharaths/.TinyTeX/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc" 1136849721 2900 1537cc8184ad1792082cd229ecc269f4 ""
   "/home/sharaths/.TinyTeX/texmf-dist/fonts/tfm/jknappen/ec/tcrm1200.tfm" 1136768653 1536 74b7293ec3713bb7fdca8dd1bd1f469c ""
   "/home/sharaths/.TinyTeX/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex7.tfm" 1246382020 1004 54797486969f23fa377b128694d548df ""
@@ -178,6 +178,7 @@
   "/home/sharaths/.TinyTeX/texmf-dist/tex/latex/amsmath/amsopn.sty" 1748806692 4474 c510a88aa5f51b8c773b50a7ee92befd ""
   "/home/sharaths/.TinyTeX/texmf-dist/tex/latex/amsmath/amstext.sty" 1748806692 2444 9983e1d0683f102e3b190c64a49313aa ""
   "/home/sharaths/.TinyTeX/texmf-dist/tex/latex/base/article.cls" 1748806692 20144 b966087dda3b194755eb460d32e2ef75 ""
+  "/home/sharaths/.TinyTeX/texmf-dist/tex/latex/base/omscmr.fd" 1738182759 2469 c75f72b1dc17277decdd842fa4a321a8 ""
   "/home/sharaths/.TinyTeX/texmf-dist/tex/latex/base/size12.clo" 1748806692 8449 8dc66c6c313c8eb2d774af83bca435dd ""
   "/home/sharaths/.TinyTeX/texmf-dist/tex/latex/booktabs/booktabs.sty" 1579038678 6078 f1cb470c9199e7110a27851508ed7a5c ""
   "/home/sharaths/.TinyTeX/texmf-dist/tex/latex/caption/caption.sty" 1696191071 56128 c2ccf1a29d78c33bc553880402e4fb9a ""
@@ -238,10 +239,10 @@
   "figures/fig_h1_iterations.pdf" 1787370971.60851 24955 85ffb955681c55a78ddf5e1bbe908a5d ""
   "figures/fig_mmd_convergence.pdf" 1787370971.15451 24712 ab68787f87d2f2b1cdb4e9d7ea8594a8 ""
   "figures/fig_warm_start.pdf" 1787370971.51951 25603 af7f0ff3ce742d56c8e0899365b38df3 ""
-  "kinetic_ai.aux" 1787370975.92853 10896 c65df05d32c8ba10dd597df93e918e97 "pdflatex"
-  "kinetic_ai.bbl" 1787370975.53553 275 de5ffaf5b665b622658d80bed97ba2a5 "bibtex kinetic_ai"
-  "kinetic_ai.out" 1787370975.92853 10001 d2d910ae3962ee80811d1a37cff53caf "pdflatex"
-  "kinetic_ai.tex" 1787370931.97337 41144 27c75fd42a55a40fc5f0756fd5f9dc56 ""
+  "kinetic_ai.aux" 1787795209.829 11103 59e836cffeb0df29e27c250bf1e59f72 "pdflatex"
+  "kinetic_ai.bbl" 1787795179.2589 275 de5ffaf5b665b622658d80bed97ba2a5 "bibtex kinetic_ai"
+  "kinetic_ai.out" 1787795209.83 10552 27de7d983bf7ff7a51608703664e36a2 "pdflatex"
+  "kinetic_ai.tex" 1787795209.39545 44107 25200748f899f20368d69a3dff365b9a ""
   (generated)
   "kinetic_ai.aux"
   "kinetic_ai.log"
