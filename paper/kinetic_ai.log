@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.28 (TeX Live 2025) (preloaded format=pdflatex 2026.8.13)  27 AUG 2026 04:24
+This is pdfTeX, Version 3.141592653-2.6-1.40.28 (TeX Live 2025) (preloaded format=pdflatex 2026.8.13)  27 AUG 2026 04:36
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -715,18 +715,18 @@ Overfull \hbox (1.98389pt too wide) in paragraph at lines 110--118
  [] 
  []
 
-<figures/fig_mmd_convergence.pdf, id=183, 702.75513pt x 232.88985pt>
+<figures/fig_mmd_convergence.pdf, id=187, 702.75513pt x 232.88985pt>
 File: figures/fig_mmd_convergence.pdf Graphic file (type pdf)
 <use figures/fig_mmd_convergence.pdf>
 Package pdftex.def Info: figures/fig_mmd_convergence.pdf  used on input line 125.
 (pdftex.def)             Requested size: 328.82707pt x 108.97139pt.
 [3] [4 <./figures/fig_mmd_convergence.pdf>]
-<figures/fig_deq_memory.pdf, id=218, 485.92291pt x 305.82129pt>
+<figures/fig_deq_memory.pdf, id=222, 485.92291pt x 305.82129pt>
 File: figures/fig_deq_memory.pdf Graphic file (type pdf)
 <use figures/fig_deq_memory.pdf>
 Package pdftex.def Info: figures/fig_deq_memory.pdf  used on input line 178.
 (pdftex.def)             Requested size: 305.33789pt x 192.17377pt.
-<figures/fig_anderson_stiffness.pdf, id=219, 485.86205pt x 306.50197pt>
+<figures/fig_anderson_stiffness.pdf, id=223, 485.86205pt x 306.50197pt>
 File: figures/fig_anderson_stiffness.pdf Graphic file (type pdf)
 <use figures/fig_anderson_stiffness.pdf>
 Package pdftex.def Info: figures/fig_anderson_stiffness.pdf  used on input line 185.
@@ -737,7 +737,7 @@ Overfull \hbox (6.78123pt too wide) in paragraph at lines 215--217
  []
 
 [6 <./figures/fig_anderson_stiffness.pdf>]
-<figures/fig_auction_regret.pdf, id=249, 702.74986pt x 234.16734pt>
+<figures/fig_auction_regret.pdf, id=253, 702.74986pt x 234.16734pt>
 File: figures/fig_auction_regret.pdf Graphic file (type pdf)
 <use figures/fig_auction_regret.pdf>
 Package pdftex.def Info: figures/fig_auction_regret.pdf  used on input line 220.
@@ -753,7 +753,7 @@ Overfull \hbox (34.08112pt too wide) in paragraph at lines 251--260
  []
 
 [7 <./figures/fig_auction_regret.pdf>] [8]
-<figures/fig_eqlm_loss_curves.pdf, id=283, 558.15968pt x 341.87851pt>
+<figures/fig_eqlm_loss_curves.pdf, id=287, 558.15968pt x 341.87851pt>
 File: figures/fig_eqlm_loss_curves.pdf Graphic file (type pdf)
 <use figures/fig_eqlm_loss_curves.pdf>
 Package pdftex.def Info: figures/fig_eqlm_loss_curves.pdf  used on input line 310.
@@ -778,7 +778,7 @@ Overfull \hbox (68.44435pt too wide) in paragraph at lines 417--428
  [] 
  []
 
-<figures/fig_h1_iterations.pdf, id=313, 558.39745pt x 380.03041pt>
+<figures/fig_h1_iterations.pdf, id=317, 558.39745pt x 380.03041pt>
 File: figures/fig_h1_iterations.pdf Graphic file (type pdf)
 <use figures/fig_h1_iterations.pdf>
 Package pdftex.def Info: figures/fig_h1_iterations.pdf  used on input line 439.
@@ -793,7 +793,7 @@ Overfull \hbox (6.15013pt too wide) in paragraph at lines 468--469
 \OT1/cmr/m/n/12 for Hug-ging Face pub-li-ca-tion, un-block-ing model re-lease. (exp09[]adaptive, con-fig sha 54698443,
  []
 
-<figures/fig_warm_start.pdf, id=341, 702.62059pt x 341.7543pt>
+<figures/fig_warm_start.pdf, id=345, 702.62059pt x 341.7543pt>
 File: figures/fig_warm_start.pdf Graphic file (type pdf)
 <use figures/fig_warm_start.pdf>
 Package pdftex.def Info: figures/fig_warm_start.pdf  used on input line 472.
@@ -810,27 +810,32 @@ File: omscmr.fd 2024/11/19 v2.5n Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <12> not available
 (Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 544.
- [16] [17] [18] (./kinetic_ai.bbl [19] [20]) [21] (./kinetic_ai.aux)
+ [16]
+Overfull \hbox (48.073pt too wide) in paragraph at lines 568--569
+[]\OT1/cmr/m/n/12 Results frozen from re-sults/exp12/results[]seed\OMS/cmsy/m/n/12 f\OT1/cmr/m/n/12 42,43,44\OMS/cmsy/m/n/12 g\OT1/cmr/m/n/12 .json; the same runs' bid/winner/payment
+ []
+
+[17] [18] [19] (./kinetic_ai.bbl [20]) [21] (./kinetic_ai.aux)
  ***********
 LaTeX2e <2025-11-01>
 L3 programming layer <2026-01-19>
  ***********
 Package rerunfilecheck Info: File `kinetic_ai.out' has not changed.
-(rerunfilecheck)             Checksum: 17F4E8A59E81B9DD53CA59B1831D56C0;10884.
+(rerunfilecheck)             Checksum: D89ACD9D77D2B13D9F0FAF3237B06BCA;11241.
  ) 
 Here is how much of TeX's memory you used:
- 34813 strings out of 469471
- 802106 string characters out of 5468383
+ 34815 strings out of 469471
+ 802136 string characters out of 5468383
  1300770 words of memory out of 5000000
- 62839 multiletter control sequences out of 15000+600000
+ 62840 multiletter control sequences out of 15000+600000
  639814 words of font info for 86 fonts, out of 8000000 for 9000
  36 hyphenation exceptions out of 8191
- 99i,9n,108p,1732b,599s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 99i,9n,108p,1732b,578s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </home/sharaths/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></home/sharaths/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></home/sharaths/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></home/sharaths/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></home/sharaths/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></home/sharaths/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></home/sharaths/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></home/sharaths/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></home/sharaths/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></home/sharaths/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></home/sharaths/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb></home/sharaths/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt12.pfb></home/sharaths/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb></home/sharaths/.TinyTeX/texmf-dist/fonts/type1/public/cm-super/sfrm1200.pfb>
-Output written on kinetic_ai.pdf (21 pages, 376169 bytes).
+Output written on kinetic_ai.pdf (21 pages, 379090 bytes).
 PDF statistics:
- 533 PDF objects out of 1000 (max. 8388607)
- 425 compressed objects within 5 object streams
- 93 named destinations out of 1000 (max. 500000)
- 360 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 537 PDF objects out of 1000 (max. 8388607)
+ 429 compressed objects within 5 object streams
+ 94 named destinations out of 1000 (max. 500000)
+ 368 words of extra memory for PDF output out of 10000 (max. 10000000)
 

@@ -547,6 +547,24 @@
    },
    "status": "VALIDATED (Tarka-resolved, sign-off pending)",
    "artifact_path": "results/exp11_seed42/"
+  },
+  {
+   "id": "F22",
+   "title": "H4 MET (3/3 seeds): truthful token-auction selection beats the best single specialist by 23% on mixed-domain perplexity",
+   "claim": "Second-price per-token auction of two 30M domain specialists (childes vs simple_wiki): mixed-stream perplexity 182.8 vs 236.8 best single and 207.9 logit-average ensemble; bids are target-independent confidence, mechanism cross-checked (0 mismatches). Scoped per adversarial review: teacher-forced scoring-time selection (not yet autoregressive generation); absolute childes ppl may reflect split overlap; traces are a 200-position sample.",
+   "evidence": {
+    "exp": "exp12 (RTX 5090)",
+    "seeds": 3,
+    "ppl_mixed": {
+     "auction": 182.8,
+     "ensemble": 207.9,
+     "best_single": 236.8,
+     "worst_single": 1242.4
+    },
+    "paired_t": 4.98
+   },
+   "status": "VALIDATED (Tarka-resolved, sign-off pending)",
+   "artifact_path": "results/exp12/"
   }
  ]
 }

@@ -557,6 +557,16 @@ H3 asked whether MMD's magnetic anchor improves preference optimization: does DP
 
 Results frozen from results/exp11\_seed\{42,43,44\}/results.json.
 
+\subsection{Token-Auction Selection of Domain Specialists (H4, F22)}
+
+H4 tests the mechanism-design leg of the program at the token level: can a truthful auction aggregate specialist models better than any fixed choice? Per seed, we train two 30.0M-parameter explicit specialists on disjoint BabyLM subdomains (child-directed speech from \texttt{childes}; written text from \texttt{simple\_wiki}; 3k steps each) and evaluate on a 50/50 interleaved held-out mixed stream ($\approx$100k tokens). At each position every specialist bids its own max-probability confidence — target-independent by construction — and the winner's distribution scores the true next token, paying the second price (the F6-validated Vickrey mechanism; the vectorized implementation matches \texttt{TokenAuction} on every traced position across all seeds).
+
+\textbf{Pre-registered verdict: MET (3/3 seeds).} Mixed-domain perplexity (3-seed means): auction $\mathbf{182.8}$ $<$ uniform logit-average ensemble $207.9$ $<$ best single specialist $236.8$ $<$ worst $1242.4$; the auction beats the \emph{best} single specialist on every seed (paired $t=4.98$), clearing the pre-registered bar with a $23\%$ margin, and beats uniform ensembling by $12\%$. The decomposition is honest about how: confidence-bidding is imperfect \emph{within} a domain (on child-speech windows the auction's $26$--$33$ ppl trails the specialist's $13.8$), but per-token selection dominates any fixed commitment once domains mix, because each specialist collapses off-domain ($\approx 4000$--$4900$ ppl).
+
+\textbf{Scope (adversarially enforced).} This is teacher-forced per-token \emph{selection} at scoring time, not autoregressive generation — the auction chooses which model scores each position; it does not yet feed its own output forward. The childes specialist's absolute $13.8$ ppl may be flattered by n-gram overlap across the line-level split (child-directed speech is highly repetitive); this affects absolute numbers only, as all four systems share the identical evaluation stream. The published traces are a sample of the first 200 positions per seed and are labeled as such.
+
+Results frozen from results/exp12/results\_seed\{42,43,44\}.json; the same runs' bid/winner/payment traces feed the researcher app's Auction playground.
+
 \section{Related Work}
 
 \textbf{Equilibrium dynamics for learning.} Sokota et al.\ \citep{Sokota2023} unify mirror-descent methods for QRE and zero-sum games and give the magnetic mirror descent update we implement; McKelvey and Palfrey \citep{McKelvey1995} introduced quantal response equilibria; Hoda et al.\ \citep{Hoda2010} developed smoothing for sequential games. Large-scale game solvers such as unified PSRO \citep{Lanctot2017} and R-NaD in DeepNash \citep{Perolat2022} demonstrate that regularized equilibrium dynamics scale; our F3 periodic-reference-reset result is a small-scale instance of the same principle.

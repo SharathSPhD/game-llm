@@ -196873,7 +196873,7 @@ spirit, and is reported as such. (This mirrors ADR 0003: the magnet's home
 is pretraining stability, not preference-phase drift control.)
 
 ## F22 — H4 verdict (3 seeds): MET — truthful second-price token-auction
-## decoding beats the best single specialist by 23% and the logit-average
+## selection beats the best single specialist by 23% and the logit-average
 ## ensemble by 12% on mixed-domain perplexity
 
 - **Protocol (SPEC 0008):** two 30.0M-param explicit specialists per seed,
@@ -196902,5 +196902,17 @@ is pretraining stability, not preference-phase drift control.)
 - **App tie-in delivered:** real bid/winner/payment traces
   (results/exp12/traces_seed4*.json, 200 positions/seed) served by
   GET /api/auction/traces for the Auction playground.
-- **Status:** VALIDATED (3 seeds) · verdict MET · Tarka pending ·
-  SIGN-OFF PENDING
+- **Tarka review (resolved 2026-08-27): MET confirmed (paired t=4.98,
+  p~0.01), oracle leakage CLEARED (bids are target-independent max-prob),
+  fairness CLEARED (identical stream/metric/ensemble-as-specced). Three
+  rescopings applied:** (1) this is teacher-forced per-token SELECTION at
+  scoring time, not autoregressive generation — the claim is scoped to
+  "truthful token-auction selection"; autoregressive decoding results
+  pending. (2) S_A's 13.8 childes ppl may be inflated by n-gram overlap
+  across the line-level split (repetitive child-directed speech); this
+  affects absolute numbers only — all systems share the same eval stream,
+  so the H4 comparison stands. (3) traces_seed*.json are a SAMPLE of the
+  first 200 positions (win-frac_A ~0.80 there vs 0.61 over the full
+  stream) — labeled as such, not representative of the full distribution.
+- **Status:** VALIDATED (3 seeds, Tarka-resolved with rescoping) · verdict
+  MET · SIGN-OFF PENDING
