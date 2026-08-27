@@ -272,3 +272,16 @@
 - Port agent had pre-staged chained seed-42 on the 5090 (auto-started 22:01);
   monitor re-armed. GB10 remains GPU-idle per cooling-defect directive; NVIDIA
   case package delivered (3 PDFs, questionnaire answered from telemetry).
+
+## [cycle 17b | 2026-08-27] F20 CLOSED (Tarka-amended) · H3 LAUNCHED ON 5090
+- Seed 42 auto-chained job completed overnight; 3-seed 121M verdict: ratio
+  0.7868, CI [0.785, 0.788], paired t=-82.6. Memory -23% confirmed at width.
+- Tarka REFUTED the original mechanism (F18 small-scale runs show the same
+  0.0 convergence / 12-iter telemetry): rewrote F20 as graded
+  contraction-vs-width under a fixed budget; scale trend rescoped for the
+  20k-vs-10k step confound. Findings ledger amended before any artifact use.
+- H3 shipped: exp11 MPO-vs-DPO harness (TDD, 4 smoke tests incl. tau-only
+  controlled comparison via MagneticAdamW ref_mode="fixed"+tau=0 as the DPO
+  arm), spec 0007 amended (controlled comparison + phenomenon-level split),
+  3 seed configs; container preflight (local kinetic_ai shadows stale wheel,
+  offline tokenizer, checkpoint load) then chained seeds launched. ~2h est.

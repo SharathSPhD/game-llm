@@ -1,5 +1,5 @@
 {
-  "cycle": 16,
+  "cycle": 17,
   "phase": "closure-program (5090-only; GB10 excluded from GPU workload)",
   "current_rq": "RQ-3b (H1-prime a/b/c per ADR 0004)",
   "gpu_lock": true,
@@ -17,6 +17,6 @@
   "known_defects": [
     "GB10 cooling defect (hardware): 12C die-vs-platform sensor gap at ~60W, BMC power-throttle to ~60W despite no kernel throttle flag, hard trip ~91C. Confirmed via live telemetry + NVIDIA forum cross-reference (RMA channel: FieldDiag PowerStress MODS-020000600139). FieldDiag itself blocked here: mods.ko builds/signs but insmod rejected under Secure Boot ('Key was rejected by service'); box is SSH-only so the UEFI disable-Secure-Boot/re-enable round trip needs physical/console access not currently available. Operator directive (2026-08-26): GB10 excluded from ALL GPU workload until RMA/repair; GB10 stays available for serving/evals/CPU-bound work only."
   ],
-  "next_action": "5090 queue (single GPU, sequential): seed43 DONE, seed44 running (A2), seed42 auto-queued via seed42_after.sh wait-wrapper (PID 736 on 5090 as of 2026-08-26 22:18 BST) -> harvest 3-seed H1-at-scale verdict; then SPEC 0007 (H3) + SPEC 0008 (H4, specialists+decode eval) both on 5090; then arXiv/HF/PyPI-v1 artifact freeze. GB10-free zone: do not schedule GPU work there.",
-  "gpu_lock_holder": "5090: exp10_full seed44 (A2) running; seed42 queued behind it via seed42_after.sh"
+  "next_action": "exp11 (H3) running on 5090 -> harvest, F21 verdict vs SPEC 0007 gates, Tarka. Meanwhile GPU-free: build SPEC 0008 (H4) specialists+auction harness (exp12), paper F20 section + figures, site refresh. Then H4 on 5090, then artifact freeze (arXiv polish, HF checkpoint releases, PyPI v1.0). GB10 stays GPU-free pending RMA. F20 recorded (Tarka-amended): 121M 3-seed ratio 0.787 [0.785,0.788], memory -23%, mechanism = graded contraction-vs-width, NOT binary convergence failure.",
+  "gpu_lock_holder": "rtx5090: exp11 MPO-vs-DPO seeds 42/43/44 (chained, launched 2026-08-27)"
 }
