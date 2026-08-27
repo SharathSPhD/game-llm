@@ -300,3 +300,8 @@
 - HF releases live: qbz506/kinetic-eqlm-121m-babylm,
   qbz506/kinetic-explicitlm-124m-babylm. Backend+tunnel restored on GB10;
   registry serves 121M checkpoints end-to-end through the worker.
+
+## [cycle 17d | 2026-08-27] RIDER HARVESTED: magnet second-order in DPO regime
+- exp11b: KL 1.2406->1.2256 across tau 0->10; heldout flat. Rider prediction
+  refuted; F21 addendum recorded (PARTIAL on letter, MISSED in spirit).
+- exp12 (H4) now holds the GPU. F21 fully closed pending operator sign-off.

@@ -196856,3 +196856,18 @@ m- **Scale trend (rescoped per Tarka):** ratio 0.930 [0.898, 0.949] at
   0.1-3.9% vs 30-40% explicit). Refined ratio: 1655x lower KL drift.
 - **Status:** VALIDATED (pre-registered arms, Tarka-resolved) · verdict
   PARTIAL · SIGN-OFF PENDING · rider exp11b pending for dose-response
+
+### F21 rider result (exp11b, 3 seeds, recorded 2026-08-27)
+
+Dose-response tau in {0.1, 1, 10} on both bases (results/exp11b_seed4*):
+explicit KL-to-base 1.2406 (tau=0) -> 1.2414 (0.1) -> 1.2398 (1) -> 1.2256
+(10); held-out accuracy unchanged at every tau (+-1 pair at tau=10). EqLM
+flat at 0.00074-0.00075 throughout. The rider's pre-registered prediction
+("KL visibly reduced by tau=1") is REFUTED: the magnetic proximal pull is
+second-order to the DPO gradient across tau in [1e-3, 10] at this budget
+(even tau=10's total displacement bound lr*tau*T ~ 6.7% buys only a 1.2% KL
+reduction). Honest conclusion folded into F21: MPO-as-implemented does not
+deliver H3's drift-reduction promise in any practically distinguishable
+regime at this scale — the H3 verdict stands at PARTIAL on letter, MISSED in
+spirit, and is reported as such. (This mirrors ADR 0003: the magnet's home
+is pretraining stability, not preference-phase drift control.)

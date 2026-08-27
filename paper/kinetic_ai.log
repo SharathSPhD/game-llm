@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.28 (TeX Live 2025) (preloaded format=pdflatex 2026.8.13)  27 AUG 2026 03:38
+This is pdfTeX, Version 3.141592653-2.6-1.40.28 (TeX Live 2025) (preloaded format=pdflatex 2026.8.13)  27 AUG 2026 04:24
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -810,7 +810,7 @@ File: omscmr.fd 2024/11/19 v2.5n Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <12> not available
 (Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 544.
- [16] [17] [18] (./kinetic_ai.bbl [19]) [20] (./kinetic_ai.aux)
+ [16] [17] [18] (./kinetic_ai.bbl [19] [20]) [21] (./kinetic_ai.aux)
  ***********
 LaTeX2e <2025-11-01>
 L3 programming layer <2026-01-19>
@@ -819,18 +819,18 @@ Package rerunfilecheck Info: File `kinetic_ai.out' has not changed.
 (rerunfilecheck)             Checksum: 17F4E8A59E81B9DD53CA59B1831D56C0;10884.
  ) 
 Here is how much of TeX's memory you used:
- 34812 strings out of 469471
- 802099 string characters out of 5468383
+ 34813 strings out of 469471
+ 802106 string characters out of 5468383
  1300770 words of memory out of 5000000
  62839 multiletter control sequences out of 15000+600000
  639814 words of font info for 86 fonts, out of 8000000 for 9000
  36 hyphenation exceptions out of 8191
- 99i,9n,108p,1732b,574s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 99i,9n,108p,1732b,599s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </home/sharaths/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></home/sharaths/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></home/sharaths/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></home/sharaths/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></home/sharaths/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></home/sharaths/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></home/sharaths/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></home/sharaths/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></home/sharaths/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></home/sharaths/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></home/sharaths/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb></home/sharaths/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt12.pfb></home/sharaths/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb></home/sharaths/.TinyTeX/texmf-dist/fonts/type1/public/cm-super/sfrm1200.pfb>
-Output written on kinetic_ai.pdf (20 pages, 375272 bytes).
+Output written on kinetic_ai.pdf (21 pages, 376169 bytes).
 PDF statistics:
- 529 PDF objects out of 1000 (max. 8388607)
- 422 compressed objects within 5 object streams
- 92 named destinations out of 1000 (max. 500000)
+ 533 PDF objects out of 1000 (max. 8388607)
+ 425 compressed objects within 5 object streams
+ 93 named destinations out of 1000 (max. 500000)
  360 words of extra memory for PDF output out of 10000 (max. 10000000)
 
