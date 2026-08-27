@@ -16,7 +16,7 @@ eval:
     num_phenomena: 5
     pairs_per_phenomenon: 200
 control:
-  note: exp10 seed42 A3 (identical data/steps/batch): blimp 0.537, conv 0.0
+  note: "exp10 seed42 A3 (identical data/steps/batch) blimp 0.537, conv 0.0"
   blimp_accuracy: 0.537
   explicit_a1_blimp: 0.682
 save_checkpoints: true

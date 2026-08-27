@@ -1,0 +1,43 @@
+{
+  "experiment": "exp14_autoregressive_auction",
+  "spec": "0009",
+  "seed": 42,
+  "config_hash": "98d2299f4a92eecf1354437420c9df200befbbc68693ce17961ea3a769192c85",
+  "git_commit": "unknown",
+  "n_prompts": 100,
+  "systems": {
+    "S_A": {
+      "judge_nll_per_token": 3.3910350799560547,
+      "domain_consistency": {
+        "a": 1.0,
+        "b": 0.0
+      },
+      "repetition_3gram": 0.6006666666666667
+    },
+    "S_B": {
+      "judge_nll_per_token": 5.72678804397583,
+      "domain_consistency": {
+        "a": 0.2199999988079071,
+        "b": 0.9799999594688416
+      },
+      "repetition_3gram": 0.6493333333333333
+    },
+    "ENS": {
+      "judge_nll_per_token": 5.369747161865234,
+      "domain_consistency": {
+        "a": 0.25999999046325684,
+        "b": 0.4599999785423279
+      },
+      "repetition_3gram": 0.8316666666666667
+    },
+    "AUC": {
+      "judge_nll_per_token": 4.736080646514893,
+      "domain_consistency": {
+        "a": 0.9799999594688416,
+        "b": 0.019999999552965164
+      },
+      "repetition_3gram": 0.3873333333333333
+    }
+  },
+  "h5_score": "MISSED"
+}

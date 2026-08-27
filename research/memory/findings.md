@@ -402,3 +402,37 @@ traces to a real run with config hash + seeds. All statuses: operator sign-off: 
   GET /api/auction/traces for the Auction playground.
 - **Status:** VALIDATED (3 seeds, Tarka-resolved with rescoping) · verdict
   MET · SIGNED-OFF (operator, 2026-08-27)
+
+## F23 — H5 verdict (3 seeds): MISSED — the auction's teacher-forced selection advantage INVERTS in closed-loop generation, empirically vindicating F22's Tarka rescoping
+
+- **Protocol (SPEC 0009, pre-registered):** exp12 specialists per seed, 100
+  held-out mixed prefixes (50/50 childes/simple_wiki, 32 tokens), 32
+  generated tokens, greedy; judge = frozen exp10 seed-42 124M explicit LM,
+  NLL/token of generated text only. results/exp14/results_seed4{2,3,4}.json.
+- **Verdict: MISSED (3/3).** Judge NLL: best single S_A 3.37/3.37/3.69 <
+  auction 4.74/4.23/4.60 < ensemble 5.37/5.19/5.70 < S_B 5.73/5.75/5.51.
+  The auction still beats the uniform ensemble and the worse specialist,
+  but loses to the best single model once each system generates its own
+  context — per-token model switching creates style hand-offs that the
+  fixed model never pays.
+- **Why (from secondaries):** the auction drifts toward S_A everywhere
+  (domain consistency ~1.0 on childes prompts but ~0.02 on wiki prompts —
+  on wiki prefixes its continuations end up S_A-flavored), while under
+  teacher forcing the TRUE context kept pulling selection back to the
+  right specialist each token. Closed-loop removes that anchor. Notable
+  positive: the auction has the LOWEST degeneration of all systems
+  (3-gram repetition 0.39-0.48 vs S_A 0.52-0.60; the ensemble collapses
+  to 0.78-0.83) — bid competition acts as an implicit anti-repetition
+  regularizer, worth its own study.
+- **Caveats (self-declared for Tarka):** judge is trained on the BabyLM mix
+  (child-speech heavy), which may favor S_A-style text; both metrics agree
+  in DIRECTION with the mechanism story, but the judge-bias magnitude is
+  unquantified. Greedy-only decoding; sampling could change hand-off
+  dynamics.
+- **Meaning for the program:** F22 (scoring-time selection wins) and F23
+  (closed-loop generation loses) are BOTH true; the F22 Tarka rescoping
+  that insisted on the distinction is empirically vindicated. Auction
+  aggregation belongs at scoring/reranking time, or needs context-aware
+  bids (bid on the PREFIX's domain, not own confidence) as future work.
+- **Status:** VALIDATED (3 seeds) · verdict MISSED (honest) · Tarka pending
+  · SIGN-OFF PENDING
