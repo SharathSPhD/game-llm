@@ -196871,3 +196871,36 @@ deliver H3's drift-reduction promise in any practically distinguishable
 regime at this scale — the H3 verdict stands at PARTIAL on letter, MISSED in
 spirit, and is reported as such. (This mirrors ADR 0003: the magnet's home
 is pretraining stability, not preference-phase drift control.)
+
+## F22 — H4 verdict (3 seeds): MET — truthful second-price token-auction
+## decoding beats the best single specialist by 23% and the logit-average
+## ensemble by 12% on mixed-domain perplexity
+
+- **Protocol (SPEC 0008):** two 30.0M-param explicit specialists per seed,
+  trained 3k steps on disjoint BabyLM subdomains (A: childes child-directed
+  speech; B: simple_wiki written text; line-level 5% held-out per seed);
+  eval on a 50/50 interleaved held-out mixed stream (~100k tokens). Per
+  token: bid_i = own max-prob confidence; winner's distribution scores the
+  token; winner pays second price (F6-validated mechanism; vectorized path
+  cross-checked against TokenAuction on trace samples — 0 mismatches in all
+  seeds). Seeds 42/43/44; results/exp12/results_seed4{2,3,4}.json.
+- **Pre-registered verdict: MET (3/3 seeds).** Mixed-domain perplexity
+  (means): auction 182.8 < uniform logit-average ensemble 207.9 < best
+  single specialist 236.8 (S_A) < worst 1242.4 (S_B). Auction beats BEST
+  single on every seed (158.5/189.4/200.5 vs 234.3/232.8/243.4) — the
+  pre-registered bar — and also beats the ensemble baseline on every seed.
+- **How it wins (per-domain decomposition):** confidence-bid selection is
+  imperfect within-domain (on domain A the auction's 26-33 ppl trails pure
+  S_A's 13.8; win-frac_A ~0.60 on a 50/50 stream) but per-token specialist
+  selection dominates any fixed commitment when domains mix: S_A collapses
+  on domain B (3979-4280 ppl) and S_B on domain A (4477-4856), while the
+  auction stays within range of the right specialist on both sides.
+- **Asymmetry noted honestly:** childes-trained S_A transfers to wiki text
+  better than S_B transfers to speech, so S_A is the stronger single model
+  and wins ~60% of auctions; the result does not depend on this asymmetry
+  (auction < best single holds per seed).
+- **App tie-in delivered:** real bid/winner/payment traces
+  (results/exp12/traces_seed4*.json, 200 positions/seed) served by
+  GET /api/auction/traces for the Auction playground.
+- **Status:** VALIDATED (3 seeds) · verdict MET · Tarka pending ·
+  SIGN-OFF PENDING

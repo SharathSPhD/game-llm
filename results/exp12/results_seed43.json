@@ -1,0 +1,46 @@
+{
+  "experiment": "exp12_auction_decoding",
+  "spec": "0008",
+  "seed": 43,
+  "config_hash": "c0e635662bdb594f5b8d7ab87c5859740254f2d256dba55cdc17b422453fb78d",
+  "git_commit": "unknown",
+  "domains": {
+    "a": "childes",
+    "b": "simple_wiki"
+  },
+  "specialist_a": {
+    "num_params": 29997702,
+    "final_loss": 2.673332691192627,
+    "train_time_sec": 89.3786826133728
+  },
+  "specialist_b": {
+    "num_params": 29997702,
+    "final_loss": 5.614939212799072,
+    "train_time_sec": 88.78925251960754
+  },
+  "eval": {
+    "perplexity_mixed": {
+      "S_A": 232.76622009277344,
+      "S_B": 1245.849609375,
+      "ENS": 205.74681091308594,
+      "AUC": 189.36595153808594
+    },
+    "perplexity_domain_a": {
+      "S_A": 13.947598457336426,
+      "S_B": 4856.01416015625,
+      "ENS": 68.63935852050781,
+      "AUC": 33.29759979248047
+    },
+    "perplexity_domain_b": {
+      "S_A": 3884.548095703125,
+      "S_B": 319.6327819824219,
+      "ENS": 616.72705078125,
+      "AUC": 1076.938720703125
+    },
+    "auction_win_frac_a": 0.6058070866141733,
+    "auction_mean_payment": 0.14530266453900675,
+    "num_tokens": 101600,
+    "trace_mechanism_mismatches": 0
+  },
+  "h4_score": "MET"
+}

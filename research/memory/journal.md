@@ -305,3 +305,14 @@
 - exp11b: KL 1.2406->1.2256 across tau 0->10; heldout flat. Rider prediction
   refuted; F21 addendum recorded (PARTIAL on letter, MISSED in spirit).
 - exp12 (H4) now holds the GPU. F21 fully closed pending operator sign-off.
+
+## [cycle 17e | 2026-08-27] H4 HARVESTED: MET 3/3 (F22) - auction beats best
+## single by 23% and ensemble by 12% on mixed-domain perplexity
+- exp12 relaunch green all seeds; 0 vectorized-vs-mechanism mismatches;
+  F22 recorded, Tarka in flight (teacher-forcing scoping + childes-line
+  leakage check requested). App playground serves real traces
+  (GET /api/auction/traces -> seeds [42,43,44]) end-to-end on GB10.
+- Empirical program now COMPLETE: H1 (miss, F18/F20), H2 (validated),
+  H3 (PARTIAL, F21+rider), H4 (MET, F22). Remaining: Tarka F22, paper
+  H4 section, artifact freeze (PyPI v1.0, HF done, arXiv polish),
+  operator sign-off pass F16-F22.

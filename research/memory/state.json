@@ -2,7 +2,7 @@
   "cycle": 17,
   "phase": "closure-program (5090-only; GB10 excluded from GPU workload)",
   "current_rq": "RQ-3b (H1-prime a/b/c per ADR 0004)",
-  "gpu_lock": true,
+  "gpu_lock": false,
   "open_questions": [
     "RQ-3b (H1-prime): warm-start decoding / per-token early exit / think-harder dial (ADR 0004)",
     "RQ-4 (H3): MPO vs DPO",
@@ -17,6 +17,6 @@
   "known_defects": [
     "GB10 cooling defect (hardware): 12C die-vs-platform sensor gap at ~60W, BMC power-throttle to ~60W despite no kernel throttle flag, hard trip ~91C. Confirmed via live telemetry + NVIDIA forum cross-reference (RMA channel: FieldDiag PowerStress MODS-020000600139). FieldDiag itself blocked here: mods.ko builds/signs but insmod rejected under Secure Boot ('Key was rejected by service'); box is SSH-only so the UEFI disable-Secure-Boot/re-enable round trip needs physical/console access not currently available. Operator directive (2026-08-26): GB10 excluded from ALL GPU workload until RMA/repair; GB10 stays available for serving/evals/CPU-bound work only."
   ],
-  "next_action": "exp11b tau rider running on 5090 -> exp12 relaunch queued behind it. On exp11b: harvest dose-response, fold into F21 interpretation. On exp12: harvest H4 verdict (F22). Tarka F21 in flight - resolve bug-vs-science on EqLM drift resistance BEFORE paper use. Then: paper H3/H4 sections, site cards, PyPI v1.0 freeze, operator sign-off pass F16-F22.",
-  "gpu_lock_holder": "rtx5090: exp11 MPO-vs-DPO seeds 42/43/44 (chained, launched 2026-08-27)"
+  "next_action": "Empirical program complete (H1 miss / H2 validated / H3 partial / H4 MET). Await Tarka F22 -> paper H4 section + site card -> artifact freeze: PyPI v1.0 + docs, arXiv-ready pass, README refresh -> operator sign-off F16-F22 -> final milestone push. 5090 queue drained; GB10 GPU-free pending RMA.",
+  "gpu_lock_holder": null
 }

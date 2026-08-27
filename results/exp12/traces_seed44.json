@@ -1,0 +1,2002 @@
+[
+  {
+    "position": 0,
+    "bids": [
+      0.414724,
+      0.076617
+    ],
+    "winner": 0,
+    "payment": 0.076617,
+    "target_token": 44
+  },
+  {
+    "position": 1,
+    "bids": [
+      0.962919,
+      0.015933
+    ],
+    "winner": 0,
+    "payment": 0.015933,
+    "target_token": 2394
+  },
+  {
+    "position": 2,
+    "bids": [
+      0.976478,
+      0.186225
+    ],
+    "winner": 0,
+    "payment": 0.186225,
+    "target_token": 25
+  },
+  {
+    "position": 3,
+    "bids": [
+      0.977209,
+      0.213983
+    ],
+    "winner": 0,
+    "payment": 0.213983,
+    "target_token": 197
+  },
+  {
+    "position": 4,
+    "bids": [
+      0.057967,
+      0.100321
+    ],
+    "winner": 1,
+    "payment": 0.057967,
+    "target_token": 482
+  },
+  {
+    "position": 5,
+    "bids": [
+      0.961999,
+      0.299214
+    ],
+    "winner": 0,
+    "payment": 0.299214,
+    "target_token": 323
+  },
+  {
+    "position": 6,
+    "bids": [
+      0.525,
+      0.224083
+    ],
+    "winner": 0,
+    "payment": 0.224083,
+    "target_token": 13
+  },
+  {
+    "position": 7,
+    "bids": [
+      0.976974,
+      0.293776
+    ],
+    "winner": 0,
+    "payment": 0.293776,
+    "target_token": 198
+  },
+  {
+    "position": 8,
+    "bids": [
+      0.879382,
+      0.232199
+    ],
+    "winner": 0,
+    "payment": 0.232199,
+    "target_token": 9
+  },
+  {
+    "position": 9,
+    "bids": [
+      0.403002,
+      0.06926
+    ],
+    "winner": 0,
+    "payment": 0.06926,
+    "target_token": 44
+  },
+  {
+    "position": 10,
+    "bids": [
+      0.965613,
+      0.004573
+    ],
+    "winner": 0,
+    "payment": 0.004573,
+    "target_token": 2394
+  },
+  {
+    "position": 11,
+    "bids": [
+      0.976744,
+      0.075631
+    ],
+    "winner": 0,
+    "payment": 0.075631,
+    "target_token": 25
+  },
+  {
+    "position": 12,
+    "bids": [
+      0.977473,
+      0.262688
+    ],
+    "winner": 0,
+    "payment": 0.262688,
+    "target_token": 197
+  },
+  {
+    "position": 13,
+    "bids": [
+      0.058807,
+      0.089397
+    ],
+    "winner": 1,
+    "payment": 0.058807,
+    "target_token": 271
+  },
+  {
+    "position": 14,
+    "bids": [
+      0.134897,
+      0.112253
+    ],
+    "winner": 0,
+    "payment": 0.112253,
+    "target_token": 340
+  },
+  {
+    "position": 15,
+    "bids": [
+      0.149872,
+      0.373495
+    ],
+    "winner": 1,
+    "payment": 0.149872,
+    "target_token": 257
+  },
+  {
+    "position": 16,
+    "bids": [
+      0.041951,
+      0.012053
+    ],
+    "winner": 0,
+    "payment": 0.012053,
+    "target_token": 3860
+  },
+  {
+    "position": 17,
+    "bids": [
+      0.410447,
+      0.48612
+    ],
+    "winner": 1,
+    "payment": 0.410447,
+    "target_token": 30
+  },
+  {
+    "position": 18,
+    "bids": [
+      0.977414,
+      0.144812
+    ],
+    "winner": 0,
+    "payment": 0.144812,
+    "target_token": 198
+  },
+  {
+    "position": 19,
+    "bids": [
+      0.880311,
+      0.227429
+    ],
+    "winner": 0,
+    "payment": 0.227429,
+    "target_token": 9
+  },
+  {
+    "position": 20,
+    "bids": [
+      0.403394,
+      0.069037
+    ],
+    "winner": 0,
+    "payment": 0.069037,
+    "target_token": 3398
+  },
+  {
+    "position": 21,
+    "bids": [
+      0.970714,
+      0.138138
+    ],
+    "winner": 0,
+    "payment": 0.138138,
+    "target_token": 40
+  },
+  {
+    "position": 22,
+    "bids": [
+      0.977099,
+      0.024093
+    ],
+    "winner": 0,
+    "payment": 0.024093,
+    "target_token": 25
+  },
+  {
+    "position": 23,
+    "bids": [
+      0.977264,
+      0.30414
+    ],
+    "winner": 0,
+    "payment": 0.30414,
+    "target_token": 197
+  },
+  {
+    "position": 24,
+    "bids": [
+      0.09197,
+      0.081488
+    ],
+    "winner": 0,
+    "payment": 0.081488,
+    "target_token": 31811
+  },
+  {
+    "position": 25,
+    "bids": [
+      0.059018,
+      0.117102
+    ],
+    "winner": 1,
+    "payment": 0.059018,
+    "target_token": 339
+  },
+  {
+    "position": 26,
+    "bids": [
+      0.165629,
+      0.239813
+    ],
+    "winner": 1,
+    "payment": 0.165629,
+    "target_token": 307
+  },
+  {
+    "position": 27,
+    "bids": [
+      0.09495,
+      0.071676
+    ],
+    "winner": 0,
+    "payment": 0.071676,
+    "target_token": 986
+  },
+  {
+    "position": 28,
+    "bids": [
+      0.973586,
+      0.059517
+    ],
+    "winner": 0,
+    "payment": 0.059517,
+    "target_token": 198
+  },
+  {
+    "position": 29,
+    "bids": [
+      0.882076,
+      0.222836
+    ],
+    "winner": 0,
+    "payment": 0.222836,
+    "target_token": 58
+  },
+  {
+    "position": 30,
+    "bids": [
+      0.100039,
+      0.026542
+    ],
+    "winner": 0,
+    "payment": 0.026542,
+    "target_token": 64
+  },
+  {
+    "position": 31,
+    "bids": [
+      0.016092,
+      0.119543
+    ],
+    "winner": 1,
+    "payment": 0.016092,
+    "target_token": 7779
+  },
+  {
+    "position": 32,
+    "bids": [
+      0.193025,
+      0.097809
+    ],
+    "winner": 0,
+    "payment": 0.097809,
+    "target_token": 2925
+  },
+  {
+    "position": 33,
+    "bids": [
+      0.090429,
+      0.182085
+    ],
+    "winner": 1,
+    "payment": 0.090429,
+    "target_token": 416
+  },
+  {
+    "position": 34,
+    "bids": [
+      0.237023,
+      0.208533
+    ],
+    "winner": 0,
+    "payment": 0.208533,
+    "target_token": 2354
+  },
+  {
+    "position": 35,
+    "bids": [
+      0.415081,
+      0.380433
+    ],
+    "winner": 0,
+    "payment": 0.380433,
+    "target_token": 523
+  },
+  {
+    "position": 36,
+    "bids": [
+      0.048077,
+      0.053046
+    ],
+    "winner": 1,
+    "payment": 0.048077,
+    "target_token": 340
+  },
+  {
+    "position": 37,
+    "bids": [
+      0.113597,
+      0.121036
+    ],
+    "winner": 1,
+    "payment": 0.113597,
+    "target_token": 318
+  },
+  {
+    "position": 38,
+    "bids": [
+      0.044415,
+      0.342037
+    ],
+    "winner": 1,
+    "payment": 0.044415,
+    "target_token": 2408
+  },
+  {
+    "position": 39,
+    "bids": [
+      0.664951,
+      0.541199
+    ],
+    "winner": 0,
+    "payment": 0.541199,
+    "target_token": 284
+  },
+  {
+    "position": 40,
+    "bids": [
+      0.037181,
+      0.069051
+    ],
+    "winner": 1,
+    "payment": 0.037181,
+    "target_token": 3285
+  },
+  {
+    "position": 41,
+    "bids": [
+      0.240796,
+      0.19695
+    ],
+    "winner": 0,
+    "payment": 0.19695,
+    "target_token": 60
+  },
+  {
+    "position": 42,
+    "bids": [
+      0.976079,
+      0.230351
+    ],
+    "winner": 0,
+    "payment": 0.230351,
+    "target_token": 198
+  },
+  {
+    "position": 43,
+    "bids": [
+      0.881242,
+      0.219501
+    ],
+    "winner": 0,
+    "payment": 0.219501,
+    "target_token": 9
+  },
+  {
+    "position": 44,
+    "bids": [
+      0.405583,
+      0.059321
+    ],
+    "winner": 0,
+    "payment": 0.059321,
+    "target_token": 44
+  },
+  {
+    "position": 45,
+    "bids": [
+      0.967276,
+      0.006271
+    ],
+    "winner": 0,
+    "payment": 0.006271,
+    "target_token": 2394
+  },
+  {
+    "position": 46,
+    "bids": [
+      0.976809,
+      0.015964
+    ],
+    "winner": 0,
+    "payment": 0.015964,
+    "target_token": 25
+  },
+  {
+    "position": 47,
+    "bids": [
+      0.977471,
+      0.574393
+    ],
+    "winner": 0,
+    "payment": 0.574393,
+    "target_token": 197
+  },
+  {
+    "position": 48,
+    "bids": [
+      0.059861,
+      0.103251
+    ],
+    "winner": 1,
+    "payment": 0.059861,
+    "target_token": 4598
+  },
+  {
+    "position": 49,
+    "bids": [
+      0.694639,
+      0.136819
+    ],
+    "winner": 0,
+    "payment": 0.136819,
+    "target_token": 345
+  },
+  {
+    "position": 50,
+    "bids": [
+      0.105522,
+      0.12328
+    ],
+    "winner": 1,
+    "payment": 0.105522,
+    "target_token": 892
+  },
+  {
+    "position": 51,
+    "bids": [
+      0.11901,
+      0.085448
+    ],
+    "winner": 0,
+    "payment": 0.085448,
+    "target_token": 673
+  },
+  {
+    "position": 52,
+    "bids": [
+      0.142376,
+      0.130253
+    ],
+    "winner": 0,
+    "payment": 0.130253,
+    "target_token": 338
+  },
+  {
+    "position": 53,
+    "bids": [
+      0.080828,
+      0.008239
+    ],
+    "winner": 0,
+    "payment": 0.008239,
+    "target_token": 1016
+  },
+  {
+    "position": 54,
+    "bids": [
+      0.676852,
+      0.547803
+    ],
+    "winner": 0,
+    "payment": 0.547803,
+    "target_token": 284
+  },
+  {
+    "position": 55,
+    "bids": [
+      0.047296,
+      0.066458
+    ],
+    "winner": 1,
+    "payment": 0.047296,
+    "target_token": 1461
+  },
+  {
+    "position": 56,
+    "bids": [
+      0.152723,
+      0.161813
+    ],
+    "winner": 1,
+    "payment": 0.152723,
+    "target_token": 340
+  },
+  {
+    "position": 57,
+    "bids": [
+      0.18907,
+      0.134224
+    ],
+    "winner": 0,
+    "payment": 0.134224,
+    "target_token": 30
+  },
+  {
+    "position": 58,
+    "bids": [
+      0.977528,
+      0.330333
+    ],
+    "winner": 0,
+    "payment": 0.330333,
+    "target_token": 198
+  },
+  {
+    "position": 59,
+    "bids": [
+      0.880767,
+      0.229681
+    ],
+    "winner": 0,
+    "payment": 0.229681,
+    "target_token": 9
+  },
+  {
+    "position": 60,
+    "bids": [
+      0.404591,
+      0.057747
+    ],
+    "winner": 0,
+    "payment": 0.057747,
+    "target_token": 44
+  },
+  {
+    "position": 61,
+    "bids": [
+      0.966639,
+      0.006247
+    ],
+    "winner": 0,
+    "payment": 0.006247,
+    "target_token": 3698
+  },
+  {
+    "position": 62,
+    "bids": [
+      0.975902,
+      0.172887
+    ],
+    "winner": 0,
+    "payment": 0.172887,
+    "target_token": 25
+  },
+  {
+    "position": 63,
+    "bids": [
+      0.977485,
+      0.464903
+    ],
+    "winner": 0,
+    "payment": 0.464903,
+    "target_token": 197
+  },
+  {
+    "position": 64,
+    "bids": [
+      0.060662,
+      0.065784
+    ],
+    "winner": 1,
+    "payment": 0.060662,
+    "target_token": 5832
+  },
+  {
+    "position": 65,
+    "bids": [
+      0.100557,
+      0.437159
+    ],
+    "winner": 1,
+    "payment": 0.100557,
+    "target_token": 760
+  },
+  {
+    "position": 66,
+    "bids": [
+      0.077936,
+      0.060973
+    ],
+    "winner": 0,
+    "payment": 0.060973,
+    "target_token": 477
+  },
+  {
+    "position": 67,
+    "bids": [
+      0.217601,
+      0.063354
+    ],
+    "winner": 0,
+    "payment": 0.063354,
+    "target_token": 262
+  },
+  {
+    "position": 68,
+    "bids": [
+      0.0184,
+      0.012127
+    ],
+    "winner": 0,
+    "payment": 0.012127,
+    "target_token": 7259
+  },
+  {
+    "position": 69,
+    "bids": [
+      0.309264,
+      0.102305
+    ],
+    "winner": 0,
+    "payment": 0.102305,
+    "target_token": 30
+  },
+  {
+    "position": 70,
+    "bids": [
+      0.977553,
+      0.450534
+    ],
+    "winner": 0,
+    "payment": 0.450534,
+    "target_token": 198
+  },
+  {
+    "position": 71,
+    "bids": [
+      0.881156,
+      0.234248
+    ],
+    "winner": 0,
+    "payment": 0.234248,
+    "target_token": 9
+  },
+  {
+    "position": 72,
+    "bids": [
+      0.403799,
+      0.049945
+    ],
+    "winner": 0,
+    "payment": 0.049945,
+    "target_token": 3398
+  },
+  {
+    "position": 73,
+    "bids": [
+      0.970222,
+      0.153454
+    ],
+    "winner": 0,
+    "payment": 0.153454,
+    "target_token": 40
+  },
+  {
+    "position": 74,
+    "bids": [
+      0.977336,
+      0.099924
+    ],
+    "winner": 0,
+    "payment": 0.099924,
+    "target_token": 25
+  },
+  {
+    "position": 75,
+    "bids": [
+      0.977382,
+      0.329411
+    ],
+    "winner": 0,
+    "payment": 0.329411,
+    "target_token": 197
+  },
+  {
+    "position": 76,
+    "bids": [
+      0.087172,
+      0.106506
+    ],
+    "winner": 1,
+    "payment": 0.087172,
+    "target_token": 5832
+  },
+  {
+    "position": 77,
+    "bids": [
+      0.079519,
+      0.409467
+    ],
+    "winner": 1,
+    "payment": 0.079519,
+    "target_token": 1392
+  },
+  {
+    "position": 78,
+    "bids": [
+      0.19677,
+      0.232957
+    ],
+    "winner": 1,
+    "payment": 0.19677,
+    "target_token": 617
+  },
+  {
+    "position": 79,
+    "bids": [
+      0.057586,
+      0.073053
+    ],
+    "winner": 1,
+    "payment": 0.057586,
+    "target_token": 36116
+  },
+  {
+    "position": 80,
+    "bids": [
+      0.562382,
+      0.354458
+    ],
+    "winner": 0,
+    "payment": 0.354458,
+    "target_token": 30
+  },
+  {
+    "position": 81,
+    "bids": [
+      0.977604,
+      0.374023
+    ],
+    "winner": 0,
+    "payment": 0.374023,
+    "target_token": 198
+  },
+  {
+    "position": 82,
+    "bids": [
+      0.881284,
+      0.226893
+    ],
+    "winner": 0,
+    "payment": 0.226893,
+    "target_token": 9
+  },
+  {
+    "position": 83,
+    "bids": [
+      0.405532,
+      0.059282
+    ],
+    "winner": 0,
+    "payment": 0.059282,
+    "target_token": 3398
+  },
+  {
+    "position": 84,
+    "bids": [
+      0.970238,
+      0.201733
+    ],
+    "winner": 0,
+    "payment": 0.201733,
+    "target_token": 40
+  },
+  {
+    "position": 85,
+    "bids": [
+      0.97724,
+      0.106467
+    ],
+    "winner": 0,
+    "payment": 0.106467,
+    "target_token": 25
+  },
+  {
+    "position": 86,
+    "bids": [
+      0.977172,
+      0.451497
+    ],
+    "winner": 0,
+    "payment": 0.451497,
+    "target_token": 197
+  },
+  {
+    "position": 87,
+    "bids": [
+      0.095157,
+      0.155844
+    ],
+    "winner": 1,
+    "payment": 0.095157,
+    "target_token": 9099
+  },
+  {
+    "position": 88,
+    "bids": [
+      0.959975,
+      0.216082
+    ],
+    "winner": 0,
+    "payment": 0.216082,
+    "target_token": 470
+  },
+  {
+    "position": 89,
+    "bids": [
+      0.06396,
+      0.024225
+    ],
+    "winner": 0,
+    "payment": 0.024225,
+    "target_token": 2834
+  },
+  {
+    "position": 90,
+    "bids": [
+      0.213808,
+      0.054971
+    ],
+    "winner": 0,
+    "payment": 0.054971,
+    "target_token": 13
+  },
+  {
+    "position": 91,
+    "bids": [
+      0.977544,
+      0.411305
+    ],
+    "winner": 0,
+    "payment": 0.411305,
+    "target_token": 198
+  },
+  {
+    "position": 92,
+    "bids": [
+      0.882145,
+      0.224899
+    ],
+    "winner": 0,
+    "payment": 0.224899,
+    "target_token": 9
+  },
+  {
+    "position": 93,
+    "bids": [
+      0.405373,
+      0.049674
+    ],
+    "winner": 0,
+    "payment": 0.049674,
+    "target_token": 44
+  },
+  {
+    "position": 94,
+    "bids": [
+      0.966843,
+      0.006758
+    ],
+    "winner": 0,
+    "payment": 0.006758,
+    "target_token": 2394
+  },
+  {
+    "position": 95,
+    "bids": [
+      0.976864,
+      0.142641
+    ],
+    "winner": 0,
+    "payment": 0.142641,
+    "target_token": 25
+  },
+  {
+    "position": 96,
+    "bids": [
+      0.977558,
+      0.331852
+    ],
+    "winner": 0,
+    "payment": 0.331852,
+    "target_token": 197
+  },
+  {
+    "position": 97,
+    "bids": [
+      0.058996,
+      0.090817
+    ],
+    "winner": 1,
+    "payment": 0.058996,
+    "target_token": 4598
+  },
+  {
+    "position": 98,
+    "bids": [
+      0.682964,
+      0.172827
+    ],
+    "winner": 0,
+    "payment": 0.172827,
+    "target_token": 345
+  },
+  {
+    "position": 99,
+    "bids": [
+      0.098259,
+      0.063786
+    ],
+    "winner": 0,
+    "payment": 0.063786,
+    "target_token": 588
+  },
+  {
+    "position": 100,
+    "bids": [
+      0.123823,
+      0.10609
+    ],
+    "winner": 0,
+    "payment": 0.10609,
+    "target_token": 284
+  },
+  {
+    "position": 101,
+    "bids": [
+      0.052105,
+      0.059242
+    ],
+    "winner": 1,
+    "payment": 0.052105,
+    "target_token": 307
+  },
+  {
+    "position": 102,
+    "bids": [
+      0.152243,
+      0.063463
+    ],
+    "winner": 0,
+    "payment": 0.063463,
+    "target_token": 17533
+  },
+  {
+    "position": 103,
+    "bids": [
+      0.59025,
+      0.082236
+    ],
+    "winner": 0,
+    "payment": 0.082236,
+    "target_token": 30
+  },
+  {
+    "position": 104,
+    "bids": [
+      0.977377,
+      0.424848
+    ],
+    "winner": 0,
+    "payment": 0.424848,
+    "target_token": 198
+  },
+  {
+    "position": 105,
+    "bids": [
+      0.881428,
+      0.222511
+    ],
+    "winner": 0,
+    "payment": 0.222511,
+    "target_token": 9
+  },
+  {
+    "position": 106,
+    "bids": [
+      0.402637,
+      0.045061
+    ],
+    "winner": 0,
+    "payment": 0.045061,
+    "target_token": 44
+  },
+  {
+    "position": 107,
+    "bids": [
+      0.965186,
+      0.007033
+    ],
+    "winner": 0,
+    "payment": 0.007033,
+    "target_token": 2394
+  },
+  {
+    "position": 108,
+    "bids": [
+      0.97681,
+      0.120465
+    ],
+    "winner": 0,
+    "payment": 0.120465,
+    "target_token": 25
+  },
+  {
+    "position": 109,
+    "bids": [
+      0.97748,
+      0.280423
+    ],
+    "winner": 0,
+    "payment": 0.280423,
+    "target_token": 197
+  },
+  {
+    "position": 110,
+    "bids": [
+      0.060293,
+      0.194395
+    ],
+    "winner": 1,
+    "payment": 0.060293,
+    "target_token": 23442
+  },
+  {
+    "position": 111,
+    "bids": [
+      0.222898,
+      0.024818
+    ],
+    "winner": 0,
+    "payment": 0.024818,
+    "target_token": 340
+  },
+  {
+    "position": 112,
+    "bids": [
+      0.433103,
+      0.360966
+    ],
+    "winner": 0,
+    "payment": 0.360966,
+    "target_token": 685
+  },
+  {
+    "position": 113,
+    "bids": [
+      0.14428,
+      0.025185
+    ],
+    "winner": 0,
+    "payment": 0.025185,
+    "target_token": 5420
+  },
+  {
+    "position": 114,
+    "bids": [
+      0.015572,
+      0.032598
+    ],
+    "winner": 1,
+    "payment": 0.015572,
+    "target_token": 9100
+  },
+  {
+    "position": 115,
+    "bids": [
+      0.015571,
+      0.003686
+    ],
+    "winner": 0,
+    "payment": 0.003686,
+    "target_token": 10061
+  },
+  {
+    "position": 116,
+    "bids": [
+      0.549681,
+      0.340015
+    ],
+    "winner": 0,
+    "payment": 0.340015,
+    "target_token": 60
+  },
+  {
+    "position": 117,
+    "bids": [
+      0.236328,
+      0.054893
+    ],
+    "winner": 0,
+    "payment": 0.054893,
+    "target_token": 685
+  },
+  {
+    "position": 118,
+    "bids": [
+      0.130428,
+      0.025717
+    ],
+    "winner": 0,
+    "payment": 0.025717,
+    "target_token": 28124
+  },
+  {
+    "position": 119,
+    "bids": [
+      0.530714,
+      0.133756
+    ],
+    "winner": 0,
+    "payment": 0.133756,
+    "target_token": 4083
+  },
+  {
+    "position": 120,
+    "bids": [
+      0.975349,
+      0.511612
+    ],
+    "winner": 0,
+    "payment": 0.511612,
+    "target_token": 198
+  },
+  {
+    "position": 121,
+    "bids": [
+      0.879394,
+      0.210148
+    ],
+    "winner": 0,
+    "payment": 0.210148,
+    "target_token": 9
+  },
+  {
+    "position": 122,
+    "bids": [
+      0.40259,
+      0.036289
+    ],
+    "winner": 0,
+    "payment": 0.036289,
+    "target_token": 49
+  },
+  {
+    "position": 123,
+    "bids": [
+      0.535497,
+      0.047586
+    ],
+    "winner": 0,
+    "payment": 0.047586,
+    "target_token": 7730
+  },
+  {
+    "position": 124,
+    "bids": [
+      0.95176,
+      0.095297
+    ],
+    "winner": 0,
+    "payment": 0.095297,
+    "target_token": 25
+  },
+  {
+    "position": 125,
+    "bids": [
+      0.977345,
+      0.214185
+    ],
+    "winner": 0,
+    "payment": 0.214185,
+    "target_token": 197
+  },
+  {
+    "position": 126,
+    "bids": [
+      0.057938,
+      0.151953
+    ],
+    "winner": 1,
+    "payment": 0.057938,
+    "target_token": 273
+  },
+  {
+    "position": 127,
+    "bids": [
+      0.869607,
+      0.204667
+    ],
+    "winner": 0,
+    "payment": 0.204667,
+    "target_token": 9
+  },
+  {
+    "position": 128,
+    "bids": [
+      0.405177,
+      0.036323
+    ],
+    "winner": 0,
+    "payment": 0.036323,
+    "target_token": 44
+  },
+  {
+    "position": 129,
+    "bids": [
+      0.964305,
+      0.007701
+    ],
+    "winner": 0,
+    "payment": 0.007701,
+    "target_token": 2394
+  },
+  {
+    "position": 130,
+    "bids": [
+      0.976466,
+      0.120024
+    ],
+    "winner": 0,
+    "payment": 0.120024,
+    "target_token": 25
+  },
+  {
+    "position": 131,
+    "bids": [
+      0.977258,
+      0.236476
+    ],
+    "winner": 0,
+    "payment": 0.236476,
+    "target_token": 197
+  },
+  {
+    "position": 132,
+    "bids": [
+      0.057597,
+      0.152879
+    ],
+    "winner": 1,
+    "payment": 0.057597,
+    "target_token": 10919
+  },
+  {
+    "position": 133,
+    "bids": [
+      0.185234,
+      0.114164
+    ],
+    "winner": 0,
+    "payment": 0.114164,
+    "target_token": 288
+  },
+  {
+    "position": 134,
+    "bids": [
+      0.5805,
+      0.046159
+    ],
+    "winner": 0,
+    "payment": 0.046159,
+    "target_token": 6
+  },
+  {
+    "position": 135,
+    "bids": [
+      0.633085,
+      0.030564
+    ],
+    "winner": 0,
+    "payment": 0.030564,
+    "target_token": 345
+  },
+  {
+    "position": 136,
+    "bids": [
+      0.094186,
+      0.100373
+    ],
+    "winner": 1,
+    "payment": 0.094186,
+    "target_token": 892
+  },
+  {
+    "position": 137,
+    "bids": [
+      0.189424,
+      0.100471
+    ],
+    "winner": 0,
+    "payment": 0.100471,
+    "target_token": 339
+  },
+  {
+    "position": 138,
+    "bids": [
+      0.135355,
+      0.14923
+    ],
+    "winner": 1,
+    "payment": 0.135355,
+    "target_token": 338
+  },
+  {
+    "position": 139,
+    "bids": [
+      0.083291,
+      0.007561
+    ],
+    "winner": 0,
+    "payment": 0.007561,
+    "target_token": 1804
+  },
+  {
+    "position": 140,
+    "bids": [
+      0.622437,
+      0.101296
+    ],
+    "winner": 0,
+    "payment": 0.101296,
+    "target_token": 783
+  },
+  {
+    "position": 141,
+    "bids": [
+      0.578101,
+      0.108594
+    ],
+    "winner": 0,
+    "payment": 0.108594,
+    "target_token": 30
+  },
+  {
+    "position": 142,
+    "bids": [
+      0.976898,
+      0.166485
+    ],
+    "winner": 0,
+    "payment": 0.166485,
+    "target_token": 198
+  },
+  {
+    "position": 143,
+    "bids": [
+      0.880712,
+      0.222562
+    ],
+    "winner": 0,
+    "payment": 0.222562,
+    "target_token": 9
+  },
+  {
+    "position": 144,
+    "bids": [
+      0.404308,
+      0.061809
+    ],
+    "winner": 0,
+    "payment": 0.061809,
+    "target_token": 3398
+  },
+  {
+    "position": 145,
+    "bids": [
+      0.970521,
+      0.149438
+    ],
+    "winner": 0,
+    "payment": 0.149438,
+    "target_token": 40
+  },
+  {
+    "position": 146,
+    "bids": [
+      0.977021,
+      0.039755
+    ],
+    "winner": 0,
+    "payment": 0.039755,
+    "target_token": 25
+  },
+  {
+    "position": 147,
+    "bids": [
+      0.977195,
+      0.354919
+    ],
+    "winner": 0,
+    "payment": 0.354919,
+    "target_token": 197
+  },
+  {
+    "position": 148,
+    "bids": [
+      0.097936,
+      0.079781
+    ],
+    "winner": 0,
+    "payment": 0.079781,
+    "target_token": 270
+  },
+  {
+    "position": 149,
+    "bids": [
+      0.623639,
+      0.06145
+    ],
+    "winner": 0,
+    "payment": 0.06145,
+    "target_token": 460
+  },
+  {
+    "position": 150,
+    "bids": [
+      0.335785,
+      0.121838
+    ],
+    "winner": 0,
+    "payment": 0.121838,
+    "target_token": 1280
+  },
+  {
+    "position": 151,
+    "bids": [
+      0.207207,
+      0.208101
+    ],
+    "winner": 1,
+    "payment": 0.207207,
+    "target_token": 13
+  },
+  {
+    "position": 152,
+    "bids": [
+      0.977236,
+      0.319414
+    ],
+    "winner": 0,
+    "payment": 0.319414,
+    "target_token": 198
+  },
+  {
+    "position": 153,
+    "bids": [
+      0.882796,
+      0.220073
+    ],
+    "winner": 0,
+    "payment": 0.220073,
+    "target_token": 9
+  },
+  {
+    "position": 154,
+    "bids": [
+      0.405271,
+      0.057712
+    ],
+    "winner": 0,
+    "payment": 0.057712,
+    "target_token": 3398
+  },
+  {
+    "position": 155,
+    "bids": [
+      0.970566,
+      0.168415
+    ],
+    "winner": 0,
+    "payment": 0.168415,
+    "target_token": 40
+  },
+  {
+    "position": 156,
+    "bids": [
+      0.977229,
+      0.049907
+    ],
+    "winner": 0,
+    "payment": 0.049907,
+    "target_token": 25
+  },
+  {
+    "position": 157,
+    "bids": [
+      0.977098,
+      0.354302
+    ],
+    "winner": 0,
+    "payment": 0.354302,
+    "target_token": 197
+  },
+  {
+    "position": 158,
+    "bids": [
+      0.099253,
+      0.080254
+    ],
+    "winner": 0,
+    "payment": 0.080254,
+    "target_token": 3919
+  },
+  {
+    "position": 159,
+    "bids": [
+      0.50035,
+      0.237863
+    ],
+    "winner": 0,
+    "payment": 0.237863,
+    "target_token": 314
+  },
+  {
+    "position": 160,
+    "bids": [
+      0.107832,
+      0.063985
+    ],
+    "winner": 0,
+    "payment": 0.063985,
+    "target_token": 986
+  },
+  {
+    "position": 161,
+    "bids": [
+      0.973488,
+      0.071478
+    ],
+    "winner": 0,
+    "payment": 0.071478,
+    "target_token": 198
+  },
+  {
+    "position": 162,
+    "bids": [
+      0.882678,
+      0.218764
+    ],
+    "winner": 0,
+    "payment": 0.218764,
+    "target_token": 58
+  },
+  {
+    "position": 163,
+    "bids": [
+      0.100254,
+      0.024779
+    ],
+    "winner": 0,
+    "payment": 0.024779,
+    "target_token": 4033
+  },
+  {
+    "position": 164,
+    "bids": [
+      0.003396,
+      0.020822
+    ],
+    "winner": 1,
+    "payment": 0.003396,
+    "target_token": 3255
+  },
+  {
+    "position": 165,
+    "bids": [
+      0.062383,
+      0.103467
+    ],
+    "winner": 1,
+    "payment": 0.062383,
+    "target_token": 290
+  },
+  {
+    "position": 166,
+    "bids": [
+      0.020925,
+      0.024324
+    ],
+    "winner": 1,
+    "payment": 0.020925,
+    "target_token": 7720
+  },
+  {
+    "position": 167,
+    "bids": [
+      0.076386,
+      0.028904
+    ],
+    "winner": 0,
+    "payment": 0.028904,
+    "target_token": 12734
+  },
+  {
+    "position": 168,
+    "bids": [
+      0.423152,
+      0.237539
+    ],
+    "winner": 0,
+    "payment": 0.237539,
+    "target_token": 60
+  },
+  {
+    "position": 169,
+    "bids": [
+      0.975707,
+      0.062627
+    ],
+    "winner": 0,
+    "payment": 0.062627,
+    "target_token": 198
+  },
+  {
+    "position": 170,
+    "bids": [
+      0.881156,
+      0.218531
+    ],
+    "winner": 0,
+    "payment": 0.218531,
+    "target_token": 9
+  },
+  {
+    "position": 171,
+    "bids": [
+      0.404533,
+      0.049838
+    ],
+    "winner": 0,
+    "payment": 0.049838,
+    "target_token": 37
+  },
+  {
+    "position": 172,
+    "bids": [
+      0.978026,
+      0.025242
+    ],
+    "winner": 0,
+    "payment": 0.025242,
+    "target_token": 1404
+  },
+  {
+    "position": 173,
+    "bids": [
+      0.976295,
+      0.211854
+    ],
+    "winner": 0,
+    "payment": 0.211854,
+    "target_token": 25
+  },
+  {
+    "position": 174,
+    "bids": [
+      0.977435,
+      0.308315
+    ],
+    "winner": 0,
+    "payment": 0.308315,
+    "target_token": 197
+  },
+  {
+    "position": 175,
+    "bids": [
+      0.057683,
+      0.139557
+    ],
+    "winner": 1,
+    "payment": 0.057683,
+    "target_token": 40838
+  },
+  {
+    "position": 176,
+    "bids": [
+      0.232521,
+      0.025557
+    ],
+    "winner": 0,
+    "payment": 0.025557,
+    "target_token": 338
+  },
+  {
+    "position": 177,
+    "bids": [
+      0.194648,
+      0.010386
+    ],
+    "winner": 0,
+    "payment": 0.010386,
+    "target_token": 1115
+  },
+  {
+    "position": 178,
+    "bids": [
+      0.314693,
+      0.057816
+    ],
+    "winner": 0,
+    "payment": 0.057816,
+    "target_token": 1528
+  },
+  {
+    "position": 179,
+    "bids": [
+      0.487185,
+      0.12491
+    ],
+    "winner": 0,
+    "payment": 0.12491,
+    "target_token": 12979
+  },
+  {
+    "position": 180,
+    "bids": [
+      0.725314,
+      0.382877
+    ],
+    "winner": 0,
+    "payment": 0.382877,
+    "target_token": 13
+  },
+  {
+    "position": 181,
+    "bids": [
+      0.977116,
+      0.513872
+    ],
+    "winner": 0,
+    "payment": 0.513872,
+    "target_token": 198
+  },
+  {
+    "position": 182,
+    "bids": [
+      0.881333,
+      0.23045
+    ],
+    "winner": 0,
+    "payment": 0.23045,
+    "target_token": 9
+  },
+  {
+    "position": 183,
+    "bids": [
+      0.402735,
+      0.06483
+    ],
+    "winner": 0,
+    "payment": 0.06483,
+    "target_token": 4261
+  },
+  {
+    "position": 184,
+    "bids": [
+      0.818816,
+      0.027128
+    ],
+    "winner": 0,
+    "payment": 0.027128,
+    "target_token": 50
+  },
+  {
+    "position": 185,
+    "bids": [
+      0.973064,
+      0.038664
+    ],
+    "winner": 0,
+    "payment": 0.038664,
+    "target_token": 25
+  },
+  {
+    "position": 186,
+    "bids": [
+      0.97745,
+      0.356782
+    ],
+    "winner": 0,
+    "payment": 0.356782,
+    "target_token": 197
+  },
+  {
+    "position": 187,
+    "bids": [
+      0.058811,
+      0.148529
+    ],
+    "winner": 1,
+    "payment": 0.058811,
+    "target_token": 270
+  },
+  {
+    "position": 188,
+    "bids": [
+      0.649394,
+      0.028658
+    ],
+    "winner": 0,
+    "payment": 0.028658,
+    "target_token": 338
+  },
+  {
+    "position": 189,
+    "bids": [
+      0.194023,
+      0.009468
+    ],
+    "winner": 0,
+    "payment": 0.009468,
+    "target_token": 257
+  },
+  {
+    "position": 190,
+    "bids": [
+      0.043454,
+      0.011727
+    ],
+    "winner": 0,
+    "payment": 0.011727,
+    "target_token": 10662
+  },
+  {
+    "position": 191,
+    "bids": [
+      0.706899,
+      0.025055
+    ],
+    "winner": 0,
+    "payment": 0.025055,
+    "target_token": 13
+  },
+  {
+    "position": 192,
+    "bids": [
+      0.977717,
+      0.602792
+    ],
+    "winner": 0,
+    "payment": 0.602792,
+    "target_token": 198
+  },
+  {
+    "position": 193,
+    "bids": [
+      0.880799,
+      0.233785
+    ],
+    "winner": 0,
+    "payment": 0.233785,
+    "target_token": 9
+  },
+  {
+    "position": 194,
+    "bids": [
+      0.403261,
+      0.058674
+    ],
+    "winner": 0,
+    "payment": 0.058674,
+    "target_token": 3398
+  },
+  {
+    "position": 195,
+    "bids": [
+      0.970607,
+      0.210003
+    ],
+    "winner": 0,
+    "payment": 0.210003,
+    "target_token": 40
+  },
+  {
+    "position": 196,
+    "bids": [
+      0.977338,
+      0.115991
+    ],
+    "winner": 0,
+    "payment": 0.115991,
+    "target_token": 25
+  },
+  {
+    "position": 197,
+    "bids": [
+      0.977322,
+      0.287578
+    ],
+    "winner": 0,
+    "payment": 0.287578,
+    "target_token": 197
+  },
+  {
+    "position": 198,
+    "bids": [
+      0.092328,
+      0.128237
+    ],
+    "winner": 1,
+    "payment": 0.092328,
+    "target_token": 5562
+  },
+  {
+    "position": 199,
+    "bids": [
+      0.522376,
+      0.063296
+    ],
+    "winner": 0,
+    "payment": 0.063296,
+    "target_token": 534
+  }
+]
