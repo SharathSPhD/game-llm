@@ -115,6 +115,7 @@ The H4 experiment trained two 30M-parameter specialists on disjoint BabyLM subdo
 \small
 \caption{H4 auction scoring-time selection (F22): teacher-forced mixed-domain perplexity (lower is better). Auction selects the highest-confidence specialist at each token; ensemble averages logits uniformly; best/worst single specialists in isolation. Means and per-seed values shown.}
 \label{tab:auction_scoring}
+\resizebox{\textwidth}{!}{%
 \begin{tabular}{@{}lcccccc@{}}
 \toprule
 System & Seed 42 & Seed 43 & Seed 44 & Mean ppl & Ratio to best single & Win rate vs.\ ensemble \\
@@ -124,7 +125,8 @@ Ensemble & 199.3 & 215.1 & 208.3 & 207.9 & 0.880 & 0/3 \\
 Best specialist (S\_A) & 234.3 & 232.8 & 243.4 & 236.8 & 1.000 & --- \\
 Worst specialist (S\_B) & 1301.8 & 1167.7 & 1304.3 & 1242.4 & 5.254 & --- \\
 \bottomrule
-\end{tabular}
+\end{tabular}%
+}
 \end{table}
 
 The auction beats the best single specialist on all three seeds (paired $t = 4.98$). On a per-token basis, the mechanism's advantage is highest on child-directed-speech windows (where the resident specialist S\_A scores 13.8 ppl, the auction 26--33 ppl) and grows on domain-mixed regions as domain-specific specialists collapse off-domain (S\_A on Wikipedia: 3979--4280 ppl; S\_B on child-speech: 4477--4856 ppl). Confidence-bidding is imperfect within-domain but dominates any fixed commitment once domains alternate, because no single specialist remains in-domain for the entire mixed stream.

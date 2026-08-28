@@ -566,3 +566,46 @@ unchanged (they attach to the Anderson eval path, as scoped).
   any uptraining run.
 - **Status:** VALIDATED (design measurement, single seed — it selects a
   configuration, it does not claim a scientific result) · feeds SPEC 0011
+
+## F26 — H7 verdict (1.7B conversion): PARTIAL. Perplexity nearly recovers (1.19x base) while benchmark capability does not (0.533 retention), and the loss is strongly task-dependent — multi-step arithmetic collapses while commonsense likelihood survives
+
+- **Protocol (SPEC 0011, exp15 + exp15_eval):** Qwen3-1.7B converted to the
+  KineticLM topology at the F25 operating point (8 explicit layers at each end,
+  the middle 12 collapsed to one shared core applied 12 times) = 1.167B unique
+  parameters, **68% of base**. Uptrained on 98M FineWeb-Edu tokens (3.88 h on
+  one RTX 5090) with teacher distillation from the frozen base plus stochastic
+  anytime supervision at reduced depth. Evaluated with the SAME
+  lm-evaluation-harness invocation that produced the recorded base rates
+  (0-shot, 300-sample limit, batch 8, same machine).
+  Artifacts: results/scale/exp15_kinetic/, results/scale/exp15_eval_results.json.
+- **Perplexity recovers almost fully.** Held-out perplexity 13877 -> 20.84
+  against a base measured at **17.486 on the identical tokens** — a ratio of
+  **1.19x** after a budget 100-1000x smaller than published recursive-uptraining
+  recipes (10-100B tokens).
+- **Benchmark capability does not follow.** acc_norm ARC-Challenge 0.2900 vs
+  base 0.4433 (retention 0.654); HellaSwag 0.4633 vs 0.5067 (**0.914**);
+  GSM8K flexible-extract 0.0133 vs 0.4567 (**0.029**). Mean headline retention
+  **0.533**, far below the pre-registered 0.90 gate.
+- **The dissociation is the finding.** Language-modelling loss and downstream
+  capability come apart sharply under conversion: next-token prediction is
+  restored to within 19% while multi-step arithmetic is destroyed almost
+  entirely and commonsense likelihood is nearly untouched. The ordering
+  (HellaSwag 0.91 > ARC-C 0.65 > GSM8K 0.03) tracks how much composition over
+  many sequential steps a task requires, which is precisely what collapsing
+  twelve distinct layers into one repeated block removes. Perplexity on general
+  web text is therefore an unreliable progress signal for conversion work — a
+  practitioner watching only perplexity would have declared this run a success.
+- **The budget dial transfers.** Held-out perplexity 21.78 / 21.11 / 20.84 at
+  recursion depths 3 / 6 / 12: halving inference computation costs about 1% of
+  perplexity, reproducing the F24/B1 anytime property on a real pretrained model.
+- **Verdict vs SPEC 0011 gates: PARTIAL** — the parameter target (68% <= 70%)
+  and the graceful-degradation requirement are met; the >= 0.90 retention half
+  is missed at 0.533. Scoped honestly to the budget: 98M tokens is 100-1000x
+  below the recipes this method derives from, so the result bounds what one
+  GPU-day buys rather than what the architecture can reach.
+- **Consequence:** motivates the pre-registered H10 arms (SPEC 0014) —
+  depth-curriculum weighting and LoRA relaxation with rank annealed to zero —
+  which target recovery specifically rather than perplexity, and should be
+  scored on benchmark retention rather than loss.
+- **Status:** VALIDATED (single seed, design-screen scale) · verdict PARTIAL ·
+  Tarka pending · SIGN-OFF PENDING
