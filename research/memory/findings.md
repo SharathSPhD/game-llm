@@ -1136,3 +1136,90 @@ comparing against the best single player, which is the wrong bar.
 
 **Status:** VALIDATED (3 seeds, 360 questions, paired against the router) ·
 verdict NOT MET · closes ADR 0009's Phase 1b · Tarka PENDING
+
+## F37 — The solve is cheap; the council is not, and it buys nothing
+
+**Cycle 27 · 2026-08-28 · exp26 · GB10 · 12 prompts, 1,152 generated tokens**
+
+The PRD's cost argument holds that after one forward pass per player, the
+equilibrium solve is softmax and dot products over the vocabulary and therefore
+adds negligible time, so a council runs at ensemble cost. ADR 0009 flagged that
+cross-examination breaks the argument by being quadratic in council size. The
+autoresearch agent ranked measuring this first once the quality questions closed,
+and it is the only hypothesis in the belief state that this cycle confirmed.
+
+- **The solve is genuinely cheap.** Of 68.15 s of wall-clock for token-level
+  council decoding over three players, forward passes account for 65.94 s
+  (96.8%) and the equilibrium solve for 2.16 s (3.2%), at 1.875 ms per token
+  against 57.240 ms for the forwards. The claim that the solve adds negligible
+  time against the passes themselves is correct as stated.
+- **The council costs what an ensemble costs, which is the whole point and also
+  the problem.** Three players decode at 5.679 s per request against a single
+  model's 1.898 s, a factor of 2.99 — linear in council size, exactly as
+  designed. Peak memory 9.4 GB, well inside GB10's unified memory, so residency
+  is not the constraint.
+- **The comparison that matters is against the router, not the single model.**
+  F34's domain router pays one forward pass, the same as a single model, and F36
+  showed nothing beats it on quality. So the council's true position is
+  **three times the latency of the thing it fails to beat**. A negative result
+  that quantifies its own overhead is worth more than one reporting a tie, and
+  this is the number a practitioner would want first.
+- **Cross-examination is worse than linear and was not run.** It pays one full
+  decode per player to generate, then one forward pass over prompt and candidate
+  for every reader-writer pair — nine passes for three players, sixteen for four.
+  Its generation cost alone is the 3x above, before any scoring.
+- **A structural finding surfaced by the guard.** The four-player council does
+  not share a tokenizer: Qwen3-1.7B carries 151,669 tokens against Qwen2.5's
+  151,665, differing by four control tokens. Token-level aggregation across them
+  is therefore undefined, and the measurement above uses the three Qwen2.5
+  players that do agree. No earlier result is invalidated, since the answer-level
+  experiments aggregated over options and the cross-examination experiments
+  scored text, neither of which needs a shared vocabulary — but ADR 0008's
+  token-level decoder has never been runnable on the nominal council, and the
+  PRD's requirement that a shared tokenizer be enforced at load time rather than
+  assumed is vindicated by having caught it here rather than in a fluent-nonsense
+  output.
+- **Status:** VALIDATED · the cost hypothesis is MET and is the one positive
+  result of this cycle · Tarka PENDING
+
+## F38 — The hybrid does not survive held-out testing, and the action set is exhausted
+
+**Cycle 27 · 2026-08-28 · offline over exp23's 360 records**
+
+F36 noted that council rules beat the router where no specialist dominates and
+lose where one does, and that a hybrid routing mathematics while solving general
+knowledge reached 0.5778 against the router's 0.5611. That figure was flagged as
+a hindsight maximum, since which rule served which domain was chosen after seeing
+the numbers. Tested properly by fitting the per-domain rule choice on one seed
+and evaluating on the other two, across all three folds:
+
+- Fitting on seed 42 gives mathematics to the router and general knowledge to
+  self-preference, and scores 0.5583 held-out against the router's 0.5792, a
+  margin of $-0.0208$ ($z = -0.73$).
+- Fitting on seed 43 gives both domains to the equilibrium, scoring 0.5333
+  against 0.5500, margin $-0.0167$ ($z = -0.60$).
+- Fitting on seed 44 gives mathematics to the router and general knowledge to the
+  equilibrium, scoring 0.5625 against 0.5542, margin $+0.0083$ ($z = 0.37$).
+
+The mean margin is $-0.0097$: the hybrid is no better than the router, and the
+0.0167 gain reported in F36 was entirely hindsight. The rule selected differs in
+every fold, which is the more telling observation — if there were a stable
+per-domain signal, three folds drawn from the same distribution would agree about
+what it was.
+
+**The state of the action set.** With this closed, every candidate the
+autoresearch agent holds has near-zero or positive expected free energy:
+re-measuring latency 0.089 nats of information, a second model family 0.168, the
+offline simulation 0.022, cross-examination 0.060, distillation 0.033 against a
+cost of 0.333. The two hypotheses that would justify building anything sit at
+0.042. The agent is not stuck in the sense of being unable to choose; it is
+telling us that nothing in its action set is worth running, which is the correct
+output when the routes on offer have all been closed and is a different situation
+from an unresolved question.
+
+That is a limit of the method worth stating plainly. Expected Free Energy ranks
+actions; it does not invent them. When every action scores near zero the
+constraint has moved from selection to generation, and generating genuinely new
+candidates is an inventive step the loop cannot perform on its own.
+
+**Status:** VALIDATED (3 held-out folds) · closes the hybrid lead · Tarka PENDING

@@ -215,12 +215,22 @@ class EFEAgent:
         return gain
 
     def pragmatic_value(self, experiment: Experiment) -> float:
-        """Expected progress toward beating the baseline, in the same units.
+        """Expected progress toward the goal, in the same units.
 
         An experiment earns this by being likely to confirm something that
         matters. A probe that can only ever return bad news still has epistemic
         value — knowing a route is closed redirects effort — but it earns little
         here, which is the intended asymmetry.
+
+        The value is scaled by how unsettled the hypothesis still is, via
+        ``4q(1-q)``, which is one at maximum uncertainty and zero at either
+        certainty. Without that scaling the agent keeps proposing experiments
+        whose answers it already has: running this loop for real surfaced exactly
+        that, with a latency measurement still ranked first after the
+        measurement had been made and the hypothesis driven to 0.944, because
+        confirming something already believed still scored as progress. Progress
+        means changing what would be done next, and an outcome that is already
+        expected changes nothing.
         """
         value = 0.0
         for hyp, payoff in experiment.payoff.items():
@@ -229,7 +239,8 @@ class EFEAgent:
             p_true, p_false = experiment.diagnosticity[hyp]
             prior = self.beliefs[hyp]
             p_confirms = prior * p_true + (1 - prior) * p_false
-            value += payoff * p_confirms
+            still_open = 4.0 * prior * (1.0 - prior)
+            value += payoff * p_confirms * still_open
         return value
 
     def expected_free_energy(self, experiment: Experiment) -> EFEScore:

@@ -1,6 +1,6 @@
 {
-  "cycle": 26,
-  "phase": "Cycle 27: H10 closed NOT MET (F35); exp23 re-running on corrected arena; router is the bar (F34)",
+  "cycle": 27,
+  "phase": "Cycle 27 closed: F34-F38. All tested routes fail to beat a domain router; EFE action set exhausted, next step is candidate generation not selection",
   "current_rq": "RQ-3b (H1-prime a/b/c per ADR 0004)",
   "gpu_lock": false,
   "open_questions": [

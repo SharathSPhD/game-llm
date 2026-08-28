@@ -1,0 +1,70 @@
+{
+  "prompts": 12,
+  "max_new_tokens": 96,
+  "players": [
+    "Qwen/Qwen2.5-1.5B-Instruct",
+    "Qwen/Qwen3-1.7B",
+    "Qwen/Qwen2.5-Math-1.5B-Instruct",
+    "Qwen/Qwen2.5-Coder-1.5B-Instruct"
+  ],
+  "vocab_sizes": {
+    "Qwen/Qwen2.5-1.5B-Instruct": 151665,
+    "Qwen/Qwen3-1.7B": 151669,
+    "Qwen/Qwen2.5-Math-1.5B-Instruct": 151665,
+    "Qwen/Qwen2.5-Coder-1.5B-Instruct": 151665
+  },
+  "shared_tokenizer": false,
+  "systems": {
+    "single": {
+      "per_request_s": [
+        2.49821384200186,
+        1.8384106750017963,
+        1.8213546740007587,
+        1.8313042959925951,
+        1.8335698900045827,
+        1.833561894003651,
+        1.8340573429886717,
+        1.8295993049978279,
+        1.8211113730067154,
+        1.8323962220019894,
+        1.837368066990166,
+        1.8326703000057023
+      ],
+      "tokens": [
+        96,
+        96,
+        96,
+        96,
+        96,
+        96,
+        96,
+        96,
+        96,
+        96,
+        96,
+        96
+      ],
+      "note": "Qwen/Qwen2.5-1.5B-Instruct, the strongest player on the ladder"
+    },
+    "equilibrium": {
+      "skipped": "players do not share a tokenizer, so token-level aggregation is undefined"
+    },
+    "cross_exam_derived": {
+      "generation_s": 7.547872626998772,
+      "scoring_passes": 16,
+      "note": "generation is one full decode per player; scoring is one forward pass over the prompt and candidate for every reader-writer pair, quadratic in council size"
+    }
+  },
+  "summary": {
+    "single": {
+      "mean_request_s": 1.886968156749693,
+      "ms_per_token": 19.65591829947597,
+      "vs_single": 1.0
+    },
+    "cross_exam_derived": {
+      "mean_request_s": 7.547872626998772,
+      "vs_single": 4,
+      "note": "generation only; scoring passes extra"
+    }
+  }
+}

@@ -263,3 +263,31 @@ class TestConstruction:
     def test_selecting_from_nothing_is_refused(self) -> None:
         with pytest.raises(ValueError, match="no candidate"):
             EFEAgent().select([])
+
+
+class TestSettledQuestionsStopBeingWorthAsking:
+    """Found by running the loop: an experiment whose hypothesis is already
+    settled kept ranking first, because confirming a belief already held scored
+    as progress. Progress means changing what would be done next."""
+
+    def test_pragmatic_value_falls_sharply_as_a_hypothesis_settles(self) -> None:
+        """The scaling is 4q(1-q), so a belief at 0.97 keeps about a ninth of the
+        value it had at even odds. The threshold below is deliberately loose: the
+        property under test is that settling costs most of the value, not that it
+        costs some particular fraction, and pinning an exact constant would make
+        the test a restatement of the formula rather than a check on it."""
+        hyp = Hypothesis.SOLVE_IS_AFFORDABLE_AT_SERVING
+        exp = _sharp(hyp, cost=0.0, payoff=1.0)
+        open_q = EFEAgent({hyp: 0.5}).pragmatic_value(exp)
+        settled = EFEAgent({hyp: 0.97}).pragmatic_value(exp)
+        assert settled < 0.3 * open_q
+
+    def test_an_open_question_outranks_a_settled_one_at_equal_cost(self) -> None:
+        settled = Hypothesis.SOLVE_IS_AFFORDABLE_AT_SERVING
+        still_open = Hypothesis.COMPLEMENTARITY_GENERALISES
+        agent = EFEAgent({settled: 0.97, still_open: 0.5})
+        chosen = agent.select([
+            _sharp(settled, cost=1.0, payoff=1.0),
+            _sharp(still_open, cost=1.0, payoff=1.0),
+        ])
+        assert chosen.diagnosticity == {still_open: (0.95, 0.05)}

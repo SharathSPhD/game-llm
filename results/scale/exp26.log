@@ -1,0 +1,14 @@
+Loading weights:   0%|          | 0/338 [00:00<?, ?it/s]Loading weights:   0%|          | 1/338 [00:03<17:25,  3.10s/it]Loading weights:   1%|▏         | 5/338 [00:03<02:44,  2.03it/s]Loading weights:   2%|▏         | 7/338 [00:04<02:56,  1.87it/s]Loading weights:  11%|█         | 36/338 [00:06<00:39,  7.67it/s]Loading weights:  29%|██▉       | 99/338 [00:12<00:23, 10.09it/s]Loading weights:  63%|██████▎   | 214/338 [00:14<00:06, 20.56it/s]Loading weights:  83%|████████▎ | 280/338 [00:17<00:02, 21.87it/s]Loading weights: 100%|██████████| 338/338 [00:17<00:00, 19.33it/s]
+single done: 1.887s/request
+{
+  "single": {
+    "mean_request_s": 1.886968156749693,
+    "ms_per_token": 19.65591829947597,
+    "vs_single": 1.0
+  },
+  "cross_exam_derived": {
+    "mean_request_s": 7.547872626998772,
+    "vs_single": 4,
+    "note": "generation only; scoring passes extra"
+  }
+}

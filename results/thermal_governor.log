@@ -1615,3 +1615,7 @@
 2026-08-28T20:32:15+01:00 PAUSE at 84900mC (pid 1645353)
 2026-08-28T20:32:25+01:00 RESUME at 63700mC (pid 1645353)
 2026-08-28T20:32:35+01:00 DONE pid 1645353 exited
+2026-08-28T20:52:50+01:00 GUARD pid 1702908 pause=82000mC resume=74000mC :: .venv-scale/bin/python experiments/exp26_serving_latency.py 
+2026-08-28T20:53:40+01:00 DONE pid 1702908 exited
+2026-08-28T20:54:30+01:00 GUARD pid 1703723 pause=82000mC resume=74000mC :: .venv-scale/bin/python experiments/exp26_serving_latency.py --players Qwen/Qwen2.5-1.5B-Instruct,Qwen/Qwen2.5-Math-1.5B-
+2026-08-28T20:57:20+01:00 DONE pid 1703723 exited
