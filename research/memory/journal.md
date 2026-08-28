@@ -425,3 +425,37 @@
   model, server, and UI (suite 76 green on touched files). Lesson recorded:
   a working app with unexamined outputs is not a tested app — generation is
   the sensitive assay for eval-path bugs.
+
+## [cycle 23 | 2026-08-28] SCALE PROGRAM OPENED: 1-3B open-weight class
+- Operator goal: advance beyond BabyLM to the 1-3B instruct class, real LLM
+  output, kinetic architecture retained as the core, benchmark vs the same
+  open-weight bases, NVIDIA tooling, 5090 trains / GB10 parallel, productionize.
+- Research (web): Nemotron 3 Nano is 30B-MoE/3B-active; Qwen3-1.7B posts
+  MMLU 62-66 / GSM8K 75-79. From-scratch 1B is out (Qwen3 saw ~36T tokens).
+  Established route = uptrain a pretrained model into a looped/recursive form
+  (Relaxed Recursive Transformers 2410.20672; Huginn; Ouro). DEQ at >=1B is
+  UNEXPLORED (our opening); auction/mechanism-design decoding is the most
+  novel of our three directions.
+- INTEGRITY (ADR 0006): "Magnetic Preference Optimization" is ALREADY
+  PUBLISHED (arXiv 2410.16714, ICLR 2025) as policy-space MMD with self-play.
+  Ours is a different mechanism (parameter-space magnet on the DPO loss) but
+  the name collides: renamed PMA; paper must cite it and scope F21's negative
+  result to PMA. Recorded before any scale claim.
+- Built: KineticLM conversion module (object-identity weight tying with
+  distinct layer_idx -> KV cache, generate(), and lm-eval all work unmodified;
+  block-recursive n_cores; budget dial; anytime forward; HF-standard
+  persistence). 23 tests green. Two real bugs caught by tests/integration:
+  HF refuses shared-tensor saves; Qwen3 indexes config.layer_types per layer
+  (depth changes overflow it).
+- F25 damage curve measured before spending GPU-days: average init beats
+  stepwise 10-100x; explicit outer layers matter more than core count;
+  operating point 8+8/1-core = 68% params, ppl 1909 (base 6.01). SPEC 0011
+  parameter gate amended 60%->70% on that evidence, pre-registered.
+- RUNNING: exp15 KineticLM uptraining on 5090 (~98M tokens, distillation +
+  stochastic anytime supervision; smoke recovered ppl 9649->329 in 12 steps).
+  exp16 auction over real Qwen2.5-1.5B specialists on GB10 (40 GSM8K + 40
+  MMLU, closed-loop, objective accuracy). Baseline for comparison established
+  under lm-eval-harness on GB10: ARC-C 40.7 / HellaSwag 43.0 / GSM8K 45.7.
+- Ops lesson repeated and heeded: the first auction smoke showed chance-level
+  accuracy for EVERY system; inspecting the actual generations showed a
+  96-token truncation, not a science result.
