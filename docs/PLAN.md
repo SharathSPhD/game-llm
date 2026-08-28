@@ -9,10 +9,10 @@ in — a plan that survives contact unchanged was not specific enough.
 
 | # | Objective | Standing |
 |---|---|---|
-| O1 | A new paradigm, not incremental mimicry: the token distribution as a solved game | Paradigm defined (ADR 0008), implemented, unmeasured against baselines |
+| O1 | A new paradigm, not incremental mimicry: the token distribution as a solved game | Refuted at answer level (F29): indistinguishable from averaging, and higher influence rationality is harmful. Open in the sequential arena, where influence can follow verification of a jointly-authored prefix rather than confidence |
 | O2 | Retain the kinetic core — MMD, QRE, implicit depth, truthful auctions | Every component of O1 is one of these strands; F21's correction is what placed the magnet in policy space |
-| O3 | Beat the baseline ladder: Qwen3-1.7B matched, Qwen3-4B larger, Nemotron Nano sparse | Ladder measurement in progress on GB10 |
-| O4 | Domain teachers chosen from measured eval gaps, not a preset list | Blocked on the ladder; selection criteria fixed |
+| O3 | Beat the baseline ladder | Ladder measured (F28). The bar is Qwen2.5-1.5B-Instruct at 0.626 MMLU, not the nominally matched Qwen3-1.7B at 0.583; no aggregation yet exceeds 0.642 |
+| O4 | Domain teachers chosen from measured eval gaps, not a preset list | Deferred by F29: with 20 points of oracle headroom unclaimed, better players cannot be the bottleneck until selection works |
 | O5 | Top-down distillation from a larger model into the teachers | Not started; depends on O4 |
 | O6 | Ship API, then Hugging Face release, then dashboard | Not started; council must beat something first |
 | O7 | EFE-driven autoresearch with TRIZ for inventive steps | Active — cheap probes before decisive runs; TRIZ produced the recovery arms now training |
@@ -27,12 +27,33 @@ depend on numbers we produced rather than numbers from model cards. Running now
 on GB10 across MMLU, ARC-Challenge, HellaSwag, GSM8K, WinoGrande, PIQA and
 TruthfulQA for Qwen3-1.7B and the three candidate players.
 
-**Phase 1 — does the paradigm pay?** The decisive question before anything is
-built on top: does solving the equilibrium beat averaging, the auction, the best
-single player, and the oracle router on the same prompts? A cheap probe over the
-influence rationality and magnet strength narrows the parameter region first;
-the full comparison follows. If the equilibrium does not beat averaging here, it
-does not deserve a product, and the plan changes rather than the claim softening.
+**Phase 1 — does the paradigm pay?** *Answered, in part, and the answer moved
+this plan.* Aggregating over answer options let one GPU pass fund an unlimited
+offline sweep, so the comparison ran over 8,301 questions instead of the tens a
+generation sweep affords. Solving the equilibrium scored 0.6311 against uniform
+averaging's 0.6304 with a standard error of 0.0053, and raising the influence
+rationality cost up to eight points (F29). The mechanism did not merely fail to
+help; the thing it does is the thing that hurts.
+
+The diagnosis is specific and is what the plan now turns on. Influence follows
+each player's agreement with the emerging consensus, which rewards confidence,
+and confidence is not competence — the weakest player is no less emphatic for
+being wrong two questions in three. Weighting players by measured reliability is
+the only intervention that moved anything (+1.14 points), and a solved game
+added nothing on top of it. Meanwhile some player answers correctly on 83% of
+the questions against the best aggregate's 64%, so the council's complementarity
+is real and almost entirely unclaimed.
+
+**Phase 1b — influence from verification rather than confidence.** What answer
+level cannot test is the only part of the construction an ensemble cannot
+imitate: in generation the consensus is jointly authored, so a player conditions
+on a prefix it might not have chosen and can be asked to *score what the council
+proposed*. That is a verification signal rather than a confidence signal, and it
+is the one channel F29 leaves open. The council becomes a market in which a
+proposed continuation must clear the members' collective valuation, with
+truthful bidding (F6) keeping the valuations honest. This is the current
+decisive test, and it requires first repairing the generative harness, which F28
+found to be measuring formatting rather than capability.
 
 **Phase 2 — better players.** Teachers built for the domains the ladder shows to
 be weak, by fine-tuning, by distillation from a larger model, or by adopting an
@@ -76,8 +97,13 @@ silently applied.
 
 ## What would change this plan
 
-A finding that the equilibrium is indistinguishable from averaging at every
-setting, which would move effort to player quality instead of aggregation. A
+The first of these has now happened. F29 found the equilibrium indistinguishable
+from averaging at every setting tested, which under the previous version of this
+plan would have moved effort to player quality. It has not, and the reason is
+worth recording: the same measurement showed a 20-point per-example oracle gap,
+so the council's players are demonstrably good enough and selection is what
+fails. Moving to better players would have been the pre-committed response and
+the wrong one. What remains open is a
 latency measurement that breaks the cost argument. A ladder result showing the
 parameter-matched baseline is strong everywhere, which would push the comparison
 toward the larger baselines and change what counts as a win. Any of these is a
