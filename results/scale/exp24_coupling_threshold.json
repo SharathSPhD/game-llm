@@ -1,0 +1,244 @@
+{
+  "questions": 8000,
+  "seeds": 5,
+  "competence": [
+    0.6259999871253967,
+    0.5830000042915344,
+    0.5199999809265137,
+    0.39100000262260437
+  ],
+  "sweep": [
+    {
+      "coupling": 0.0,
+      "error_correlation": 0.0,
+      "best_single": 0.7135,
+      "oracle": 0.985,
+      "mean": 0.7699,
+      "game": 0.8084,
+      "game_beta4": 0.8105,
+      "game_beta16": 0.8113,
+      "stderr": 0.0025,
+      "best_game_minus_mean": 0.0414
+    },
+    {
+      "coupling": 0.0,
+      "error_correlation": 0.35,
+      "best_single": 0.6815,
+      "oracle": 0.9765,
+      "mean": 0.7097,
+      "game": 0.7427,
+      "game_beta4": 0.7441,
+      "game_beta16": 0.7456,
+      "stderr": 0.0025,
+      "best_game_minus_mean": 0.0359
+    },
+    {
+      "coupling": 0.0,
+      "error_correlation": 0.57,
+      "best_single": 0.6615,
+      "oracle": 0.97,
+      "mean": 0.6608,
+      "game": 0.6838,
+      "game_beta4": 0.6852,
+      "game_beta16": 0.6855,
+      "stderr": 0.0025,
+      "best_game_minus_mean": 0.0247
+    },
+    {
+      "coupling": 0.0,
+      "error_correlation": 0.8,
+      "best_single": 0.6408,
+      "oracle": 0.962,
+      "mean": 0.6017,
+      "game": 0.6132,
+      "game_beta4": 0.6132,
+      "game_beta16": 0.6126,
+      "stderr": 0.0025,
+      "best_game_minus_mean": 0.0115
+    },
+    {
+      "coupling": 0.35,
+      "error_correlation": 0.0,
+      "best_single": 0.7211,
+      "oracle": 0.9861,
+      "mean": 0.8242,
+      "game": 0.8344,
+      "game_beta4": 0.8333,
+      "game_beta16": 0.8303,
+      "stderr": 0.0025,
+      "best_game_minus_mean": 0.0102
+    },
+    {
+      "coupling": 0.35,
+      "error_correlation": 0.35,
+      "best_single": 0.6883,
+      "oracle": 0.9779,
+      "mean": 0.7638,
+      "game": 0.7704,
+      "game_beta4": 0.7691,
+      "game_beta16": 0.7664,
+      "stderr": 0.0025,
+      "best_game_minus_mean": 0.0066
+    },
+    {
+      "coupling": 0.35,
+      "error_correlation": 0.57,
+      "best_single": 0.6681,
+      "oracle": 0.9716,
+      "mean": 0.7091,
+      "game": 0.7127,
+      "game_beta4": 0.7108,
+      "game_beta16": 0.7076,
+      "stderr": 0.0025,
+      "best_game_minus_mean": 0.0036
+    },
+    {
+      "coupling": 0.35,
+      "error_correlation": 0.8,
+      "best_single": 0.6469,
+      "oracle": 0.9637,
+      "mean": 0.6429,
+      "game": 0.6439,
+      "game_beta4": 0.6396,
+      "game_beta16": 0.6356,
+      "stderr": 0.0025,
+      "best_game_minus_mean": 0.001
+    },
+    {
+      "coupling": 0.7,
+      "error_correlation": 0.0,
+      "best_single": 0.7211,
+      "oracle": 0.9861,
+      "mean": 0.8506,
+      "game": 0.8449,
+      "game_beta4": 0.8428,
+      "game_beta16": 0.8406,
+      "stderr": 0.0025,
+      "best_game_minus_mean": -0.0057
+    },
+    {
+      "coupling": 0.7,
+      "error_correlation": 0.35,
+      "best_single": 0.6883,
+      "oracle": 0.9779,
+      "mean": 0.7957,
+      "game": 0.7887,
+      "game_beta4": 0.7839,
+      "game_beta16": 0.7798,
+      "stderr": 0.0025,
+      "best_game_minus_mean": -0.007
+    },
+    {
+      "coupling": 0.7,
+      "error_correlation": 0.57,
+      "best_single": 0.6681,
+      "oracle": 0.9716,
+      "mean": 0.7443,
+      "game": 0.7393,
+      "game_beta4": 0.7333,
+      "game_beta16": 0.7274,
+      "stderr": 0.0025,
+      "best_game_minus_mean": -0.005
+    },
+    {
+      "coupling": 0.7,
+      "error_correlation": 0.8,
+      "best_single": 0.6469,
+      "oracle": 0.9637,
+      "mean": 0.6852,
+      "game": 0.6819,
+      "game_beta4": 0.6737,
+      "game_beta16": 0.6651,
+      "stderr": 0.0025,
+      "best_game_minus_mean": -0.0033
+    },
+    {
+      "coupling": 1.0,
+      "error_correlation": 0.0,
+      "best_single": 0.7211,
+      "oracle": 0.9861,
+      "mean": 0.8574,
+      "game": 0.8473,
+      "game_beta4": 0.846,
+      "game_beta16": 0.8431,
+      "stderr": 0.0025,
+      "best_game_minus_mean": -0.0101
+    },
+    {
+      "coupling": 1.0,
+      "error_correlation": 0.35,
+      "best_single": 0.6883,
+      "oracle": 0.9779,
+      "mean": 0.8051,
+      "game": 0.7934,
+      "game_beta4": 0.7892,
+      "game_beta16": 0.7854,
+      "stderr": 0.0025,
+      "best_game_minus_mean": -0.0117
+    },
+    {
+      "coupling": 1.0,
+      "error_correlation": 0.57,
+      "best_single": 0.6681,
+      "oracle": 0.9716,
+      "mean": 0.7572,
+      "game": 0.7475,
+      "game_beta4": 0.7413,
+      "game_beta16": 0.7362,
+      "stderr": 0.0025,
+      "best_game_minus_mean": -0.0097
+    },
+    {
+      "coupling": 1.0,
+      "error_correlation": 0.8,
+      "best_single": 0.6469,
+      "oracle": 0.9637,
+      "mean": 0.7011,
+      "game": 0.6944,
+      "game_beta4": 0.6858,
+      "game_beta16": 0.6791,
+      "stderr": 0.0025,
+      "best_game_minus_mean": -0.0067
+    }
+  ],
+  "measured_confidence_competence_correlation": {
+    "qwen3-1.7b": 0.3544,
+    "qwen2.5-base": 0.4427,
+    "qwen2.5-math": 0.2623,
+    "qwen2.5-coder": 0.4018
+  },
+  "regimes_where_game_wins": [
+    [
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.35
+    ],
+    [
+      0.0,
+      0.57
+    ],
+    [
+      0.0,
+      0.8
+    ],
+    [
+      0.35,
+      0.0
+    ]
+  ],
+  "at_measured_regime": {
+    "coupling": 0.35,
+    "error_correlation": 0.57,
+    "best_single": 0.6681,
+    "oracle": 0.9716,
+    "mean": 0.7091,
+    "game": 0.7127,
+    "game_beta4": 0.7108,
+    "game_beta16": 0.7076,
+    "stderr": 0.0025,
+    "best_game_minus_mean": 0.0036
+  }
+}

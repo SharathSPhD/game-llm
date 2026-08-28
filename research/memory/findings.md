@@ -836,3 +836,57 @@ both were tried.
   correctly fails here precisely because nothing new is on the table.
 - **Status:** VALIDATED (8,301 examples, held-out fitting for both repairs) ·
   verdict NOT MET · closes the answer-level arena · Tarka PENDING
+
+## F31 — Training players to be calibrated would make the game worse, not better
+
+**Cycle 26 · 2026-08-28 · exp24 · simulation anchored to the measured council**
+
+F29 attributed the influence game's failure to confidence not tracking
+competence. The natural remedy is to train players so that it does, which is
+expensive, so the premise was tested first by simulating a council with two
+dials: how tightly each player's confidence tracks its chance of being right on
+that question, and how often players that are wrong are wrong in the *same* way.
+Sixteen regimes, five seeds each, 8,000 questions per seed, with the players'
+standing competences set to the four measured in F28.
+
+- **Both dials were measured on the real council before being swept.** Confidence
+  correlates with correctness at 0.26 to 0.44 across the four players, placing
+  the council near a coupling of 0.35. Errors are strongly shared: when two
+  players are both wrong they choose the same wrong option 56.6% of the time
+  against the 34.2% expected if errors were independent, a ratio of 1.66, rising
+  to 0.68 between the base and coder variants.
+- **The remedy is refuted, and the sign is the opposite of the hypothesis.** The
+  game's margin over averaging falls monotonically as coupling rises: $+0.041$ at
+  coupling 0, $+0.010$ at 0.35, $-0.006$ at 0.70 and $-0.010$ at 1.0, against a
+  cell standard error of 0.0025. Solving the game helps only when confidence is
+  nearly uninformative and hurts once confidence becomes informative. Training
+  players to report competence faithfully would therefore move the council
+  *away* from the regime in which the game pays.
+- **The reason is the one F30 identified, seen from the other side.** When
+  confidence is informative, averaging is the larger beneficiary — the mean rises
+  from 0.709 to 0.757 at fixed error correlation as coupling goes from 0.35 to
+  1.0 — because informative confidences make every player's contribution worth
+  more, and averaging keeps all of them. Concentrating influence discards
+  corroboration, which is only a good trade when the discarded evidence was
+  worthless to begin with.
+- **Error correlation lowers every rule without changing which one wins.** Raising
+  it from 0 to 0.8 costs the mean between 12 and 17 points at every coupling, but
+  the sign of the game-minus-mean margin is set by coupling alone. Correlated
+  errors are therefore a problem for the council's ceiling, not an explanation of
+  the game's failure.
+- **Limitation, and it is material.** The simulation reproduces the *sign* of the
+  measured comparison at the measured regime — a tie, $+0.0036$ simulated against
+  $+0.0007$ observed — but not the magnitude of the degradation as influence
+  concentrates: eight points on the real council between $\beta = 0$ and
+  $\beta = 8$, against half a point in simulation. Something about real players'
+  score geometry punishes concentration far harder than this model does, so the
+  quantitative predictions here are not load-bearing and only the direction of
+  the coupling effect is claimed.
+- **Consequence.** The training-for-calibration branch is closed before any GPU
+  was spent on it, which is what the probe existed to decide. ADR 0009's
+  direction is unaffected and, if anything, reinforced: cross-examination adds
+  candidates rather than concentrating influence over fixed ones, and every
+  measurement in this cycle points the same way — a council is helped by having
+  more evidence weighed and harmed by having evidence discarded.
+- **Status:** VALIDATED (16 regimes, 5 seeds) · closes the calibration-training
+  branch · simulation, not measurement, and scoped accordingly · Tarka PENDING
