@@ -264,7 +264,6 @@ class TestDepthLoRARelaxation:
         return m
 
     def test_adds_parameters_but_far_fewer_than_untying(self, base) -> None:
-        from kinetic_ai.models.kinetic_lm import add_depth_lora
 
         plain = convert_to_kinetic(_tiny_base(), KineticConfig(n_pre=2, n_post=2, n_cores=1))
         n_plain = count_unique_params(plain)

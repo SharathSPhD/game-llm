@@ -344,7 +344,10 @@ confidence is still not competence.
 \begin{table}[t]
 \centering
 \caption{Aggregation rules over identical stored per-option loglikelihoods,
-8{,}301 questions, standard error $0.0053$ on a single accuracy. The paired
+8{,}301 questions, standard error $0.0053$ on a single accuracy. The average is
+computed directly here and by the solver at $\beta = 0$ in the influence-game
+rows, which differ on one question through tie-breaking and so read $0.6305$ and
+$0.6304$ respectively. The paired
 $z$ compares each rule against the mean on the subset where the two disagree,
 since agreeing predictions contribute nothing to the variance of the difference.
 Competence weights and temperatures are fitted on a held-out half of each task
@@ -356,7 +359,7 @@ half-sample average of $0.6301$.}
 Family & Rule & Accuracy & Paired $z$ vs.\ mean \\
 \midrule
 \multirow{2}{*}{Reference} & Best single player & 0.6253 & --- \\
- & Uniform average (mean) & 0.6304 & --- \\
+ & Uniform average (mean) & 0.6305 & --- \\
 \midrule
 \multirow{4}{*}{Influence game} & $\beta = 0.25$, $\tau = 0$ (grid best) & 0.6311 & --- \\
  & $\beta = 2$, $\tau = 0$ & 0.6003 & --- \\

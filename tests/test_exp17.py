@@ -7,7 +7,6 @@ contrasting chosen/rejected responses to the same prompt.
 
 from __future__ import annotations
 
-import json
 import sys
 import tempfile
 from pathlib import Path
@@ -62,7 +61,7 @@ def _tiny_preference_dataset(tokenizer, n_pairs: int = 10, seq_len: int = 32, vo
     dataset = []
     pad_token_id = 0  # Use 0 for padding in tiny vocab
 
-    for i in range(n_pairs):
+    for _i in range(n_pairs):
         # Generate random token sequences within vocab_size
         # Make chosen and rejected slightly different
         chosen_len = seq_len - 4
@@ -229,7 +228,6 @@ class TestExperiment17:
 
     def test_exp17_run_with_tiny_config(self) -> None:
         """Integration test: run exp17 with tiny smoke config."""
-        from experiments.exp17_pma_dpo import main
 
         # Create temporary output directory
         with tempfile.TemporaryDirectory() as tmpdir:

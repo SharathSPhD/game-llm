@@ -49,8 +49,6 @@ class TestB1Unrolled:
         outs = tiny_eqlm.forward_unrolled(ids, supervise_at=[2])
         loss = outs[0][1].sum()
         loss.backward()
-        g = tiny_eqlm.block.attn.in_proj_weight.grad if hasattr(
-            tiny_eqlm.block, "attn") else None
         grads = [p.grad for p in tiny_eqlm.block.parameters() if p.grad is not None]
         assert grads and any(g.abs().sum() > 0 for g in grads), \
             "early-iterate loss must reach block parameters"

@@ -17,14 +17,14 @@ import torch
 
 from kinetic_ai.config import BregmanType, MMDConfig
 from kinetic_ai.models.eqlm import (
-    load_checkpoint,
-    save_checkpoint,
     EqLM,
     EqLMBlock,
     EqLMConfig,
     ExplicitLM,
     count_params,
+    load_checkpoint,
     match_explicit_width,
+    save_checkpoint,
 )
 from kinetic_ai.optim.mmd import MagneticMirrorDescent
 
