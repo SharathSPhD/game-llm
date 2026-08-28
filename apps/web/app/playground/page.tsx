@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { DemoBadge } from "../components/DemoBadge";
 
 interface ModelEntry {
   path: string;
@@ -229,6 +230,7 @@ export default function PlaygroundPage() {
         {result && (
           <div className="output-panel">
             <h2>Output</h2>
+            {(result as { replay?: boolean }).replay && <DemoBadge />}
 
             <div className="stats">
               <div className="stat">

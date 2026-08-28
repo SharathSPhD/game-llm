@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { DemoBadge } from "../components/DemoBadge";
 import { QREPathResponse } from "@/lib/replay-data";
 import { Loader2 } from "lucide-react";
 
@@ -171,6 +172,7 @@ export default function QREPage() {
           {result ? (
             <div className="card">
               <h3>QRE Path Results</h3>
+              {(result as { replay?: boolean }).replay && <DemoBadge />}
 
               <div style={{ marginTop: "1.5rem" }}>
                 <h4>Exploitability vs. Rationality</h4>

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { DemoBadge } from "../../components/DemoBadge";
 import { SolveResponse, TrajectoryPoint } from "@/lib/replay-data";
 import { Loader2 } from "lucide-react";
 
@@ -179,6 +180,7 @@ export function EquilibriumLab() {
           {result ? (
             <div className="card">
               <h3>Convergence Results</h3>
+              {(result as { replay?: boolean }).replay && <DemoBadge />}
               <div
                 style={{
                   display: "grid",

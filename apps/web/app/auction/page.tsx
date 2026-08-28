@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { DemoBadge } from "../components/DemoBadge";
 import { AuctionResponse } from "@/lib/replay-data";
 import { Loader2 } from "lucide-react";
 
@@ -368,6 +369,7 @@ export default function AuctionPage() {
 
         {result && (
           <div className="card" style={{ marginTop: "2rem" }}>
+            {(result as { replay?: boolean }).replay && <DemoBadge />}
             <h3>Auction Results</h3>
 
             <div

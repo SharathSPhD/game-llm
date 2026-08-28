@@ -196,3 +196,78 @@ export function getReplayAuctionResponse(params: {
     replay: true,
   };
 }
+
+// ── Demo replay for unauthorized visitors ────────────────────────────────────
+// Served (clearly flagged with replay: true) when a visitor is not signed in
+// or not tier-enabled. The auction trace sample is REAL data from the F22
+// evaluation (exp12 seed 42, first 12 positions), embedded verbatim.
+
+export function getReplayPlaygroundResponse(params: {
+  prompt: string;
+  max_new_tokens: number;
+  solver_budget: number;
+}) {
+  const words = [
+    " the", " equilibrium", " of", " the", " game", " is", " a", " fixed",
+    " point", " of", " the", " learning", " dynamics", ".", " Each", " player",
+  ];
+  const n = Math.max(1, Math.min(params.max_new_tokens, words.length));
+  const tokens = words.slice(0, n).map((w) => ({
+    token_str: w,
+    solver_iters: params.solver_budget,
+  }));
+  return {
+    text: params.prompt + tokens.map((t) => t.token_str).join(""),
+    tokens,
+    mean_iters: params.solver_budget,
+    wall_ms: 42.0,
+    replay: true,
+  };
+}
+
+export function getReplayModelsResponse() {
+  return {
+    models: [
+      {
+        path: "demo/checkpoints/eqlm_demo.pt",
+        model_class: "EqLM",
+        num_params: 120696016,
+        label: "EqLM 121M (demo replay — sign in for live checkpoints)",
+      },
+    ],
+    replay: true,
+  };
+}
+
+const F22_DEMO_TRACES = [
+  { position: 0, bids: [0.3934, 0.0771], winner: 0, payment: 0.0771, target_token: 3398 },
+  { position: 1, bids: [0.9703, 0.0547], winner: 0, payment: 0.0547, target_token: 40 },
+  { position: 2, bids: [0.978, 0.1264], winner: 0, payment: 0.1264, target_token: 25 },
+  { position: 3, bids: [0.9748, 0.2044], winner: 0, payment: 0.2044, target_token: 197 },
+  { position: 4, bids: [0.1133, 0.0278], winner: 0, payment: 0.0278, target_token: 259 },
+  { position: 5, bids: [0.305, 0.2079], winner: 0, payment: 0.2079, target_token: 262 },
+  { position: 6, bids: [0.0196, 0.0088], winner: 0, payment: 0.0088, target_token: 2119 },
+  { position: 7, bids: [0.6711, 0.1347], winner: 0, payment: 0.1347, target_token: 351 },
+  { position: 8, bids: [0.9782, 0.2333], winner: 0, payment: 0.2333, target_token: 257 },
+  { position: 9, bids: [0.8769, 0.2156], winner: 0, payment: 0.2156, target_token: 345 },
+  { position: 10, bids: [0.0957, 0.0461], winner: 0, payment: 0.0461, target_token: 1849 },
+  { position: 11, bids: [0.1884, 0.0711], winner: 0, payment: 0.0711, target_token: 287 },
+];
+
+export function getReplayTracesListResponse() {
+  return { seeds: [42], replay: true };
+}
+
+export function getReplayTracesResponse(seed: number) {
+  return {
+    seed,
+    traces: F22_DEMO_TRACES,
+    summary: {
+      h4_score: "MET",
+      domains: { a: "childes", b: "simple_wiki" },
+      perplexity_mixed: { S_A: 234.3, S_B: 1241.8, ENS: 208.3, AUC: 158.5 },
+      auction_win_frac_a: 0.598,
+    },
+    replay: true,
+  };
+}
