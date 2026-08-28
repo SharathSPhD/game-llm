@@ -1,6 +1,6 @@
 {
   "cycle": 26,
-  "phase": "Phase 1: influence game refuted at answer level (F29); moving to the sequential arena",
+  "phase": "Phase 1b: cross-examination arena (ADR 0009); GSM8K re-measurement then exp23 x3 seeds on GB10",
   "current_rq": "RQ-3b (H1-prime a/b/c per ADR 0004)",
   "gpu_lock": false,
   "open_questions": [
@@ -18,5 +18,6 @@
     "GB10 cooling defect (hardware): 12C die-vs-platform sensor gap at ~60W, BMC power-throttle to ~60W despite no kernel throttle flag, hard trip ~91C. Confirmed via live telemetry + NVIDIA forum cross-reference (RMA channel: FieldDiag PowerStress MODS-020000600139). FieldDiag itself blocked here: mods.ko builds/signs but insmod rejected under Secure Boot ('Key was rejected by service'); box is SSH-only so the UEFI disable-Secure-Boot/re-enable round trip needs physical/console access not currently available. Operator directive (2026-08-26): GB10 excluded from ALL GPU workload until RMA/repair; GB10 stays available for serving/evals/CPU-bound work only."
   ],
   "next_action": "Harvest exp15 (KineticLM uptraining -> lm-eval retention vs base ARC 40.7/HS 43.0/GSM8K 45.7) and exp16 (auction H9 verdict). Then: SPEC 0012 PMA-vs-DPO at 1.7B on the 5090; paper related-work fix for the MPO collision; app productization (chat + leaderboard + equilibrium controls). Specs 0011-0013 pre-registered; ADR 0006 binding.",
-  "gpu_lock_holder": "5090: exp15 KineticLM uptraining | GB10: exp16 auction (parallel, both authorized)"
+  "gpu_lock_holder": "5090: exp15 KineticLM uptraining | GB10: exp16 auction (parallel, both authorized)",
+  "adrs": []
 }
