@@ -82,7 +82,7 @@ class Example:
         return self.normed if normalised else self.raw
 
 
-def _example_matrix(records: list[dict[str, Any]]) -> Example | None:
+def _example_matrix(records: list[dict[str, Any]], gold: int) -> Example | None:
     """Per-player option scores for one example.
 
     Returns raw loglikelihood sums, the same scores normalised per option by
@@ -102,56 +102,142 @@ def _example_matrix(records: list[dict[str, Any]]) -> Example | None:
         [[max(len(str(c)), 1) for c in _completions(records[0])]],
         dtype=torch.float32,
     )
-    gold = _gold_index(records[0])
-    if gold is None:
+    if not 0 <= gold < raw.shape[-1]:
         return None
     return Example(raw=raw, normed=raw / lengths, gold=gold)
 
 
 def _completions(rec: dict[str, Any]) -> list[str]:
+    """The candidate continuations, in the order their scores were recorded.
+
+    The harness writes these either as a mapping ``gen_args_N -> {arg_0: context,
+    arg_1: continuation}`` or as bare pairs, depending on version, and the order
+    of the mapping is the order of ``filtered_resps``.
+    """
     args = rec.get("arguments", {})
     if isinstance(args, dict):
-        return [v[1] for v in args.values()]
-    return [a[1] for a in args]
+        out = []
+        for value in args.values():
+            if isinstance(value, dict):
+                out.append(str(value.get("arg_1", "")))
+            else:
+                out.append(str(value[1]))
+        return out
+    return [str(a[1]) for a in args]
 
 
-def _gold_index(rec: dict[str, Any]) -> int | None:
+def _raw_target(rec: dict[str, Any]) -> int | None:
+    """The task's answer label as an integer, before any convention is assumed.
+
+    Tasks disagree about what the integer means — ARC and HellaSwag label options
+    from zero, WinoGrande from one — so this deliberately does not resolve the
+    label into a position. ``_calibrate_offset`` does that from evidence.
+    """
+    # The harness's own ``target`` is authoritative and is consulted first. The
+    # raw document fields are a fallback only, because they can disagree with it
+    # under a different convention within a single task: ARC records carry
+    # ``target`` "1" alongside ``answerKey`` 2 for the same question, and reading
+    # the document field first mixes two conventions inside one task, which no
+    # single offset can then repair.
     tgt = rec.get("target")
     if isinstance(tgt, int):
         return tgt
+    if isinstance(tgt, str):
+        if tgt.strip().isdigit():
+            return int(tgt.strip())
+        if len(tgt.strip()) == 1 and tgt.strip().upper() in "ABCDE":
+            return "ABCDE".index(tgt.strip().upper())
+        # Matching the target against the continuations only identifies an
+        # option when exactly one matches. WinoGrande varies the *context*
+        # between its two options and repeats the same continuation in both, so
+        # a first-match lookup would silently always return option zero.
+        comps = [c.strip() for c in _completions(rec)]
+        if comps.count(tgt.strip()) == 1:
+            return comps.index(tgt.strip())
     doc = rec.get("doc", {})
-    for key in ("label", "answer", "gold"):
+    for key in ("label", "answer", "gold", "answerKey"):
         if key in doc:
             val = doc[key]
             if isinstance(val, int):
                 return val
             if isinstance(val, str):
-                if val.isdigit():
-                    return int(val)
-                if len(val) == 1 and val.upper() in "ABCDE":
-                    return "ABCDE".index(val.upper())
-    if isinstance(tgt, str):
-        comps = [str(c).strip() for c in _completions(rec)]
-        if tgt.strip() in comps:
-            return comps.index(tgt.strip())
+                if val.strip().isdigit():
+                    return int(val.strip())
+                if len(val.strip()) == 1 and val.strip().upper() in "ABCDE":
+                    return "ABCDE".index(val.strip().upper())
     return None
 
 
-def collect(root: Path) -> dict[str, list[Example]]:
-    """Align every player on the examples all of them scored."""
+def _calibrate_offset(records: list[dict[str, Any]]) -> int | None:
+    """Recover a task's label convention from the harness's own scoring.
+
+    Every logged record carries both the model's option scores and the ``acc``
+    the harness awarded, so the correct label-to-position mapping is the one
+    under which "the top-scoring option is the labelled one" agrees with the acc
+    the harness actually recorded. Testing that, rather than assuming zero-based
+    labels, is what catches an off-by-one: WinoGrande labels from one, and
+    reading its labels as positions scored the players at 0.13 against a true
+    0.63 — an error large enough to invert every conclusion, and silent, because
+    a wrong index still produces a plausible-looking number.
+    """
+    best, best_hits = None, -1
+    for offset in (0, -1):
+        hits = 0
+        total = 0
+        for rec in records:
+            tgt = _raw_target(rec)
+            if tgt is None or "acc" not in rec:
+                continue
+            gold = tgt + offset
+            scores = [float(r[0]) for r in rec["filtered_resps"]]
+            if not 0 <= gold < len(scores):
+                total += 1
+                continue
+            predicted = max(range(len(scores)), key=lambda i: scores[i])
+            hits += int((predicted == gold) == (float(rec["acc"]) == 1.0))
+            total += 1
+        if total and hits > best_hits:
+            best, best_hits = offset, hits
+        if total:
+            _CALIBRATION.setdefault(id(records), {})[offset] = hits / total
+    return best
+
+
+_CALIBRATION: dict[int, dict[int, float]] = {}
+
+
+def collect(root: Path) -> tuple[dict[str, list[Example]], dict[str, Any]]:
+    """Align every player on the examples all of them scored.
+
+    Returns the per-task examples and a provenance record of how each task's
+    label convention was resolved, so a later reader can see that the mapping
+    was established rather than assumed.
+    """
     loaded = {p: _load_samples(root, p) for p in PLAYERS}
     tasks = set.intersection(*(set(v) for v in loaded.values()))
     per_task: dict[str, list[Example]] = {}
+    provenance: dict[str, Any] = {}
     for task in sorted(tasks):
-        ids = set.intersection(*(set(loaded[p][task]) for p in PLAYERS))
+        ids = sorted(set.intersection(*(set(loaded[p][task]) for p in PLAYERS)))
+        anchor = [loaded[PLAYERS[0]][task][i] for i in ids]
+        offset = _calibrate_offset(anchor)
+        agreement = _CALIBRATION.get(id(anchor), {})
+        if offset is None or agreement.get(offset, 0.0) < 0.99:
+            provenance[task] = {"dropped": True, "agreement": agreement}
+            continue
+        provenance[task] = {"offset": offset, "agreement": agreement[offset]}
         rows: list[Example] = []
-        for doc_id in sorted(ids):
-            got = _example_matrix([loaded[p][task][doc_id] for p in PLAYERS])
+        for doc_id in ids:
+            records = [loaded[p][task][doc_id] for p in PLAYERS]
+            tgt = _raw_target(records[0])
+            if tgt is None:
+                continue
+            got = _example_matrix(records, tgt + offset)
             if got is not None:
                 rows.append(got)
         if rows:
             per_task[task] = rows
-    return per_task
+    return per_task, provenance
 
 
 def _as_player_logits(scores: torch.Tensor) -> torch.Tensor:
@@ -210,7 +296,7 @@ def main() -> int:
     ap.add_argument("--normalised", action="store_true", default=True)
     args = ap.parse_args()
 
-    per_task = collect(Path(args.root))
+    per_task, provenance = collect(Path(args.root))
     if not per_task:
         print("no aligned samples found", file=sys.stderr)
         return 1
@@ -225,6 +311,7 @@ def main() -> int:
     report: dict[str, Any] = {
         "players": [SHORT[p] for p in PLAYERS],
         "tasks": {t: len(r) for t, r in per_task.items()},
+        "label_calibration": provenance,
         "pooled": evaluate(pooled, args.normalised),
         "per_task": {t: evaluate(r, args.normalised) for t, r in per_task.items()},
         "sweep": [],
