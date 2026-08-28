@@ -58,7 +58,7 @@ dev = [
 data = [
     "datasets>=2.14",
     "tokenizers>=0.15",
-    "transformers>=4.35",
+    "transformers>=5.0",  # Qwen3 configs, and get_vocab() over the removed .encoder
 ]
 experiments = [
     "matplotlib>=3.7",

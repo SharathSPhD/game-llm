@@ -95,8 +95,11 @@ def load_or_build_tokenizer(
     # Try GPT-2 first (offline)
     gpt2_tok = load_gpt2_tokenizer()
     if gpt2_tok is not None:
-        # Convert GPT-2 tokenizer to our format
-        token2id = gpt2_tok.encoder
+        # Convert GPT-2 tokenizer to our format. `get_vocab()` is the stable
+        # accessor across tokenizer implementations; the `.encoder` attribute it
+        # replaces was specific to the slow GPT-2 tokenizer and was removed in
+        # transformers 5.
+        token2id = gpt2_tok.get_vocab()
         id2token = {v: k for k, v in token2id.items()}
         return token2id, id2token, "gpt2"
 

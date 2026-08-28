@@ -93,7 +93,7 @@ def build_tasks(cfg: dict) -> list[dict]:
 
     mmlu = load_dataset("cais/mmlu", "all", split="test").shuffle(seed=cfg["seed"])
     for row in mmlu.select(range(n_gen)):
-        choices = "\n".join(f"{c}. {t}" for c, t in zip("ABCD", row["choices"]))
+        choices = "\n".join(f"{c}. {t}" for c, t in zip("ABCD", row["choices"], strict=True))
         tasks.append(
             {
                 "domain": "general",

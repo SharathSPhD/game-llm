@@ -100,7 +100,35 @@ def _get_by_path(module: nn.Module, path: str) -> nn.Parameter:
     target: Any = module
     for part in path.split("."):
         target = getattr(target, part)
+    assert isinstance(target, nn.Parameter), f"{path} is not a parameter"
     return target
+
+
+def _decoder_layers(model: nn.Module) -> nn.ModuleList:
+    """The transformer block list of a causal language model.
+
+    Reaching through ``model.model.layers`` directly defeats type checking,
+    because ``nn.Module.__getattr__`` is declared to return ``Tensor | Module``
+    and the block list is neither as far as the checker knows. Localising the
+    access here states the one structural assumption this module makes about the
+    models it converts, and states it once rather than at every call site.
+    """
+    inner = getattr(model, "model", None)
+    layers = getattr(inner, "layers", None)
+    if not isinstance(layers, nn.ModuleList):
+        raise TypeError(
+            f"{type(model).__name__} does not expose model.layers as a ModuleList; "
+            "conversion supports decoder stacks of that shape only"
+        )
+    return layers
+
+
+def _set_decoder_layers(model: nn.Module, layers: nn.ModuleList) -> None:
+    """Replace the block list, the counterpart of :func:`_decoder_layers`."""
+    inner = getattr(model, "model", None)
+    if inner is None:
+        raise TypeError(f"{type(model).__name__} has no inner model to restructure")
+    inner.layers = layers
 
 
 def _tie_to(source: nn.Module, target: nn.Module) -> None:
@@ -282,7 +310,7 @@ class DepthLoRALinear(nn.Module):
         return self.base.weight
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
-        out = self.base(x)
+        out: torch.Tensor = self.base(x)
         if self.scale:
             out = out + self.scale * F.linear(F.linear(x, self.lora_a), self.lora_b)
         return out
@@ -343,7 +371,7 @@ def convert_to_kinetic(model: nn.Module, config: KineticConfig) -> Any:
         The same model object, restructured and augmented with the KineticLM
         API (``recursion_depth``, ``set_recursion_depth``, ``forward_at_depths``).
     """
-    layers = list(model.model.layers)  # type: ignore[attr-defined]
+    layers = list(_decoder_layers(model))
     n_layers = len(layers)
     n_middle = n_layers - config.n_pre - config.n_post
     if n_middle < 2:
@@ -366,9 +394,13 @@ def convert_to_kinetic(model: nn.Module, config: KineticConfig) -> Any:
     cls = type(model)
     if not isinstance(model, _KineticMixin):
         model.__class__ = type(f"Kinetic{cls.__name__}", (_KineticMixin, cls), {})
-    model.kinetic_config = config  # type: ignore[attr-defined]
-    model._core_layers = cores  # type: ignore[attr-defined]
-    model._core_layer = cores[0]  # type: ignore[attr-defined]  # back-compat alias
+    # The class was just rewritten to mix in _KineticMixin, so these attributes
+    # are part of the object's interface from here on even though the static
+    # type of `model` cannot express that.
+    kinetic: Any = model
+    kinetic.kinetic_config = config
+    kinetic._core_layers = cores
+    kinetic._core_layer = cores[0]  # back-compat alias
 
     pre = layers[: config.n_pre]
     post = layers[n_layers - config.n_post :] if config.n_post else []
@@ -379,7 +411,7 @@ def convert_to_kinetic(model: nn.Module, config: KineticConfig) -> Any:
     new_layers = nn.ModuleList(pre + core_stack + post)
     for i, layer in enumerate(new_layers):
         _set_layer_idx(layer, i)
-    model.model.layers = new_layers  # type: ignore[attr-defined]
+    _set_decoder_layers(model, new_layers)
     _sync_config_for_layers(model, config.n_pre, depth * len(cores), config.n_post)
     return model
 
@@ -405,9 +437,10 @@ def load_kinetic(path: str | Path, **kwargs: Any) -> Any:
     cores = [layers[kin_cfg.n_pre + i * per_core] for i in range(kin_cfg.n_cores)]
     cls = type(model)
     model.__class__ = type(f"Kinetic{cls.__name__}", (_KineticMixin, cls), {})
-    model.kinetic_config = kin_cfg
-    model._core_layers = cores
-    model._core_layer = cores[0]
+    kinetic: Any = model
+    kinetic.kinetic_config = kin_cfg
+    kinetic._core_layers = cores
+    kinetic._core_layer = cores[0]
 
     core_stack: list[nn.Module] = []
     for c in cores:

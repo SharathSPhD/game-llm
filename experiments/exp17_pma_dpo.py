@@ -76,7 +76,7 @@ def load_config(path: str) -> dict:
     for section in ["training", "arms"]:
         if section in cfg:
             if section == "arms":
-                for arm_name, arm_cfg in cfg["arms"].items():
+                for _arm_name, arm_cfg in cfg["arms"].items():
                     if isinstance(arm_cfg.get("tau"), str):
                         arm_cfg["tau"] = float(arm_cfg["tau"])
             else:
@@ -282,15 +282,9 @@ def run_arm(
         model.gradient_checkpointing_enable()
         model.config.use_cache = False
 
-    # Initialize base reference for MagneticAdamW
-    ref_weights = None
-    if arm_cfg.get("optimizer_type") == "magnetic_adamw":
-        ref_weights = {
-            name: param.data.clone().detach()
-            for name, param in model.named_parameters()
-            if param.requires_grad
-        }
-
+    # No reference snapshot is taken here: MagneticAdamW clones each parameter
+    # into its own reference state on the first step where tau > 0, so a second
+    # copy of the full parameter set would be dead weight in both senses.
     # Build optimizer based on arm config
     lr = float(tr["lr"])
     wd = float(tr.get("weight_decay", 0.01))
@@ -483,7 +477,7 @@ def main() -> None:
     if tokenizer.pad_token is None:
         tokenizer.pad_token = tokenizer.eos_token
 
-    print(f"[data] loading preference data...", flush=True)
+    print("[data] loading preference data...", flush=True)
     ds = load_preference_data(cfg, tokenizer)
 
     # Split into train/heldout

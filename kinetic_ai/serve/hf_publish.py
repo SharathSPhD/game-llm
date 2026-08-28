@@ -382,4 +382,4 @@ def publish_checkpoint_to_hf(
     except Exception as e:
         raise RuntimeError(f"Failed to upload model card to {repo_id}: {e}") from e
 
-    return repo_url
+    return str(repo_url)
