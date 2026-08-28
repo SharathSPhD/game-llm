@@ -1,0 +1,42 @@
+{
+  "_comment": "Cycle 28, after F34-F38 closed selection over the existing action set. TRIZ (principles 13/8/24/10, .triz/session.jsonl) generated a new mechanism: the magnetically anchored answer vote, whose tau->inf limit IS the router, so its floor is the bar by construction. New hypothesis added for it.",
+  "beliefs": {
+    "verification_beats_aggregation": 0.042,
+    "better_players_raise_the_ceiling": 0.042,
+    "solve_is_affordable_at_serving": 0.944,
+    "complementarity_generalises": 0.182,
+    "anchored_vote_beats_router": 0.5
+  },
+  "cost_weight": 0.0417,
+  "cost_units": "GPU-hours; one day of GPU time trades against one nat",
+  "candidates": [
+    {
+      "name": "exp27_anchored_vote_offline",
+      "cost": 0.0,
+      "diagnosticity": {"anchored_vote_beats_router": [0.8, 0.2]},
+      "payoff": {"anchored_vote_beats_router": 1.0},
+      "description": "MAAV over exp23's stored candidates, 3-fold held-out; zero GPU"
+    },
+    {
+      "name": "exp27_confirmation_fresh_seeds",
+      "cost": 3.0,
+      "diagnosticity": {"anchored_vote_beats_router": [0.9, 0.1]},
+      "payoff": {"anchored_vote_beats_router": 1.0},
+      "description": "Fresh GPU seeds with pre-registered tau, only if the offline test is positive"
+    },
+    {
+      "name": "second_model_family_check",
+      "cost": 2.0,
+      "diagnosticity": {"complementarity_generalises": [0.85, 0.15]},
+      "payoff": {"complementarity_generalises": 0.6},
+      "description": "Repeat complementarity on a different model family"
+    },
+    {
+      "name": "teacher_distillation_run",
+      "cost": 8.0,
+      "diagnosticity": {"better_players_raise_the_ceiling": [0.8, 0.2]},
+      "payoff": {"better_players_raise_the_ceiling": 1.0},
+      "description": "Distil a specialist and re-measure the ceiling"
+    }
+  ]
+}

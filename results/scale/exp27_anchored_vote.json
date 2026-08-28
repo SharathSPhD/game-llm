@@ -1,0 +1,112 @@
+{
+  "seeds": [
+    "seed42",
+    "seed43",
+    "seed44"
+  ],
+  "router": {
+    "math": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+    "general": "Qwen/Qwen2.5-1.5B-Instruct"
+  },
+  "router_accuracy_pooled": 0.5611111111111111,
+  "in_sample_grid": {
+    "uniform/tau=0.25": 0.6222,
+    "uniform/tau=0.5": 0.6222,
+    "uniform/tau=0.75": 0.6222,
+    "uniform/tau=1": 0.6306,
+    "uniform/tau=1.5": 0.6306,
+    "uniform/tau=2": 0.6278,
+    "uniform/tau=2.5": 0.6278,
+    "ladder/tau=0.25": 0.6222,
+    "ladder/tau=0.5": 0.6333,
+    "ladder/tau=0.75": 0.6333,
+    "ladder/tau=1": 0.6306,
+    "ladder/tau=1.5": 0.6306,
+    "ladder/tau=2": 0.6306,
+    "ladder/tau=2.5": 0.6306
+  },
+  "folds": [
+    {
+      "fit_seed": "seed42",
+      "chosen": {
+        "weighting": "ladder",
+        "tau": 0.5
+      },
+      "held_out_accuracy": 0.6625,
+      "held_out_router": 0.5792,
+      "margin": 0.0833,
+      "paired": {
+        "wins": 21,
+        "losses": 1,
+        "z": 4.264014327112209
+      },
+      "per_domain": {
+        "math": {
+          "mechanism": 0.8333,
+          "router": 0.8
+        },
+        "general": {
+          "mechanism": 0.4917,
+          "router": 0.3583
+        }
+      }
+    },
+    {
+      "fit_seed": "seed43",
+      "chosen": {
+        "weighting": "uniform",
+        "tau": 0.25
+      },
+      "held_out_accuracy": 0.5875,
+      "held_out_router": 0.55,
+      "margin": 0.0375,
+      "paired": {
+        "wins": 18,
+        "losses": 9,
+        "z": 1.7320508075688772
+      },
+      "per_domain": {
+        "math": {
+          "mechanism": 0.8167,
+          "router": 0.825
+        },
+        "general": {
+          "mechanism": 0.3583,
+          "router": 0.275
+        }
+      }
+    },
+    {
+      "fit_seed": "seed44",
+      "chosen": {
+        "weighting": "uniform",
+        "tau": 2.0
+      },
+      "held_out_accuracy": 0.6125,
+      "held_out_router": 0.5542,
+      "margin": 0.0583,
+      "paired": {
+        "wins": 14,
+        "losses": 0,
+        "z": 3.7416573867739413
+      },
+      "per_domain": {
+        "math": {
+          "mechanism": 0.85,
+          "router": 0.8417
+        },
+        "general": {
+          "mechanism": 0.375,
+          "router": 0.2667
+        }
+      }
+    }
+  ],
+  "mean_held_out_margin": 0.0597,
+  "pooled_paired": {
+    "wins": 53,
+    "losses": 10,
+    "z": 5.42,
+    "note": "test folds overlap (each seed appears in two folds), so this z overstates independence; the per-fold numbers are the claim"
+  }
+}
