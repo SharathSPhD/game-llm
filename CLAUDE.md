@@ -14,6 +14,13 @@ paper (`paper/`) + GitHub Pages site (`site/`).
 
 ## Objective (operator direction, 2026-08-28)
 
+**Living documents come first.** `docs/PLAN.md` carries the objectives in force
+(O1-O9), the current phase, machine allocation and open decisions; `docs/PRD.md`
+carries the product requirements and success criteria. Read both before planning
+work, and revise them when a measurement changes what should happen next — they
+are expected to move.
+
+
 The programme builds a game-theoretic LLM system — the Equilibrium Council
 (SPEC 0015) — that **outperforms strong open-weight baselines** on public
 benchmarks and ships as a usable product: models and data on Hugging Face, an
