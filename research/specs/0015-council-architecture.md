@@ -15,17 +15,22 @@ published so others can use and reproduce it.
 
 ## Architecture
 
-The council routes each token through a small number of domain specialists and
-aggregates their predictions by a validated truthful mechanism.
+The council is the substrate; **equilibrium decoding (ADR 0008) is the
+architecture**. Each token's distribution is the solved quantal response
+equilibrium of an influence game among the players, rather than a blend of their
+outputs or a selection among them — averaging and routing are its degenerate
+cases. The components below are what the players and the solve are made of.
 
 - **Teachers.** Efficient domain specialists sharing one tokenizer, so token-level
-  aggregation is well defined. Sources may be mixed: existing open specialists
+  aggregation is well defined. A player earns its seat by being decisive where
+  the others are unsure, which is a different objective from being a strong
+  stand-alone model and is selected for directly. Sources may be mixed: existing open specialists
   where they are already strong, fine-tuned experts where a gap exists, and
   students distilled down from a larger model.
-- **Aggregation.** Second-price token auction with confidence bids (truthfulness
-  measured exactly, F6; beats best-single at 1.5B, F27) alongside uniform
-  logit averaging, which F27 showed to be statistically indistinguishable —
-  the aggregation rule is a tunable component, not a fixed commitment.
+- **Aggregation.** Equilibrium decoding under the entropy mirror map, with the
+  second-price token auction (F6, F27) and uniform logit averaging retained as
+  measured incumbents and as the degenerate settings of the same solve. Which
+  rule ships is decided by SPEC 0016's measurement, not by preference.
 - **Rationality control.** Decoding temperature is treated as the QRE rationality
   parameter, exposed as a system control rather than a hyperparameter.
 - **Equilibrium depth.** Weight-tied recursive cores (SPEC 0011/0014) provide the
