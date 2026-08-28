@@ -1,0 +1,104 @@
+- generic [active] [ref=f2e1]:
+  - link "Skip to main content" [ref=f2e2] [cursor=pointer]:
+    - /url: "#main"
+  - navigation "Primary" [ref=f2e3]:
+    - link "EqLM" [ref=f2e4] [cursor=pointer]:
+      - /url: /
+    - generic [ref=f2e10]:
+      - link "Lab" [ref=f2e11] [cursor=pointer]:
+        - /url: /lab
+      - link "Learn" [ref=f2e12] [cursor=pointer]:
+        - /url: /learn
+      - link "Playground" [ref=f2e13] [cursor=pointer]:
+        - /url: /playground
+      - link "Auction" [ref=f2e14] [cursor=pointer]:
+        - /url: /auction
+      - link "Studio" [ref=f2e15] [cursor=pointer]:
+        - /url: /studio
+      - link "Models" [ref=f2e16] [cursor=pointer]:
+        - /url: /models
+      - link "Findings" [ref=f2e17] [cursor=pointer]:
+        - /url: /findings
+      - link "Sign in" [ref=f2e18] [cursor=pointer]:
+        - /url: /login
+    - generic [ref=f2e19]:
+      - generic "Backend offline — using replay demo data" [ref=f2e20]: Demo
+      - button "Toggle theme" [ref=f2e22] [cursor=pointer]
+  - main [ref=f2e29]:
+    - generic [ref=f2e30]:
+      - generic [ref=f2e31]:
+        - heading "Equilibrium Lab" [level=1] [ref=f2e32]
+        - paragraph [ref=f2e33]: Run MMD, GDA, and QRE solvers on matrix games. Tune learning rate, magnetic strength, and step count to observe convergence behavior. Nash convergence is tracked along the trajectory; strategy evolution is shown on the simplex.
+      - generic [ref=f2e35]:
+        - generic [ref=f2e36]:
+          - heading "Solver Configuration" [level=3] [ref=f2e37]
+          - generic [ref=f2e38]:
+            - generic [ref=f2e39]:
+              - text: Game
+              - combobox [ref=f2e40]:
+                - option "Rock-Paper-Scissors" [selected]
+                - option "Matching Pennies"
+                - option "Biased RPS"
+                - option "Kuhn Poker"
+            - generic [ref=f2e41]:
+              - text: Method
+              - combobox [ref=f2e42]:
+                - option "MMD Fixed Reference" [selected]
+                - option "MMD Random Reference"
+                - option "Gradient Descent Ascent"
+            - generic [ref=f2e43]:
+              - generic [ref=f2e44]:
+                - text: "Learning Rate:"
+                - code [ref=f2e45]: "0.100"
+              - slider [ref=f2e46]: "0.101"
+            - generic [ref=f2e47]:
+              - generic [ref=f2e48]:
+                - text: "Magnetic Strength (τ):"
+                - code [ref=f2e49]: "0.100"
+              - slider [ref=f2e50]: "0.101"
+            - generic [ref=f2e51]:
+              - generic [ref=f2e52]:
+                - text: "Steps:"
+                - code [ref=f2e53]: "500"
+              - slider [ref=f2e54]: "510"
+            - button "Run Solver" [ref=f2e55] [cursor=pointer]
+        - paragraph [ref=f2e62]: Configure solver and click "Run Solver" to see results
+  - contentinfo [ref=f2e63]:
+    - generic [ref=f2e64]:
+      - paragraph [ref=f2e66]:
+        - strong [ref=f2e67]: EqLM
+        - text: is a research platform for equilibrium learning dynamics, quantal response equilibria, mechanism design verification, and GPU-accelerated training. All results include reproducible configs and are tracked via Tarka verification.
+      - generic [ref=f2e68]:
+        - heading "Lab" [level=3] [ref=f2e69]
+        - list [ref=f2e70]:
+          - listitem [ref=f2e71]:
+            - link "Equilibrium Lab" [ref=f2e72] [cursor=pointer]:
+              - /url: /lab
+          - listitem [ref=f2e73]:
+            - link "QRE Explorer" [ref=f2e74] [cursor=pointer]:
+              - /url: /qre
+          - listitem [ref=f2e75]:
+            - link "Auction Playground" [ref=f2e76] [cursor=pointer]:
+              - /url: /auction
+      - generic [ref=f2e77]:
+        - heading "Research" [level=3] [ref=f2e78]
+        - list [ref=f2e79]:
+          - listitem [ref=f2e80]:
+            - link "Training Studio" [ref=f2e81] [cursor=pointer]:
+              - /url: /studio
+          - listitem [ref=f2e82]:
+            - link "Findings" [ref=f2e83] [cursor=pointer]:
+              - /url: /findings
+          - listitem [ref=f2e84]:
+            - link "Source" [ref=f2e85] [cursor=pointer]:
+              - /url: https://github.com/sharaths/game-llm
+      - generic [ref=f2e86]:
+        - heading "Info" [level=3] [ref=f2e87]
+        - list [ref=f2e88]:
+          - listitem [ref=f2e89]:
+            - link "Overview" [ref=f2e90] [cursor=pointer]:
+              - /url: /
+          - listitem [ref=f2e91]:
+            - link "Contact" [ref=f2e92] [cursor=pointer]:
+              - /url: mailto:sharath.ai.colab@gmail.com
+  - alert [ref=f2e93]

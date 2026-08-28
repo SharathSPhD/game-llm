@@ -161,7 +161,7 @@ export default function QREPage() {
                   fontSize: "0.875rem",
                 }}
               >
-                <strong>Demo mode:</strong> Using replay data (gateway offline)
+                <strong>Demo mode:</strong> Sample replay data — sign in for live runs
               </div>
             )}
           </div>

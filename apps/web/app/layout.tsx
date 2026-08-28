@@ -82,7 +82,7 @@ export default function RootLayout({
               <ul>
                 <li><Link href="/studio">Training Studio</Link></li>
                 <li><Link href="/findings">Findings</Link></li>
-                <li><a href="https://github.com/sharaths/game-llm">Source</a></li>
+                <li><a href="https://github.com/SharathSPhD/game-llm">Source</a></li>
               </ul>
             </div>
             <div>
