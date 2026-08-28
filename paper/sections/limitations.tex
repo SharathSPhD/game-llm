@@ -6,7 +6,6 @@
 % Deterministic allocator peak (F4); two-specialist restriction (F22).
 
 \section{Limitations}
-\label{sec:limitations}
 
 The empirical program operates within the constraints of its pre-registered hypothesis gates and the available compute resources. All completed experiments (hypotheses H1–H4 and H6) span from 11~million to 121~million parameters, each trained on the 10~million-word BabyLM strict-small corpus~\cite{Warstadt2023}. Conversion of larger pretrained models (a 1.7~billion-parameter Qwen instance per F25) is underway but not complete; the findings therefore make claims about small-LM equilibrium dynamics grounded in experiments at these scales, not extrapolations to foundation models. The anytime training trajectory (F24, section~\ref{sec:h6}) includes unrolled supervision that achieves statistical parity with a 12-layer explicit baseline; that result is established at smoke (204-dimensional) and full 121~million-parameter scales, and does not yet apply to the larger-scale conversions where the solver-contraction challenge may re-emerge.
 

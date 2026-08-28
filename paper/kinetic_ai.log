@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.28 (TeX Live 2025) (preloaded format=pdflatex 2026.8.13)  28 AUG 2026 10:08
+This is pdfTeX, Version 3.141592653-2.6-1.40.28 (TeX Live 2025) (preloaded format=pdflatex 2026.8.13)  28 AUG 2026 10:23
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -622,17 +622,7 @@ Package newunicodechar Warning: Redefining Unicode character on input line 33.
 (/home/sharaths/.TinyTeX/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def
 File: l3backend-pdftex.def 2025-10-09 L3 backend support: PDF output (pdfTeX)
 \l__color_backend_stack_int=\count352
-) (./kinetic_ai.aux
-
-LaTeX Warning: Label `sec:background' multiply defined.
-
-
-LaTeX Warning: Label `sec:setup' multiply defined.
-
-
-LaTeX Warning: Label `sec:limitations' multiply defined.
-
-)
+) (./kinetic_ai.aux)
 \openout1 = `kinetic_ai.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 65.
@@ -727,51 +717,52 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 
 {/home/sharaths/.TinyTeX/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
 
-LaTeX Warning: Reference `sec:scale' on page 2 undefined on input line 6.
+LaTeX Warning: Reference `sec:scale' on page 2 undefined on input line 12.
 
 
-LaTeX Warning: Reference `sec:closedloop' on page 2 undefined on input line 6.
+LaTeX Warning: Reference `sec:closedloop' on page 2 undefined on input line 12.
+
+[2]
+
+LaTeX Warning: Reference `sec:convergence' on page 3 undefined on input line 18.
 
 
-LaTeX Warning: Reference `sec:convergence' on page 2 undefined on input line 10.
+LaTeX Warning: Reference `sec:mechanism' on page 3 undefined on input line 18.
 
 
-LaTeX Warning: Reference `sec:mechanism' on page 2 undefined on input line 10.
+LaTeX Warning: Reference `sec:eqlm' on page 3 undefined on input line 18.
 
 
-LaTeX Warning: Reference `sec:eqlm' on page 2 undefined on input line 10.
+LaTeX Warning: Reference `sec:mpo' on page 3 undefined on input line 18.
 
 
-LaTeX Warning: Reference `sec:mpo' on page 2 undefined on input line 10.
+LaTeX Warning: Reference `sec:auction' on page 3 undefined on input line 18.
 
 
-LaTeX Warning: Reference `sec:auction' on page 2 undefined on input line 10.
+LaTeX Warning: Reference `sec:scale' on page 3 undefined on input line 18.
 
+) [3] (./sections/background.tex
 
-LaTeX Warning: Reference `sec:scale' on page 2 undefined on input line 10.
+LaTeX Warning: Reference `sec:convergence' on page 4 undefined on input line 50.
 
-) [2] (./sections/background.tex
+[4] [5]
 
-LaTeX Warning: Reference `sec:convergence' on page 3 undefined on input line 51.
+LaTeX Warning: Reference `sec:diagnostic' on page 6 undefined on input line 130.
 
-[3] [4]
-
-LaTeX Warning: Reference `sec:diagnostic' on page 5 undefined on input line 131.
-
-[5] [6]
-Overfull \hbox (10.24594pt too wide) in paragraph at lines 236--250
+[6] [7]
+Overfull \hbox (10.24594pt too wide) in paragraph at lines 235--249
  [][] 
  []
 
 
-LaTeX Warning: Reference `sec:h6' on page 7 undefined on input line 260.
+LaTeX Warning: Reference `sec:h6' on page 8 undefined on input line 259.
 
 ) (./sections/methodology.tex (./sections/figures_arch.tex
 Overfull \hbox (174.5789pt too wide) in paragraph at lines 102--108
  [][] 
  []
 
-) [7] [8] [9]
+) [8] [9] [10]
 Underfull \hbox (badness 8075) in paragraph at lines 51--51
 []\OT1/cmr/m/n/10 Assume con-
  []
@@ -841,106 +832,120 @@ Underfull \hbox (badness 10000) in paragraph at lines 53--54
 []\OT1/cmr/m/n/10 Intermediate
  []
 
-[10] [11] [12]) (./sections/experimental_setup.tex
+[11] [12] [13]) (./sections/experimental_setup.tex
 
-LaTeX Warning: Reference `sec:scale' on page 13 undefined on input line 23.
+LaTeX Warning: Reference `sec:scale' on page 14 undefined on input line 22.
 
 
-LaTeX Warning: Reference `sec:closedloop' on page 13 undefined on input line 24.
+LaTeX Warning: Reference `sec:closedloop' on page 14 undefined on input line 23.
 
-[13]
-Underfull \hbox (badness 10000) in paragraph at lines 42--42
+[14]
+Underfull \hbox (badness 10000) in paragraph at lines 41--41
 []\OT1/cmr/bx/n/10 Gate (quan-ti-ta-tive
  []
 
 
-Overfull \hbox (3.24385pt too wide) in paragraph at lines 42--43
+Overfull \hbox (3.24385pt too wide) in paragraph at lines 41--42
 []\OT1/cmr/bx/n/10 Findings| 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 44--44
+Underfull \hbox (badness 10000) in paragraph at lines 43--43
 \OT1/cmr/m/n/10 BLiMP at matched
  []
 
 
-Underfull \hbox (badness 2573) in paragraph at lines 45--45
+Underfull \hbox (badness 2573) in paragraph at lines 44--44
 []\OT1/cmr/m/n/10 MMD last-iterate con-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 48--48
+Underfull \hbox (badness 10000) in paragraph at lines 47--47
 []\OT1/cmr/m/n/10 Auction ad-van-tage
  []
 
 
-Underfull \hbox (badness 5036) in paragraph at lines 48--48
+Underfull \hbox (badness 5036) in paragraph at lines 47--47
 \OT1/cmr/m/n/10 per-sists in closed-loop
  []
 
 
-Overfull \hbox (6.54735pt too wide) in paragraph at lines 50--50
+Overfull \hbox (6.54735pt too wide) in paragraph at lines 49--49
 []\OT1/cmr/m/n/10 H7{H10| 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 50--50
+Underfull \hbox (badness 10000) in paragraph at lines 49--49
 []\OT1/cmr/m/n/10 1{3B con-ver-sion and
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 50--50
+Underfull \hbox (badness 10000) in paragraph at lines 49--49
 \OT1/cmr/m/n/10 preference-tuning (in
  []
 
-[14] [15] [16{/home/sharaths/.TinyTeX/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc}]
+[15] [16] [17{/home/sharaths/.TinyTeX/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc}]
 
-LaTeX Warning: Reference `sec:convergence' on page 17 undefined on input line 157.
+LaTeX Warning: Reference `sec:convergence' on page 18 undefined on input line 156.
 
 
-LaTeX Warning: Reference `sec:auction' on page 17 undefined on input line 157.
+LaTeX Warning: Reference `sec:auction' on page 18 undefined on input line 156.
 
-) (./sections/results.tex [17]
-Overfull \hbox (3.37123pt too wide) in paragraph at lines 14--15
- []\OT1/cmr/bx/n/10.95 Asymmetric games and context-dependent at-trac-tors (F2).[] \OT1/cmr/m/n/10.95 For bi-ased rock-paper-scissors,
+) (./sections/results.tex [18]
+<figures/fig_mmd_convergence.pdf, id=478, 702.87422pt x 233.92174pt>
+File: figures/fig_mmd_convergence.pdf Graphic file (type pdf)
+<use figures/fig_mmd_convergence.pdf>
+Package pdftex.def Info: figures/fig_mmd_convergence.pdf  used on input line 12.
+(pdftex.def)             Requested size: 399.29463pt x 132.8906pt.
+ [19 <./figures/fig_mmd_convergence.pdf>]
+<figures/fig_anderson_stiffness.pdf, id=516, 486.01135pt x 305.70995pt>
+File: figures/fig_anderson_stiffness.pdf Graphic file (type pdf)
+<use figures/fig_anderson_stiffness.pdf>
+Package pdftex.def Info: figures/fig_anderson_stiffness.pdf  used on input line 25.
+(pdftex.def)             Requested size: 399.29463pt x 251.16425pt.
+<figures/fig_deq_memory.pdf, id=517, 486.08475pt x 305.42828pt>
+File: figures/fig_deq_memory.pdf Graphic file (type pdf)
+<use figures/fig_deq_memory.pdf>
+Package pdftex.def Info: figures/fig_deq_memory.pdf  used on input line 50.
+(pdftex.def)             Requested size: 399.29463pt x 250.90488pt.
+<figures/fig_auction_regret.pdf, id=518, 702.82135pt x 234.07547pt>
+File: figures/fig_auction_regret.pdf Graphic file (type pdf)
+<use figures/fig_auction_regret.pdf>
+Package pdftex.def Info: figures/fig_auction_regret.pdf  used on input line 62.
+(pdftex.def)             Requested size: 399.29463pt x 132.98508pt.
+ [20 <./figures/fig_anderson_stiffness.pdf>] [21 <./figures/fig_deq_memory.pdf>]
+<figures/fig_eqlm_loss_curves.pdf, id=555, 558.5003pt x 341.84494pt>
+File: figures/fig_eqlm_loss_curves.pdf Graphic file (type pdf)
+<use figures/fig_eqlm_loss_curves.pdf>
+Package pdftex.def Info: figures/fig_eqlm_loss_curves.pdf  used on input line 82.
+(pdftex.def)             Requested size: 399.29463pt x 244.41205pt.
+<figures/fig_h1_iterations.pdf, id=556, 558.57089pt x 377.9819pt>
+File: figures/fig_h1_iterations.pdf Graphic file (type pdf)
+<use figures/fig_h1_iterations.pdf>
+Package pdftex.def Info: figures/fig_h1_iterations.pdf  used on input line 91.
+(pdftex.def)             Requested size: 399.29463pt x 270.2031pt.
+ [22 <./figures/fig_auction_regret.pdf>]
+<figures/fig_warm_start.pdf, id=584, 702.75862pt x 341.56328pt>
+File: figures/fig_warm_start.pdf Graphic file (type pdf)
+<use figures/fig_warm_start.pdf>
+Package pdftex.def Info: figures/fig_warm_start.pdf  used on input line 100.
+(pdftex.def)             Requested size: 399.29463pt x 194.06766pt.
+
+Overfull \hbox (21.57498pt too wide) in paragraph at lines 113--114
+\OT1/cmr/m/n/10.95 solved (F24, B1). Eval-u-a-tion still runs An-der-son solver at bud-get 12. Re-sults: BLiMP $0\OML/cmm/m/it/10.95 :\OT1/cmr/m/n/10.95 662\OML/cmm/m/it/10.95 =\OT1/cmr/m/n/10.95 0\OML/cmm/m/it/10.95 :\OT1/cmr/m/n/10.95 697\OML/cmm/m/it/10.95 =\OT1/cmr/m/n/10.95 0\OML/cmm/m/it/10.95 :\OT1/cmr/m/n/10.95 672$
  []
 
+[23 <./figures/fig_eqlm_loss_curves.pdf>] [24 <./figures/fig_h1_iterations.pdf>]
+<figures/fig_parity_budget.pdf, id=624, 663.758pt x 310.1296pt>
+File: figures/fig_parity_budget.pdf Graphic file (type pdf)
+<use figures/fig_parity_budget.pdf>
+Package pdftex.def Info: figures/fig_parity_budget.pdf  used on input line 136.
+(pdftex.def)             Requested size: 399.29463pt x 186.56186pt.
+ [25 <./figures/fig_warm_start.pdf>] [26 <./figures/fig_parity_budget.pdf>] [27] [28] [29]) [30] (./sections/discussion.tex [31] [32]) (./sections/limitations.tex
 
-LaTeX Warning: Reference `fig:mmd_convergence' on page 18 undefined on input line 24.
+LaTeX Warning: Reference `sec:h6' on page 33 undefined on input line 10.
 
-[18]
-Overfull \hbox (7.81522pt too wide) in paragraph at lines 64--65
-\OT1/cmr/m/n/10.95 At 121M (batch 32, 10k steps, 3 seeds on RTX 5090), the gap reap-peared un-der implicit-differentiation
- []
-
-[19] [20]
-Overfull \hbox (3.41824pt too wide) in paragraph at lines 124--125
-[]\OT1/cmr/m/n/10.95 Verdict: \OT1/cmr/m/sc/10.95 missed\OT1/cmr/m/n/10.95 . Judge NLL: best sin-gle $3\OML/cmm/m/it/10.95 :\OT1/cmr/m/n/10.95 39\OML/cmm/m/it/10.95 =\OT1/cmr/m/n/10.95 3\OML/cmm/m/it/10.95 :\OT1/cmr/m/n/10.95 37\OML/cmm/m/it/10.95 =\OT1/cmr/m/n/10.95 3\OML/cmm/m/it/10.95 :\OT1/cmr/m/n/10.95 69$ (per seed) ver-sus auc-tion $4\OML/cmm/m/it/10.95 :\OT1/cmr/m/n/10.95 74\OML/cmm/m/it/10.95 =\OT1/cmr/m/n/10.95 4\OML/cmm/m/it/10.95 :\OT1/cmr/m/n/10.95 23\OML/cmm/m/it/10.95 =\OT1/cmr/m/n/10.95 4\OML/cmm/m/it/10.95 :\OT1/cmr/m/n/10.95 60$.
- []
-
-[21]
-
-LaTeX Warning: Reference `fig:parity_budget' on page 22 undefined on input line 137.
-
-[22] [23]
-
-LaTeX Warning: `h' float specifier changed to `ht'.
-
-[24] [25] [26]
-Overfull \hbox (51.9405pt too wide) in paragraph at lines 258--270
- [][] 
- []
-
-[27] [28] [29]
-Overfull \hbox (8.29448pt too wide) in paragraph at lines 315--326
- [][] 
- []
-
-[30] [31]) (./sections/discussion.tex [32] [33]) (./sections/limitations.tex
-
-LaTeX Warning: Reference `sec:h6' on page 34 undefined on input line 11.
-
-[34] [35]) (./sections/conclusion.tex [36]) (./sections/availability.tex)
+[33]) [34] (./sections/conclusion.tex [35]) (./sections/availability.tex)
 Overfull \hbox (78.16878pt too wide) in paragraph at lines 4--107
 \OT1/cmr/m/n/10.95 check-points are re-leased on the Hug-ging Face Hub un-der the \OT1/cmtt/m/n/10.95 qbz506 \OT1/cmr/m/n/10.95 ac-count: \OT1/cmtt/m/n/10.95 kinetic-eqlm-anytime-121m-babylm
  []
@@ -950,27 +955,27 @@ Overfull \hbox (2.5523pt too wide) in paragraph at lines 4--107
 \OT1/cmr/m/n/10.95 LN implicit-trained model), and \OT1/cmtt/m/n/10.95 kinetic-explicitlm-124m-babylm \OT1/cmr/m/n/10.95 (the explicit-architecture base-
  []
 
-[37] (./kinetic_ai.bbl [38]) (./sections/appendix.tex [39]
-
-LaTeX Warning: Reference `sec:parity' on page 40 undefined on input line 39.
-
-[40]
+(./kinetic_ai.bbl [36] [37]) (./sections/appendix.tex
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-[41]
+
+LaTeX Warning: Reference `sec:parity' on page 38 undefined on input line 39.
+
+[38]
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+[39] [40]
 Overfull \hbox (22.95692pt too wide) in paragraph at lines 118--128
  [][] 
  []
 
+[41] [42]
 
-LaTeX Warning: `h' float specifier changed to `ht'.
+LaTeX Warning: Reference `eq:postln' on page 43 undefined on input line 211.
 
-[42] [43]
-
-LaTeX Warning: Reference `eq:postln' on page 44 undefined on input line 211.
-
-[44] [45]) [46] (./kinetic_ai.aux)
+[43]) [44] (./kinetic_ai.aux)
  ***********
 LaTeX2e <2025-11-01>
 L3 programming layer <2026-01-19>
@@ -979,25 +984,22 @@ L3 programming layer <2026-01-19>
 
 LaTeX Warning: There were undefined references.
 
-
-LaTeX Warning: There were multiply-defined labels.
-
 Package rerunfilecheck Info: File `kinetic_ai.out' has not changed.
-(rerunfilecheck)             Checksum: E1E86C9D3E81FCD77F8EE736CAFCA93C;23713.
+(rerunfilecheck)             Checksum: C5ABFFCA6AC9C96A4D3E525343B9542E;15826.
  ) 
 Here is how much of TeX's memory you used:
- 35706 strings out of 469471
- 820708 string characters out of 5468383
- 1329231 words of memory out of 5000000
- 63557 multiletter control sequences out of 15000+600000
+ 35705 strings out of 469471
+ 822130 string characters out of 5468383
+ 1331117 words of memory out of 5000000
+ 63589 multiletter control sequences out of 15000+600000
  642465 words of font info for 96 fonts, out of 8000000 for 9000
  36 hyphenation exceptions out of 8191
- 99i,13n,117p,2679b,994s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 99i,13n,117p,2907b,994s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </home/sharaths/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></home/sharaths/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></home/sharaths/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmcsc10.pfb></home/sharaths/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></home/sharaths/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></home/sharaths/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></home/sharaths/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></home/sharaths/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></home/sharaths/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></home/sharaths/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></home/sharaths/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></home/sharaths/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></home/sharaths/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></home/sharaths/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></home/sharaths/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy6.pfb></home/sharaths/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></home/sharaths/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></home/sharaths/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></home/sharaths/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb></home/sharaths/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/symbols/msam10.pfb></home/sharaths/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb></home/sharaths/.TinyTeX/texmf-dist/fonts/type1/public/cm-super/sfrm1095.pfb>
-Output written on kinetic_ai.pdf (46 pages, 457488 bytes).
+Output written on kinetic_ai.pdf (44 pages, 591481 bytes).
 PDF statistics:
- 890 PDF objects out of 1000 (max. 8388607)
- 789 compressed objects within 8 object streams
- 208 named destinations out of 1000 (max. 500000)
- 725 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 901 PDF objects out of 1000 (max. 8388607)
+ 735 compressed objects within 8 object streams
+ 175 named destinations out of 1000 (max. 500000)
+ 565 words of extra memory for PDF output out of 10000 (max. 10000000)
 

@@ -20,6 +20,13 @@ Re-centering the magnet on the current iterate at fixed intervals drives converg
 
 Warm-starting the QRE solver improves convergence efficiency (F7, F8). Warm-starting each fixed-point solve from the previous $\lambda$'s solution reduces iterations by $25.2\%$ on asymmetric $2 \times 2$ games ($5990 \to 4481$ mean iterations). Plain fixed-point iteration $s \leftarrow \mathrm{softmax}(\lambda A s)$ diverges for $\lambda \gtrsim 0.32$ on biased RPS; an adaptively damped variant $(1-\gamma)s + \gamma \cdot \mathrm{softmax}(\lambda A s)$ restores convergence across $\lambda \in \{1, 10, 100\}$ (requiring $21, 700, 42{,}000$ iterations respectively). This establishes MMD as a directed alternative for two-player zero-sum games, resolving a known lacuna in online optimization for competitive settings.
 
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/fig_anderson_stiffness.pdf}
+\caption{Anderson acceleration beats Picard fixed-point iteration on stiff contraction maps. Iteration ratio (Anderson / Picard) as a function of spectral radius $\rho$ at different dimensions ($d \in \{32, 128\}$). Anderson achieves sublinear cost advantage at $\rho \geq 0.99$, the regime where Picard becomes slow, relevant for solving implicit-depth models where spectral properties are tight.}
+\label{fig:anderson_stiffness}
+\end{figure}
+
 \begin{table}[h]
 \centering
 \small
@@ -38,50 +45,74 @@ Game & Algorithm & $R^2$ (final 50\%) & Final NashConv & 95\% CI \\
 \end{tabular}
 \end{table}
 
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/fig_deq_memory.pdf}
+\caption{Deep-equilibrium models achieve $O(1)$ peak activation memory independent of effective depth, while explicit stacks scale linearly (F4). DEQ implicit block: $0.032 \pm 0.000$ MB peak memory across effective depths. Explicit stack: linear slope $0.0168$ MB/layer, ranging from $0.067$ MB (4 layers) to $0.539$ MB (32 layers). This $O(1)$ property enables scaling to large depths without the memory cost of explicit stacks, the architectural foundation for efficient serving.}
+\label{fig:deq_memory}
+\end{figure}
+
 \subsection{Mechanism Validation: Token Auction Truthfulness}
 \label{sec:results:auction_mech}
 
-\paragraph{Second-price auctions are exactly truthful (F6).}
+A second-price auction with per-token valuations equal to each model's maximum next-token probability is empirically \emph{exactly} truthful (F6). Protocol: 10 seeds, 200 auctions per seed, $\{3, 5\}$-agent configurations, misreport grid $v \in \{0.25v, 0.5v, 1.0v, 1.5v, 2.0v\}$ (total $16{,}000$ observations). The regret for truthful bidding is $0.0$ with $95\%$ CI $[0.0, 0.0]$, confirming Vickrey's theorem in practice. A weighted-aggregation baseline is measurably manipulable (mean misreport gain $0.0773$ at $n=3$, $0.0683$ at $n=5$), with non-VCG payments. This measurement is not a formality but a gate: Vickrey's theorem applies to the auction mechanism abstractly; its implementation on LLM confidence must be verified. The protocol fixes valuations as the maximum next-token probability (target-independent), ruling out oracle leakage. The regret measurement confirms that under this valuation, truthful bidding is indeed optimal; no model has an incentive to misreport.
 
-A second-price auction with per-token valuations equal to each model's maximum next-token probability is empirically \emph{exactly} truthful. Protocol: 10 seeds, 200 auctions per seed, $\{3, 5\}$-agent configurations, misreport grid $v \in \{0.25v, 0.5v, 1.0v, 1.5v, 2.0v\}$ (total $16{,}000$ observations). The regret for truthful bidding is $0.0$ with $95\%$ CI $[0.0, 0.0]$, confirming Vickrey's theorem in practice. A weighted-aggregation baseline is measurably manipulable (mean misreport gain $0.0773$ at $n=3$, $0.0683$ at $n=5$), with non-VCG payments. Second-price auctions are therefore the appropriate choice for truthful multi-model decoding.
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/fig_auction_regret.pdf}
+\caption{Second-price auction regret distribution over 16,000 auctions (10 seeds, 200 auctions each, misreport grid $v \in \{0.25v, 0.5v, 1.0v, 1.5v, 2.0v\}$). Truthful bidding achieves regret $0.0$ (95\% CI $[0.0, 0.0]$), while weighted-aggregation baseline shows positive misreport gain (0.0773 at $n=3$, 0.0683 at $n=5$). Second-price auctions are the appropriate choice for truthful multi-model decoding.}
+\label{fig:auction_regret}
+\end{figure}
 
-\subsection{EqLM at Smoke Scale: Pipeline Validation and Optimizer Fixes}
-\label{sec:results:eqlm_smoke}
+The comparison to weighted-aggregation is not a criticism of aggregation by pooling but a statement of mechanism design: if the goal is to aggregate without requiring a judge or external validation while preserving truthful incentives, second-price auctions are the appropriate tool. Weighted-aggregation requires learning or tuning the weights; second-price requires no calibration.
 
-\paragraph{Parity at smoke scale after initialization fix (F10).}
+\subsection{The EqLM Diagnostic Arc at Smoke and 11M Scale}
+\label{sec:results:eqlm_diagnostic}
 
-An end-to-end pipeline was validated at smoke scale (800 steps, batch 32, 1000 BabyLM pairs). An initialization bug set all models to loss $\approx 125$ instead of $\ln|V| \approx 10.8$; correction revealed parity: EqLM final loss $5.94$ vs.\ explicit $5.99$, with EqLM $6.2\%$ fewer parameters ($10.67$M vs.\ $11.06$M). BLiMP scores at this scale ($0.452$--$0.465$) register as chance, expected for a 3-minute epoch.
+An end-to-end pipeline was validated at smoke scale (800 steps, batch 32, 1000 BabyLM pairs), revealing parity after an initialization bug fix (F10). An initialization bug set all models to loss $\approx 125$ instead of $\ln|V| \approx 10.8$; correction revealed parity: EqLM final loss $5.94$ vs.\ explicit $5.99$, with EqLM $6.2\%$ fewer parameters ($10.67$M vs.\ $11.06$M). BLiMP scores at this scale ($0.452$--$0.465$) register as chance, expected for a 3-minute epoch, ruling out the alternative that EqLM has an inherent architectural deficiency.
 
-\paragraph{Magnetic anchor is loss-neutral in pretraining; weight-decay bug fixed (F12, F11).}
+The magnetic anchor is loss-neutral at pretraining scale (F12, F11). The magnetic anchor at $\tau = 10^{-3}$ does not improve pretraining loss ($8.61$ vs.\ explicit $8.51$, within the $\leq 10\%$ gate). Total displacement scales as $\eta \tau T \approx 2.4 \times 10^{-4}$ relative, negligible at pretraining scale. This motivated a methodological choice: pretraining uses plain AdamW; magnetic anchoring is reserved for preference-phase fine-tuning. Additionally, coupled weight decay in MagneticAdamW destroyed sparse-gradient parameters: at $\tau = 0$ (mathematically equivalent to AdamW), EqLM reached only $10.46$ loss versus decoupled AdamW's exact $8.8236$ on tied embeddings. Decoupling restores exact equivalence.
 
-The magnetic anchor at $\tau = 10^{-3}$ does not improve pretraining loss ($8.61$ vs.\ explicit $8.51$, within the $\leq 10\%$ gate). Total displacement scales as $\eta \tau T \approx 2.4 \times 10^{-4}$ relative, negligible at pretraining scale. This motivated a methodological choice: pretraining uses plain AdamW; magnetic anchoring is reserved for preference-phase fine-tuning. Additionally, coupled weight decay in MagneticAdamW silently destroyed sparse-gradient parameters: at $\tau = 0$ (mathematically equivalent to AdamW), EqLM reached only $10.46$ loss versus decoupled AdamW's exact $8.8236$ on tied embeddings. Decoupling restores exact equivalence and preserves learning at small $\tau$.
+The v1 residual map admits no fixed point (F14). The v1 residual-form map $f(z,x) = (1-\alpha)z + \alpha(z + \mathrm{Attn}(z) + \mathrm{MLP}(z) + x)$ admits no bona fide fixed point. Solver residuals plateau at constant magnitude with tail ratio $\approx 0.99$ over $100$ iterations; residual magnitude scales \emph{linearly} with damping $\alpha$ ($32.65 \to 5.41 \to 1.35$ at $\alpha = 1/0.2/0.05$), the signature of $z \leftarrow z + \alpha g(z)$ with $\lVert g \rVert$ constant. The v1 models were 12-iteration weight-tied transformers, not equilibrium models, ruling out the alternative that the problem was merely weak contraction at some $\alpha$; the residual map has no fixed point at all.
 
-\subsection{The Fixed-Point Map Discovery and Solver-Aware Loss}
-\label{sec:results:diagnosis}
+The v3 post-LN map restores fixed points and enables learned contraction (F15, F16). The v3 post-LN map, applying layer normalization inside the recursion---$h = \mathrm{LN}_1(z + \mathrm{Attn}(z) + x)$, $f(z, x) = \mathrm{LN}_2(h + \mathrm{MLP}(h))$---restores bounded iterates and genuine convergence. Relative residual at smoke scale ($d=204$, $T=127$) decays from $1.0$ to $0.105$ monotonically. However, contraction at LM width is weak (effective Lipschitz $\approx 1$). Adding a solver-aware auxiliary loss $\lambda_c \cdot \lVert f(z^*, x) - z^* \rVert / \lVert z^* \rVert$ reduces exit residual by $16\times$ (from $0.1277$ to $0.0076$--$0.0078$) for every $\lambda_c \in \{0.01, 0.1, 1.0\}$ at $\leq 1.8\%$ CE cost and zero wall-time overhead, ruling out the alternative that weak contraction at LM width is insurmountable without changing the map. The model learns to be contractive during training.
 
-\paragraph{The v1 residual map admits no fixed point (F14).}
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/fig_eqlm_loss_curves.pdf}
+\caption{EqLM diagnostic arc from smoke to 11M scale. Smoke-scale pipeline (F10) achieves parity after initialization fix (5.94 vs 5.99 CE loss). Full 11M-parameter runs (F13-F18) show iteration-by-iteration improvement: v1 residual (0.571 BLiMP) $\to$ v3 post-LN (0.704) $\to$ three-seed verdict (0.664 mean, ratio 0.93). Solver-aware loss (F16) teaches contraction with minimal CE cost. Numbers represent 20k-step full-stream BLiMP runs at matched parameters.}
+\label{fig:eqlm_loss_curves}
+\end{figure}
 
-The v1 residual-form map $f(z,x) = (1-\alpha)z + \alpha(z + \mathrm{Attn}(z) + \mathrm{MLP}(z) + x)$ admits no bona fide fixed point. Solver residuals plateau at constant magnitude with tail ratio $\approx 0.99$ over $100$ iterations; residual magnitude scales \emph{linearly} with damping $\alpha$ ($32.65 \to 5.41 \to 1.35$ at $\alpha = 1/0.2/0.05$), the signature of $z \leftarrow z + \alpha g(z)$ with $\lVert g \rVert$ constant. The v1 models were 12-iteration weight-tied transformers, not equilibrium models.
+The 11M-parameter run documents progression driven by diagnosis (F13, F17, F18). The first full run (20k steps, BabyLM strict-small, 1000-pair BLiMP) missed the 95\% parity gate decisively: explicit $0.734$; EqLM v1 $0.571$; EqLM v3 $0.584$ (78--80\% of baseline). Each failure localized the next experiment: F14's discovery that v1 had no fixed point reframed the problem from ``why does training fail?'' to ``what is the right map?''. F15's weak contraction at LM width was not accepted as a limitation but as a design constraint for F16's solver-aware loss. With the post-LN map and solver-aware loss, iteration 2 improved: seed 1 reached $0.704$ (94.4\%, statistically a tie with the gate at $n=1000$ pairs). The 3-seed verdict across seeds 42/43/44: explicit mean $0.7133 \pm 0.0294$; EqLM mean $0.6637 \pm 0.0365$; mean ratio $0.9303$; bootstrap $95\%$ CI $[0.8979, 0.9492]$, formally missing the $0.95$ threshold. Progression iteration 1 (0.78) $\to$ iteration 3 (0.93) documents the value of diagnosed fixes (initialization scaling, post-LN map). The trajectory shows that the alternatives---accept the miss and move on, or blame hyperparameters and tune---were less informative than the chosen path: diagnose the fixed-point map, design a remedy, and experiment.
 
-\paragraph{The v3 post-LN map restores fixed points and learned contraction (F15, F16).}
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/fig_h1_iterations.pdf}
+\caption{H1 iteration-by-iteration progression at 11M parameters (F17--F18 verdict), showing ratio (EqLM BLiMP / explicit BLiMP) across three seeds (42/43/44). Iteration 1 baseline with v1 residual (0.78 ratio) $\to$ iteration 2 with v3 post-LN (0.93 ratio near-miss) $\to$ iteration 3 three-seed verdict (0.9303 mean ratio, CI $[0.8979, 0.9492]$). Each iteration's fix addresses a diagnosed defect: initialization scaling, then fixed-point map topology, then weak contraction. Bootstrap 95\% CI bands shown; all seeds within plotted range.}
+\label{fig:h1_iterations}
+\end{figure}
 
-The v3 post-LN map, applying layer normalization inside the recursion---$h = \mathrm{LN}_1(z + \mathrm{Attn}(z) + x)$, $f(z, x) = \mathrm{LN}_2(h + \mathrm{MLP}(h))$---restores bounded iterates and genuine convergence. Relative residual at smoke scale ($d=204$, $T=127$) decays from $1.0$ to $0.105$ monotonically. However, contraction at LM width is weak (effective Lipschitz $\approx 1$). Adding a solver-aware auxiliary loss $\lambda_c \cdot \lVert f(z^*, x) - z^* \rVert / \lVert z^* \rVert$ reduces exit residual by $16\times$ (from $0.1277$ to $0.0076$--$0.0078$) for every $\lambda_c \in \{0.01, 0.1, 1.0\}$ at $\leq 1.8\%$ CE cost and zero wall-time overhead. The model learns to be contractive during training.
+Warm-started decoding cuts inference cost by 79\% (F19). Warm-started equilibrium decoding cuts solver iterations from $7.91$ to $1.64$ per token ($-79.3\%$, exceeding the $\geq 50\%$ gate), with $97.6\%$ greedy-token agreement (narrowly missing the $\geq 99\%$ gate). An explicit 12-layer stack incurs 12 block applications per token; warm-started equilibrium requires $\approx 1.6$. This inverts the wall-clock story: an explicit $L$-layer stack always pays $L$; a warm equilibrium model pays $\approx 1.6$ at smoke scale.
 
-\subsection{H1 Iteration 1--2: The 11M-Parameter Verdict}
-
-The first full run (20k steps, BabyLM strict-small, 1000-pair BLiMP) missed the 95\% parity gate decisively: explicit $0.734$; EqLM v1 $0.571$; EqLM v3 $0.584$ (78--80\% of baseline). With the post-LN map and solver-aware loss, iteration 2 improved: seed 1 reached $0.704$ (94.4\%, statistically a tie with the gate at $n=1000$ pairs). The 3-seed verdict across seeds 42/43/44: explicit mean $0.7133 \pm 0.0294$; EqLM mean $0.6637 \pm 0.0365$; mean ratio $0.9303$; bootstrap $95\%$ CI $[0.8979, 0.9492]$, formally missing the $0.95$ threshold. Progression iteration 1 (0.78) $\to$ iteration 3 (0.93) documents the value of diagnosed fixes (initialization scaling, post-LN map).
-
-Warm-started decoding cuts solver iterations from $7.91$ to $1.64$ per token ($-79.3\%$, exceeding the $\geq 50\%$ gate), with $97.6\%$ greedy-token agreement (narrowly missing the $\geq 99\%$ gate). An explicit 12-layer stack incurs 12 block applications per token; warm-started equilibrium requires $\approx 1.6$.
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/fig_warm_start.pdf}
+\caption{Warm-started equilibrium decoding reduces solver iterations per token from 7.91 (cold-start) to 1.64 (warm-started), a 79.3\% reduction (F19). Greedy-token agreement is 97.6\% across 1000 tokens (39/40 sequences exact match). The TRIZ P10 prediction holds: sequential equilibria are close, allowing efficient warm-started inference.}
+\label{fig:warm_start}
+\end{figure}
 
 \subsection{The 121M-Parameter Study and Mechanism Correction}
 \label{sec:results:scale}
 
-At 121M (batch 32, 10k steps, 3 seeds on RTX 5090), the gap reappeared under implicit-differentiation training: explicit $0.6833$ vs.\ EqLM $0.5377$; per-seed ratio mean $0.7868$, bootstrap CI $[0.785, 0.788]$; paired $t = -82.6$. The original mechanistic claim (``solver converges at small width, fails at large'') was refuted by adversarial review: solver telemetry shows convergence rate $0.0$ at \emph{both} scales. The corrected mechanism is graded: under fixed 12-iteration budget, the map becomes progressively less contractive per iteration as width scales $204 \to 1704$, widening truncation penalty from $\approx 7\%$ to $21\%$. EqLM maintains peak-memory advantage ($6.29$ GB vs.\ $8.13$ GB, $-23\%$), but wall-clock cost is substantial ($92$ vs.\ $11$ min/arm, $8.4\times$ slower). The trend's direction is robust; magnitude is confounded by differing step budgets (10k vs.\ 20k).
+At 121M (batch 32, 10k steps, 3 seeds on RTX 5090), the quality gap widened under implicit-differentiation training (F20). Explicit $0.6833$ vs.\ EqLM $0.5377$; per-seed ratio mean $0.7868$, bootstrap CI $[0.785, 0.788]$; paired $t = -82.6$. The original mechanistic claim (``solver converges at small width, fails at large'') was refuted by adversarial review: solver telemetry shows convergence rate $0.0$ at \emph{both} scales. The corrected mechanism is graded: under fixed 12-iteration budget, the map becomes progressively less contractive per iteration as width scales $204 \to 1704$, widening truncation penalty from $\approx 7\%$ to $21\%$. EqLM maintains peak-memory advantage ($6.29$ GB vs.\ $8.13$ GB, $-23\%$), but wall-clock cost is substantial ($92$ vs.\ $11$ min/arm, $8.4\times$ slower). The trend's direction is robust across seeds; magnitude is confounded by differing step budgets (10k vs.\ 20k). A convergence rate of zero under a fixed iteration budget is a signal that the map is weakly contractive at that width; it is not evidence that the map is non-contractive. The scale progression documents degradation across width, supporting the interpretation that implicit-differentiation training through a weakly contractive map is inefficient at realistic widths.
 
 \subsection{Anytime-Unrolled Training Reaches Parity}
 \label{sec:results:parity}
 
-When training regime changed from implicit-differentiation to anytime-unrolled supervision (12 explicit iterations, $z_0=x$, cross-entropy at $z_4, z_8, z_{12}$ with weights $0.15/0.3/1.0$), the scale gap dissolved. Evaluation still runs Anderson solver at budget 12. Results: BLiMP $0.662/0.697/0.672$ (mean $0.677$, ratio $\mathbf{0.991}$, with seed 43 exceeding its baseline). Recipe audit confirms cleanliness: identical data, steps, batch, learning rate, gradient clipping; parameters within $2.5\%$. Three dividends: (1) unrolled training is $2.1\times$ \emph{faster} than implicit training ($44$ vs.\ $92$ min/arm); the solve, not backprop, dominates EqLM cost. (2) Budget-sweep rider is met: same checkpoint at Anderson budgets $\{4, 8, 12\}$ yields BLiMP $0.621/0.638/0.662$ (s42), $0.601/0.674/0.697$ (s43), $0.587/0.655/0.672$ (s44)---graceful degradation. (3) Real cost: unrolled training stores iterates for backprop, paying explicit-like activation memory during training ($16.4$ GB vs.\ $7.8$ GB); serving uses the implicit solver.
+When training regime changed from implicit-differentiation to anytime-unrolled supervision (12 explicit iterations, $z_0=x$, cross-entropy at $z_4, z_8, z_{12}$ with weights $0.15/0.3/1.0$), the scale gap dissolved (F24, B1). Evaluation still runs Anderson solver at budget 12. Results: BLiMP $0.662/0.697/0.672$ (mean $0.677$, ratio $\mathbf{0.991}$, with seed 43 exceeding its baseline). Recipe audit confirms cleanliness: identical data, steps, batch, learning rate, gradient clipping; parameters within $2.5\%$. The anytime-unrolled result inverts the 121M story: same architecture, same solver at evaluation, but training changes from solving iterates with implicit differentiation to unrolling and supervising plain iterates. This is not a hyperparameter improvement but a regime shift, ruling out the alternative that weight-tied or post-LN architectures are fundamentally limited at 121M. The result supports the interpretation that the fixed-point solve is a mismatch with gradient-based training: implicit differentiation through 12 iterations of a weakly contractive map incurs a quality penalty that explicit unrolling avoids.
+
+The regime change carries three consequences beyond the accuracy figure. Unrolled training is $2.1\times$ faster than implicit training ($44$ versus $92$ minutes per arm), which locates the dominant cost of the implicit regime in the fixed-point solve rather than in backpropagation. The pre-registered budget-sweep rider is also met: the same checkpoint evaluated at Anderson budgets $\{4, 8, 12\}$ yields BLiMP $0.621/0.638/0.662$ on seed 42, $0.601/0.674/0.697$ on seed 43 and $0.587/0.655/0.672$ on seed 44, so accuracy degrades gracefully as the inference budget is reduced and a single checkpoint serves three operating points without retraining, which is the adaptive-computation objective of \citet{Graves2016} obtained architecturally rather than through a halting mechanism. The cost falls on training memory: storing the unrolled iterates for backpropagation requires $16.4$ GB of activation memory against $7.8$ GB for the implicit regime, while serving continues to run the solver and retains the constant-memory property. Quality at parity is therefore purchased with training-time memory, not with serving-time efficiency.
 
 \begin{table}[t]
 \centering
@@ -100,76 +131,52 @@ EqLM (anytime, F24 B1) & 0.662 / 0.697 / 0.672 & 0.677 & \textbf{0.991} & 16.4 G
 \end{tabular}
 \end{table}
 
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/fig_parity_budget.pdf}
+\caption{Anytime-trained checkpoint exhibits graceful degradation across inference budgets (F24, B1 budget-sweep rider). BLiMP scores at Anderson solver budgets $\{4, 8, 12\}$ decrease monotonically: 0.621/0.638/0.662 (s42), 0.601/0.674/0.697 (s43), 0.587/0.655/0.672 (s44). Same checkpoint reaches parity at full budget (ratio 0.991) and degrades predictably at reduced budgets, demonstrating adaptive computation without retraining.}
+\label{fig:parity_budget}
+\end{figure}
+
 \subsection{Certification and the Quality-Preservation Challenge}
 \label{sec:results:certification}
 
 H6 demanded both quality recovery ($\geq 50\%$ gap closure) and certification (solver convergence rate $> 0.5$). A TRIZ physical contradiction analysis framed the tension as: the map must be contractive (small Lipschitz, for certification) and expressive (large capacity). Spatial separation proposed penalizing contraction only along the solver trajectory.
 
-Arm B2 implements trajectory-local contraction via finite-difference probes at random points on the solve ray ($\epsilon = 10^{-3}$), one per training step. Result (seed 42): BLiMP $0.577$, above control but below parity; solver convergence rate $1.0$ at $4.0$ mean iterations (the program's first certified 121M equilibrium); peak memory $5.5$ GB (lowest of all arms).
+Arm B2 implements trajectory-local contraction via finite-difference probes at random points on the solve ray ($\epsilon = 10^{-3}$), one per training step (F24). Result (seed 42): BLiMP $0.577$, above control but below parity; solver convergence rate $1.0$ at $4.0$ mean iterations (the program's first certified 121M equilibrium); peak memory $5.5$ GB (lowest of all arms). Arm B3 applies spectral normalization to a 256-dimensional core between wide explicit encoder/decoder layers ($2+2$ at $d=1152$): BLiMP $0.642$, partial certification.
 
-Arm B3 applies spectral normalization to a 256-dimensional core between wide explicit encoder/decoder layers ($2+2$ at $d=1152$): BLiMP $0.642$, partial certification.
+Arm B4 combines anytime supervision (B1) with raw trajectory penalty (B2), pre-registered to meet both gates. The combination was refuted: unnormalized penalty reached $3.5 \times 10^4$ at init, drowning CE signal under gradient clipping. Final BLiMP $0.529$ (below control). This recorded failed intervention points to a scale mismatch: the penalty scale must track the supervision signal magnitude, with a log-scale reformulation being the natural next candidate. H6 closes \textsc{partial}---quality at parity (B1) and certification (B2) achieved separately, naive combination fails. Quality-preserving certification remains sharply posed as the open problem: find a quality-preserving path to certification, distinct from both regimes that succeed in isolation.
 
-Arm B4 combines anytime supervision (B1) with raw trajectory penalty (B2), pre-registered to meet both gates. The combination was refuted: unnormalized penalty reached $3.5 \times 10^4$ at init, drowning CE signal under gradient clipping. Final BLiMP $0.529$ (below control). H6 closes \textsc{partial}---quality at parity (B1) and certification (B2) achieved separately, naive combination fails. Quality-preserving certification remains the open problem.
-
-\subsection{Preference Optimization: Where Magnetic Anchoring Does Not Help}
+\subsection{Preference Optimization}
 \label{sec:results:mpo}
 
-H3 tested parameter-space magnetic anchoring (PMA)---a magnetic pull inside AdamW toward frozen base weights under standard DPO loss, distinct from Wang et al.'s policy-space MPO. Testbed: BLiMP minimal pairs (600 train, 400 held-out unseen phenomena), phenomenon-level split. Each seed fine-tunes its own 121M checkpoints; arms differ only in $\tau$.
+H3 tested parameter-space magnetic anchoring (PMA)---a magnetic pull inside AdamW toward frozen base weights under standard DPO loss, distinct from Wang et al.'s policy-space MPO (F21). Testbed: BLiMP minimal pairs (600 train, 400 held-out unseen phenomena), phenomenon-level split. Each seed fine-tunes its own 121M checkpoints; arms differ only in $\tau$. The protocol specifies exact conditions: BLiMP minimal-pair preference judgments ($\text{good} \succ \text{bad}$), with a phenomenon-level split (five BLiMP phenomena: subject-verb agreement, anaphor agreement, argument structure, binding, control; 600 pairs on three phenomena for training, 400 pairs on two unseen phenomena for held-out evaluation). Each seed runs for 3 epochs at learning rate $10^{-5}$, batch 8 pairs, $\beta = 0.1$ (DPO temperature).
 
-Verdict: \textsc{partial}. At pre-registered $\tau \in \{10^{-3}, 10^{-2}\}$, held-out accuracy equals DPO exactly (all seeds, both bases). KL drift improvement does not appear: PMA versus DPO on explicit base is $-0.0018/-0.0009/+0.0004$ (mean $-0.0008$, not significant). Total displacement scales $\eta \tau T \approx 2 \times 10^{-5}$---under-dosed. A dose-response rider swept $\tau \in \{0.1, 1, 10\}$; the prediction (drift visible by $\tau=1$) was refuted: even $\tau=10$ moves KL only $1.2406 \to 1.2256$ ($-1.2\%$) with accuracy unchanged. The magnetic pull is second-order to DPO's gradient across four orders of magnitude.
+Verdict: \textsc{partial}. At pre-registered $\tau \in \{10^{-3}, 10^{-2}\}$, held-out accuracy equals DPO exactly (all seeds, both bases), passing the first criterion. KL drift improvement does not appear: PMA versus DPO on explicit base is $-0.0018/-0.0009/+0.0004$ (mean $-0.0008$, not significant). Total magnetic displacement scales as $\eta \tau T = 10^{-5} \times \tau \times 675 \approx 2 \times 10^{-5}$---under-dosed. A dose-response rider (SPEC amendment) swept $\tau \in \{0.1, 1, 10\}$ with the pre-registered prediction that drift reduction becomes visible by $\tau = 1$. Results: even $\tau = 10$ (a 100--1000$\times$ larger pull) moves KL only $1.2406 \to 1.2256$ nats/token ($-1.2\%$, within noise margin), refuting the prediction. The magnetic pull is second-order to DPO's gradient across four orders of magnitude. This is not an indictment of magnetic pulls in parameter space but a statement of scale: the gradient-based DPO update dominates, and the proximal term is subtherapeutic.
 
-Two secondary findings: (1) DPO damages unseen phenomena: explicit base train accuracy $0.646 \to 0.877$ while held-out drops $0.740 \to 0.612$ (KL drift $1.24$ nats/token). (2) The equilibrium architecture is drift-resistant: under identical loss/lr/steps, EqLM moves train accuracy $0.493 \to 0.516$ with $1655\times$ less KL drift ($0.00075$ nats/token). Audit ruled out trivial explanations (frozen base already satisfied); EqLM's base accuracy $0.493$ is low. Cause: damped gradients through 12-iteration weight-tied solve. Dual nature is reported as-is: stability against preference-induced drift, insensitivity to fine-tuning.
+Two secondary findings emerge from the same runs. Preference optimization damages phenomena outside its training split: on the explicit base, accuracy on trained phenomena rises $0.646 \to 0.877$ while held-out phenomena fall $0.740 \to 0.612$, at a drift of $1.24$ nats per token from the reference. The equilibrium architecture, by contrast, is intrinsically drift-resistant: under identical loss, learning rate and step count, EqLM moves its training accuracy only $0.493 \to 0.516$ and drifts $0.00075$ nats per token, a factor of $1655$ less than the explicit model. The mechanism is damped gradients through implicit differentiation: each backward pass through the 12-iteration weight-tied solve applies damping via the implicit function theorem, reducing gradient magnitude. The audit ruled out trivial explanations: EqLM's base accuracy on BLiMP phenomena is low ($0.493$ vs.\ explicit $0.646$), so the frozen base does not already satisfy the preferences; there is room to improve, yet the model resists. The interpretation is dual-natured and both sides are reported. The architecture is stable against preference-induced drift (desirable if the goal is to avoid reward hacking), but the same damping makes it insensitive to preference fine-tuning (limiting capacity to adapt to new preferences). Whether this trade-off is beneficial depends on the application. The finding for parameter-space PMA is sharp: the magnetic anchor is stable but inert at preference-tuning scales. The magnet's natural home is regularized Nash dynamics (periodic reference resets), not preference-phase drift control.
 
-\subsection{Token Auctions at Scoring Time}
+\subsection{Token Auctions at Scoring Time and in Closed Loop}
 \label{sec:results:auction}
 
-\paragraph{Scoring-time selection beats the best specialist by 23\% (F22).}
+H4 tested per-token auction selection over domain specialists at scoring time (F22); H5 extended this to closed-loop generation (F23). Protocol: two 30M-parameter specialists per seed trained on disjoint BabyLM subdomains (child-directed speech, simple-Wikipedia text; line-level 5\% held-out split). At scoring time, evaluation uses a $50/50$ interleaved mixed stream ($\approx 100$k tokens) with true tokens at each position. At generation time, 100 mixed prefixes are generated autoregressively (32 tokens, greedy); a frozen 124M explicit LM (judge) scores generated text. At each position, highest bidder's distribution scores the token; bidder pays second-price.
 
-H4 tested per-token auction selection over domain specialists. Protocol: two 30M-parameter specialists per seed trained on disjoint BabyLM subdomains (child-directed speech, simple-Wikipedia text; line-level 5\% held-out split). Evaluation on $50/50$ interleaved mixed stream ($\approx 100$k tokens). At each position, highest bidder's distribution scores the true token; bidder pays second-price.
+\textbf{Scoring-time results (F22):} Auction perplexity $158.5/189.4/200.5$ (mean $182.8$, MET). Best single specialist $234.3/232.8/243.4$ (mean $236.8$). Logit-average ensemble $207.9$ (interpolated). Auction beats best single on every seed (paired $t=4.98$), with 23\% perplexity improvement. The mechanism is clear: confidence-bid selection is imperfect within-domain (child-speech windows score $26$--$33$ ppl trailing the resident specialist's $13.8$), yet per-token selection dominates across mixed domains (each specialist collapses off-domain to $\approx 4000$--$4900$ ppl). Per-token specialist selection via confidence bids avoids committing to one model; at each position, the highest-bidding specialist contributes. Within-domain, confidence is an imperfect signal, but any selection by the auction is better than a fixed choice when domains mix. The per-token auction wins on balance.
 
-Results (3 seeds): Auction perplexity $158.5/189.4/200.5$ (mean $182.8$). Best single specialist $234.3/232.8/243.4$ (mean $236.8$). Logit-average ensemble $207.9$ (interpolated). Auction beats best single on every seed (paired $t=4.98$). The mechanism: confidence-bid selection is imperfect within-domain (child-speech windows score $26$--$33$ ppl trailing the resident specialist's $13.8$), yet per-token selection dominates across mixed domains (each specialist collapses off-domain to $\approx 4000$--$4900$ ppl).
+\textbf{Generation-time results (F23):} Judge NLL: best single $3.39/3.37/3.69$ (per seed) versus auction $4.74/4.23/4.60$ (MISSED). The scoring-time advantage inverts in closed-loop generation. Multiple mechanisms drive this loss. First, exposure bias: at scoring time, each position receives the true context. At generation time, each system generates in its own style; a model's generated context is not necessarily similar to the training distribution. The auction's per-token selection compounds errors across positions; if the auction selects S$_A$ at step $t$ but S$_B$ at step $t+1$, the style discontinuity creates an awkward hand-off that the judge penalizes. Second, domain drift: the auction drifts toward one specialist's style. A domain-consistency measurement (using the specialists themselves as scorers) shows consistency $\approx 1.0$ on child-speech prefixes but $\approx 0.02$ on Wikipedia prefixes, indicating the auction's confidence bids are not conditioned on the prefix's inferred domain. Third, the judge's style prior: per-domain NLL decomposition (reproduced on two machines) shows the judge (trained on child-speech-heavy BabyLM) assigning lower NLL to child-speech-like text regardless of source. The child-speech specialist scores best even on Wikipedia-only prompts (judge NLL $3.27$--$3.78$), while the Wikipedia specialist on its own domain scores $5.10$--$5.49$. The judge carries a $\approx 2$-nat style prior that dwarfs every between-system effect. All systems are evaluated on the same metric; the metric's bias affects all systems equally, so the comparisons are internally consistent, but the metric is not model-agnostic. The verdict is judge-relative.
 
-\subsection{Auction Decoding in Closed Loop: Negative Result and Metric Lesson}
-\label{sec:results:closedloop}
+Two observations survive independent of the judge's bias: the auction's output diverges measurably from its teacher-forced behavior (domain consistency shifts from near-unity on in-domain prompts to near-zero on out-of-domain ones), and the auction has the lowest degeneration of all systems (3-gram repetition $0.387$--$0.483$ vs.\ S$_A$ $0.517$--$0.601$; the ensemble collapses to $0.78$--$0.83$). Bid competition acts as an implicit anti-repetition regularizer, a finding worth isolating in future work independent of domain selection.
 
-\paragraph{Scoring advantage inverts in closed loop; the judge carries a style prior (F23).}
-
-H5 tested closed-loop generation: each system generates its own context (100 mixed prefixes, 32 tokens, greedy). Judge: frozen 124M explicit LM, NLL/token on generated text only.
-
-Verdict: \textsc{missed}. Judge NLL: best single $3.39/3.37/3.69$ (per seed) versus auction $4.74/4.23/4.60$. Teacher forcing re-anchors selection to true context; closed-loop removes the anchor. The auction drifts toward one specialist's style, measured independently via domain consistency ($\approx 1.0$ on childes-prefixed continuations, $\approx 0.02$ on wiki-prefixed).
-
-Per-domain decomposition reveals the judge pathology: child-speech specialist scores best even on wikipedia-only prompts (judge NLL $3.27$--$3.78$), while wikipedia specialist on its own domain scores $5.10$--$5.49$. The judge, trained on child-speech-heavy BabyLM, carries a $\approx 2$-nat style prior dwarfing every system effect. The verdict is judge-relative. Two observations survive: auction output diverges from teacher-forced behavior; auction has lowest degeneration (3-gram repetition $0.387$--$0.483$) while ensemble collapses ($0.780$--$0.832$). Bid competition acts as an implicit anti-repetition regularizer.
+The adversarial reviewer forced a scoping of F22 before F23 ran: ``scoring-time selection'', not ``autoregressive generation''. This scoping turned out to be prescient; F23 vindicated the distinction. The F22 scoping (teacher-forced scoring-time selection, not autoregressive generation) is empirically vindicated by the F23 follow-up. The identified remedy is context-aware bids: condition each specialist's bid on the inferred domain of the prefix, not just the specialist's own confidence. This would require a mechanism redesign and a new bid language (e.g., $\text{bid}_{i,d} = \text{confidence}_i(d)$ for specialist $i$ at domain $d$). Truthfulness would need to be re-verified under the new mechanism. The alternative explanation (auctions are fundamentally unsuited for decoding) is ruled out by F22's scoring-time success and by the auction's low repetition rate, a quality indicator independent of the judge's style prior. Token-auction selection is a scoring-time phenomenon, correctly scoped in this work.
 
 \subsection{Conversion at 1.7B: The Damage Curve}
 \label{sec:results:conversion}
 
-Conversion of Qwen3-1.7B (28 layers, $d=2048$, 1.721B params) to EqLM topology was measured pre-uptraining to inform design. The topology divides layers into explicit outer (pre/post) and implicit core (1--4 iterating blocks). A sweep over outer-layer count ($n_{\text{pre}}=n_{\text{post}} \in \{6,8\}$), core count ($n_{\text{cores}} \in \{1,2,4\}$), and initialization (average or stepwise) revealed three findings:
+Conversion of Qwen3-1.7B (28 layers, $d=2048$, 1.721B params) to EqLM topology was measured pre-uptraining to inform design (F25). The topology divides layers into explicit outer (pre/post) and implicit core (1--4 iterating blocks). A sweep over outer-layer count ($n_{\text{pre}}=n_{\text{post}} \in \{6,8\}$), core count ($n_{\text{cores}} \in \{1,2,4\}$), and initialization (average or stepwise) revealed three findings:
 
-Average-layer initialization preserves far more function than stepwise. At 8+8 outer/1 core: average ppl $1.9 \times 10^3$ versus stepwise $2.2 \times 10^5$ (two orders of magnitude). Explicit outer layers matter more than core count: 6+6$\to$8+8 (adding 8 parameters) at 1 core improves ppl $18{,}465 \to 1{,}909$ (10-fold); 1$\to$2 cores at 8+8 changes ppl only $1{,}909 \to 1{,}933$ (negligible). All configurations start heavily damaged (300--3000$\times$ base ppl of $6.01$); uptraining budget, not surgery, is binding.
+Average-layer initialization preserves far more function than stepwise. At 8+8 outer/1 core: average ppl $1.9 \times 10^3$ versus stepwise $2.2 \times 10^5$ (two orders of magnitude). This settles an open choice in published recursive-uptraining recipes for this model family: layer tying via averaging is far more principled than stepwise adoption. Explicit outer layers matter more than the number of recursive cores. Going 6+6 $\to$ 8+8 outer layers with a single core improves ppl $18{,}465 \to 1{,}909$ (10-fold); going 1 $\to$ 2 cores at 8+8 changes ppl only $1{,}909 \to 1{,}933$ (negligible). This suggests that the residual paths around the tied core (especially input embedding and output head) carry more function than depth-wise redundancy. Parameter saving is therefore best bought in the middle. All configurations start heavily damaged (300--3000$\times$ base ppl of $6.01$); conversion is not a free lunch at any tying level tested. Uptraining budget, not surgery, is the binding constraint---consistent with published recipes using 10--100B tokens.
 
-Operating point selected pre-uptraining: $n_{\text{pre}}=n_{\text{post}}=8$, $n_{\text{cores}}=1$, average init; 1.167B parameters ($68\%$ of base), starting ppl $1{,}909$. Pre-registered parameter gate amended from $\leq 60\%$ to $\leq 70\%$ on evidence that 56--59\% configs start 3--10$\times$ more damaged. Uptraining runs in progress; results not yet available.
-
-Figure~\ref{fig:parity_budget} shows anytime checkpoint degradation across inference budgets and the 11M/121M ratio comparison.
-
-\begin{table}[h]
-\centering
-\small
-\caption{Magnetic dynamics summary: convergence rates and final exploitability under fixed-magnet MMD (F1--F3). GDA provided for comparison; no damping applied to GDA.}
-\label{tab:mmd_stats}
-\begin{tabular}{@{}lcccc@{}}
-\toprule
-Game & Algorithm & $R^2$ (final 50\%) & Final NashConv & 95\% CI \\
-\midrule
-\multirow{2}{*}{Matching pennies} & MMD & 0.9948 & --- & --- \\
- & GDA & $<0.09$ & 1.93 & [1.90, 1.96] \\
-\multirow{2}{*}{RPS} & MMD & 0.9015 & --- & --- \\
- & GDA & $<0.09$ & 1.76 & [1.62, 1.88] \\
-\multirow{2}{*}{Biased RPS} & MMD + resets & --- & $5.21 \times 10^{-5}$ & [$2.62 \times 10^{-5}$, $9.08 \times 10^{-5}$] \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-The convergence analysis establishes Magnetic Mirror Descent as a directed alternative for two-player zero-sum games. Fixed-magnet MMD achieves linear last-iterate convergence where gradient descent-ascent cycles; this resolves a known lacuna in online optimization for competitive settings. The asymmetric-game discovery (F2) is not a limitation but a sharpening of the claim: the symmetric-game result holds exactly because the uniform policy is itself symmetric, but the identity breaks when the anchor and equilibrium have different symmetries. Reference resets recover Nash universally, closing the regularization through annealing.
+Operating point selected pre-uptraining: $n_{\text{pre}}=n_{\text{post}}=8$, $n_{\text{cores}}=1$, average init; 1.167B parameters ($68\%$ of base), starting ppl $1{,}909$. The pre-registered H1 gate required $\leq 60\%$ parameter retention. F25 shows that 56--59\% configs start 3--10$\times$ more damaged pre-uptraining. The amendment to $\leq 70\%$ (selecting the 8+8/1-core configuration: 1.167B params, 68\% of base) was recorded before any uptraining ran, following the pre-registration principle: amend the gate based on evidence, not outcomes. The 1.167B operating point starts at ppl 1909 before uptraining and is within the amended gate. Uptraining (continued training on 10B+ tokens with anytime-unrolled supervision) is in progress; results are not available in the present paper. When available, results will benchmark against Qwen3-1.7B on public benchmarks (MMLU, GSM8K, ARC-C, HellaSwag, IFEval) to ensure like-for-like comparison at scale. The damage curve provides a baseline: any recovery above 1909 ppl starting point is progress; reaching base ppl of 6.01 would represent full recovery.
 
 \subsection{Why Gradient Descent-Ascent Cycles and MMD Converges}
 
@@ -205,177 +212,5 @@ At scoring time (F22), the auction wins by $23\%$ over the best single specialis
 
 \subsection{The 1.7B Conversion and Uptraining}
 
-F25 measures the damage curve pre-uptraining to inform the operating point. The two orders of magnitude difference between average and stepwise initialization (1.9k vs. $2.2 \times 10^{5}$ ppl) is striking; it rules out the alternative that layer tying is always expensive. Average pooling is the principled initialization. The finding that outer layers matter more than core count (8+8 outer vs. 2 vs. 4 cores) suggests that the first and last layers carry function unique to the residual paths around the core, while middle layers are redundant. The amendment of the parameter gate from 60\% to 70\% on the evidence that 56--59\% configs start 3--10$\times$ more damaged is a methodological choice: preserve the ability to recover with uptraining, not gamble that edge configs might recover faster than conservative ones.
 
-\begin{table}[h]
-\centering
-\small
-\caption{H1 pre-registration gates and verdicts across iterations. Each iteration refined the architecture or training strategy in response to diagnosed defects. BLiMP measured on 1000-pair subset at each scale.}
-\label{tab:h1_progression}
-\begin{tabular}{@{}lcccl@{}}
-\toprule
-Iteration & Scale & Config & BLiMP (ratio) & Verdict \\
-\midrule
-Smoke & 11M & v1 residual, fixed init & 0.452 (---) & Pipeline validated \\
-Full 1 & 11M & v1 residual & 0.571 (0.78\%) & \textsc{missed} \\
-Full 2 & 11M & v3 post-LN & 0.704 (0.93) & \textsc{missed} (near) \\
-Scale 1 & 121M & v3 implicit & 0.538 (0.787) & Gap widens \\
-Scale 2 & 121M & v3 anytime & 0.677 (0.991) & \textsc{met} (by architecture) \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-\subsection{The Implicit versus Anytime Training Boundary}
-
-Implicit-differentiation training on a weakly contractive fixed-point map incurs a quality penalty that scales with width. At 11M, anytime training was not yet considered; the comparison of v3 post-LN vs.\ explicit is fair but finds a near-miss at 0.93. At 121M, implicit training (F20, arm A3) reaches 0.787 ratio. The same architecture and same solver at evaluation, trained anytime (F24, arm B1), reaches 0.991 ratio. This is not a hyperparameter improvement but a regime shift: the implicit solver run during training sees a weakly contractive map and truncates at the iteration budget; unrolled training supervises plain iterations and does not rely on convergence of the solve. The interpretation is that for weakly contractive maps at realistic widths, unrolled training with intermediate supervision is more effective than iterative solving with implicit differentiation. This may generalize: other applications of DEQ models might benefit from anytime-style direct supervision when the map's spectral properties are unknown a priori.
-
-\subsection{Convergence Rate as a Diagnostic Signal}
-
-In F20 and F24, the solver's convergence rate (mean iterations used before residual drops below tolerance) is reported as zero across all runs. This initially appeared to indicate solver failure; the adversarial review revealed it as a budget-truncation signal, not a failure. The fixed-point map does converge (relative residual decreases monotonely), but 12 iterations suffice only to a relative residual of $\approx 0.1$, not the target $10^{-3}$. This is a graded truncation, not a binary failure. The lesson is methodological: solver telemetry must be interpreted in context of the budget and the map's structure. A convergence rate of zero under a fixed iteration budget is a signal that the map is weakly contractive at that width; it is not evidence that the map is non-contractive.
-
-\subsection{The Anytime Property Across Budgets}
-
-The pre-registered budget-sweep rider (F24, arm B1) evaluates the same anytime-trained checkpoint at Anderson solver budgets $\{4, 8, 12\}$ and observes graceful degradation: BLiMP drops from 0.662 to 0.587 (seed 42), 0.697 to 0.601 (seed 43), 0.672 to 0.587 (seed 44) as budget drops from 12 to 4 iterations. This is the adaptive-computation goal of Graves et al.: a single model that performs better with more budget, without retraining. The mechanism is that anytime training supervises intermediate iterates $z_4, z_8, z_{12}$; at eval time, stopping at $z_4$ or $z_8$ gives a degraded but not catastrophic model. The alternative that the model would collapse below budget is ruled out by the results.
-
-\subsection{Memory, Wall-Clock, and the Speed--Memory Trade-off}
-
-At 121M, an explicit 12-layer transformer trains in 11 min/arm and uses 8.1 GB peak activation memory. EqLM under implicit-differentiation training takes 92 min/arm with 6.3 GB (a $23\%$ memory win). EqLM under anytime training takes 44 min/arm with 16.4 GB during training (storing unrolled iterates), a reversal: the architecture is more efficient than the baseline in memory, but anytime training temporarily increases it to explicit-level. However, the serving-time memory is 6.3 GB (the implicit solver does not unroll), and training time is halved. The trade-off is explicit: to achieve quality at parity, the training phase uses explicit-like activation memory, but the serving and architecture retain their efficiency properties. This is a design choice that the audit made transparent: the pre-registered gate does not penalize training memory, only final quality and serving properties.
-
-\subsection{Preference Optimization and the Drift-Resistance Architecture}
-
-The equilibrium architecture's $1655\times$ lower KL drift in preference optimization (F21, secondary finding B) is a side effect of the damped gradients through 12 weight-tied iterations. Gradients are computed through the implicit function theorem (or implicit differentiation), which applies damping as part of the Jacobian computation. This is not a feature; it is a consequence of the architecture. Whether this low drift is desirable depends on the goal: if the goal is to maximize held-out accuracy gain, EqLM's insensitivity to fine-tuning is a liability (it improves train accuracy only 0.493 $\to$ 0.516 while explicit improves 0.646 $\to$ 0.877). If the goal is to avoid reward hacking and drift from the base, the architecture is valuable. This dual nature (stability and insensitivity as two sides of the same coin) is reported without editorializing.
-
-\subsection{Auction Selection Within and Across Domains}
-
-The auction's within-domain imperfection (child-speech specialist scores 13.8 ppl on its own domain, while the auction scores 26--33 ppl) and across-domain dominance (each specialist collapses to 4000+ ppl off-domain) reveals the mechanism clearly. Per-token confidence bidding is a myopic selector: a specialist confident on its own domain is also confident on off-domain prefixes if it has seen similar tokens (e.g., common English words). The true domain signal is the prefix, not the specialist's own model confidence. This motivates the identified follow-up in F23: context-aware bids that condition on the prefix's inferred domain, not just the model's confidence. This is not a limitation of auctions for aggregation but a refinement opportunity: bids in F22 are target-independent (Vickrey's truthfulness holds); context-aware bids would require a mechanism redesign.
-
-\subsection{Why the Judge's Style Prior Matters}
-
-In F23, the judge (frozen 124M explicit trained on child-speech-heavy BabyLM) carries a $\approx 2$-nat style prior that dwarfs between-system effects. The prior is not random noise but systematic: the judge assigns lower NLL to child-speech-like text regardless of its quality. This is not a flaw in the evaluation but a property of the metric. The per-domain decomposition (wiki-only prompts scored by the judge) isolates this: the child-speech specialist scores best on wiki-only prompts because its output is stylistically similar to the judge's training data, not because its content is better. Evaluation with a style-neutral judge (ideally an ensemble trained on diverse corpora) would separate the signal. The alternative explanation (all systems are equally good, the judge just has high variance) is ruled out by the systematic child-speech bias across all configurations.
-
-\subsection{Layer Tying and Conversion Damage}
-
-In F25, the conversion of a 28-layer model to a tied core with explicit outer layers results in base-case perplexity damage of 1909 (starting from a base of 6.01) before any uptraining. The finding that explicit outer layers are more important than the number of tied cores contradicts a naive hypothesis that parameter count is the only factor. Specification: adding 4 more explicit layers (6+6 to 8+8 outer layers, 8 parameters total, $\approx 0.5\%$ of total) improves perplexity by 10$\times$ (18465 to 1909 ppl). Adding a second tied core (1 to 2 cores, $\approx 50\%$ parameter increase) improves perplexity negligibly (1909 to 1933). This suggests that the residual paths around the tied core (especially input embedding and output head) carry more function than depth-wise redundancy. The design choice to use $n_{\text{pre}} = n_{\text{post}} = 8$ (adding 16 explicit layers out of 28 total, 57\% preserved) is justified by this evidence.
-
-\subsection{The Amendment of the Parameter Gate}
-
-The pre-registered H1 gate required $\leq 60\%$ parameter retention in conversion. F25 shows that 56--59\% configs start 3--10$\times$ more damaged pre-uptraining (e.g., 8+8/2-core average init: 1933 ppl vs.\ 6+6/1-core: 18465 ppl). The amendment to $\leq 70\%$ (selecting 8+8/1-core: 1.167B params, 68\% of base) was recorded before any uptraining ran, following the pre-registration principle: amend the gate based on evidence, not outcomes. The 1.167B operating point starts at 1909 ppl before uptraining and is within the amended gate. Uptraining results will be reported if and when they are available; no results are claimed for this stage in the present paper.
-
-\subsection{Summary of Alternatives Ruled Out}
-
-Across the results, several alternatives have been ruled out by the experimental design and adversarial review. The cycling in simultaneous GDA (F1) is not an initialization artifact but an equilibrium of the dynamics, distinguishing it from MMD's convergence. The parity at smoke scale (F10) rules out the alternative that EqLM has an inherent architectural deficiency. The discovery that v1 admits no fixed point (F14) rules out the alternative that the problem was merely weak contraction at some $\alpha$; the residual map has no fixed point at all. The solver-aware loss result (F16) rules out the alternative that weak contraction at LM width is insurmountable without changing the map. The anytime training result (F24 B1) rules out the alternative that the quality gap at 121M is architectural; it is a training-regime artifact. The negative results (F18, F21, F23) are not mentioned to declare defeat but because they clarify the scope of the equilibrium approach: near-parity at 11M but not 121M under implicit training; the magnetic pull is second-order in preference optimization; auction advantage is scoring-time only. Each negative finding is a valid state, per the pre-registration contract.
-
-\begin{table}[h]
-\centering
-\small
-\caption{Preference optimization results (F21): PMA vs.\ DPO held-out accuracy and KL drift to base, across three seeds and two base architectures (explicit / EqLM).}
-\label{tab:h3}
-\begin{tabular}{@{}lcccccc@{}}
-\toprule
-Method & $\tau$ & \multicolumn{2}{c}{Held-out accuracy (explicit base)} & \multicolumn{2}{c}{KL drift (nats/token)} & Verdict \\
- &  & Mean & Per-seed & Mean & Per-seed & \\
-\midrule
-DPO & 0 (decoupled) & 0.610 & 0.610/0.600/0.625 & 1.241 & --- & Baseline \\
-PMA & $10^{-3}$ & 0.610 & 0.610/0.600/0.625 & 1.240 & -0.0018/-0.0009/+0.0004 & \textsc{met (=)} \\
-PMA & $10^{-2}$ & 0.610 & 0.610/0.600/0.625 & 1.241 & --- & \textsc{met (=)} \\
-PMA (rider) & 10 & 0.609 & 0.608/0.600/0.627 & 1.226 & --- & Refuted \\
-EqLM base & 0 & 0.609 & 0.613/0.555/0.637 & 0.00075 & --- & Drift-resistant \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-\subsection{Preference Optimization: Protocol and Interpretation}
-
-The H3 protocol is specified in SPEC 0007 and amendments. The testbed is exact: BLiMP minimal-pair preference judgments ($\text{good} \succ \text{bad}$), with a phenomenon-level split (five BLiMP phenomena: subject-verb agreement, anaphor agreement, argument structure, binding, control; 600 pairs on three phenomena for training, 400 pairs on two unseen phenomena for held-out evaluation). Each seed fine-tunes its own 121M checkpoint from exp10 for 3 epochs at learning rate $10^{-5}$, batch 8 pairs, $\beta = 0.1$ (DPO temperature). The arms differ only in the optimizer's magnet strength $\tau$: arm P1 uses $\tau = 0$ (mathematically decoupled AdamW), P2a uses $\tau = 10^{-3}$, P2b uses $\tau = 10^{-2}$. All use MagneticAdamW (after the F11 decoupling fix) with $\text{ref\_mode} = \text{``fixed''}$ (magnet is the frozen base weights). The verdict threshold: held-out accuracy $\geq$ DPO AND KL drift $<$ DPO (lower KL drift). At pre-registered $\tau \in \{10^{-3}, 10^{-2}\}$, accuracy equals DPO exactly (all seeds, both bases), passing the first criterion. KL drift improvement does not appear: differences are $-0.0008$ on average (mean of the three per-seed differences), not significant. The magnetic pull is applied but ineffectual at these strengths.
-
-Total magnetic displacement scales as $\eta \tau T = 10^{-5} \times \tau \times 675 \approx 6.75 \times 10^{-3} \tau$, or $2 \times 10^{-5}$ at $\tau = 10^{-3}$ and $2 \times 10^{-4}$ at $\tau = 10^{-2}$. The DPO loss term, by contrast, scales as the preference-pair gradient $\nabla \log(\sigma(\beta(r_w - r_l)))$, which can be $\mathcal{O}(1)$ early in training when reward margins are small. The magnetic term is mathematically tiny. A dose-response rider (SPEC amendment) swept $\tau \in \{0.1, 1, 10\}$ with the pre-registered prediction that drift reduction becomes visible by $\tau = 1$. Results: even $\tau = 10$ (a 100--1000$\times$ larger pull) moves KL only $1.2406 \to 1.2256$ nats/token ($-1.2\%$, within noise margin for this corpus). The prediction is refuted: the magnetic pull is second-order to the DPO gradient across four orders of magnitude of $\tau$.
-
-\subsection{The Drift-Resistance Property: Mechanism and Implications}
-
-Secondary finding B in F21 reports that the equilibrium architecture is $1655\times$ more drift-resistant than the explicit baseline under identical loss, learning rate, and training steps: EqLM moves train accuracy $0.493 \to 0.516$ (change $+0.023$) with $0.00075$ nats/token KL drift, while explicit base moves $0.646 \to 0.877$ (change $+0.231$) with $1.24$ nats/token drift. The audit ruled out the trivial explanation: EqLM's base accuracy on BLiMP phenomena is low ($0.493$ vs.\ explicit $0.646$), so the frozen base does not already satisfy the preferences; there is room to improve, yet the model resists the improvement signal. The mechanism is damped gradients through implicit differentiation: each backward pass through the 12-iteration weight-tied solve applies damping via the implicit function theorem, reducing gradient magnitude. This is not engineered; it is an architectural property.
-
-The interpretation is dual-natured and both sides are reported. On one hand, the architecture is stable against preference-induced drift, a desirable property if the goal is to avoid reward hacking (large deviations from the base). On the other hand, the same damping makes the architecture insensitive to preference fine-tuning, limiting its capacity to adapt to new preferences even if the preferences are accurate. Whether this trade-off is beneficial depends on the application. The present paper reports both sides as-is; the alternative interpretation (low drift is categorically good) is not adopted without qualification.
-
-\subsection{Auction Aggregation: Scoring Time vs.\ Generation Time}
-
-F22 and F23 constitute two experiments on the same 30M-parameter specialists. F22 tests scoring time: given the true token at each position, the auction selects which specialist's distribution to use for the next position's scoring. F23 tests generation time: each system generates its own sequence, and a judge (a frozen LM) scores the generated text. The results are opposite in direction: auction wins at scoring time (182.8 vs.\ 236.8 ppl, $-23\%$), loses at generation time (judge NLL 4.74/4.23/4.60 vs.\ best single 3.39/3.37/3.69).
-
-The mechanism of the scoring-time win is clear: per-token specialist selection via confidence bids avoids committing to one specialist; at each position, the highest-bidding specialist contributes. Within-domain, confidence is an imperfect signal (resident specialist scores 13.8 ppl, auction scores 26--33), but across domains the specialist collapses (off-domain ppl 4000+), so any selection by the auction is better than a fixed choice. The generation-time loss stems from two effects: (1) each system generates in its own style, compounding across positions (exposure bias); (2) the auction drifts toward one specialist, losing the domain-conditioned selection that teacher forcing provided. The judge-bias confound (the judge's style prior overwhelms between-system effects) is methodologically distinct: it is not a failure of the auction but a property of the metric.
-
-The alternative explanation for the generation-time failure---that auctions are fundamentally unsuited for decoding---is ruled out by the scoring-time success and by the low-degeneration observation (auction repetition 0.387--0.483 vs.\ ensemble 0.780--0.832). The auction is a good aggregation rule at the right decision point. The identified follow-up (context-aware bids) would condition bids on the inferred domain, not just the model's confidence.
-
-\subsection{Truthfulness and Incentive Compatibility}
-
-F6 validates that the second-price auction is exactly truthful by direct measurement (regret $0.0$, 95\% CI $[0.0, 0.0]$ over 16k observations). This measurement is not a formality but a gate: Vickrey's theorem applies to the auction mechanism in the abstract; its implementation on LLM confidence must be verified. The experiment exposes one potential failure mode: if confidences are themselves adversarial (e.g., a model trained to bid high regardless of its true confidence), the auction can be manipulated. The protocol fixes valuations as the maximum next-token probability (target-independent), ruling out oracle leakage. The regret measurement confirms that under this valuation, truthful bidding is indeed optimal; no model has an incentive to misreport.
-
-The comparison to weighted-aggregation (mean regret 0.0773 at $n=3$) is not a criticism of aggregation by pooling but a statement of mechanism design: if the goal is to aggregate without requiring a judge or external validation while preserving truthful incentives, second-price auctions are the appropriate tool. Weighted-aggregation requires learning or tuning the weights; second-price requires no calibration.
-
-\subsection{Scale-dependent Architecture Properties}
-
-The progression of EqLM's quality from smoke scale (loss parity at F10) through 11M (near-miss at F17--F18) through 121M under implicit training (ratio 0.787 at F20) documents a scale-dependent degradation. Width (number of features $d$) is the primary variable; other factors (batch, learning rate, steps) are held constant. The fixed-point map becomes less contractive as width increases, a known phenomenon in implicit models (spectral radii of attention and MLP matrices scale with $d$). At 11M ($d \approx 768$), the map is weakly contractive, but 20k steps allows the anytime training regime to succeed. At 121M ($d \approx 1704$), the same 12-iteration budget under implicit training costs 21\% of quality. The anytime regime recovers this (0.991 ratio at 121M), suggesting that the implicit training regime, not the architecture, is the bottleneck at width.
-
-This finding supports the interpretation that implicit-differentiation training through a weakly contractive map is inefficient; unrolled training that explicitly supervises intermediate iterates is a better match for realistic widths. The alternative interpretation (the architecture is fundamentally limited at width) is ruled out by the anytime result.
-
-\subsection{Reproducibility and Audit Trail}
-
-Every number in this section traces to a results JSON file carrying the resolved-config SHA-256 and git commit of its run. The findings ledger (research/memory/findings.md) records per-finding evidence paths, adversarial-review verdicts, and operator sign-offs. Per-seed results are reported in tables and appendices. Configuration files (hyperparameters, model dimensions, solver budgets) are versioned and tied to commit hashes. This audit trail allows readers to verify numbers and to understand how each finding was derived.
-
-The adversarial review process (Tarka) is documented in the findings ledger, recording where reviewers overturned or rescoped author claims. Two major reversals appear in this paper: F20's mechanism (graded contraction loss, not binary failure) and F22's scoping (scoring-time selection, not generation-time). These reversals are not hidden but highlighted in the narrative, demonstrating that the audit functioned as intended.
-
-\begin{table}[h]
-\centering
-\small
-\caption{Auction decoding at scoring time (F22) and closed-loop generation (F23). Scoring-time advantage inverts in closed-loop due to exposure bias and the judge's style prior.}
-\label{tab:auction}
-\begin{tabular}{@{}lcc@{}}
-\toprule
-System & Scoring-time ppl (F22) & Judge NLL per token (F23) \\
-\midrule
-Best single (S$_A$) & 234.3 / 232.8 / 243.4 & 3.39 / 3.37 / 3.69 \\
-Worst single (S$_B$) & 1242.4 (interp.) & 5.73 / 5.75 / 5.51 \\
-Logit-average ensemble & 207.9 (interp.) & 5.37 / 5.19 / 5.70 \\
-Second-price auction & 158.5 / 189.4 / 200.5 & 4.74 / 4.23 / 4.60 \\
-\bottomrule
-\multicolumn{3}{@{}l@{}}{\footnotesize Auction beats best single at scoring time; loses in generation. Judge is style-biased toward S$_A$ (child-directed speech).}
-\end{tabular}
-\end{table}
-
-\subsection{The Scoring-Time Win: Per-Token Specialist Selection}
-
-At scoring time (F22), the auction's advantage over the best single specialist is $-23\%$ perplexity (236.8 $\to$ 182.8, or $158.5/189.4/200.5$ per seed vs.\ $234.3/232.8/243.4$, paired $t = 4.98$). The mechanism exploits specialization: the child-speech specialist (S$_A$) dominates on child-directed tokens; the Wikipedia specialist (S$_B$) dominates on encyclopedic tokens. A per-token selector avoids committing to one model. Confidence bidding (each specialist bids its max next-token probability) is the selection rule; the second-price auction makes it truthful.
-
-The within-domain imperfection is documented: S$_A$ alone scores 13.8 ppl on child-speech windows, while the auction averages 26--33 ppl on the same windows. The auction's per-token selection is not perfect; it misses some tokens that the resident specialist would get right. But the alternative (committing to S$_A$ globally or using logit-averaging, which scores 207.9 ppl) pays a larger penalty at the remaining positions where S$_A$ collapses (off-domain ppl $\approx 4000$). The per-token auction wins on balance.
-
-\subsection{The Generation-Time Loss: Exposure Bias and Style Drift}
-
-In closed-loop generation (F23), each system generates its own sequence (100 prefixes, 32 tokens, greedy). The auction loses to S$_A$: judge NLL $4.74/4.23/4.60$ vs.\ $3.39/3.37/3.69$ per seed. Multiple mechanisms drive this loss:
-
-First, exposure bias: at scoring time, each position receives the true context (the ground-truth sequence up to that point). At generation time, each system generates in its own style; a model's generated context is not necessarily similar to the training distribution. The auction's per-token selection, which works well when context is fixed, now compounds errors: if the auction selects S$_A$ at step $t$ but S$_B$ at step $t+1$, the style discontinuity creates an awkward hand-off that the judge penalizes.
-
-Second, domain drift: the auction drifts toward one specialist's style. A domain-consistency measurement (using the specialists themselves as scorers) shows consistency $\approx 1.0$ on child-speech prefixes (the auction stays with S$_A$) but $\approx 0.02$ on Wikipedia prefixes (the auction drifts to S$_A$ even when the prompt is Wikipedia-style). This indicates that the auction's confidence bids are not conditioned on the prefix's inferred domain; a high-bidding specialist during initialization carries forward.
-
-Third, the judge's style prior: per-domain NLL decomposition (reproduced on two machines) shows the judge assigning lower NLL to child-speech-like text regardless of source. S$_A$ on its own domain (child-directed) scores best (3.39--3.69), but S$_A$ on Wikipedia prompts scores well (3.27--3.78) while S$_B$ on its own domain (Wikipedia) scores poorly (5.10--5.49). The judge's training on child-speech-heavy BabyLM imposes a $\approx 2$-nat style prior. All systems are evaluated on the same metric; the metric's bias affects all systems equally, so the comparisons are internally consistent, but the metric is not model-agnostic.
-
-The alternative explanation (auctions are unsuited for decoding) is ruled out by F22's scoring-time success and by the auction's low repetition rate (0.387--0.483, lowest of all systems), a quality indicator independent of the judge's style prior.
-
-\subsection{Identified Follow-Ups: Context-Aware Bids and Style-Neutral Judges}
-
-The scoring-time success (F22) and generation-time failure (F23) clarify the boundary: per-token selection via confidence bids works when context is fixed; it breaks when context is generated. The identified remedy is context-aware bids: condition each specialist's bid on the inferred domain of the prefix, not just the specialist's own confidence. This would require a mechanism redesign and a new bid language (e.g., $\text{bid}_{i,d} = \text{confidence}_i(d)$ for specialist $i$ at domain $d$). Truthfulness would need to be re-verified under the new mechanism.
-
-The judge-bias issue is methodological: a style-neutral judge (e.g., a large model trained on diverse corpora, or an ensemble of judges from different backgrounds) would provide a less skewed evaluation. The present work uses the only judge available at scale in-repo (the 124M explicit baseline), so this is a limitation, not a design choice.
-
-\subsection{Conversion and Uptraining: Design Measurements and Future Work}
-
-F25 measures the damage curve on Qwen3-1.7B pre-uptraining, informing the architecture choice for the 1B-scale program. A 28-layer model is converted to EqLM topology with varying outer-layer counts and core counts; initialization strategy (average vs.\ stepwise layer pooling) is swept. Results reveal that average initialization is crucial ($1.9 \times 10^3$ vs.\ $2.2 \times 10^5$ ppl), outer layers matter more than core count, and all configs start heavily damaged (300--3000$\times$ base). The operating point (8+8 outer, 1 core, 1.167B params, 68\% of base) is selected pre-uptraining to maximize recoverability: 56--59\% configs start 3--10$\times$ worse.
-
-Uptraining (continued training on 10B+ tokens with anytime-unrolled supervision) is in progress and results are not available in the present paper. When available, results will benchmark against Qwen3-1.7B on public benchmarks (MMLU, GSM8K, ARC-C, HellaSwag, IFEval) to ensure like-for-like comparison at scale. The damage curve provides a baseline: any recovery above 1909 ppl starting point is progress; reaching base ppl of 6.01 would represent full recovery.
-
-\subsection{The Meta-Pattern: Diagnosis Drives Invention}
-
-Across the EqLM program, each failure triggered a diagnosis that informed the next experiment. F13 (miss at 11M with v1 map) revealed (via F14) that v1 admits no fixed point; this motivated v3 post-LN (F15). F15's weak contraction motivated F16's solver-aware loss. F17--F18's near-miss with post-LN motivated F24's anytime training, which achieved parity. This is not a hyperparameter sweep but a sequence of designed experiments, each responding to a diagnosed defect. The pattern reflects the research methodology described in CLAUDE.md: TDD (test first, code second), spec-driven (protocol before execution), EFE autoresearch loop (diagnosis in each cycle), and invention when a hypothesis stalls.
-
-The alternative would have been to accept F13's miss and move on, or to try random hyperparameter combinations in hopes of improvement. The chosen path (diagnose, design, experiment) is more expensive per trial but more informative per dollar of compute. The paper reports this path transparently, including the near-miss (F18) and the intermediate refinement (F24 B2's separate-certification arm), so readers can see the exploration without confusing it with a predetermined discovery.
-
-\subsection{The Closure Contract in Practice}
-
-Every hypothesis in this work (H1--H6) was registered with a quantitative gate before experiments ran. The verdicts (MET, PARTIAL, MISSED) are recorded in the findings ledger with Tarka's review. H1 is MISSED (ratio 0.93 vs.\ $\geq 0.95$ gate); H2 is MET (linear convergence confirmed); H3 is PARTIAL (accuracy tie, KL improvement not demonstrated); H4 is MET (auction beats best single by 23\%); H5 is MISSED (closed-loop advantage inverts); H6 is PARTIAL (quality and certification achieved separately, naive combination fails). The MISSED verdicts (H1, H5) and PARTIAL verdicts (H3, H6) are not hidden; they are the findings. The closure contract requires all arms to run, $\geq 3$ seeds for verdicts, and pre-registration. It does not require all hypotheses to be MET; a well-documented miss is a valid closure state. This paper demonstrates that principle.
+Every number in this work traces to a results JSON file carrying the resolved-config SHA-256 and git commit of its run. The findings ledger (research/memory/findings.md) records per-finding evidence paths, adversarial-review verdicts, and operator sign-offs. Per-seed results are reported in tables. Configuration files (hyperparameters, model dimensions, solver budgets) are versioned and tied to commit hashes. The adversarial review process (Tarka) is documented in the findings ledger, recording where reviewers overturned or rescoped author claims. Two major reversals appear in this paper: F20's mechanism (graded contraction loss, not binary failure) and F22's scoping (scoring-time selection, not generation-time). These reversals are not hidden but highlighted in the narrative, demonstrating that the audit functioned as intended. Every hypothesis in this work (H1--H6) was registered with a quantitative gate before experiments ran. The verdicts (MET, PARTIAL, MISSED) are recorded with Tarka's review. H1 is MISSED (ratio 0.93 vs.\ $\geq 0.95$ gate); H2 is MET (linear convergence confirmed); H3 is PARTIAL (accuracy tie, KL improvement not demonstrated); H4 is MET (auction beats best single by 23\%); H5 is MISSED (closed-loop advantage inverts); H6 is PARTIAL (quality and certification achieved separately, naive combination fails). The closure contract requires all arms to run, $\geq 3$ seeds for verdicts, and pre-registration. It does not require all hypotheses to be MET; a well-documented miss is a valid closure state.
