@@ -497,23 +497,37 @@ vote.
 Evaluated offline over the 360 stored cross-examination candidates at no
 additional compute, every cell of a fourteen-point grid over the weighting and
 $\tau \in [0.25, 2.5]$ scores between $0.6222$ and $0.6333$ against the
-router's $0.5611$. Fitting the two parameters on one seed and evaluating on the
-other two gives held-out margins of $+0.0833$ ($z = 4.26$, 21 wins to 1 loss on
-disagreements), $+0.0375$ ($z = 1.73$) and $+0.0583$ ($z = 3.74$, 14 wins to no
-losses), a mean of $+0.0597$. The mechanism gains on both domains rather than
-trading one for the other: held-out mathematics reaches $0.833$ against the
-router's $0.800$ in the strongest fold while general knowledge reaches $0.492$
-against $0.358$, which is the division of labour the per-domain decomposition
-of the cross-examination experiment suggested and which rule selection failed
-to exploit.
+router's $0.5611$, with held-out margins of $+0.0833$, $+0.0375$ and $+0.0583$
+across three folds. An adversarial review conducted before the pre-registered
+confirmation was scored found that margin to be structurally misattributed, and
+the decomposition it forced is more informative than the original claim.
 
-The result is consistent with, rather than contrary to, the impossibility
-observed at answer level. The earlier experiments reweighted one fixed body of
-evidence and could not beat retaining all of it; the vote operates on new
-evidence --- answers extracted from independently generated reasoning chains ---
-and the anchor injects a second signal, the ladder's prior measurement of who is
-reliable where, that no purely per-question rule contained. Because the 360
-questions had been used to establish the router bar, the mechanism's parameters
-were pre-registered at uniform weighting and $\tau = 1.0$ before any fresh data
-was drawn, and a confirmation on three unseen seeds is reported below; the
-offline result is not claimed independently of it.
+The router row abstains whenever its single champion emits an answer the
+extractor cannot parse, which occurs on 58 of the 360 questions; the vote has
+four extraction attempts. Of the mechanism's 26 paired wins at the
+pre-registered cell, 24 are such abstention rescues, and on questions both
+systems answered the record is 2 wins to 1 loss ($z = 0.58$). Against the fair
+bar --- the router with a majority-vote fallback on extraction failure, the
+one-line repair a practitioner would ship --- no cell of the grid separates:
+the fallback router scores $0.6278$, the best cell wins 3 and loses 1
+($z = 1.00$), and at $\tau \geq 2$ the mechanism reproduces the fallback
+router exactly. The magnetic threshold behaves precisely as the answer-level
+findings predict: at $\tau = 1$ the council overrides an answering champion
+three times in 360 questions, rare enough to be harmless and thereby rare
+enough to be worthless.
+
+What survives is stated at its measured size. The council system --- routing on
+ladder priors plus redundancy against single-model extraction failure --- beats
+the strongest single model $0.6278$ to $0.5472$ on the mixed arena, at roughly
+$1.2\times$ expected serving cost since further candidates are generated only
+on the 16\% of extraction failures. Both ingredients are constructions of this
+work, and the redundancy is the $\tau \to \infty$ limit of the anchored vote.
+What no tested mechanism contributes is extraction of knowledge complementarity
+beyond redundancy: the per-example oracle stands twelve points above the fair
+bar and remains unclaimed, consistent with the answer-level impossibility
+results at generation level. The pre-registration was amended before any
+confirmation data was scored --- primary comparison moved to the fallback
+router, threshold raised to the Bonferroni-corrected $z \geq 2.807$ for the
+roughly fifteen mechanisms examined on the development arena, and every margin
+reported with its abstention-versus-override decomposition --- and the
+confirmation on three unseen seeds tests whether the decomposition replicates.

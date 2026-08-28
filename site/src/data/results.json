@@ -817,8 +817,24 @@
         "router_pooled": 0.5611,
         "path": "results/scale/exp27_anchored_vote.json"
       },
-      "status": "PRELIMINARY POSITIVE",
-      "verdict": "pending SPEC 0017 confirmation"
+      "status": "SUPERSEDED BY F40",
+      "verdict": "margin decomposes into extraction redundancy, not anchoring"
+    },
+    {
+      "id": "F40",
+      "title": "The anchored vote's margin is redundancy, not anchoring",
+      "claim": "Tarka review before confirmation scoring: 24 of 26 wins are abstention rescues (the router's champion emits an unparseable answer on 16% of questions; the vote has four attempts). Against a router with majority fallback \u2014 the fair bar \u2014 no grid cell separates (best 3W/1L, z=1.00; tau>=2 IS the fair bar). What survives: the council system beats the strongest single model 0.6278 vs 0.5472 via ladder routing + redundancy at ~1.2x cost. Knowledge-complementarity extraction contributes nothing measurable; the oracle stays 12 points above the fair bar.",
+      "evidence": {
+        "exp": "tarka f40",
+        "fallback_router": 0.6278,
+        "best_single": 0.5472,
+        "abstention_wins": 24,
+        "override_record": "2W/1L z=0.58",
+        "oracle": 0.75,
+        "path": "research/specs/0017-anchored-vote-confirmation.md"
+      },
+      "status": "VALIDATED",
+      "verdict": "supersedes F39; SPEC 0017 amended pre-scoring"
     }
   ]
 }
