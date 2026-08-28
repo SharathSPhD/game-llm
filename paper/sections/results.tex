@@ -466,3 +466,53 @@ beliefs. That the answer-level analogue of such cross-examination fails here, in
 the leave-one-out proposal pricing row of Table~\ref{tab:aggregation}, is
 consistent with this reading rather than contrary to it: pricing a peer's chosen
 option adds nothing precisely because nothing new is on the table.
+
+\subsection{An Anchored Mechanism That Clears the Bar}
+\label{sec:results:anchored}
+
+The findings above close every route in which the council competes with the
+router: aggregation over fixed distributions cannot beat averaging
+(Section~\ref{sec:results:aggregation}), cross-examination over generated
+candidates ties the router, and a per-domain hybrid shows no held-out gain.
+Applying the contradiction-matrix method to the resulting impasse --- adaptability
+of per-question collective evidence against reliability where a specialist
+dominates --- yields a different construction: rather than compete with the
+router, the mechanism takes the router as the \emph{reference policy} of the
+game. Each player generates a full solution; extracted answers are collapsed
+into equivalence classes; and a class's score is its vote count plus a magnetic
+bonus $\tau$ on the class the router selected. The council therefore overrides
+the incumbent only when its net vote margin exceeds $\tau$, and as
+$\tau \to \infty$ the mechanism is exactly the router, so its floor is the
+baseline by construction --- a property no previously tested rule possessed.
+The construction retains the components validated earlier in this work: the
+magnetic anchor is the policy-space proximal term of magnetic mirror descent
+with the router as the magnet, the vote is the argmax of a quantal response
+over the discrete class space, and vote weights are fixed in advance from the
+ladder of Table~\ref{tab:ladder} rather than fitted. Answer classes also
+neutralise two measurement hazards documented above: players that do not share
+a tokenizer still share answers, and a verbose derivation casts exactly one
+vote.
+
+Evaluated offline over the 360 stored cross-examination candidates at no
+additional compute, every cell of a fourteen-point grid over the weighting and
+$\tau \in [0.25, 2.5]$ scores between $0.6222$ and $0.6333$ against the
+router's $0.5611$. Fitting the two parameters on one seed and evaluating on the
+other two gives held-out margins of $+0.0833$ ($z = 4.26$, 21 wins to 1 loss on
+disagreements), $+0.0375$ ($z = 1.73$) and $+0.0583$ ($z = 3.74$, 14 wins to no
+losses), a mean of $+0.0597$. The mechanism gains on both domains rather than
+trading one for the other: held-out mathematics reaches $0.833$ against the
+router's $0.800$ in the strongest fold while general knowledge reaches $0.492$
+against $0.358$, which is the division of labour the per-domain decomposition
+of the cross-examination experiment suggested and which rule selection failed
+to exploit.
+
+The result is consistent with, rather than contrary to, the impossibility
+observed at answer level. The earlier experiments reweighted one fixed body of
+evidence and could not beat retaining all of it; the vote operates on new
+evidence --- answers extracted from independently generated reasoning chains ---
+and the anchor injects a second signal, the ladder's prior measurement of who is
+reliable where, that no purely per-question rule contained. Because the 360
+questions had been used to establish the router bar, the mechanism's parameters
+were pre-registered at uniform weighting and $\tau = 1.0$ before any fresh data
+was drawn, and a confirmation on three unseen seeds is reported below; the
+offline result is not claimed independently of it.
