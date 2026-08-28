@@ -24,7 +24,10 @@ generation:
   # the model. Mathematics gets room to derive; the multiple-choice prompts ask
   # for a bare letter and need almost none.
   max_new_tokens_math: 512
-  max_new_tokens_general: 96
+  # Raised from 96: the general half now asks for brief reasoning before the
+  # answer, so a budget sized for a bare letter would truncate mid-argument and
+  # reintroduce the length confound from the other direction.
+  max_new_tokens_general: 320
 
 equilibrium:
   # beta is deliberately small. F29 measured accuracy falling monotonically as

@@ -122,6 +122,30 @@ def main() -> int:
     # across seeds, which would leave the mathematics half — the domain where
     # the council is most heterogeneous — with no seed variation at all.
     tasks = build_tasks(cfg, shuffle_math=True)
+
+    # The inherited multiple-choice prompt asks for a bare letter and forbids
+    # explanation, which makes it unusable here. Seed 42 showed why: the general
+    # model complied and emitted "\boxed{B}" in ten characters while the
+    # mathematics model ignored the instruction and wrote 444 characters of
+    # derivation, so a per-token valuation compared a handful of tokens against
+    # hundreds of highly predictable ones and preferred the verbose answer on 52
+    # of 60 questions — selecting the player that was right on 12 of them over
+    # players right on 27 and 28. That measures instruction compliance and
+    # length, not reasoning quality. Cross-examination prices reasoning, so the
+    # arena has to contain reasoning on both halves for the mechanism to be
+    # under test at all.
+    for task in tasks:
+        if task["kind"] == "letter":
+            task["prompt"] = (
+                task["prompt"]
+                .replace(
+                    "Reply with ONLY the single letter of the correct option in "
+                    "\\boxed{}. Do not explain.",
+                    "Reason briefly, then give the single letter of the correct "
+                    "option in \\boxed{}.",
+                )
+            )
+
     budget = {
         "number": int(cfg["generation"]["max_new_tokens_math"]),
         "letter": int(cfg["generation"]["max_new_tokens_general"]),
@@ -194,7 +218,14 @@ def main() -> int:
         votes = Counter(p for p in preds.values() if p is not None)
         maj = votes.most_common(1)[0][0] if votes else None
 
-        row: dict[str, Any] = {"domain": task["domain"], "gold": gold}
+        row: dict[str, Any] = {
+            "domain": task["domain"],
+            "gold": gold,
+            # Recorded per example so that a valuation preferring long or
+            # short candidates is visible in the results rather than needing
+            # to be discovered by reading generations.
+            "lengths": {n: len(candidates[i][n]) for n in names},
+        }
         for rule, winner in picks.items():
             ok = right[winner]
             results[rule] += int(ok)
@@ -218,8 +249,24 @@ def main() -> int:
                 d[key] += int(right[picks[rule]])
 
     n = len(tasks)
+    # Length by domain, and the length of what each rule picked: if a rule's
+    # winners are systematically longer or shorter than the field, its valuation
+    # is keyed on verbosity and the accuracy figure should not be read as a
+    # statement about reasoning.
+    length_bias: dict[str, Any] = {}
+    for rule in ("cross_exam", "leave_one_out", "self_preference", "equilibrium"):
+        picked, field = [], []
+        for rec in records:
+            picked.append(rec["lengths"][rec[rule]["winner"]])
+            field.extend(rec["lengths"].values())
+        length_bias[rule] = {
+            "mean_length_of_winner": round(sum(picked) / max(len(picked), 1), 1),
+            "mean_length_of_field": round(sum(field) / max(len(field), 1), 1),
+        }
+
     report: dict[str, Any] = {
         "n_tasks": n,
+        "length_bias": length_bias,
         "seed": args.seed,
         "players": names,
         "accuracy": {k: round(v / n, 4) for k, v in sorted(results.items())},
