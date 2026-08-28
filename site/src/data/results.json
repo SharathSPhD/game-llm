@@ -630,7 +630,8 @@
             "arc_c": 0.46,
             "hellaswag": 0.635,
             "piqa": 0.78,
-            "winogrande": 0.65
+            "winogrande": 0.65,
+            "gsm8k": 0.595
           },
           {
             "name": "Qwen3-1.7B",
@@ -638,7 +639,8 @@
             "arc_c": 0.465,
             "hellaswag": 0.485,
             "piqa": 0.745,
-            "winogrande": 0.625
+            "winogrande": 0.625,
+            "gsm8k": 0.45
           },
           {
             "name": "Qwen2.5-Coder-1.5B-Instruct",
@@ -646,7 +648,8 @@
             "arc_c": 0.4,
             "hellaswag": 0.56,
             "piqa": 0.73,
-            "winogrande": 0.565
+            "winogrande": 0.565,
+            "gsm8k": 0.51
           },
           {
             "name": "Qwen2.5-Math-1.5B-Instruct",
@@ -654,7 +657,8 @@
             "arc_c": 0.35,
             "hellaswag": 0.45,
             "piqa": 0.6,
-            "winogrande": 0.525
+            "winogrande": 0.525,
+            "gsm8k": 0.795
           }
         ],
         "per_subject_oracle": 0.635,
@@ -663,7 +667,7 @@
       },
       "status": "VALIDATED",
       "verdict": "informs O3 and O4",
-      "note": "GSM8K excluded: strict match scored zero for every model, which measures the answer convention an instruction-tuned model emits rather than whether it can do the arithmetic."
+      "note": "GSM8K was excluded here because strict match scored zero for every model, a harness artifact rather than a capability measurement. Re-measured under chat templates (F33) it reads 0.795 / 0.595 / 0.510 / 0.450, which reverses the council's apparent structure: the 'weakest' player leads mathematics by 20 points."
     },
     {
       "id": "F29",
@@ -726,6 +730,33 @@
       },
       "status": "VALIDATED",
       "verdict": "supersedes the headroom claim in F29-F31"
+    },
+    {
+      "id": "F33",
+      "title": "The arena was homogeneous, and that is why nothing beat averaging",
+      "claim": "Re-measuring GSM8K under each model's chat template moves the math specialist from 0.290 to 0.795 and the generalist from 0.095 to 0.595, while leaving Qwen3-1.7B unchanged. The specialist leads mathematics by 20 points while placing last on MMLU, so the one task where the players differ in kind was the one the broken harness forced out of the aggregation set. On a mixed math-and-knowledge arena the same council carries 10 points of routable headroom against the 1 point available on the homogeneous set where every aggregation rule was tested.",
+      "evidence": {
+        "exp": "gsm8k_fixed",
+        "seeds": 1,
+        "n": 200,
+        "gsm8k_corrected": {
+          "qwen2.5-math": 0.795,
+          "qwen2.5-base": 0.595,
+          "qwen2.5-coder": 0.51,
+          "qwen3-1.7b": 0.45
+        },
+        "gsm8k_broken": {
+          "qwen2.5-math": 0.29,
+          "qwen2.5-base": 0.095,
+          "qwen2.5-coder": 0.34,
+          "qwen3-1.7b": 0.455
+        },
+        "mixed_arena_best_single": 0.611,
+        "mixed_arena_perfect_router": 0.711,
+        "path": "results/scale/gsm8k_fixed/"
+      },
+      "status": "VALIDATED",
+      "verdict": "scopes F29-F31 without overturning them"
     }
   ]
 }

@@ -273,27 +273,56 @@ that rises to $0.68$ between the base and coder variants.
 \centering
 \caption{Council members measured under one harness invocation
 (\texttt{lm\_eval}, bfloat16, \texttt{limit} 200 for the ladder and 150 for the
-aligned set; single seed per model, loglikelihood tasks only). MMLU is weighted
-over the 57 subjects by subject size. The oracle rows bound what selection could
+aligned set; single seed per model). MMLU is weighted over the 57 subjects by
+subject size. The five loglikelihood columns require no generation; GSM8K is
+generative and is reported under each model's own chat template with a 512-token
+budget and flexible answer extraction, without which it measures answer
+formatting rather than arithmetic. The oracle rows bound what selection could
 achieve: the per-subject oracle knows which player is best on each subject, and
 the per-example oracle knows which is right on each question. The gated figure
 is the realistic ceiling: an ungated oracle credits the council for answers its
 sole correct member holds with no confidence, which no rule can identify.}
 \label{tab:ladder}
-\begin{tabular}{lccccc}
+\begin{tabular}{lcccccc}
 \toprule
-Model & MMLU & ARC-C & HellaSwag & PIQA & WinoGrande \\
+Model & MMLU & ARC-C & HellaSwag & PIQA & WinoGrande & GSM8K \\
 \midrule
-Qwen2.5-1.5B-Instruct       & \textbf{0.626} & 0.460 & \textbf{0.635} & \textbf{0.780} & \textbf{0.650} \\
-Qwen3-1.7B                  & 0.583 & \textbf{0.465} & 0.485 & 0.745 & 0.625 \\
-Qwen2.5-Coder-1.5B-Instruct & 0.520 & 0.400 & 0.560 & 0.730 & 0.565 \\
-Qwen2.5-Math-1.5B-Instruct  & 0.391 & 0.350 & 0.450 & 0.600 & 0.525 \\
+Qwen2.5-1.5B-Instruct       & \textbf{0.626} & 0.460 & \textbf{0.635} & \textbf{0.780} & \textbf{0.650} & 0.595 \\
+Qwen3-1.7B                  & 0.583 & \textbf{0.465} & 0.485 & 0.745 & 0.625 & 0.450 \\
+Qwen2.5-Coder-1.5B-Instruct & 0.520 & 0.400 & 0.560 & 0.730 & 0.565 & 0.510 \\
+Qwen2.5-Math-1.5B-Instruct  & 0.391 & 0.350 & 0.450 & 0.600 & 0.525 & \textbf{0.795} \\
 \midrule
-Per-subject oracle (MMLU)   & 0.635 & --- & --- & --- & --- \\
-Per-example oracle (pooled) & \multicolumn{5}{c}{0.826; gated on the correct player reaching confidence 0.5, 0.658} \\
+Per-subject oracle (MMLU)   & 0.635 & --- & --- & --- & --- & --- \\
+Per-example oracle (pooled) & \multicolumn{6}{c}{0.826; gated on the correct player reaching confidence 0.5, 0.658} \\
 \bottomrule
 \end{tabular}
 \end{table}
+
+\subsubsection{The arena, and what excluding one task did to it}
+
+The GSM8K column of Table~\ref{tab:ladder} was absent from the aggregation
+experiments, and its absence shaped their result. Under the harness configuration
+used for the ladder, strict-match scored $0.000$ for all four models, which
+measures whether an instruction-tuned model emits a particular answer convention
+rather than whether it can carry out the arithmetic; the task was therefore
+excluded rather than reported. Re-measuring under each model's own chat template
+changes three of the four scores substantially --- the mathematics variant from
+$0.290$ to $0.795$, the general instruct model from $0.095$ to $0.595$, the coder
+from $0.340$ to $0.510$ --- while leaving Qwen3-1.7B unmoved at $0.450$.
+
+The consequence for the aggregation results is structural rather than
+incidental. On the 61 loglikelihood tasks the four players differ mainly in
+overall strength, which is why a per-subject oracle buys under a point there. The
+one task on which they differ in *kind* is the one the broken configuration
+forced out of the set: the mathematics variant leads GSM8K by twenty points over
+the general model while placing last on MMLU. Composing an arena of equal parts
+mathematics and knowledge gives a best single score of $0.611$ against a perfect
+domain router's $0.711$, so ten points of routable headroom exist on
+heterogeneous work where one point exists on the homogeneous set. The results
+below are therefore measurements of aggregation over a near-interchangeable
+council, and they are reported as such; what they establish about rules over
+fixed distributions holds, and what they cannot establish is how those rules
+behave where the players genuinely differ.
 
 \subsubsection{Solving the game does not beat averaging, and concentrating influence harms}
 
