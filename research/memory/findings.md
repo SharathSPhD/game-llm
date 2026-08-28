@@ -586,15 +586,29 @@ unchanged (they attach to the Anderson eval path, as scoped).
   base 0.4433 (retention 0.654); HellaSwag 0.4633 vs 0.5067 (**0.914**);
   GSM8K flexible-extract 0.0133 vs 0.4567 (**0.029**). Mean headline retention
   **0.533**, far below the pre-registered 0.90 gate.
-- **The dissociation is the finding.** Language-modelling loss and downstream
-  capability come apart sharply under conversion: next-token prediction is
-  restored to within 19% while multi-step arithmetic is destroyed almost
-  entirely and commonsense likelihood is nearly untouched. The ordering
-  (HellaSwag 0.91 > ARC-C 0.65 > GSM8K 0.03) tracks how much composition over
-  many sequential steps a task requires, which is precisely what collapsing
-  twelve distinct layers into one repeated block removes. Perplexity on general
-  web text is therefore an unreliable progress signal for conversion work — a
-  practitioner watching only perplexity would have declared this run a success.
+- **The dissociation is the finding, and it is binary rather than graded.**
+  Language-modelling loss and downstream capability come apart sharply under
+  conversion: next-token prediction is restored to within 19% while two of the
+  three benchmarks collapse. Chance-floor analysis (added after review) is
+  essential to reading these numbers: ARC-Challenge and HellaSwag are four-way
+  multiple choice, so a model that guesses uniformly scores 0.25, which maps to
+  apparent "retention" of 0.56 and 0.49 respectively. Against that floor,
+  HellaSwag at 0.4633 is genuinely retained ($z = 8.5$ above chance), whereas
+  **ARC-Challenge at 0.2900 is NOT distinguishable from chance** ($z = 1.60$,
+  binomial SE 0.025 at $n = 300$) — its 0.654 retention figure is an artifact
+  of the floor, not evidence of partial capability. GSM8K, being open-ended and
+  therefore floorless, collapses to 0.0133. The corrected picture is that
+  commonsense likelihood survives conversion while multi-step reasoning and
+  arithmetic are destroyed outright, which is what collapsing twelve distinct
+  layers into one repeated block would predict. Perplexity on general web text
+  is an unreliable progress signal for conversion work: a practitioner watching
+  only perplexity would have declared this run a success.
+- **Retention resolution.** At 300 samples per task the retention ratios carry
+  standard errors of ±0.073 (ARC-C), ±0.077 (HellaSwag) and ±0.015 (GSM8K), so
+  the mean headline figure of 0.533 should not be read to three digits, and the
+  mean itself mixes two floored metrics with one unfloored one — it is reported
+  because SPEC 0011 pre-registered it, not because it is the most informative
+  summary.
 - **The budget dial transfers.** Held-out perplexity 21.78 / 21.11 / 20.84 at
   recursion depths 3 / 6 / 12: halving inference computation costs about 1% of
   perplexity, reproducing the F24/B1 anytime property on a real pretrained model.
@@ -607,8 +621,13 @@ unchanged (they attach to the Anderson eval path, as scoped).
   depth-curriculum weighting and LoRA relaxation with rank annealed to zero —
   which target recovery specifically rather than perplexity, and should be
   scored on benchmark retention rather than loss.
+- **Tarka review (resolved 2026-08-28):** parameter accounting, perplexity
+  provenance and harness parity CONFIRMED; the held-out slice was verified
+  excluded from training (no contamination). Two corrections added by the
+  author after review, which the review had not surfaced: the ARC-Challenge
+  chance-floor analysis above, and the retention standard errors.
 - **Status:** VALIDATED (single seed, design-screen scale) · verdict PARTIAL ·
-  Tarka pending · SIGN-OFF PENDING
+  SIGN-OFF PENDING
 
 ## F27 — H9 verdict (3 seeds, real 1.5B specialists): MET. Truthful token-auction selection beats the best single specialist in CLOSED-LOOP generation on objective accuracy, reversing F23 — but it does not beat uniform logit averaging, and context-aware bidding is refuted
 
@@ -621,21 +640,33 @@ unchanged (they attach to the Anderson eval path, as scoped).
   (numeric match for GSM8K, letter match for MMLU), which removes the
   judge-LM style prior that made F23's verdict judge-relative. Seeds 42/43/44
   on GB10 under the thermal governor. results/scale/exp16/.
-- **Verdict MET, 3/3 seeds.** The second-price auction beats the best single
-  specialist on every seed: 0.625 vs 0.537, 0.637 vs 0.575, 0.738 vs 0.700
-  (margins +0.088 / +0.062 / +0.038; means 0.667 vs 0.604). This is the
-  pre-registered claim that F23 missed at 121M with toy specialists, and it
+- **Verdict MET, 3/3 seeds, with the margin only marginally significant.**
+  The second-price auction beats the best single specialist on every seed:
+  0.625 vs 0.537, 0.637 vs 0.575, 0.738 vs 0.700 (margins +0.088 / +0.062 /
+  +0.038; means 0.667 vs 0.604). A paired test across seeds gives
+  $t = 4.33$ at $df = 2$ against a critical value of 4.30 — significant, but
+  only just, and the smallest per-seed margin (+0.038) sits below the
+  single-seed binomial standard error of 0.055 at $n = 80$. The direction is
+  consistent across all three seeds; the effect size is not established to
+  better than this. Additional seeds would be required to tighten it. This is
+  the pre-registered claim that F23 missed at 121M with toy specialists, and it
   holds once the specialists are genuinely strong and the metric is objective.
-- **The auction does NOT beat uniform logit averaging.** ENS scores 0.637 /
-  0.637 / 0.762 (mean 0.679) against the auction's 0.667; the per-seed
-  differences are -0.012 / 0.000 / -0.025. Aggregation is what wins here, and
-  the mechanism-design machinery buys nothing over simple averaging on this
-  benchmark. Reported as the primary limitation of the result.
-- **Both aggregators match or beat an oracle router** (mean 0.679), which
-  always selects the domain-correct specialist. Per-token aggregation therefore
+- **The auction and uniform logit averaging are statistically
+  indistinguishable.** ENS scores 0.637 / 0.637 / 0.762 (mean 0.679) against
+  the auction's 0.667; per-seed differences are -0.012 / 0.000 / -0.025, and a
+  paired test gives $t = -1.73$ at $df = 2$, far short of significance. The
+  correct statement is therefore that the mechanism buys nothing measurable
+  over simple averaging on this benchmark, not that averaging is superior.
+  Aggregation is what wins; the choice of aggregation rule is not resolved by
+  this experiment. Reported as the primary limitation of the result.
+- **Both aggregators match or beat a domain-correct routing baseline**
+  (mean 0.679). This arm is a routing heuristic that always selects the
+  specialist owning the prompt's domain; it is NOT a theoretical upper bound,
+  and calling it one would overstate the result — uniform averaging matches or
+  exceeds it on two of three seeds. Per-token aggregation nonetheless
   contributes something routing cannot: on math the auction reaches 0.800,
-  above the oracle's 0.775, because it can take a token from the general model
-  when the math model is locally unsure.
+  above the routing baseline's 0.775, because it can take a token from the
+  general model when the specialist is locally unsure.
 - **Context-aware bidding is refuted.** Bidding on prompt-level confidence
   rather than per-token confidence — the fix F23 itself proposed — is worse on
   every seed (-0.100 / -0.025 / -0.100 against per-token bidding). The
@@ -644,5 +675,11 @@ unchanged (they attach to the Anderson eval path, as scoped).
 - **Domain decomposition:** the auction is strongest exactly where specialists
   differ most (math 0.800 mean, versus 0.533 on general knowledge where the
   three models are closer and confidence is a weaker routing signal).
-- **Status:** VALIDATED (3 seeds) · verdict MET · Tarka pending ·
-  SIGN-OFF PENDING
+- **Tarka review (resolved 2026-08-28):** all per-seed numbers, the
+  tokenizer-identity guard and the fairness of the best-single definition
+  (a hindsight maximum, which makes the comparison harder for the auction)
+  CONFIRMED; the "oracle upper bound" wording was rescoped as above. The
+  review's claim that the margins greatly exceed the standard error did not
+  survive author recomputation and has been replaced with the paired test.
+- **Status:** VALIDATED (3 seeds, Tarka-resolved with rescoping) · verdict MET
+  (marginal) · SIGN-OFF PENDING
