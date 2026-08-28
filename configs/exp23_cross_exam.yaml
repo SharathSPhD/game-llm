@@ -1,0 +1,34 @@
+# Cross-examination over generated solutions (exp23, SPEC 0016 Phase 1b).
+#
+# The council is the four players the ladder measured (F28). Their spread is the
+# point: the strongest is right on 63% of MMLU and the weakest on 39%, yet some
+# member is right on 83% of questions, and that unclaimed complementarity is what
+# cross-examination is meant to reach.
+players:
+  - Qwen/Qwen2.5-1.5B-Instruct
+  - Qwen/Qwen3-1.7B
+  - Qwen/Qwen2.5-Math-1.5B-Instruct
+  - Qwen/Qwen2.5-Coder-1.5B-Instruct
+
+device: cuda:0
+seed: 42
+
+tasks:
+  # Mixed domain on purpose: a council should show its advantage where its
+  # members differ, and collapse to the generalist where they do not.
+  n_gsm8k: 60
+  n_mmlu: 60
+
+generation:
+  # F28's integrity flag: a truncated chain of thought measures the budget, not
+  # the model. Mathematics gets room to derive; the multiple-choice prompts ask
+  # for a bare letter and need almost none.
+  max_new_tokens_math: 512
+  max_new_tokens_general: 96
+
+equilibrium:
+  # beta is deliberately small. F29 measured accuracy falling monotonically as
+  # influence concentrates, so the game enters here near its averaging limit and
+  # any gain must come from what the candidates carry, not from concentration.
+  beta: 0.25
+  tau: 0.0
