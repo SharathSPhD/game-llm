@@ -23,9 +23,12 @@ in — a plan that survives contact unchanged was not specific enough.
 
 **Phase 0 — measure the ground.** Establishing what the baselines actually
 score on our harness, since domain selection (O4) and every later claim (O3)
-depend on numbers we produced rather than numbers from model cards. Running now
-on GB10 across MMLU, ARC-Challenge, HellaSwag, GSM8K, WinoGrande, PIQA and
-TruthfulQA for Qwen3-1.7B and the three candidate players.
+depend on numbers we produced rather than numbers from model cards. Complete
+(F28) across MMLU, ARC-Challenge, HellaSwag, WinoGrande, PIQA and TruthfulQA for
+all four candidate players. GSM8K is excluded rather than reported: strict-match
+scored zero for every model, which measures the answer format the task expects
+and not the capability, so the generative harness needs chat templates and a
+per-domain generation budget before any generative claim rests on it.
 
 **Phase 1 — does the paradigm pay?** *Answered, in part, and the answer moved
 this plan.* Aggregating over answer options let one GPU pass fund an unlimited
@@ -76,9 +79,10 @@ starts, after it was found guarding nothing twice.
 
 ## Decision points ahead
 
-Whether the equilibrium beats averaging decides whether Phase 2 builds players
-for a council or the effort returns to single-model work. The ladder gaps decide
-which domains get teachers. Whether a distilled student beats an adopted
+Whether influence driven by verification of a jointly-authored prefix behaves
+differently from influence driven by confidence is the open question the whole
+paradigm now rests on; F29 settled the confidence half of it in the negative.
+Whether a distilled student beats an adopted
 open specialist decides where teacher effort goes. Latency under real serving
 decides whether the cost argument in the PRD survives; if the solve turns out to
 cost more than a small fraction of the forward passes, the iteration budget
