@@ -1,0 +1,81 @@
+{
+  "per_seed": {
+    "records_seed42": {
+      "n": 120,
+      "singles": {
+        "Qwen/Qwen2.5-1.5B-Instruct": 0.5916666666666667,
+        "Qwen/Qwen3-1.7B": 0.3416666666666667,
+        "Qwen/Qwen2.5-Math-1.5B-Instruct": 0.5333333333333333,
+        "Qwen/Qwen2.5-Coder-1.5B-Instruct": 0.45
+      },
+      "best_single": 0.5916666666666667,
+      "best_single_name": "Qwen/Qwen2.5-1.5B-Instruct",
+      "domain_router": 0.6666666666666666,
+      "router_over_best_single": 0.07499999999999996,
+      "rules": {
+        "cross_exam": 0.49166666666666664,
+        "leave_one_out": 0.49166666666666664,
+        "self_preference": 0.625,
+        "equilibrium": 0.5
+      },
+      "oracle_any_player_correct": 0.8333333333333334,
+      "rules_vs_router": {
+        "cross_exam": {
+          "margin": -0.175,
+          "wins": 8,
+          "losses": 29,
+          "z": -3.452378733412503
+        },
+        "leave_one_out": {
+          "margin": -0.175,
+          "wins": 8,
+          "losses": 29,
+          "z": -3.452378733412503
+        },
+        "self_preference": {
+          "margin": -0.04166666666666663,
+          "wins": 7,
+          "losses": 12,
+          "z": -1.1470786693528088
+        },
+        "equilibrium": {
+          "margin": -0.16666666666666663,
+          "wins": 7,
+          "losses": 27,
+          "z": -3.4299717028501764
+        }
+      },
+      "per_domain": {
+        "general": {
+          "n": 60,
+          "router_picks": "Qwen/Qwen2.5-1.5B-Instruct",
+          "router": 0.4666666666666667,
+          "cross_exam": 0.2,
+          "leave_one_out": 0.2,
+          "self_preference": 0.4666666666666667,
+          "equilibrium": 0.21666666666666667
+        },
+        "math": {
+          "n": 60,
+          "router_picks": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+          "router": 0.8666666666666667,
+          "cross_exam": 0.7833333333333333,
+          "leave_one_out": 0.7833333333333333,
+          "self_preference": 0.7833333333333333,
+          "equilibrium": 0.7833333333333333
+        }
+      }
+    }
+  },
+  "mean": {
+    "domain_router": 0.6666666666666666,
+    "best_single": 0.5916666666666667,
+    "oracle": 0.8333333333333334,
+    "rules": {
+      "self_preference": 0.625,
+      "equilibrium": 0.5,
+      "leave_one_out": 0.49166666666666664,
+      "cross_exam": 0.49166666666666664
+    }
+  }
+}

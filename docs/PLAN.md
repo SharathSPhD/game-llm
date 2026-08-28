@@ -11,7 +11,7 @@ in — a plan that survives contact unchanged was not specific enough.
 |---|---|---|
 | O1 | A new paradigm, not incremental mimicry: the token distribution as a solved game | Refuted at answer level (F29): indistinguishable from averaging, and higher influence rationality is harmful. Open in the sequential arena, where influence can follow verification of a jointly-authored prefix rather than confidence |
 | O2 | Retain the kinetic core — MMD, QRE, implicit depth, truthful auctions | Every component of O1 is one of these strands; F21's correction is what placed the magnet in policy space |
-| O3 | Beat the baseline ladder | Ladder measured (F28, corrected F33). The bar is Qwen2.5-1.5B-Instruct: 0.626 MMLU, 0.595 GSM8K, 0.611 on a 50/50 mixed arena. A perfect domain router reaches 0.711 there, so the mixed arena is where a win is available |
+| O3 | Beat the baseline ladder | **The bar is a domain router, not a single model (F34).** A router fixed from the ladder scores 0.667 on the mixed arena against the best single player's 0.592, and beats every council rule measured so far. A council earns its machinery only by beating the router |
 | O4 | Domain teachers chosen from measured eval gaps, not a preset list | Reopened by F32/F33: the answer-level headroom was ~3 points once the oracle is gated on identifiable confidence, not 20, so better players are back in contention — and F33 shows the council already holds one genuine specialist whose strength only appears on generative work |
 | O5 | Top-down distillation from a larger model into the teachers | Not started; depends on O4 |
 | O6 | Ship API, then Hugging Face release, then dashboard | Not started; council must beat something first |
@@ -95,6 +95,9 @@ starts, after it was found guarding nothing twice.
 Whether influence driven by verification of a jointly-authored prefix behaves
 differently from influence driven by confidence is the open question the whole
 paradigm now rests on; F29 settled the confidence half of it in the negative.
+F34 raised the bar that question has to clear: a domain router with no machinery
+in it takes 7.5 points over the best single player and beats every council rule
+measured, so a council that merely beats a single model has demonstrated nothing.
 Whether a distilled student beats an adopted
 open specialist decides where teacher effort goes. Latency under real serving
 decides whether the cost argument in the PRD survives; if the solve turns out to

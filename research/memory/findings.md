@@ -984,3 +984,46 @@ generation budget settles what the exclusion was hiding.
   best-single now has a meaningful 10-point ceiling rather than a 1-point one.
 - **Status:** VALIDATED (single seed per model, 200 questions, limit-bounded) ·
   scopes F29–F31 without overturning them · Tarka PENDING
+
+## F34 — The bar is a domain router, not the best single player
+
+**Cycle 27 · 2026-08-28 · exp23_router_baseline over the exp23 records**
+
+F33 reported ten points of routable headroom on a mixed arena and treated it as
+an opportunity for the council. It is better read as an obligation. The headroom
+is reachable by the cheapest mechanism that exploits the same structure: classify
+the prompt's domain and send it to whichever player the ladder already showed to
+be best there. On a mix of mathematics word problems and multiple-choice
+knowledge that classification is decidable from format alone, so the router costs
+one forward pass, needs no aggregation, no solve and no second model, and is what
+a competent engineer would build before considering a council at all.
+
+Measured on the first cross-examination run's 120 questions, with the per-domain
+champions fixed in advance from the ladder rather than derived from the run being
+scored:
+
+- **Domain router 0.6667**, against a best single player of 0.5917 — the router
+  takes 7.5 points for free.
+- Every council rule measured falls below it: self-preference 0.6250,
+  the equilibrium over candidates 0.5000, leave-one-out pricing and
+  cross-examination 0.4917. The best of them is more than four points short of a
+  method with no machinery in it.
+- The oracle over players stands at 0.8333, so the council's members do hold the
+  answers; nothing measured extracts them better than asking which subject the
+  question is about.
+
+**What this changes.** Every comparison in this programme has been reported
+against the best single player, and that bar is too low to be informative,
+because it is not what anyone would actually deploy. A council earns its
+complexity only by beating the router, and the margin it needs is the router's
+7.5 points plus whatever it adds. Results reported against best-single are
+retained but are no longer the headline comparison; the router is.
+
+**Scope.** The general half of this particular run was compromised by a prompt
+that forbade explanation, which is why the cross-examination figures here are not
+a fair test of that mechanism and are being re-measured. The router figure is
+unaffected by that defect, since it uses only each player's own answer, and the
+margin over every council rule is far too large to be an artefact of it.
+
+**Status:** VALIDATED (single seed; re-measured across three seeds in the
+corrected run) · supersedes the headroom framing in F33 · Tarka PENDING
