@@ -132,3 +132,31 @@ The key outcome is replicable diagnostic: "Curriculum and adapter relaxation do 
 ---
 
 **Prepared:** 2026-08-28 · **Authorized by:** ADR 0007 (TRIZ inventory) · **Approval:** Operator sign-off pending
+
+
+## Amendment (2026-08-28, pre-registered BEFORE any H10 run) — budget and metric
+
+Two changes, both forced by the F26 result:
+
+**Budget fixed at 98M tokens, not 150-300M.** F26 established a same-method
+baseline at exactly 98M tokens (mean headline retention 0.533, perplexity ratio
+1.19x). Running the H10 arms at that identical budget isolates the effect of the
+METHOD, which is the question H10 actually asks; a larger budget would confound
+method with tokens and leave no controlled comparison. Wall-clock also permits
+both arms sequentially on one GPU at this size (~4 h each).
+
+**Scored on benchmark retention, not perplexity.** F26 showed the two come apart
+sharply: perplexity recovered to 1.19x base while mean headline retention reached
+only 0.533, with GSM8K at 0.029. Perplexity is therefore not an admissible
+progress signal for this hypothesis. Gates below are restated against the
+lm-evaluation-harness retention measured by experiments/exp15_eval.py under the
+same invocation as the recorded base rates.
+
+- **MET:** mean headline retention >= 0.80 for at least one arm (versus the
+  F26 baseline of 0.533 at the same budget), with GSM8K retention >= 0.30.
+- **PARTIAL:** mean headline retention >= 0.65, or GSM8K retention >= 0.30
+  without the mean improving.
+- **MISSED:** neither arm exceeds the F26 baseline by more than noise. This
+  outcome would establish that the capability loss reported in F26 is a
+  property of the tying itself at this budget rather than of the recovery
+  objective, which is a publishable constraint on the approach.
