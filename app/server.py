@@ -1667,6 +1667,32 @@ def _load_council_comparison() -> dict[str, Any]:
         except (json.JSONDecodeError, OSError, KeyError, TypeError) as exc:
             comparison["exp21_market"] = {"error": f"unreadable: {type(exc).__name__}"}
 
+    # The anchored answer vote (F39): the one mechanism to beat the router
+    # held-out. Served from its results file, marked preliminary until the
+    # pre-registered confirmation of SPEC 0017 reports.
+    exp27_file = results_dir / "exp27_anchored_vote.json"
+    if exp27_file.exists():
+        try:
+            with open(exp27_file) as f:
+                av = json.load(f)
+            folds = av.get("folds", [])
+            comparison["anchored_vote"] = {
+                "router_accuracy": av.get("router_accuracy_pooled"),
+                "in_sample_grid": av.get("in_sample_grid"),
+                "held_out_folds": [
+                    {
+                        "fit_seed": fo.get("fit_seed"),
+                        "margin": fo.get("margin"),
+                        "z": round(fo.get("paired", {}).get("z", 0.0), 2),
+                    }
+                    for fo in folds
+                ],
+                "mean_held_out_margin": av.get("mean_held_out_margin"),
+                "status": "preliminary; pre-registered confirmation per SPEC 0017",
+            }
+        except (json.JSONDecodeError, OSError) as exc:
+            comparison["anchored_vote"] = {"error": f"unreadable: {type(exc).__name__}"}
+
     # The realistic ceiling, measured rather than asserted. Serving the ungated
     # oracle alone would overstate what any mechanism can reach, which is the
     # reading finding F32 withdrew.
