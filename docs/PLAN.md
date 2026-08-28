@@ -11,8 +11,8 @@ in — a plan that survives contact unchanged was not specific enough.
 |---|---|---|
 | O1 | A new paradigm, not incremental mimicry: the token distribution as a solved game | Refuted at answer level (F29): indistinguishable from averaging, and higher influence rationality is harmful. Open in the sequential arena, where influence can follow verification of a jointly-authored prefix rather than confidence |
 | O2 | Retain the kinetic core — MMD, QRE, implicit depth, truthful auctions | Every component of O1 is one of these strands; F21's correction is what placed the magnet in policy space |
-| O3 | Beat the baseline ladder | Ladder measured (F28). The bar is Qwen2.5-1.5B-Instruct at 0.626 MMLU, not the nominally matched Qwen3-1.7B at 0.583; no aggregation yet exceeds 0.642 |
-| O4 | Domain teachers chosen from measured eval gaps, not a preset list | Deferred by F29: with 20 points of oracle headroom unclaimed, better players cannot be the bottleneck until selection works |
+| O3 | Beat the baseline ladder | Ladder measured (F28, corrected F33). The bar is Qwen2.5-1.5B-Instruct: 0.626 MMLU, 0.595 GSM8K, 0.611 on a 50/50 mixed arena. A perfect domain router reaches 0.711 there, so the mixed arena is where a win is available |
+| O4 | Domain teachers chosen from measured eval gaps, not a preset list | Reopened by F32/F33: the answer-level headroom was ~3 points once the oracle is gated on identifiable confidence, not 20, so better players are back in contention — and F33 shows the council already holds one genuine specialist whose strength only appears on generative work |
 | O5 | Top-down distillation from a larger model into the teachers | Not started; depends on O4 |
 | O6 | Ship API, then Hugging Face release, then dashboard | Not started; council must beat something first |
 | O7 | EFE-driven autoresearch with TRIZ for inventive steps | Active — cheap probes before decisive runs; TRIZ produced the recovery arms now training |
@@ -46,6 +46,19 @@ the only intervention that moved anything (+1.14 points), and a solved game
 added nothing on top of it. Meanwhile some player answers correctly on 83% of
 the questions against the best aggregate's 64%, so the council's complementarity
 is real and almost entirely unclaimed.
+
+**Correction that reframes Phase 1.** Two audits landed after the results above
+and both cut against how they were first reported. The twenty-point per-example
+oracle is mostly not extractable: gating it on the correct player reaching even
+0.5 confidence — twice chance on four options — drops the ceiling to 0.658, so
+the best rule at 0.6415 was operating within 1.6 points of what those
+distributions support rather than 20 short of it (F32). And the arena itself was
+near-homogeneous, because the one task on which these players differ in kind was
+excluded from it by a harness fault: with chat templates applied the mathematics
+variant scores 0.795 on GSM8K against the generalist's 0.595, while placing last
+on MMLU. A mixed arena carries ten points of routable headroom where the tested
+set carried one (F33). The aggregation results stand for what they measured; what
+they cannot support is a claim about councils whose members genuinely differ.
 
 **Phase 1b — influence from verification rather than confidence.** What answer
 level cannot test is the only part of the construction an ensemble cannot
