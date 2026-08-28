@@ -1,0 +1,93 @@
+% Equilibrium Language Models: architecture and training regimes.
+% Numbers from: F14 (residual scaling), F16 (solver-aware loss), F24 (anytime supervision), F19 (warm-start), F25 (KineticLM conversion).
+% Architecture: EqLM v1 (residual, no fixed point) and v3 (post-LN, fixed points exist).
+% Inference: warm-start + budget dial. PMA: MagneticAdamW definition. Auctions: second-price mechanism.
+
+\input{sections/figures_arch.tex}
+
+\section*{Equilibrium Language Models}
+
+The \EqLM{} architecture replaces the conventional transformer's $L$-layer stack with a single learned map $f_\theta$ whose parameters are reused and solved toward a fixed point. Rather than sequencing $L$ distinct layer applications $z_L = f_L(\ldots f_1(x)\ldots)$, the model solves $z^* = f_\theta(z^*, x)$ in the representation space---a game-theoretic view where the equilibrium representation $z^*$ is the model's computation, not the intermediate layers. An embedding layer produces $x \in \mathbb{R}^{B \times T \times d}$ from token IDs and learned position embeddings; the model solves for $z^*$ in the $d$-dimensional representation space (not the vocabulary simplex), then applies a final LayerNorm and a weight-tied output head with $1/\sqrt{d}$ logit scaling to produce logit estimates $\hat{z} \in \mathbb{R}^{B \times T \times |V|}$ where $|V|$ is vocabulary size. This formulation decouples depth of computation (how many times the map is applied) from depth of parameters (always one block). The equilibrium representation $z^*$ is the output of the implicit depth computation; parameters are weight-tied across the iterations that reach it.
+
+\subsection*{Fixed-Point Maps: Two Forms and a Critical Discovery}
+
+Two map forms were implemented and evaluated. The v1 \emph{residual} form, intended to stabilize convergence through damping, is written as
+\begin{equation}
+f(z, x) = (1-\alpha)z + \alpha(z + \mathrm{Attn}(z) + \mathrm{MLP}(z) + x)
+\label{eq:v1_map}
+\end{equation}
+where $\alpha \in (0, 1]$ is a fixed damping parameter. This applies a convex combination between the current state $z$ and the residually updated state after attention and feedforward operations. The intent is to bound step size and encourage convergence, a technique standard in numerical analysis for difficult root-finding problems.
+
+However, solver diagnostics revealed a fundamental incompatibility with equilibrium modeling. When the Anderson solver ran on this map at training scale (121M parameters, batch size 32), residuals (measured as $\|f(z_k) - z_k\|$) plateaued at constant magnitude across 100 iterations. The tail ratio---residual at iteration 100 divided by residual at iteration 99---was $\approx 0.99$, indicating no decay. More revealing, the residual magnitude scaled \emph{linearly} with the damping parameter. At damping values $\alpha = 1, 0.2, 0.05$, the steady-state residual was $32.65, 5.41, 1.35$ respectively. This linear relationship is the signature of a scheme $z_k \leftarrow z_k + \alpha g(z_k)$ where $\|g(z_k)\|$ remains constant as iterations proceed, not diminishing toward zero. Mathematically, this map has no fixed point: it drifts at speed $\alpha \|g\|$ indefinitely. The trained systems labeled ``EqLM v1'' were unrolled weight-tied transformers---12 sequential applications of the same block---not equilibrium models. They are not guaranteed to satisfy any fixed-point property and should not be called equilibrium models.
+
+The v3 \emph{post-LN} form, adapted from DEQ-transformer architectures, places the outer normalization inside the iteration:
+\begin{equation}
+h = \mathrm{LN}_1\!\big(z + \mathrm{Attn}(z) + x\big), \qquad f(z, x) = \mathrm{LN}_2\!\big(h + \mathrm{MLP}(h)\big).
+\label{eq:postln_map}
+\end{equation}
+LayerNorm applies unit normalization to its input, bounding the magnitude: $\|h\| = \sqrt{d}$ (normalized over the feature dimension). Because the output of $f$ is bounded, iterates $z_0, z_1, z_2, \ldots$ remain bounded in norm across iterations. Bounded iteration enables the existence of fixed points: if $f$ is continuous and maps a compact set to itself, a fixed point must exist by Brouwer's theorem. In practice, fixing this architectural detail eliminates the linear-drift signature. Direct probes of the post-LN map show relative residual decaying monotonically from $1.0$ to $0.105$ over 80 iterations at smoke scale ($d=204$, sequence length 127), then creeping to $0.1053$ over the next 24 iterations---a genuine approach to a fixed point, not linear drift.
+
+\subsection*{Convergence Criterion and Batch-Scale Realities}
+
+A critical design choice is how convergence is gated. An absolute criterion $\|f(z_k) - z_k\| < \text{tolerance}$ fails at minibatch scale. The representation $z^*$ has norm $\approx \sqrt{B \times T \times d}$ due to layer normalization applied during the solve; at $B=32, T=128, d=1704$, the bounded iterates have norm $\approx 1000$. An absolute residual target of $10^{-3}$ would require a tolerance-to-norm ratio of $10^{-6}$, impossible to meet reliably without numerical instabilities. The \emph{relative} residual criterion $\|f(z_k) - z_k\| / (\|z_k\| + \epsilon)$ normalizes to the current representation scale, providing a stable signal that adapts as the model trains and representation magnitudes change. In practice, a relative-residual target of $10^{-3}$ is achievable and, empirically, sufficient for language modeling quality.
+
+\subsection*{Solvers and Anderson Acceleration}
+
+The forward solver applies Anderson acceleration with a history size of 5. Picard iteration (straightforward iteration $z_{k+1} = f(z_k)$) converges geometrically when the map is strongly contractive but may stall or diverge if the Jacobian's spectral radius is near 1. Anderson acceleration maintains a low-rank correction using information from the last 5 iterates; it fits a least-squares model to past residuals and extrapolates a better next iterate. On stiff fixed points (effective spectral radius $\rho \approx 0.9$ after training), Anderson reduces iteration count substantially compared to Picard; on easier problems, the overhead of the correction is negligible. The maximum iteration budget is set to 12 at evaluation; this budget does not adapt per-token or per-example. The tolerance target is relative residual $10^{-3}$.
+
+\subsection*{Three Training Regimes}
+
+Three training regimes are evaluated, each making different assumptions about convergence and providing different guarantees.
+
+\begin{table}[h]
+\centering
+\small
+\caption{Three training regimes for \EqLM{}: objective, computational cost, and convergence certification. All use the same Anderson solver at evaluation time (history 5, 12 iterations, relative tol $10^{-3}$).}
+\label{tab:regimes}
+\begin{tabular}{@{}lp{2.2cm}p{2.0cm}p{1.8cm}p{2.2cm}@{}}
+\toprule
+Regime & Trains on & Backprop & Memory & Certifies \\
+\midrule
+Implicit & Assume convergence, use IFT & Implicit function theorem & O(1) depth & Convergence assumed \\
+Solver-aware & Contraction directly & IFT + aux residual loss & O(1) depth & $\|\Delta z\|/\|z\| \ll 10^{-2}$ \\
+Anytime-unrolled & Supervised intermediate iters & Explicit 12 unroll, full backprop & Explicit-like & Intermediate reps \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The \emph{implicit} regime applies the fixed-point solver to convergence without gradients, then backpropagates via the implicit function theorem. At each forward pass, the Anderson solver iterates $z_0, z_1, \ldots, z_{12}$ until relative residual $< 10^{-3}$ or reaching 12 iterations, producing $z^*$. No intermediate iterates are stored. The gradient with respect to parameters is computed as $\nabla_\theta L = -(\nabla_z f)^{-T} \nabla_z L$ where $\nabla_z f$ is the Jacobian of $f$ with respect to $z$. This regime optimizes for memory efficiency---no intermediate activations are stored---but provides no guarantee that the solver actually converges. If the map fails to satisfy a contraction property, the implicit-function assumption is violated and the computed gradient may be inaccurate.
+
+The \emph{solver-aware} regime adds an auxiliary loss that directly penalizes non-contraction. After the no-gradient solve completes, one additional (tracked) application of $f$ is computed, and the auxiliary loss is applied: $L_\text{aux} = \lambda_r \cdot \|f(z^*, x) - z^*\| / \|z^*\|$. The total loss is $L_\text{total} = L_\mathrm{CE} + L_\text{aux}$. Since only one additional block evaluation is performed after the solve, the wall-time overhead is negligible. Empirically, with $\lambda_r \in \{0.01, 0.1, 1.0\}$, this auxiliary loss reduces the exit relative residual by a factor of 16---from $0.1277$ to $0.0076$--$0.0078$---at a cost of $\leq 1.8\%$ increased cross-entropy loss. The model learns to satisfy the contraction property that the solver exploits.
+
+The \emph{anytime-unrolled} regime explicitly unrolls the fixed-point iteration. The map is applied $k=12$ times from $z_0 = x$, producing iterates $z_1, z_2, \ldots, z_{12}$ with full backpropagation through all unrolled operations. Cross-entropy loss is applied at intermediate checkpoints, not just the final iterate, following the deep-supervision principle: supervision at $z_4, z_8, z_{12}$ with relative weights $0.15, 0.3, 1.0$ respectively. This means the intermediate representations at iterations 4 and 8 are directly supervised to produce correct token probabilities, in addition to the final iterate. At evaluation time, the same Anderson solver runs on the learned parameters; the representations must generalize from the supervised iterates to the solver trajectory. Training stores all 12 iterates for backpropagation, paying explicit-like activation memory during the forward and backward passes ($16.4$ GB at 121M parameters), but serving memory remains $O(1)$ in depth since inference uses the implicit solver.
+
+\subsection*{Equilibrium-Native Inference and Adaptive Computation}
+
+At test time, token generation can exploit the proximity of sequential equilibria. The solver is warm-started: when generating position $t$, the equilibrium representation $z^*_{t-1}$ from position $t-1$ is reused as the initial iterate for position $t$. Because the context differs only by one token position, the equilibrium from one step is close to the equilibrium of the next step. The solver converges faster starting from a warm initial condition.
+
+Empirically, on a held-out mixed-domain stream (500 training steps, 40 prompts $\times$ 25 tokens per prompt), cold-start decoding averaged $7.91$ Anderson iterations per token; warm-start decoding averaged $1.64$ iterations per token, a $-79.3\%$ reduction. Greedy-token agreement (comparing the top-1 predicted token at each position with the cold-start's top-1) was $97.6\%$ across 1,000 tokens. An explicit $L$-layer stack always applies $L$ block computations per token; equilibrium decoding with warm-starting applies $\approx 1.6$ block computations per token. This is the operational advantage of equilibrium modeling: a single weight-tied block solves to an equilibrium, and warm-starting exploits sequential similarity to amortize the computation.
+
+A secondary advantage is the eval-time iteration budget acts as an adaptive-computation ``think-harder dial''. The same checkpoint can be evaluated at different iteration budgets. An anytime-trained model (B1 configuration, trained with supervision at intermediate iterates) evaluated under Anderson budgets $\{4, 8, 12\}$ scores BLiMP $0.621 / 0.638 / 0.662$ on seed 42, $0.601 / 0.674 / 0.697$ on seed 43, and $0.587 / 0.655 / 0.672$ on seed 44---graceful degradation across budgets. The checkpoint serves three distinct compute budgets from a single set of trained parameters, embodying adaptive computation at the architecture level without a learned halting mechanism.
+
+\subsection*{Parameter-Space Magnetic Anchoring in Preference Optimization}
+
+When fine-tuning a pretrained model to align with human preferences, the policy moves away from the base model, as measured by KL divergence to the base. Controlling this drift is a core concern in preference optimization because large drift can damage capabilities on out-of-distribution inputs. Parameter-space Magnetic Anchoring (PMA) adds a proximal pull toward the base policy in parameter space by introducing a magnetic term inside the optimizer.
+
+MagneticAdamW extends AdamW with a two-step update. First, standard decoupled-weight-decay AdamW computes the gradient-based parameter update: $\theta' = \theta - \eta m_t / \sqrt{v_t + \epsilon} - \eta \lambda_w \theta$, where $m_t$ is the first moment (exponential moving average of gradients), $v_t$ is the second moment (exponential moving average of squared gradients), $\eta$ is the learning rate, and $\lambda_w$ is the weight decay coefficient. Second, the magnetic step applies a proximal pull: $\theta \leftarrow \theta' - \eta \tau (\theta' - \theta_\text{ref})$, where $\tau$ is the magnetic regularization strength and $\theta_\text{ref}$ is the reference point (frozen base weights, a periodic snapshot, or an exponential moving average). The total update admits a closed form and integrates directly into existing AdamW implementations. PMA is specifically a parameter-space method applied inside the optimizer; it is distinct from the published Magnetic Preference Optimization (MPO) of Wang et al., which applies magnetic mirror descent in the policy space (probability simplex) with self-play against the reference policy to target the Nash equilibrium of an implicit preference game.
+
+\subsection*{Truthful Second-Price Token Auctions}
+
+When multiple models jointly produce one continuation, each model can be viewed as a bidder with private information (its confidence on the next token). The aggregation rule must incentivize truthful communication of confidence. Vickrey's second-price auction achieves this through a dominant-strategy equilibrium: each participant wins if their bid is highest and pays a price equal to the second-highest bid. Truthful bidding is a dominant strategy regardless of others' bids.
+
+In the context of language modeling, each specialist model at each token position places a bid equal to its maximum next-token probability $p_i = \max_t p_i(t | \text{context})$. The bids are target-independent: they depend only on the specialist's own confidence in its predictions, not on the true next token. The winning specialist (highest bid) has its distribution emitted: the true next token is drawn from the winning model's distribution. The winning specialist pays a price equal to the second-highest bid. Under this mechanism, a specialist that misreports its confidence to win when it would lose is paying a price (second-highest bid) higher than its true value of winning; misreporting to lose when it would win sacrifices a valuable win. Empirically, across 16,000 observations (10 seeds, 200 auctions per seed, configurations with 3 and 5 specialists, misreport grids from $0.25 \times \text{bid}$ to $2 \times \text{bid}$), the regret from any misreport strategy versus truthful bidding is exactly $0.0$ with 95\% CI $[0.0, 0.0]$. The mechanism is empirically truthful as theory predicts. The auction operates per-token: at each position in the sequence, the specialist with the highest confidence wins and scores the true token.
+
+\subsection*{KineticLM: Topology and Conversion of Pretrained Models}
+
+Scaling equilibrium modeling requires converting existing pretrained models to the equilibrium topology without retraining from scratch. The KineticLM topology divides the layers into an explicit outer block and a weight-tied core block. The outer layers (first $n_\text{pre}$ and last $n_\text{post}$ layers) retain the original parameters and are applied sequentially; the middle layers are collapsed into a single weight-tied block that iterates to a fixed point. The outer layers provide expressive capacity for input embedding and output decoding; the core provides parameter efficiency and memory benefits.
+
+Qwen3-1.7B (28 layers, $d = 2048$, $d_\text{ff} = 6144$, 1.721B parameters total, $\approx 50.3$ M parameters per layer) is the design baseline. A grid sweep measured the conversion damage curve before uptraining. Parameters varied: $n_\text{pre} = n_\text{post} \in \{6, 8\}$ (outer-layer count), $n_\text{cores} \in \{1, 2, 4\}$ (how many weight-tied iterations in the core), and initialization method (average layer averaging vs.\ stepwise). Perplexity on a 3-passage general sample (base ppl 6.01) was measured.
+
+Three structural findings emerge. First, initialization is critical: averaging the parameters of a group of layers (elementwise mean) preserves function far better than selecting a single representative layer. At the $8+8$ (8 explicit pre, 8 explicit post, 1 core) configuration, average init yields ppl $1.9 \times 10^3$ versus stepwise init's ppl $2.2 \times 10^5$---a 116-fold difference. Second, explicit outer layers buy more capacity than core iterations: increasing from $6+6$ to $8+8$ with 1 core improves ppl from $18,465$ to $1,909$ (10-fold improvement), while increasing cores from 1 to 2 at fixed $8+8$ changes ppl only from $1,909$ to $1,933$ (no gain). Third, all configurations suffer severe pre-uptraining damage: the worst (most damaged) configuration starts at $\approx 2,200\times$ baseline ppl, the best at $\approx 300\times$ baseline, confirming that uptraining budget is the binding constraint, not the depth-reduction surgery itself.
+
+The selected operating point is $n_\text{pre} = n_\text{post} = 8$ (covering original layers 0--7 and 20--27), $n_\text{cores} = 1$ (original layers 8--19 as the core), average initialization. This yields 1.167B parameters ($68\%$ of base), starting ppl 1.909. The 68\% figure prompted an amendment to the pre-registered parameter gate (originally $\leq 60\%$, amended to $\leq 70\%$): configurations tighter than $8+8/1$ begin at 3--10-fold worse damage and would be unrecoverable within feasible uptraining budgets. The choice reflects the empirical structure of transformers: early layers carry essential input encoding that degrades sharply under tying; final layers carry output generation essential to the task; middle layers are highly redundant and tolerate weight tying well.
+

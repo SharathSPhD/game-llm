@@ -1,0 +1,12 @@
+# H9 (SPEC 0013): auction decoding over real specialists. GB10 (3 models resident).
+seed: 43
+device: cuda
+specialists:
+  S_math: Qwen/Qwen2.5-Math-1.5B-Instruct
+  S_code: Qwen/Qwen2.5-Coder-1.5B-Instruct
+  S_gen: Qwen/Qwen2.5-1.5B-Instruct
+chat_template_from: Qwen/Qwen2.5-1.5B-Instruct
+oracle_map: {math: S_math, general: S_gen}
+tasks: {n_gsm8k: 40, n_mmlu: 40}
+generation: {max_new_tokens_math: 512, max_new_tokens_general: 160, trace_positions: 64}
+extra_eos: ["<|im_end|>"]

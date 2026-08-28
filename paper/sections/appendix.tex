@@ -1,0 +1,242 @@
+% Appendix: Per-Seed Results
+% Source: F20 (121M pretraining A1/A3/B1), F24 (certification B2/B3/B4 and budget sweep), F21 (H3 preference),
+% F22/F23 (H4/H5 auction scoring and closed-loop), F25 (damage curve)
+% All numbers from results/exp05_full_v4{,_s43,_s44}, results/exp10_5090/exp10_seed4{2,3,4},
+% results/exp13_seed4{2,3,4}, results/exp13b_seed42, results/exp11_seed4{2,3,4}, results/exp11b_seed42,
+% results/exp12/results_seed4{2,3,4}, results/exp14/results_seed4{2,3,4}, results/scale/damage_sweep.json
+
+\section{Per-Seed Results}
+
+\subsection{121M Pretraining: Main Verdict and Anytime Training}
+
+The following table presents the full per-seed results for the main pretraining study (H1 and H6). Arm A1 is the explicit baseline (12-layer transformer), A3 is the EqLM model trained implicitly via implicit differentiation, and B1 is the anytime-unrolled variant. Convergence rate is the solver's fraction of forward passes reaching relative tolerance $10^{-3}$ at an iteration budget of 12; mean iterations is the average number of fixed-point iterations spent per forward pass across the full 10k-step run. The mean ratio column reports the per-seed EqLM/explicit BLiMP ratio; the final entry gives the 95\% bootstrap confidence interval (CIs hereafter) computed across the three seeds.
+
+\begin{table}[h]
+\centering
+\small
+\caption{Main 121M pretraining results (10k steps on BabyLM strict-small, batch 32, 1000-pair BLiMP subset). A1 explicit 12-layer baseline; A3 EqLM trained by implicit differentiation (F20); B1 anytime-unrolled EqLM (F24). Conv.\ indicates solver convergence rate; mean iters is the average count per forward pass.}
+\label{tab:pretraining_main}
+\begin{tabular}{@{}lcccccc@{}}
+\toprule
+Arm & Regime & Seed 42 & Seed 43 & Seed 44 & Mean & Ratio [95\% CI] \\
+\midrule
+A1 & explicit baseline & 0.682 & 0.675 & 0.693 & 0.683 & --- \\
+A3 & EqLM implicit & 0.537 & 0.532 & 0.544 & 0.538 & 0.787 [0.785, 0.788] \\
+B1 & EqLM anytime & 0.662 & 0.697 & 0.672 & 0.677 & 0.991 [0.979, 1.003] \\
+\midrule
+A3 conv.\ rate & & 0.0 & 0.0 & 0.0 & --- & --- \\
+A3 mean iters & & 12.0 & 12.0 & 12.0 & --- & --- \\
+B1 conv.\ rate & & 0.0 & 0.0 & 0.0 & --- & --- \\
+B1 mean iters & & 12.0 & 12.0 & 12.0 & --- & --- \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The transition from implicit training (A3, ratio 0.787) to anytime-unrolled training (B1, ratio 0.991) closes the width-driven quality gap observed in the full-scale study (F20 to F24). The convergence statistics for both A3 and B1 indicate that the fixed-point solve operates under an iteration budget truncation at both scales: the solver achieves its 12-iteration budget on every forward pass. Under implicit training, this truncation costs 21.3 percentage points of BLiMP (0.787 ratio); under anytime-unrolled training, the same truncation is absorbed into the training objective and erased at evaluation time (0.991 ratio). The difference in wall-clock time reflects the training regime: implicit differentiation requires 92 minutes per arm across 10k steps, while unrolled training (storing intermediate iterates) runs in 44 minutes, a $2.1\times$ speedup, because the fixed-point solve dominates training cost in the implicit path.
+
+\subsection{Anytime Inference Budget Sweep}
+
+The same anytime-trained checkpoints (B1, seeds 42/43/44) were re-evaluated at three different Anderson solver budgets: 4, 8, and 12 iterations. This experiment validates the pre-registered budget-sweep rider hypothesis (Section~\ref{sec:parity}) and demonstrates graceful degradation across inference costs. All BLiMP scores are reported on the 1000-pair subset.
+
+\begin{table}[h]
+\centering
+\small
+\caption{Anytime inference budget sweep: B1 checkpoints evaluated at Anderson solver iterations $\{4, 8, 12\}$ (F24). One anytime-trained model serves three compute budgets; dashes indicate explicit baseline's mean 0.683.}
+\label{tab:budget_sweep}
+\begin{tabular}{@{}lccccc@{}}
+\toprule
+Seed & Iter.\ 4 & Iter.\ 8 & Iter.\ 12 & Ratio @12 & Ratio trend \\
+\midrule
+42 & 0.621 & 0.638 & 0.662 & 0.970 & +0.041/iter \\
+43 & 0.601 & 0.674 & 0.697 & 1.033 & +0.048/iter \\
+44 & 0.587 & 0.655 & 0.672 & 0.984 & +0.043/iter \\
+\midrule
+Mean & 0.603 & 0.656 & 0.677 & 0.996 & +0.044/iter \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Across all seeds, increasing the budget from 4 to 8 to 12 iterations yields consistent gains ($+0.041$ to $+0.048$ BLiMP per iteration). Seed 43 exceeds the explicit baseline's mean BLiMP (0.697 vs.\ 0.683 baseline mean) at the full 12-iteration budget. The monotone improvement validates the anytime-supervision objective: the model learns to use additional iterations productively even when trained unrolled at the full depth.
+
+\subsection{Single-Seed Certification and Ablation Arms}
+
+The following results (B2, B3, B4) address the H6 gate for joint quality and certification. Only seed 42 results are available for these arms (marked as screen-level in F24); they are presented for completeness and as evidence that quality-preserving certification remains an open problem when both objectives are combined in one model.
+
+\begin{table}[h]
+\centering
+\small
+\caption{Certification arms (seed 42 only, F24): B2 trains a finite-difference trajectory-local Lipschitz penalty; B3 uses a bottleneck-core topology (256-dimensional); B4 combines anytime supervision with raw trajectory penalty (pre-registered prediction refuted).}
+\label{tab:certification}
+\begin{tabular}{@{}lcccccc@{}}
+\toprule
+Arm & Regime & BLiMP & Conv.\ rate & Mean iters & Peak mem (GB) & Train time (min) \\
+\midrule
+B1 & anytime (parity) & 0.662 & 0.0 & 12.0 & 16.4$^{\dagger}$ & 44 \\
+B2 & trajectory penalty & 0.577 & \textbf{1.0} & \textbf{4.0} & 5.5 & 38 \\
+B3 & bottleneck-core & 0.642 & 0.2 & 11.6 & 6.8 & 40 \\
+B4 & anytime + raw penalty & 0.529 & 0.0 & 12.0 & 15.9$^{\dagger}$ & 46 \\
+\bottomrule
+\multicolumn{7}{@{}l@{}}{\footnotesize $^{\dagger}$Training-time activation memory due to unrolled iterate storage; serving memory is the implicit model's.}
+\end{tabular}
+\end{table}
+
+Arm B2 achieves the program's first certified 121M-parameter equilibrium: solver convergence rate 1.0 means the fixed-point solve converges to tolerance at 4.0 mean iterations. This comes at a quality cost (0.577 BLiMP, below the control 0.662) and represents a trade-off between contraction and capacity. Arm B3 (bottleneck-core topology, 256-dimensional shared core between explicit encoder/decoder layers) scores 0.642 with partial certification (conv.\ rate 0.2, suggesting the core is partially contractive). Arm B4, the naive combination of anytime supervision and unnormalized trajectory penalty, was pre-registered with the prediction it would meet the full H6 gate; it was refuted by experiment: the penalty magnitude ($\sim 3.5 \times 10^4$ at initialization) overwhelmed the supervision signal under gradient clipping, resulting in learning failure (0.529, below control). This documented failure informs the identified next step: quality-preserving certification, likely via a scale-normalized (logarithmic) penalty.
+
+\subsection{Preference Optimization Held-Out Accuracy and KL Drift}
+
+The H3 preference study fine-tuned the 121M models from F20 (three seeds of both A1 explicit and A3 EqLM baselines) on 600 BLiMP preference pairs (train phenomena), then evaluated on 400 held-out pairs from two unseen phenomena. Arms differ only in the optimizer's magnetic regularization strength $\tau$ in MagneticAdamW; the DPO arm (P1) sets $\tau = 0$ (mathematically decoupled AdamW). Learning rate was $1 \times 10^{-5}$, batch size 8 pairs, 3 epochs, beta 0.1.
+
+\begin{table}[h]
+\centering
+\small
+\caption{H3 preference optimization on explicit bases (F21): held-out accuracy (400-pair unseen-phenomena test set) and KL divergence to frozen base in nats per token. Arms P1 (DPO, $\tau=0$), P2a ($\tau=1 \times 10^{-3}$), P2b ($\tau=1 \times 10^{-2}$).}
+\label{tab:preference_explicit}
+\begin{tabular}{@{}lcccccc@{}}
+\toprule
+Base & Arm & Seed 42 & Seed 43 & Seed 44 & Mean acc. & Mean KL (nats/tok) \\
+\midrule
+\multirow{3}{*}{A1 explicit} & P1 DPO ($\tau=0$) & 0.610 & 0.600 & 0.625 & 0.612 & 1.241 \\
+ & P2a ($\tau=1e{-3}$) & 0.612 & 0.603 & 0.627 & 0.614 & 1.239 \\
+ & P2b ($\tau=1e{-2}$) & 0.610 & 0.600 & 0.625 & 0.612 & 1.240 \\
+\midrule
+\multirow{1}{*}{A3 EqLM} & P1 DPO ($\tau=0$) & 0.613 & 0.555 & 0.637 & 0.602 & 0.00075 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Held-out accuracy across all magnetic arms (P1, P2a, P2b) on the explicit base is statistically identical: all report 0.610--0.627, with means within noise ($\pm 0.002$). KL drift to the frozen base is also invariant across $\tau$ at the pre-registered range (all near 1.24 nats/token). The EqLM base exhibits markedly lower drift (0.00075 nats/token, $1655\times$ less than explicit) but similar accuracy, interpreted as intrinsic gradient damping through the 12-iteration weight-tied solve. The rider dose-response ($\tau \in \{0.1, 1, 10\}$ on the explicit base) showed KL 1.2406 $\to$ 1.2414 $\to$ 1.2398 $\to$ 1.2256 (no monotone trend) and accuracy flat at every $\tau$, refuting the pre-registered prediction that drift reduction would become visible by $\tau = 1$.
+
+\subsection{Auction Scoring-Time Selection: Mixed-Domain Perplexity}
+
+The H4 experiment trained two 30M-parameter specialists on disjoint BabyLM subdomains (child-directed speech, simple-Wikipedia text), then evaluated on a mixed 50/50 held-out stream using teacher-forced token selection. At each position, the auction mechanism selects the specialist with highest next-token probability (confidence bid), and that specialist's distribution scores the true token. Three evaluation systems are compared: (i)~the second-price token auction (one auction per token), (ii)~uniform logit-averaging ensemble (simple average of log-probabilities), and (iii)~individual specialists in isolation.
+
+\begin{table}[h]
+\centering
+\small
+\caption{H4 auction scoring-time selection (F22): teacher-forced mixed-domain perplexity (lower is better). Auction selects the highest-confidence specialist at each token; ensemble averages logits uniformly; best/worst single specialists in isolation. Means and per-seed values shown.}
+\label{tab:auction_scoring}
+\begin{tabular}{@{}lcccccc@{}}
+\toprule
+System & Seed 42 & Seed 43 & Seed 44 & Mean ppl & Ratio to best single & Win rate vs.\ ensemble \\
+\midrule
+Auction & 158.5 & 189.4 & 200.5 & 182.8 & 0.773 & 3/3 \\
+Ensemble & 199.3 & 215.1 & 208.3 & 207.9 & 0.880 & 0/3 \\
+Best specialist (S\_A) & 234.3 & 232.8 & 243.4 & 236.8 & 1.000 & --- \\
+Worst specialist (S\_B) & 1301.8 & 1167.7 & 1304.3 & 1242.4 & 5.254 & --- \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The auction beats the best single specialist on all three seeds (paired $t = 4.98$). On a per-token basis, the mechanism's advantage is highest on child-directed-speech windows (where the resident specialist S\_A scores 13.8 ppl, the auction 26--33 ppl) and grows on domain-mixed regions as domain-specific specialists collapse off-domain (S\_A on Wikipedia: 3979--4280 ppl; S\_B on child-speech: 4477--4856 ppl). Confidence-bidding is imperfect within-domain but dominates any fixed commitment once domains alternate, because no single specialist remains in-domain for the entire mixed stream.
+
+\subsection{Auction Closed-Loop Generation: Judge NLL}
+
+The H5 follow-up experiment (F23) tested the scoped-out claim: when all systems generate their own context (greedy decoding, 100 mixed prompts per seed, 32 generated tokens), does the auction maintain its scoring-time advantage? The evaluation metric is negative log-likelihood per token assigned by a frozen judge LM (the 124M explicit baseline from the same seed).
+
+\begin{table}[h]
+\centering
+\small
+\caption{H5 closed-loop generation (F23): judge NLL/token (lower is better) on generated text. Each system generates its own context, removing the scoring-time anchor that re-centers specialist selection at every position. H5 is pre-registered as \textsc{missed}.}
+\label{tab:auction_closedloop}
+\begin{tabular}{@{}lcccccc@{}}
+\toprule
+System & Seed 42 & Seed 43 & Seed 44 & Mean NLL & Status \\
+\midrule
+Best specialist (S\_A) & 3.39 & 3.37 & 3.69 & 3.48 & baseline \\
+Auction & 4.74 & 4.23 & 4.60 & 4.52 & +1.04 nats/tok \\
+Ensemble & 5.03 & 4.54 & 4.75 & 4.77 & +1.29 nats/tok \\
+Worst specialist (S\_B) & 5.42 & 5.51 & 5.65 & 5.53 & +2.05 nats/tok \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Under closed-loop generation, the auction loses on all three seeds (best specialist 3.39--3.69 vs.\ auction 4.23--4.74). The auction drifts toward one specialist's style regardless of prompt domain (domain-consistency metric shows the auction at $\sim 1.0$ on child-speech prompts but $\sim 0.02$ on Wikipedia prompts). Tarka-mandated per-domain decomposition revealed that the judge (trained on BabyLM strict-small, which is child-speech-heavy) carries a $\sim 2$-nat style prior that dominates between-system differences. The verdict is thus scoped as judge-relative. Two effects survive judge-bias concerns: (i)~the auction's output distribution measurably diverges from scoring-time behavior, and (ii)~the auction exhibits the lowest 3-gram repetition of all systems (0.387--0.483 vs.\ best specialist 0.517--0.601; ensemble collapses to 0.78--0.83)---an implicit anti-repetition effect from bid competition.
+
+\subsection{Damage Curve: Layer-Tying Topology Search on Qwen3-1.7B}
+
+Prior to any uptraining, F25 measured the conversion damage when transforming Qwen3-1.7B (28 layers, 1.721B params, $d=2048$, $d_{\text{ff}}=6144$, 16 heads with 8 key-value heads) to the EqLMCore topology (explicit outer blocks around an iterative core). The sweep covered outer-layer counts ($n_{\mathrm{pre}} = n_{\mathrm{post}} \in \{6, 8\}$), core iteration counts ($n_{\mathrm{cores}} \in \{1, 2, 4\}$), and initialization strategies (average layer-wise mean vs.\ per-layer stepwise mean). Perplexity is measured on a 3-passage general sample; baseline (untouched Qwen3-1.7B) is 6.01.
+
+\begin{table}[h]
+\centering
+\small
+\caption{F25 damage curve: perplexity under layer-tying topology variants, no uptraining. All configurations show severe damage pre-uptraining. Average initialization (elementwise mean of layer weights) preserves function 10--100$\times$ better than stepwise. Explicit outer layers are the primary driver of recovery; additional cores show diminishing returns.}
+\label{tab:damage_curve}
+\begin{tabular}{@{}lccccc@{}}
+\toprule
+Outer layers & Cores & Avg.\ init ppl & Stepwise init ppl & Param count & Param ratio to base \\
+\midrule
+6+6 & 1 & 18465 & 2.17e5 & 1.027B & 59.7\% \\
+6+6 & 2 & 19432 & 2.31e5 & 1.121B & 65.2\% \\
+6+6 & 4 & 19734 & 2.54e5 & 1.310B & 76.1\% \\
+8+8 & 1 & 1909 & 2.19e5 & 1.167B & 67.8\% \\
+8+8 & 2 & 1933 & 2.28e5 & 1.262B & 73.4\% \\
+8+8 & 4 & 2107 & 2.51e5 & 1.450B & 84.2\% \\
+\midrule
+Baseline (no tying) & --- & 6.01 & --- & 1.721B & 100.0\% \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Three observations: (1)~average initialization dominates stepwise by 10--100$\times$ at every configuration (e.g., 8+8 with 1 core: 1909 vs.\ 2.19e5 ppl), establishing that an element-wise mean of weights preserves more learned function than selecting a representative layer; (2)~increasing explicit outer layers from 6+6 to 8+8 with 1 core improves perplexity 10$\times$ (18465 $\to$ 1909), while adding a second core at fixed 8+8 yields negligible improvement (1909 vs.\ 1933), indicating the first and last two layers carry irreplaceable function and the interior is far more redundant; (3)~all configurations start heavily damaged pre-uptraining (300--3000$\times$ baseline). The operating point selected for uptraining is 8+8 outer layers with 1 core and average initialization: 1.167B parameters (67.8\% of base), starting perplexity 1909. SPEC 0011's parameter-ratio gate was amended from $\leq 60\%$ to $\leq 70\%$ based on this evidence, before any uptraining was attempted: configurations at 56--59\% parameter ratio start 3--10$\times$ more damaged and would not be recoverable within the planned token budget.
+
+\section{Hyperparameters}
+
+\subsection{121M Pretraining: Data and Optimizer}
+
+All pretraining experiments used the BabyLM strict-small data set (10M unique tokens from books, simple-Wikipedia, and Wikitext-2) as a streaming corpus, repeated until reaching the designated step count. Batch size was 32 sequences; sequence length was 128 tokens after tokenization. Gradient clipping was applied at norm 1.0. The vocabulary consists of 50257 BPE tokens (GPT-2 tokenizer). Token embeddings and output logits shared weights (tied embeddings). Positional embeddings were learned, one per sequence position.
+
+The optimizer was AdamW with learning rate $3 \times 10^{-4}$, weight decay $0.01$ (decoupled), $\beta_1 = 0.9$, $\beta_2 = 0.999$, epsilon $1 \times 10^{-8}$. For arm A3 (EqLM implicit) and B1 (anytime), the weight decay is applied via decoupled weight decay (parameter update $\theta \leftarrow \theta(1 - \eta \lambda_{\text{wd}})$ prior to gradient-based step), not folded into gradients, to preserve AdamW equivalence when $\tau = 0$ (verified in F11).
+
+\subsection{EqLM Architecture Details}
+
+The EqLM model (arms A3 and B1) is a causal language model solving
+\[ z^* = f_\theta(z^*, x) \]
+where $f$ is a weight-tied transformer block. The architecture specifications:
+
+\begin{table}[h]
+\centering
+\small
+\caption{EqLM architecture parameters for the 121M experiments. The block is solved by Anderson acceleration with 12-iteration budget and relative-tolerance gate at $10^{-3}$. All iterates at training time supervise cross-entropy loss (anytime arm B1).}
+\label{tab:eqlm_arch}
+\begin{tabular}{@{}lc@{}}
+\toprule
+Parameter & Value \\
+\midrule
+Hidden dimension ($d$) & 1704 \\
+Number of heads & 12 \\
+Dimension per head & 142 \\
+Feed-forward dimension ($d_{\text{ff}}$) & 6807 \\
+Solver & Anderson acceleration \\
+Anderson history size & 5 \\
+Fixed-point map form & post-LN (Eq.\ \ref{eq:postln}) \\
+Max iterations (budget) & 12 \\
+Tolerance (relative) & $1 \times 10^{-3}$ \\
+Activation function & GELU \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The post-LN map has two layer normalizations: one after attention and MLP (feeding into the next input injection), and one after MLP (feeding into the output logits). Causal masking is applied inside multi-head attention. The output logit scaling is $1/\sqrt{d} = 1/\sqrt{1704} \approx 0.0243$. The attention and MLP projections use standard linear layers; no spectral normalization is applied in the baseline arms (A3, B1), though it is available in the codebase.
+
+\subsection{Anytime Training}
+
+Arm B1 (anytime-unrolled) unrolls the fixed-point map to 12 explicit applications and supervises cross-entropy loss at intermediate iterates. Supervision weights at iterates 4, 8, and 12 are $0.15$, $0.30$, and $1.0$ respectively. These are the per-iterate loss weights; the total loss is $L_{\text{total}} = 0.15 \cdot \text{CE}(z_4) + 0.30 \cdot \text{CE}(z_8) + 1.0 \cdot \text{CE}(z_{12})$, with logits computed from the output head applied to each intermediate representation. This deep-supervision principle biases the model toward early convergence even though evaluation runs the fixed-point solver.
+
+\subsection{Solver-Aware Auxiliary Loss}
+
+Arm B2 (F24, B2 in Table~\ref{tab:certification}) adds an auxiliary loss term $\lambda \cdot r_{\text{rel}}$ where $r_{\text{rel}} = \lVert f(z^*, x) - z^* \rVert / (\lVert z^* \rVert + \epsilon)$ is the relative residual computed once after the no-gradient fixed-point solve, and $\lambda$ is the auxiliary loss weight (set to $0.01$ in the reported run). The total loss is $L_{\text{total}} = L_{\text{CE}} + \lambda \cdot r_{\text{rel}}$.
+
+\subsection{Preference Optimization}
+
+The preference study (H3) fine-tuned the 121M checkpoints using the DPO loss:
+\[ L_{\text{DPO}} = -\log \sigma\left(\beta \left( \log \frac{\pi_\theta(y_w | x)}{\pi_{\text{ref}}(y_w | x)} - \log \frac{\pi_\theta(y_l | x)}{\pi_{\text{ref}}(y_l | x)} \right) \right), \]
+where $y_w$ is the preferred response, $y_l$ is the dispreferred response, $\beta = 0.1$ is the DPO beta parameter, $\pi_{\text{ref}}$ is the frozen base model, and $\sigma$ is the logistic sigmoid. The base is the corresponding 121M checkpoint from F20 (either explicit A1 or EqLM A3). Learning rate was $1 \times 10^{-5}$, batch size 8 preference pairs, 3 epochs, with the identical optimizer (AdamW, weight decay $0.01$). For magnetic arms, MagneticAdamW applies $y_{\text{ref}} = $ frozen base weights with strength $\tau \in \{1 \times 10^{-3}, 1 \times 10^{-2}, 0.1, 1, 10\}$ depending on the arm. The DPO arm (P1, $\tau = 0$) is mathematically standard decoupled AdamW, verified for equivalence against torch.optim.AdamW on sparse-gradient parameters.
+
+\subsection{Specialist Models and Auction Setup}
+
+Two 30M-parameter specialists were trained from scratch on disjoint subsets of BabyLM strict-small: specialist S\_A on child-directed speech (CHILDES), specialist S\_B on simple-Wikipedia. Each specialist is a standard GPT-2-class decoder (12 layers, $d=384$, 6 heads, $d_{\text{ff}}=1536$) trained for 3000 steps on its domain subset with batch size 8, learning rate $3 \times 10^{-4}$, and a line-level 5\% held-out evaluation split. The auction mechanism selects the specialist with the highest predicted probability for the next token at each position, and that specialist's distribution scores the true token. The winner pays the second-highest predicted probability as the second-price payment, implementing a truthful auction (F6). Confidence bids are target-independent (the specialist does not observe the true next token before bidding).
+
+\subsection{Qwen3 Conversion (F25)}
+
+Qwen3-1.7B configuration: 28 transformer layers, hidden dimension $d=2048$, feed-forward dimension $d_{\text{ff}}=6144$, 16 attention heads with 8 key-value heads (multi-query attention), head dimension 128, vocabulary size 151936, tied embeddings. The conversion to the EqLMCore topology splits the 28 layers into $n_{\mathrm{pre}}$ explicit pre-layers, $n_{\mathrm{cores}}$ iterative core layers (each identical, weight-tied), and $n_{\mathrm{post}}$ explicit post-layers, with $n_{\mathrm{pre}} = n_{\mathrm{post}}$ by design. Initialization strategies tested: (i)~average: each core layer's weights are the element-wise mean of the corresponding layers from the original 28-layer stack, and (ii)~stepwise: each core layer picks a representative layer from its assigned range (e.g., if $n_{\mathrm{pre}} = n_{\mathrm{post}} = 8$ and $n_{\mathrm{cores}} = 1$, the core is initialized from layer 14). Perplexity is computed on a 3-passage held-out sample (not the full 10M-token stream), using the base 6.01 as reference. Uptraining results are in progress and are not reported in this appendix.
+

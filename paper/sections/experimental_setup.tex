@@ -1,0 +1,160 @@
+% Experimental Setup section
+% Numbers sourced from: research/memory/findings.md (F1–F25), research/specs/000[3-14].md (pre-registered gates),
+% results/exp0[1-14]_*/ (seed-level results), and docs/decisions/000[3-7].md (protocol amendments).
+% Hardware: GB10 (DGX Spark, 121GB unified memory, thermal governor ~91°C defect) + RTX 5090 (32GB) for training.
+% Evaluation: BLiMP (1000-pair subset of minimal pairs) at 11M–121M; lm-evaluation-harness at 1–3B (Qwen3-1.7B base rates).
+
+\section{Experimental Setup and Closure Protocol}
+\label{sec:setup}
+
+This paper adopts a pre-registered empirical program with adversarial audit, as detailed in Section~\ref{sec:method}.
+Every hypothesis was registered with a quantitative, pass/fail gate in a specification document version-controlled
+before its experiment ran. The closure contract mandates six layers: (i) all experiment arms complete; (ii) no
+verdict based on fewer than three md5-distinct random seeds; (iii) every reported number traced to a results file
+carrying a resolved-config SHA-256 hash and git commit; (iv) a resolved adversarial review that recomputes all
+results from raw data and audits like-for-like fairness; (v) all findings and review verdicts recorded in the
+findings ledger; and (vi) operator sign-off before merge to main. Figure~\ref{fig:protocol} summarizes the workflow:
+an operator registers a research question and its quantitative gate; the experimenter designs a specification (typically
+a YAML config file specifying every varying quantity, seed count, budget, and metric threshold); the researcher runs the
+experiment on hardware, recording raw results and resolved config alongside git state; an adversarial reviewer (``Tarka'')
+recomputes every number from the raw results files, checks match-for-match fairness in parameters, tokens, optimizer,
+and learning rate, and attacks the mechanism interpretation. If the reviewer finds a material defect (confounding,
+measurement error, or mechanistic misread), the claim is either refuted, rescoped, or re-run. Only after this review
+closes may a finding enter the paper. Two reviews materially overturned author conclusions (Sections~\ref{sec:scale} and
+\ref{sec:closedloop}), demonstrating the audit's teeth. Hypotheses carry named outcomes: \textsc{met}, \textsc{partial},
+or \textsc{missed}. A well-documented miss is a valid closure state and often contains the most design information.
+
+\subsection{Hypotheses and Verdicts}
+
+Table~\ref{tab:hypotheses} states the six pre-registered hypotheses (H1–H6) with their verbatim quantitative gates,
+the experiment verdicts, and the findings that support them. H7–H10, registered for the open-weight 1–3B scale program,
+are marked in progress.
+
+\begin{table}[H]
+\centering
+\small
+\caption{Pre-registered hypotheses with quantitative gates, verdicts, and finding references. Gates were locked
+before any experiment ran; verdicts are named outcomes (MET/PARTIAL/MISSED) assigned by adversarial review. H7–H10
+target 1–3B-parameter models and are in progress.}
+\label{tab:hypotheses}
+\begin{tabular}{@{}p{1.0cm}p{3.8cm}p{2.6cm}p{1.4cm}@{}}
+\toprule
+\textbf{ID} & \textbf{Gate (quantitative threshold)} & \textbf{Outcome} & \textbf{Findings} \\
+\midrule
+H1 & EqLM $\geq$95\% of explicit BLiMP at matched params/tokens (121M) & \textsc{missed} & F13–F20 \\
+H2 & MMD last-iterate convergence where GDA cycles: $R^2 \geq 0.9$ on matrix games & \textsc{met} & F1–F3 \\
+H3 & PMA $\geq$ DPO held-out accuracy AND lower KL-to-reference drift & \textsc{partial} & F21 \\
+H4 & Auction beats best single specialist on mixed-domain perplexity & \textsc{met} & F22 \\
+H5 & Auction advantage persists in closed-loop greedy generation & \textsc{missed} & F23 \\
+H6 & Recover $\geq$50\% of width-gap + certification ($R > 0.5$) at $\leq$12 iterations & \textsc{partial} & F24 \\
+H7–H10 & 1–3B conversion and preference-tuning (in progress) & \textsc{in progress} & — \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Corpora}
+
+The pretraining program uses the BabyLM strict-small dataset (10M unique tokens, drawn from the BabyLM-2026
+benchmark). All arms—explicit baseline, EqLM implicit, EqLM unrolled, and ablation variants—train on the identical
+token stream, with every experiment fixing the sequence length to 128 tokens and the batch size to 32. This ensures
+matched token budgets across model variants. At 121M parameters, the full pretraining run (10,000 steps per arm)
+consumes approximately 40.96M token presentations ($10{,}000 \times 32 \times 128$). Evaluation harnesses (BLiMP
+and lm-evaluation-harness) use held-out streams disjoint from training.
+
+For the 1–3B scale program (H7–H10), the FineWeb-Edu corpus is used, selected for compatibility with published
+open-weight baseline checkpoints (e.g.\ Qwen3-1.7B) that will serve as the conversion source. This guarantees
+that both the pretrained base and the EqLM conversion run on identically sourced data, removing corpus as a
+confound in downstream evaluation.
+
+\subsection{Evaluation Harness and Benchmark}
+
+At 11M–121M parameters, the core evaluation metric is BLiMP (Basic Language Corpus Minimal Pairs), a test set of
+1,335 grammatical acceptability pairs spanning agreement, control, binding, tense, and relative clause phenomena.
+All BLiMP scores reported in this paper are computed over a held-out 1,000-pair subset, held constant across seeds.
+The minimal-pair format provides a binomial resolution: at $n = 1{,}000$ pairs, the standard error of the proportion
+is approximately $\sqrt{p(1-p)/n} \approx 0.014$ (1.4 percentage points at one standard deviation for $p \approx 0.5$).
+Confidence intervals use bootstrap resampling over the 1,000 pairs, stratified by seed.
+
+For the open-weight 1–3B scale program, evaluation transitions to the lm-evaluation-harness framework. On the
+user's hardware (Qwen3-1.7B baseline on a GB10 node), the zero-shot base rates measured for the harness's canonical
+benchmarks are: ARC-Challenge accuracy 0.4067, ARC-Challenge acc\_norm 0.4433; HellaSwag accuracy 0.43, HellaSwag
+acc\_norm 0.5067; GSM8K flexible-extract 0.4567. These base rates are held constant as reference points; all
+comparisons—EqLM conversion vs.\ explicit baseline, preference-optimized variants, auction aggregates—use the same
+harness and the same evaluation hardware to prevent measurement confounds that arise from different systems or code
+paths. Rather than lifting numbers from published model cards, the program re-measures every baseline on the project's
+own hardware under the same code path (kinetic\_ai/serve/), ensuring that architectural comparisons are not confounded
+by harness implementation, prompt format, or hardware differences.
+
+\subsection{Hardware and Thermal Constraints}
+
+Training of the 121M-parameter models (exp10, exp13) runs on an NVIDIA RTX 5090 GPU with 32 GB of VRAM. The machine
+hosting this GPU (a dedicated DGX Spark node) is reserved exclusively for this program's training jobs. Evaluation and
+inference—including BLiMP scoring, checkpoint conversion, and trace serving for the application—runs on a GB10 node
+with 121 GB of unified GPU memory. The GB10 operates under a software thermal governor triggered by a hardware cooling
+defect that causes the platform to shut down around 91°C. This constraint is not a limitation of the architecture but
+a hardware-level fact of the test environment; it is documented because memory and wall-time measurements reflect the
+thermal throttling. Peak activation memory is reported as the deterministic allocator peak for a fixed computation
+graph, an architecture-level measurement rather than a per-run distribution. All memory figures are verified bit-identical
+across seeds, consistent with the deterministic-allocator design.
+
+\subsection{Statistical Protocol}
+
+Every verdict in Table~\ref{tab:hypotheses} is grounded in one of three statistical frameworks, depending on the
+research question.
+
+\paragraph{Paired bootstrap over seeds (main pretraining and preference arms).} When two architectures or training
+regimes are evaluated on identical data across multiple random seeds, the per-seed measurements (e.g.\ BLiMP scores
+0.682, 0.675, 0.693 for three seeds) form the basis. The bootstrap confidence interval is computed by resampling the
+seed-level means 10,000 times with replacement and recording the 2.5th and 97.5th percentiles. For pairwise comparisons
+(e.g.\ H1's verdict that EqLM reaches 0.930 of baseline), the per-seed ratios are bootstrapped. A one-sided paired
+$t$-test (where appropriate for a directional claim) uses the seed-level data; the sign test (an exact paired
+permutation test) is reported as well when $n$ is small (e.g.\ $n = 5$ prompts).
+
+\paragraph{Binomial test (steering and causal interventions).} When testing whether an intervention produces an effect
+at above-chance rates (e.g.\ H2b: does steering a circuit-selected feature flip the top-1 prediction more often than
+a random feature?), the data are counts of successes and failures across a fixed set of trials. A one-sided binomial
+test is used with a null hypothesis of random performance (e.g.\ 1\% per-token chance or 50\% for a two-way choice).
+The null-hypothesis probability is specified pre-registered in the hypothesis gate.
+
+\paragraph{Like-for-like audit (all comparisons).} After the experiment runs and before any verdict is assigned, the
+adversarial reviewer checks that all arms being compared satisfy strict match criteria: identical data stream (same
+tokenized, shuffled corpus file), identical steps and batch size, identical optimizer and learning rate, identical
+gradient clipping and warmup schedules, and parameter count within 5\%. The audit also recomputes key aggregate
+quantities (means, confidence intervals) directly from the raw per-seed result files. Where the reviewer detects a
+confound—different data loaders, different learning rates, different tokenization—the claim is either rescoped or
+the arms are re-run under matched conditions. Three findings underwent major rescoping after audit (F15, F20, F24);
+two were refuted and rewritten (F14's "no fixed point" discovery, F20's mechanism claim); and one closed-loop
+experiment was run entirely because F22's advertised gate on "closed-loop auction" would have failed, leading the
+reviewer to demand the experiment and rescope F22 itself.
+
+\subsection{Configuration Hashing and Provenance}
+
+Every experiment run produces a results JSON file containing (i) per-seed raw measurements (loss, BLiMP scores, wall
+time, peak memory); (ii) a resolved configuration dictionary (all hyperparameters, seeds, batch size, corpus, and
+paths); (iii) a SHA-256 hash of the resolved configuration; and (iv) the git commit hash at run time. The findings
+ledger (research/memory/findings.md) records, for each finding, the experiment name, the config hash, the commit,
+the data range (which seed IDs, which steps, which pairs), and the extracted number. This ensures that every reported
+quantity is reproducible and that its context (hardware, code version, data version) is explicit. If an experiment is
+re-run (e.g.\ due to a Tarka-identified confound), both the old and new config hashes are recorded, and the finding's
+entry notes which hash applies to the reported number.
+
+\subsection{Adversarial Review Procedure}
+
+The adversarial reviewer operates under a standing mandate: recompute every number from the raw result files; flag any
+arithmetic or measurement error; challenge the mechanistic interpretation; and demand re-analysis or re-running if the
+evidence does not support the claim. The reviewer may refute a claim, rescope it, demand additional experiments (e.g.\
+per-domain breakdowns, ablations), or approve it. Review verdicts are recorded and published alongside the finding.
+Two high-impact examples appear in this paper. First, F20's mechanistic claim—``solver convergence fails at 121M
+width''—was refuted by the reviewer, who showed that solver convergence rate was 0.0 at both 11M and 121M, so the
+failure was not binary but graded: the map's contraction per iteration decreases with width under a fixed 12-iteration
+budget, widening the truncation penalty from 7\% to 21\%. Second, F22's gate stated that "closed-loop generation"
+achieves the auction advantage; the reviewer demanded that this gate be re-scoped to "scoring-time selection" based
+on the teacher-forced experimental design, and then insisted that the pre-registered closed-loop experiment (H5) be
+run. H5 was missed, confirming the reviewer's skepticism and validating F22's rescoped claim.
+
+\subsection{Scale and Token Limits}
+
+All results reported in Sections~\ref{sec:convergence} through~\ref{sec:auction} operate at 11M–124M parameters on
+10M words of training data. The 1–3B scale program (H7–H10) uses FineWeb-Edu and is in progress; uptraining timelines
+and conversion-damage sweeps have been completed (F25), but training and preference-tuning runs are ongoing. Results
+are reported only when they have closed with adversarial review and operator sign-off.

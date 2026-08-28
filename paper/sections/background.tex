@@ -1,0 +1,87 @@
+% Background: Sources findings F1--F7 (equilibrium + game theory convergence);
+% cites McKelvey1995, Sokota2023, Mertikopoulos2018, Perolat2021, Loshchilov2019,
+% Bai2019, Anderson1965, Broyden1965, Geng2021, Winston2020, Miyato2018, Dehghani2019,
+% Lan2020, Graves2016, RecursiveTransformers2024, Lee2015, Rafailov2023, Wu2024, Wang2025MPO,
+% Duetting2024, Vickrey1961, Holtzman2020, Bengio2015, Warstadt2020, Warstadt2023, Radford2019.
+% No invented numbers. Drawn from ADR 0006 (PMA vs MPO distinction).
+
+\section{Background and Related Work}
+\label{sec:background}
+
+Contemporary language model optimization is dominated by a single loss function and a single optimizer---a regime that one might caricature as \emph{dictatorial optimization}. Yet the systems in which these models operate are inherently interactive: preference tuning optimizes a policy against a frozen reference, decoding aggregates diverse model outputs, and training increasingly unfolds as a feedback loop between model, data, and reference. Game-theoretic machinery offers the natural mathematical language for such settings. A growing line of recent work has begun to import equilibrium theory and mechanism design into language modeling \citep{Sokota2023, Bai2019, Duetting2024, Wu2024}. This section reviews the key concepts and prior work that motivate the equilibrium-theoretic treatment of three stages of language modeling: training dynamics, model depth, and decoding.
+
+\subsection{Quantal Response Equilibrium and Softmax as Bounded Rationality}
+
+Quantal response equilibrium (QRE), introduced by McKelvey and Palfrey, models boundedly rational agents by replacing best-response play with noisy best response \citep{McKelvey1995}. Under a QRE, an agent plays action $a$ with probability proportional to $\exp(\lambda\, u(a))$, where $u(a)$ is the payoff and $\lambda$ is a rationality (inverse-temperature) parameter that captures the agent's degree of optimization. As $\lambda \to \infty$, the QRE converges to Nash equilibrium; at intermediate $\lambda$ it interpolates between random play and best response, coinciding with entropy-regularized equilibrium. The normalization constant, $\sum_a \exp(\lambda\, u(a))$, is the softmax partition function.
+
+The connection to language modeling is direct and structural. The softmax output layer of a language model is literally a quantal response to its logits. At each token position, the model computes a vector of scores (logits $\ell \in \mathbb{R}^V$) and outputs a probability distribution via softmax: $p_i = \exp(\ell_i) / Z$, where $Z = \sum_j \exp(\ell_j)$. The temperature parameter $\tau = 1/\lambda$ controls the peakedness of this distribution. This observation, though elementary, motivates studying language model decoding through the lens of QRE: the model's token distribution traces out QRE paths as temperature varies, and one may interrogate what equilibrium properties the learned logits satisfy. Such paths arise naturally in games where agents adapt their strategies in response to fixed payoff structures; understanding whether language models' learned representations align with such equilibria is an open empirical question, explored in Section~\ref{sec:convergence} of this work.
+
+\subsection{Magnetic Mirror Descent and Convergence in Two-Player Games}
+
+Magnetic Mirror Descent (MMD), introduced by Sokota et al.\ at ICLR 2023, augments standard mirror descent with a proximal pull toward a reference (magnet) policy $y_{\mathrm{ref}}$ \citep{Sokota2023}. Using the negative-entropy mirror map and regularization strength $\tau$, the update admits a closed form:
+\begin{equation}
+y_{t+1} \;=\; \frac{y_t + \eta g_t + \eta\tau\, y_{\mathrm{ref}}}{1 + \eta\tau},
+\label{eq:mmd}
+\end{equation}
+where $g_t$ is the payoff gradient and $\eta$ the step size. The proof of linear last-iterate convergence to the $\tau$-regularized equilibrium applies to two-player zero-sum games. This property is significant because it contrasts sharply with the baseline method---simultaneous gradient descent-ascent (GDA)---which cycles away from equilibrium under identical problem structure and step sizes, as established by Mertikopoulos et al.\ \citep{Mertikopoulos2018}. The magnetic term thus breaks the cycling that plagues standard GDA, offering guarantees in settings where unregularized gradient play fails.
+
+Annealing the regularization away permits recovery of Nash equilibrium itself. Periodically re-centering the magnet on the current iterate anneals $\tau$ toward zero, a technique rooted in regularized Nash dynamics \citep{Perolat2021}, which shows that re-centering on the running average recovers Nash convergence in both symmetric and asymmetric games. The parameter-space variant, MagneticAdamW, applies the magnetic pull after a decoupled-weight-decay AdamW step \citep{Loshchilov2019}, with the reference policy either an exponential moving average of recent iterates, a periodic snapshot, or frozen base weights (as in preference optimization). The closed-form update of Eq.~\ref{eq:mmd} carries directly into weight space, replacing the policy $y$ with weight parameters and $g_t$ with the normalized gradient direction from adaptive moment estimation.
+
+\subsection{Deep Equilibrium Models: Implicit Depth and Fixed-Point Computation}
+
+Deep equilibrium models, proposed by Bai et al.\ at NeurIPS 2019, replace a traditional $L$-layer feed-forward stack with a single parameterized map $f_\theta$ solved to a fixed point \citep{Bai2019}. The forward pass solves $z^* = f_\theta(z^*, x)$ to convergence; the representation $z^*$ is extracted and used for downstream prediction. Crucially, the input $x$ is fed in at every iteration, so the model's output depends on both the equilibrium representation and the input. Gradients flow backward through the fixed-point computation using the implicit function theorem, which avoids unrolling the solver and storing intermediate activations.
+
+The activation memory advantage is substantial: $O(1)$ in effective depth $L$ rather than $O(L)$. For a 12-layer explicit stack with activation dimension $d=768$, storing activations for backpropagation costs $O(12d^2)$; a DEQ model with the same dimension and iteration budget stores only $O(d^2)$, independent of effective depth. This memory savings becomes critical at large effective depths or when computing backward passes on limited-memory devices.
+
+Numerically, the fixed point is computed via Picard iteration (repeatedly applying the map), Anderson acceleration \citep{Anderson1965}, or Broyden's quasi-Newton method \citep{Broyden1965}. Picard iteration is simple but can be slow; Anderson acceleration uses a low-rank history (typically 3--5 prior iterates) to construct a linear interpolant that accelerates convergence and approaches quasi-Newton efficiency on many problem classes. Backward pass computation can use the full implicit differentiation formula (solving a linear system at gradient time) or cheaper Jacobian-free approximations \citep{Geng2021}.
+
+A critical requirement is that the fixed-point map must be contractive, or at minimum converge to a fixed point. Spectral normalization \citep{Miyato2018}, borrowed from generative adversarial networks, constrains the Lipschitz constant of the map; parametrizing layers as $W / \|W\|_2$ ensures Lipschitz constant $\leq 1$. Alternatively, monotone operator networks \citep{Winston2020} restrict the map to a class that admits a unique fixed point by construction. Failure to enforce contraction results in diverging solvers and non-existent fixed points, a practical pitfall encountered when designing equilibrium language models.
+
+\subsection{Weight Tying and Recursive Uptraining}
+
+Weight tying---reusing identical parameters across the $L$ iterations of a deep model---is independently motivated by parameter efficiency and orthogonal to the fixed-point formulation. Explicit examples include Universal Transformers \citep{Dehghani2019}, which tie weights and add learned per-instance halting; ALBERT \citep{Lan2020}, which shares embeddings across layers and intermediate feed-forward layers; and Adaptive Computation Time \citep{Graves2016}, which learns per-instance step budgets. Deep supervision \citep{Lee2015} provides auxiliary losses at intermediate layers during training, giving gradient signals at each iteration rather than only at the final output. Recursive uptraining \citep{RecursiveTransformers2024} fine-tunes pretrained models via repeated application of learnable layer-wise updates, permitting adaptation of models trained at a fixed depth to operate at multiple effective depths with shared parameters.
+
+\subsection{Preference Optimization: Mechanisms and the Critical Distinction Between Policy and Parameter Space}
+
+Direct Preference Optimization (DPO) \citep{Rafailov2023}, introduced by Rafailov et al.\ at NeurIPS 2023, optimizes the language model directly against a preference signal without training a separate reward model. DPO frames alignment as a maximum-likelihood problem with a closed-form solution in terms of the reference model's log-probabilities, making it simpler and often more stable than methods requiring auxiliary reward models. The loss is typically $-\log \sigma(\lambda(s_w - s_l))$, where $s_w$ and $s_l$ are the log-probabilities assigned by the model to preferred and dispreferred completions, and $\lambda$ is a temperature parameter.
+
+Policy-space Magnetic Preference Optimization (MPO), published by Wang et al.\ in the ICLR 2025 cycle, augments DPO with magnetic mirror descent in the policy (logit) space \citep{Wang2025MPO}. MPO applies the proximal magnetic term to the model's logits while optimizing the standard DPO objective under self-play, where the model's own generations form the preference data for training. The Nash equilibrium of the resulting preference game becomes the target of the magnetic pull.
+
+This is structurally different from parameter-space magnetic anchoring (PMA), the method studied in the present work. PMA applies a proximal pull in the \emph{parameter} space toward frozen base weights. The magnetic term may be folded into the optimizer---by scaling the Adam update direction and mixing in a pull toward the frozen reference---or applied outside the optimizer as a decoupled exponential-moving-average drift. Critically, PMA operates on the standard DPO loss function without self-play or game-theoretic restructuring. Though both policy-space MPO and parameter-space PMA deploy magnetic terms and aim to improve preference alignment, they operate in different representation spaces (logits vs.~parameters), with different target equilibria (Nash vs.~frozen reference), and under different game-theoretic framings (self-play vs.~anchor-relative optimization). Consequently, results concerning the effectiveness or ineffectiveness of PMA carry no direct bearing on policy-space MPO. Self-Play Preference Optimization (SPPO) \citep{Wu2024} pursues alignment through iterative self-play without an explicit magnetic term, offering yet another orthogonal mechanism.
+
+\subsection{Mechanism Design and Truthful Aggregation}
+
+When multiple models jointly produce a single output, each model ``bids'' its confidence in a continuation, and an aggregation mechanism decides which model to select---a classical mechanism-design problem \citep{Duetting2024}. A mechanism is truthful (incentive-compatible or strategy-proof) if each agent's best response is to truthfully report its private information; this property prevents gaming and ensures that the aggregation reflects genuine model confidence rather than strategic misreporting.
+
+Vickrey's second-price auction \citep{Vickrey1961} is the canonical truthful mechanism for single-item auctions. In the context of token-level decoding, the ``item'' is the token position, each model's ``valuation'' is its predicted confidence (log-probability or entropy), and the second-price rule (the winner pays the second-highest bid) ensures that truthful bidding is a dominant strategy. A model cannot profit by bidding higher (it wins but pays more) or lower (it loses). Alternative aggregation schemes, such as weighted averaging of logits or softmax outputs, are not truthful; models face incentives to misreport their confidence to increase their influence.
+
+Beyond truthfulness, practitioners contend with text degeneration, where greedy or even uniform aggregation of model outputs can produce repetitive or incoherent text \citep{Holtzman2020}. Exposure bias in autoregressive generation \citep{Bengio2015} refers to the distribution mismatch between training (where the model conditions on reference data) and inference (where it conditions on its own outputs). Auction mechanisms do not directly solve exposure bias but provide a principled framework for multimodel decoding grounded in mechanism theory.
+
+\subsection{Language Model Benchmarks and Sample-Efficient Evaluation}
+
+The Benchmark of Linguistic Minimal Pairs for English (BLiMP) evaluates grammatical and semantic acceptability through contrastive pairs across a range of phenomena---agreement, binding, governing category, and others \citep{Warstadt2020}. BLiMP has become the standard for assessing small language models' linguistic competence without requiring large supervised instruction-tuned datasets. The BabyLM Challenge \citep{Warstadt2023} established a shared evaluation protocol for models pretrained on a fixed small corpus (10 million words, divided into strict-small, strict-medium, and strict-large configurations), enabling direct and controlled sample-efficient comparisons across methods. The benchmark family is critical for validating methods at pre-scaling scales, where GPU compute is limited and researchers can iterate quickly. Separately, GPT-2's evaluation on standard perplexity-based benchmarks \citep{Radford2019} provides reference points for autoregressive modeling quality on diverse text corpora including Common Crawl and WebText.
+
+\subsection{Equilibrium, Depth, and Certification: A Comparative Landscape}
+
+\begin{table}[H]
+\centering
+\caption{Equilibrium-theoretic and depth-implicit architectures: parameter sharing, fixed-point semantics, convergence guarantees, and certification status. No architecture achieves certified convergence while preserving linguistic quality at the BabyLM scale.}
+\label{tab:equil_comparison}
+{\small
+\begin{tabular}{llcccc}
+\toprule
+\textbf{Framework} & \textbf{Param.\ Sharing} & \textbf{Depth Semantics} & \textbf{Fixed Pt.} & \textbf{Certified} \\
+\midrule
+Explicit stacking & none & sequential & N/A & N/A \\
+Universal Transformer & tied weights & learned halting & conditional & per-instance \\
+ALBERT & tied embeddings & parameter reduction & N/A & N/A \\
+Deep Equilibrium (DEQ) & single block & fixed-point equation & yes & via spectral norm \\
+Monotone Operator Nets & constrained weights & fixed-point enforced & yes & by construction \\
+EqLM (anytime unroll) & tied block & supervised iteration & trained & no \\
+EqLM (certified) & tied block & fixed-point w/ penalty & yes, locally & trajectory-local \\
+\bottomrule
+\end{tabular}
+}
+\end{table}
+
+The table organizes the landscape of depth-implicit and equilibrium approaches along four axes. Parameter sharing distinguishes methods that reuse parameters (reducing total model size) from those that stack unique layers. Depth semantics characterizes how the framework interprets ``depth'': sequential composition, learned adaptation, fixed-point computation, or structural enforcement. Fixed point indicates whether the architecture provably admits a well-defined equilibrium state. Certification records whether convergence to that equilibrium is guaranteed by architectural design or training regularization. The row for EqLM's certified variant (Section~\ref{sec:h6}) reflects a key empirical finding: a trajectory-local finite-difference penalty enforces convergence, yielding verifiable fixed-point correctness at the 121M parameter scale, but at the cost of linguistic quality (BLiMP score degradation). This leaves quality-preserving certification as a sharply posed open problem at the present scale and architecture.

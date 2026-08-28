@@ -61,6 +61,30 @@ never two GPU jobs at once (GPU lock in state.json).
   `https://github.com/SharathSPhD/game-llm.git`. Findings staged SIGN-OFF PENDING
   before merge to main.
 
+## Artifact standard (paper + app) — binding
+
+The paper is benchmarked against `/home/sharaths/projects/ActiveCIrcuitDiscovery/paper`
+(MDPI submission: 2183 lines of prose, ZERO bullet lists, 12 figures, 12 tables,
+modular `sections/*.tex`, appendix). Every paper edit obeys:
+
+- **Third-person impersonal.** "Retention is measured against..." — never "we", never "our".
+- **No `itemize`/`enumerate` in the body.** Lists become prose or tables.
+- **Depth, not summary.** Results carry protocol, numbers, interpretation, and the
+  ruled-out alternatives, per experiment. Results is the longest section.
+- **Rich apparatus.** `booktabs` tables with `\multirow` and CIs; TikZ architecture and
+  flow diagrams, not only result plots; captions state the protocol.
+- **Modular source.** `paper.tex` = preamble + metadata + `\input`; prose in `sections/*.tex`,
+  each opening with a comment recording the run directory and machine its numbers come from.
+- **No AI giveaways or process narration.** Banned: "honestly", "we report the full arc",
+  "adversarially audited", "commend this practice", "Notably,", "Importantly,",
+  rhetorical em-dash asides. Findings are stated; scope limits go in Limitations as
+  technical constraints.
+- **Appendices** carry per-seed tables, hyperparameters and derivations.
+
+Paper and app are living artifacts: when a finding closes, its paper section, tables,
+figures, site card and app surface update in the SAME cycle — this is the ARTIFACTS
+layer of the closure contract, not a later cleanup.
+
 ## Hardware & environment
 
 - This machine is the GB10 (DGX Spark). RTX 5090 box is reserved (other training).

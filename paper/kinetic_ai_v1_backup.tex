@@ -1,0 +1,325 @@
+\documentclass[12pt]{article}
+
+\usepackage{amssymb,amsmath,graphicx,subfig,float}
+\usepackage[hidelinks]{hyperref}
+\usepackage{geometry}
+\geometry{left=1in, right=1in, top=1in, bottom=1in}
+\usepackage{natbib}
+\usepackage{xcolor}
+\usepackage{pgfplots}
+\usetikzlibrary{shapes.geometric, arrows.meta, positioning, fit}
+\pgfplotsset{compat=1.18}
+\usepackage{adjustbox}
+\usepackage{booktabs}
+\usepackage{multirow}
+
+% Unicode to LaTeX for math symbols
+\usepackage{newunicodechar}
+\newunicodechar{−}{\ensuremath{-}}
+\newunicodechar{×}{\ensuremath{\times}}
+\newunicodechar{→}{\ensuremath{\rightarrow}}
+\newunicodechar{≈}{\ensuremath{\approx}}
+\newunicodechar{≤}{\ensuremath{\leq}}
+\newunicodechar{≥}{\ensuremath{\geq}}
+\newunicodechar{±}{\ensuremath{\pm}}
+\newunicodechar{α}{\ensuremath{\alpha}}
+\newunicodechar{β}{\ensuremath{\beta}}
+\newunicodechar{λ}{\ensuremath{\lambda}}
+\newunicodechar{μ}{\ensuremath{\mu}}
+\newunicodechar{σ}{\ensuremath{\sigma}}
+\newunicodechar{Δ}{\ensuremath{\Delta}}
+\newunicodechar{≠}{\ensuremath{\neq}}
+
+\newcommand{\finding}[1]{\textsc{#1}}
+
+\title{Kinetic AI: Language Modeling as Equilibrium Computation\\
+\large An Adversarially Audited Empirical Program}
+\author{Sharath Sathish\\ \small \url{https://github.com/SharathSPhD/game-llm}}
+\date{August 2026}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+We report a pre-registered, adversarially audited empirical program that treats three stages of language modeling as equilibrium computations: training dynamics (Magnetic Mirror Descent toward quantal response equilibria), model depth (a weight-tied transformer block solved to a fixed point, EqLM), and multi-model decoding (truthful second-price token auctions). Six hypotheses were registered with quantitative pass/fail gates before their experiments ran; every finding survived an adversarial review that twice materially rewrote our own conclusions. The headline results: (i)~a weight-tied single-block language model reaches \textbf{99.1\%} of a parameter-matched 12-layer explicit transformer's BLiMP score at 121M parameters when trained with unrolled anytime supervision---erasing a quality gap that solver-based training had widened from 7\% to 21\% with width---while training $2.1\times$ faster and serving three inference budgets from one checkpoint; (ii)~a trajectory-local contraction penalty yields the program's first \emph{certified} 121M-parameter equilibrium (solver convergence rate 1.0 at 4.0 mean iterations) at a quality cost, and the naive combination of the two mechanisms fails, leaving quality-preserving certification as a sharply posed open problem; (iii)~Magnetic Mirror Descent converges linearly where simultaneous gradient play cycles, but its magnetic anchor is second-order to the preference-optimization gradient across four orders of magnitude of regularization strength; (iv)~truthful token auctions beat the best single domain specialist by 23\% at scoring time yet lose in closed-loop generation---a distinction our adversarial reviewer forced into the claim's scope before the follow-up experiment vindicated it. We report the full diagnostic arcs, including two formally missed hypotheses, and argue that the negative results carry as much design information as the positive ones.
+\end{abstract}
+
+\section{Introduction}
+
+Contemporary language models are trained by minimizing a single loss with a single optimizer, a regime one may caricature as \emph{dictatorial optimization}. Yet the systems those models inhabit are interactive: alignment tunes a policy against a frozen reference, decoding aggregates competing continuations, and training itself is increasingly a game between model, data, and reference. Game theory offers the natural mathematics for such settings, and a line of recent work has begun importing its machinery: mirror-descent methods with last-iterate guarantees for regularized equilibria \citep{Sokota2023}, implicit-depth models that compute a fixed point rather than a feed-forward pass \citep{Bai2019}, and mechanism-design framings of model aggregation \citep{Duetting2024}.
+
+This paper asks a blunt empirical question: \emph{when the equilibrium view is implemented end-to-end at small-LM scale, what survives contact with pre-registered thresholds?} We built a single codebase (\texttt{kinetic\_ai}) implementing Magnetic Mirror Descent (MMD), quantal response equilibrium (QRE) solvers, deep-equilibrium language models, truthful token auctions, and magnetic preference optimization; we registered six hypotheses with quantitative gates before running their experiments; and we subjected every finding to an adversarial integrity review (``Tarka'') empowered to refute, rescope, or demand re-analysis. The review changed our conclusions twice in ways that mattered: it refuted our first mechanistic explanation of the width-scaling gap (Section~\ref{sec:scale}), and it forced a scoring-time scoping onto the auction result that the follow-up experiment then proved necessary (Section~\ref{sec:auction}).
+
+\paragraph{Contributions.}
+\begin{enumerate}
+\item \textbf{An equilibrium LM at parity.} A weight-tied single transformer block, trained unrolled with cross-entropy supervision on intermediate iterates and evaluated with a standard fixed-point solver, matches a parameter-matched 12-layer explicit transformer on BLiMP at 121M parameters (ratio $0.991$; one seed above baseline), trains $2.1\times$ faster than implicit-differentiation training, and degrades gracefully across inference budgets $\{4,8,12\}$ (Section~\ref{sec:parity}).
+\item \textbf{A certified 121M equilibrium, and a sharply posed open problem.} A finite-difference contraction penalty applied only along the solver's trajectory achieves certified convergence (rate $1.0$ at $4.0$ mean iterations) at the lowest memory of any arm, but costs quality; the naive combination of anytime supervision and the penalty is refuted by its own pre-registered prediction. Quality and certification are thus each solved---in different models (Section~\ref{sec:h6}).
+\item \textbf{Convergence results for magnetic dynamics.} On matrix games, fixed-magnet MMD converges linearly (log-linear $R^2 = 0.99$) where simultaneous gradient play cycles; periodic reference resets recover Nash to NashConv $< 10^{-4}$; and uniform-anchor fixed points provably diverge from logit-QRE on asymmetric games (Section~\ref{sec:convergence}).
+\item \textbf{Where the magnet does and does not help.} In preference optimization, the magnetic anchor is real but second-order to the DPO gradient across $\tau \in [10^{-3}, 10]$; meanwhile DPO itself damages held-out linguistic phenomena, and the equilibrium architecture is $1655\times$ more drift-resistant than the explicit model under identical updates (Section~\ref{sec:mpo}).
+\item \textbf{Auction aggregation, correctly scoped.} Truthful second-price token auctions over domain specialists beat the best single model by 23\% and uniform logit averaging by 12\% on mixed-domain perplexity at scoring time---and lose in closed-loop generation, where we also show the evaluation metric itself is style-dominated (Section~\ref{sec:auction}).
+\item \textbf{A replicable audit methodology.} Pre-registration with quantitative gates, $\geq 3$ md5-distinct seeds, config-hash provenance on every number, and an adversarial reviewer with refutation power. We document both cases where the reviewer overturned the authors (Section~\ref{sec:method}).
+\end{enumerate}
+
+All code, configurations, per-seed results, and checkpoints are public: the \texttt{kinetic-ai} package on PyPI (v1.0.0), three 121M checkpoints on Hugging Face including the parity model, and the full findings ledger in the repository.
+
+\section{Background}
+
+\subsection{Quantal Response Equilibrium}
+Quantal response equilibrium \citep{McKelvey1995} replaces best response with noisy best response: an agent plays action $a$ with probability proportional to $\exp(\lambda\, u(a))$, where $\lambda$ is a rationality (inverse-temperature) parameter. As $\lambda \to \infty$ the QRE approaches Nash; at finite $\lambda$ it coincides with entropy-regularized equilibrium. The softmax layer of a language model is literally a quantal response to its logits, which motivates treating decoding temperature as an explicit rationality parameter and tracing QRE paths in $\lambda$ (Section~\ref{sec:convergence}).
+
+\subsection{Magnetic Mirror Descent}
+Magnetic Mirror Descent \citep{Sokota2023} augments mirror descent with a proximal pull toward a \emph{magnet} (reference) policy $y_{\mathrm{ref}}$. With negative-entropy mirror map and regularization strength $\tau$, the update admits the closed form used throughout our implementation,
+\begin{equation}
+y_{t+1} \;=\; \frac{y_t + \eta g_t + \eta\tau\, y_{\mathrm{ref}}}{1 + \eta\tau},
+\label{eq:mmd}
+\end{equation}
+where $g_t$ is the payoff gradient and $\eta$ the step size. Sokota et al.\ prove linear last-iterate convergence to the $\tau$-regularized equilibrium in two-player zero-sum settings---precisely where simultaneous gradient descent-ascent cycles \citep{Mertikopoulos2018}. Periodically re-centering the magnet on the current iterate anneals the regularization away and recovers Nash, the mechanism underlying regularized Nash dynamics \citep{Perolat2021}. We also use a parameter-space transplant of Eq.~\ref{eq:mmd}: \emph{MagneticAdamW} applies the magnetic pull after a decoupled-weight-decay AdamW step \citep{Loshchilov2019}, with the reference either an EMA, a periodic snapshot, or frozen base weights.
+
+\subsection{Deep Equilibrium Models}
+Deep equilibrium models \citep{Bai2019} replace an $L$-layer stack with a single parameterized map $f_\theta$ solved to a fixed point $z^* = f_\theta(z^*, x)$, differentiated implicitly---so activation memory is $O(1)$ in effective depth. Solvers include Picard iteration, Anderson acceleration \citep{Anderson1965}, and Broyden's method \citep{Broyden1965}; backward passes use the implicit function theorem or cheaper Jacobian-free approximations \citep{Geng2021}. Guaranteeing a well-defined equilibrium requires the map to be contractive, which can be encouraged with spectral normalization \citep{Miyato2018} or enforced by construction \citep{Winston2020}. Weight tying across depth is independently motivated by parameter efficiency \citep{Dehghani2019, Lan2020}.
+
+\subsection{Mechanism Design for Model Aggregation}
+When multiple models jointly produce one output, each ``bids'' its confidence, and an aggregation rule decides---a mechanism-design problem \citep{Duetting2024}. Vickrey's second-price auction \citep{Vickrey1961} makes truthful bidding a dominant strategy; we verify this property empirically for token auctions and then use the auction as a per-token model-selection rule.
+
+\section{The EqLM Architecture}
+\label{sec:arch}
+
+EqLM is a causal language model whose entire depth is one weight-tied transformer block solved toward a fixed point. Token and learned positional embeddings produce $x \in \mathbb{R}^{B\times T\times d}$; the model solves
+\begin{equation}
+z^* = f_\theta(z^*, x)
+\end{equation}
+in the $d$-dimensional representation space (not the vocabulary simplex), then applies a final LayerNorm and a weight-tied output head with $1/\sqrt{d}$ logit scaling.
+
+\paragraph{The fixed-point map.} Two map forms were tested. The v1 \emph{residual} form $f(z,x) = (1-\alpha)z + \alpha(z + \mathrm{Attn}(z) + \mathrm{MLP}(z) + x)$ turns out to admit no fixed point at all (Section~\ref{sec:diagnostic}). The v3 \emph{post-LN} form, following DEQ-transformer practice,
+\begin{equation}
+h = \mathrm{LN}_1\!\big(z + \mathrm{Attn}(z) + x\big), \qquad f(z, x) = \mathrm{LN}_2\!\big(h + \mathrm{MLP}(h)\big),
+\label{eq:postln}
+\end{equation}
+keeps iterates bounded so bona fide fixed points exist. Causal masking applies inside the attention; convergence is gated on the \emph{relative} residual $\lVert f(z)-z\rVert / (\lVert z\rVert + \epsilon)$.
+
+\paragraph{Solvers and training modes.} The forward solver is Anderson acceleration (history 5) with a 12-iteration budget at tolerance $10^{-3}$ unless stated. Three training regimes appear in this paper: (a) \emph{implicit}: solve without gradients, backpropagate via the implicit function theorem; (b) \emph{solver-aware}: implicit training plus an auxiliary loss $\lambda \cdot \lVert f(z^*,x) - z^*\rVert/\lVert z^*\rVert$ that teaches contraction (Section~\ref{sec:diagnostic}); (c) \emph{anytime-unrolled}: apply the map $k$ times explicitly from $z_0 = x$ with full backpropagation and cross-entropy supervision at intermediate iterates $z_4, z_8, z_{12}$ (Section~\ref{sec:parity}). In all regimes, evaluation runs the standard Anderson solver, so solver telemetry is comparable across arms.
+
+\paragraph{Equilibrium-native inference.} Because consecutive decoding steps solve nearby problems, the solver can be warm-started from the previous token's equilibrium (concatenating the cached $z^*$ with its last position as the new initial iterate). An eval-time iteration budget acts as a ``think-harder dial''; the anytime-trained model makes this dial useful (Section~\ref{sec:parity}).
+
+\section{Methodology: Pre-registration and Adversarial Audit}
+\label{sec:method}
+
+Every hypothesis in this paper was registered with a quantitative gate before its experiment ran, in specification documents version-controlled alongside the code. The closure contract requires: all experiment arms run; $\geq 3$ md5-distinct seeds for any verdict; every reported number traceable to a results file carrying a resolved-config SHA-256 and git commit; and a resolved adversarial review before a finding may enter this paper. The reviewer (``Tarka'') recomputes every number from the raw results files, audits like-for-like fairness (matched parameters, tokens, optimizer, and recipe), and attacks the mechanism story. Findings ship with their review verdicts; two reviews materially overturned author conclusions (Sections~\ref{sec:scale} and~\ref{sec:auction}), and one forced a re-analysis that revealed a metric pathology (Section~\ref{sec:closedloop}). Hypotheses carry named outcomes---\textsc{met}, \textsc{partial}, \textsc{missed}---and a well-documented miss is a valid closure state.
+
+The six hypotheses, verbatim gates, and verdicts:
+\begin{center}
+\small
+\begin{tabular}{@{}llll@{}}
+\toprule
+ & Hypothesis (pre-registered gate) & Verdict & Findings \\
+\midrule
+H1 & EqLM $\geq$95\% of explicit BLiMP at matched params/tokens & \textsc{missed} & F13--F20 \\
+H2 & MMD last-iterate convergence where GDA cycles ($R^2 \geq 0.9$) & \textsc{met} & F1--F3 \\
+H3 & PMA $\geq$ DPO held-out accuracy AND lower KL drift & \textsc{partial} & F21 \\
+H4 & Auction beats best single specialist, mixed-domain ppl & \textsc{met} & F22 \\
+H5 & Auction advantage survives closed-loop generation & \textsc{missed} & F23 \\
+H6 & Recover $\geq$50\% of width gap at $\leq$12 iters with certification & \textsc{partial} & F24 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\section{Convergence Results: Magnetic Dynamics}
+\label{sec:convergence}
+
+\paragraph{Linear last-iterate convergence where GDA cycles (F1).} On symmetric zero-sum matrix games (matching pennies, rock-paper-scissors), fixed-magnet MMD (uniform anchor, $\eta = 0.1$, $\tau = 0.1$) converges geometrically: a log-linear fit of distance-to-fixed-point over the final 50\% of each trajectory yields $R^2 = 0.995$ (MP) and $0.902$ (RPS) across 10 seeds. Simultaneous GDA at the same step size cycles, with final NashConv $1.93\ [1.90, 1.96]$ (MP) and $1.76\ [1.62, 1.88]$ (RPS) and no decay ($R^2 < 0.09$). Figure~\ref{fig:mmd} shows representative trajectories.
+
+\paragraph{A discovery on asymmetric games (F2).} For biased RPS, MMD-with-uniform-anchor converges deterministically---but \emph{not} to the logit-QRE at $\lambda = 1/\tau$: the long-run attractor has NashConv $\approx 0.018$ while the computed QRE fixed point sits at $0.353$. The symmetric-game identity ``MMD fixed point = QRE'' does not generalize; the dynamics exhibit context-dependent attractors. Practitioners transplanting MMD guarantees to asymmetric settings should verify the target of convergence, not just its existence.
+
+\paragraph{Nash via reference resets (F3).} Re-centering the magnet periodically drives NashConv to $8.5\times 10^{-6}$ (MP), $1.1\times 10^{-6}$ (RPS), and $5.2\times 10^{-5}$ (biased RPS) across 10 seeds---the annealed-regularization route to Nash of regularized Nash dynamics \citep{Perolat2021}, reproduced in a form a single GPU afternoon can audit.
+
+\paragraph{QRE solver engineering (F7, F8).} Warm-starting each solve from the previous $\lambda$'s solution cuts homotopy path-tracing iterations by 25.2\% on asymmetric $2\times 2$ games; plain fixed-point iteration $s \leftarrow \mathrm{softmax}(\lambda A s)$ diverges beyond $\lambda \approx 0.32$ on biased RPS, and an adaptively damped iteration $(1-\gamma)s + \gamma\,\mathrm{softmax}(\lambda A s)$ restores convergence through $\lambda = 100$.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/fig_mmd_convergence.pdf}
+\caption{Fixed-magnet MMD converges linearly (log scale) where simultaneous GDA cycles at the same step size (matching pennies shown; 10 seeds).}
+\label{fig:mmd}
+\end{figure}
+
+\section{Mechanism Results: Token Auctions Are Exactly Truthful}
+\label{sec:mechanism}
+
+With valuations equal to model confidence, a second-price token auction is empirically \emph{exactly} truthful: across 16{,}000 observations (10 seeds $\times$ 200 auctions $\times$ \{3,5\} agents, misreport grid $0.25v$--$2v$), the truthful-bidding regret is $0.0$ with 95\% CI $[0.0, 0.0]$ (F6)---as Vickrey's dominant-strategy argument requires \citep{Vickrey1961}. A weighted-aggregation alternative is measurably manipulable (mean misreport gain $0.077$ at $n=3$), confirming its payments are not VCG. This validated mechanism is the substrate for the decoding experiments of Section~\ref{sec:auction}.
+
+\section{EqLM at Scale: the Full Diagnostic Arc}
+\label{sec:eqlm}
+
+We report the H1 program as it actually unfolded---three iterations, one discovery, one refuted mechanism---because the arc itself is the finding: each failure localized the next experiment.
+
+\subsection{From Pipeline to First Miss (F9--F13)}
+At smoke scale the pipeline exposed an init-scaling bug (all arms starting at loss $\approx 125$ versus $\ln|V| \approx 10.8$); with correct initialization, EqLM matched the explicit baseline's loss at 800 steps (5.94 vs.\ 5.99) with 6.2\% fewer parameters (F10). The first full run (20k steps, BabyLM strict-small \citep{Warstadt2023}, parameter-matched) missed the 95\% gate decisively: BLiMP \citep{Warstadt2020} 0.571--0.584 vs.\ 0.734 for the explicit baseline (78--80\%, F13). Two optimizer defects were root-caused en route: Adam-coupled weight decay silently destroys sparse-gradient tied-embedding rows (decoupling restores \emph{exact} AdamW equivalence at $\tau = 0$; F11), and the magnetic pull at $\tau \leq 10^{-2}$ is loss-neutral in pretraining (F12)---so pretraining arms use plain AdamW and the magnet is reserved for the preference phase, its theoretical home.
+
+\subsection{Discovery: No Fixed Point, then Learned Contraction (F14--F16)}
+\label{sec:diagnostic}
+Solver telemetry for the v1 residual map showed residuals plateauing with tail ratio $\approx 0.99$ for 100 iterations, and residual magnitude scaling \emph{linearly} with the damping $\alpha$ ($32.65 \to 5.41 \to 1.35$ at $\alpha = 1/0.2/0.05$)---the signature of $z \leftarrow z + \alpha g(z)$ with $\lVert g\rVert$ constant. The map had no fixed point; the trained models were 12-iteration weight-tied transformers, not equilibrium models (F14). The post-LN map of Eq.~\ref{eq:postln} restores bounded iterates and genuine convergence (relative residual $1.0 \to 0.105$, monotone), but contraction at LM width is weak (F15). The fix is striking in its economy: adding the solver-aware auxiliary loss (one tracked block application after the no-grad solve) reduces the exit residual $16\times$ ($0.128 \to 0.008$) for every $\lambda \in \{0.01, 0.1, 1.0\}$ at $\leq 1.8\%$ CE cost and zero wall-time overhead---the model \emph{learns} to be contractive (F16).
+
+\subsection{The 11M Verdict: an Honest Miss at 93.0\% (F17--F18)}
+With the post-LN map, EqLM reached 94.4\% of baseline BLiMP on the first seed (statistically a tie with the 95\% gate at $n = 1000$ pairs); the mandated 3-seed verdict landed at ratio $0.930$, bootstrap 95\% CI $[0.898, 0.949]$---formally below threshold (F18). The iteration-1$\to$2 progress (0.571 $\to$ 0.704 BLiMP from the map fix and init scaling alone) is the arc's constructive content.
+
+\subsection{Warm-Started Decoding (F19)}
+Sequential equilibria are close: initializing each decode step's solve from the previous token's equilibrium cuts solver cost from 7.91 to 1.64 iterations/token ($-79.3\%$; pre-registered gate $\geq$50\%, \textsc{met}) at 97.6\% greedy-token agreement (39/40 sequences exact). An explicit $L$-layer stack always pays $L$ block applications per token; a warm equilibrium model pays $\approx 1.6$ at this scale.
+
+\subsection{The 121M Verdict and a Refuted Mechanism (F20)}
+\label{sec:scale}
+At 121M parameters (batch 32, 10k steps, 3 seeds, RTX 5090), the solver-trained comparison worsened: explicit 0.6833 vs.\ EqLM 0.5377 BLiMP, per-seed ratio $0.787$ with bootstrap CI $[0.785, 0.788]$ (Table~\ref{tab:main}). Our first mechanistic explanation---``the solver converges at small width and fails at large''---was \textbf{refuted by our own adversarial review}: the telemetry shows convergence rate $0.0$ with all 12 iterations used at \emph{both} widths. The corrected mechanism is graded, not binary: under a fixed 12-iteration budget, the map grows less contractive per iteration as width scales $204 \to 1704$, and the truncation penalty widens from 7\% to 21\%. Two cost facts survive audit: EqLM keeps a $-23\%$ peak-memory advantage at 121M (6.29 vs.\ 8.13 GB), and pays $8.4\times$ wall-clock per matched step under implicit training. The step budget differs from the 11M runs (10k vs.\ 20k, applied identically to both arms), so the trend's magnitude is confounded even though its direction is robust.
+
+\subsection{Anytime Training Reaches Parity (F24)}
+\label{sec:parity}
+The scale gap dissolved when the training regime changed. Arm B1 trains the same weight-tied block \emph{unrolled}---plain iterates $z_1,\dots,z_{12}$ from $z_0 = x$ with full backpropagation---and supervises cross-entropy at $z_4, z_8, z_{12}$ (weights $0.15/0.3/1.0$), the deep-supervision principle \citep{Lee2015} applied to implicit depth. Evaluated with the standard Anderson solver at the same 12-iteration budget, B1 scores BLiMP $0.662/0.697/0.672$ across seeds---ratio $\mathbf{0.991}$ against the explicit baseline, with seed 43 \emph{above} its baseline (Table~\ref{tab:main}, Figure~\ref{fig:parity}). The comparison is recipe-clean by audit: identical data stream (same token-cache file), steps, batch, optimizer, learning rate, and gradient clipping; parameters within 2.5\%.
+
+Three dividends. First, wall-clock: unrolled training is $2.1\times$ \emph{faster} than training by implicit differentiation (44 vs.\ 92 min/arm)---the equilibrium solve, not backpropagation, dominates EqLM's training cost. Second, the pre-registered budget-sweep rider is \textsc{met}: the same checkpoint evaluated at Anderson budgets $\{4, 8, 12\}$ scores 0.621 / 0.638 / 0.662 (s42), 0.601 / 0.674 / 0.697 (s43), and 0.587 / 0.655 / 0.672 (s44)---graceful degradation, one model serving three compute budgets, the adaptive-computation goal \citep{Graves2016} obtained architecturally. Third, honesty about cost: unrolled training stores its iterates, paying explicit-like activation memory during training (16.4 GB vs.\ 7.8 GB); the serving-time properties ($O(1)$ depth-memory, warm-start decoding) are unchanged. We note the scoping our audit required: training supervises \emph{plain} iterates while eval budgets cap \emph{Anderson} iterations---a different algorithm---so the parity and degradation claims attach to the deployed Anderson path, not to plain-iteration equivalence.
+
+\begin{table}[t]
+\centering
+\small
+\caption{Main pretraining results at 121M parameters (BabyLM strict-small, batch 32 $\times$ 10k steps, 3 seeds; BLiMP subset of 1000 pairs). Ratio is per-seed EqLM/explicit. The anytime-unrolled regime closes the gap solver-based training had widened.}
+\label{tab:main}
+\begin{tabular}{@{}lccccc@{}}
+\toprule
+Model (training regime) & BLiMP (per seed) & Mean & Ratio & Peak mem & Train time \\
+\midrule
+Explicit 12-layer (baseline) & .682/.675/.693 & .683 & --- & 8.1 GB & 11 min \\
+EqLM (implicit, F20) & .537/.532/.544 & .538 & .787 & 6.3 GB & 92 min \\
+EqLM (anytime-unrolled, F24) & .662/.697/.672 & .677 & \textbf{.991} & 16.4 GB$^{\dagger}$ & 44 min \\
+\bottomrule
+\multicolumn{6}{@{}l@{}}{\footnotesize $^{\dagger}$Training-time cost of storing unrolled iterates; serving memory is the implicit model's.}
+\end{tabular}
+\end{table}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\textwidth]{figures/fig_parity_budget.pdf}
+\caption{Left: the width gap belongs to the training regime, not the architecture --- per-seed BLiMP ratio against the explicit baseline at 121M under implicit (F20) vs.\ anytime-unrolled (F24) training. Right: the anytime checkpoint evaluated at Anderson budgets $\{4,8,12\}$ degrades gracefully; dashes mark the explicit baseline's mean.}
+\label{fig:parity}
+\end{figure}
+
+\subsection{Certification, and the Open Problem (F24, arms B2--B4)}
+\label{sec:h6}
+The H6 gate demanded both quality ($\geq$50\% gap recovery) and certification (solver convergence rate $> 0.5$) in one model. A TRIZ-style decomposition framed the tension as a physical contradiction---the map's effective Lipschitz constant must be small (to certify in 12 iterations) and large (for capacity)---suggesting separation in condition and space. Arm B2 penalizes a finite-difference local Lipschitz estimate $\lVert f(z + \epsilon v) - f(z)\rVert / \epsilon$ probed \emph{only at points on the solve ray} (expressive globally, contractive where the solver travels): it achieves the program's first certified 121M equilibrium---convergence rate $1.0$ at $4.0$ mean iterations, lowest memory (5.5 GB)---at BLiMP $0.577$, above control but far from parity. Arm B3 solves the equilibrium in a 256-dimensional core between wide explicit encoder/decoder layers: $0.642$, partial certification, fastest to train. Arm B4, the naive combination of anytime supervision and the raw penalty, was pre-registered with the prediction it would meet the full gate; it was \textbf{refuted}---the unnormalized penalty ($3.5 \times 10^4$ at initialization) drowned the supervision signal under gradient clipping, scoring $0.529$, below control. H6 closes \textsc{partial}: quality at parity (B1) and certification (B2) each achieved, in different arms, with their naive sum a documented failure. The open problem this hands forward is better-posed than the one F20 left: \emph{quality-preserving certification}, with a scale-normalized (e.g.\ logarithmic) penalty as the natural first attempt.
+
+\section{Parameter-Space Magnetic Anchoring vs.\ DPO}
+\label{sec:mpo}
+
+H3 asked whether the magnetic anchor improves preference optimization: does DPO \citep{Rafailov2023} with a proximal pull toward the frozen base in parameter space (PMA, parameter-space magnetic anchoring) match DPO's accuracy at lower reward-hacking drift? This method is distinct from the published work of Wang et al.\ (2025) on Magnetic Preference Optimization (MPO) \citep{Wang2025MPO}, which applies policy-space magnetic mirror descent with self-play to target the Nash equilibrium of a preference game. Our H3 method operates in parameter space, applying a magnetic pull inside AdamW toward frozen base weights under the standard DPO loss. Our testbed makes the preference signal exact---BLiMP minimal pairs \emph{are} preference pairs ($\text{good} \succ \text{bad}$), no reward model or judge---with a phenomenon-level split: train on three phenomena (600 pairs), evaluate on two unseen ones (400 pairs). Arms differ \emph{only} in the optimizer's magnet strength (the DPO arm is MagneticAdamW at $\tau = 0$, mathematically decoupled AdamW in the same code path; a torch-AdamW baseline would confound the comparison with implementation deltas at small drift). Each seed fine-tunes its own 121M checkpoints.
+
+\paragraph{Verdict: \textsc{partial} on the letter, missed in spirit.} At the pre-registered $\tau \in \{10^{-3}, 10^{-2}\}$, PMA's held-out accuracy equals DPO's \emph{exactly} (all seeds, both bases) and the KL reduction is insignificant. The magnet is provably applied---KL trajectories diverge across arms; per-arm losses differ---but total displacement scales as $\eta\tau T \approx 2\times 10^{-5}$: under-dosed. A dose-response rider ($\tau \in \{0.1, 1, 10\}$), pre-registered with the prediction that drift reduction becomes visible by $\tau = 1$, \emph{refuted its own prediction}: even $\tau = 10$ moves KL only $1.241 \to 1.226$ ($-1.2\%$) with accuracy unchanged. The magnetic pull is second-order to the DPO gradient across four orders of magnitude at this budget---consistent with our pretraining finding (F12) that the magnet's natural home is stability, not preference-phase drift control. This negative result for PMA is evidence about parameter-space magnetic anchoring specifically, not about policy-space MPO as formulated by Wang et al.
+
+\paragraph{Two secondary findings survive audit.} (a) \emph{Preference optimization damages unseen phenomena}: on the explicit base, DPO lifts trained-phenomena accuracy $0.646 \to 0.877$ while held-out phenomena \emph{drop} $0.740 \to 0.612$, at $1.24$ nats/token KL from base---the drift H3 worried about, observed directly in the linguistic domain. (b) \emph{The equilibrium architecture is intrinsically drift-resistant}: under identical loss, learning rate, and steps, EqLM moves its train accuracy only $0.493 \to 0.516$ with $1655\times$ less KL drift ($0.00075$ vs.\ $1.24$ nats/token). Audit excluded the trivial explanation (its base accuracy is low, so preferences were \emph{not} pre-satisfied); the cause is damped gradients through the 12-iteration weight-tied solve. Double-edged, and reported as such: stability against preference-induced drift, and insensitivity to preference fine-tuning at matched learning rate.
+
+\section{Auction Decoding: Where Selection Wins and Where It Does Not}
+\label{sec:auction}
+
+\subsection{Scoring-Time Selection: \textsc{met} (F22)}
+Per seed, two 30M-parameter specialists were trained on disjoint BabyLM subdomains (child-directed speech; simple-Wikipedia text) and evaluated on a 50/50 interleaved held-out stream ($\approx$100k tokens). At each position every specialist bids its own maximum next-token probability---target-independent by construction---and the winner's distribution scores the true token, paying the second price. The auction achieves mixed-domain perplexity $158.5/189.4/200.5$ across seeds versus $234.3/232.8/243.4$ for the best single specialist (paired $t = 4.98$) and beats uniform logit averaging on every seed (means: auction $182.8 <$ ensemble $207.9 <$ best single $236.8 <$ worst $1242.4$). The decomposition is honest about the mechanism: confidence-bidding is imperfect \emph{within} a domain (on child-speech windows the auction's 26--33 ppl trails the resident specialist's 13.8), but per-token selection dominates any fixed commitment once domains mix, because each specialist collapses off-domain ($\approx$4000--4900 ppl). Adversarial review cleared oracle-leakage and fairness checks, then forced three scopings: this is teacher-forced per-token \emph{selection} at scoring time, not autoregressive generation; the resident specialist's absolute 13.8 ppl may be flattered by n-gram overlap across the line-level split; and the published traces are a 200-position sample.
+
+\subsection{Closed-Loop Generation: \textsc{missed}, and a Metric Lesson (F23)}
+\label{sec:closedloop}
+The follow-up experiment H5 tested exactly the scoped-out claim: with each system generating its own context (greedy, 100 mixed prefixes/seed, 32 generated tokens), does the auction still win? \textbf{No}: under a frozen independent judge LM (the 124M explicit baseline), the best single specialist scores $3.39/3.37/3.69$ NLL/token against the auction's $4.74/4.23/4.60$, all seeds. Teacher forcing re-anchors selection to the true context at every position; closed-loop generation removes the anchor, and the auction drifts toward one specialist's style regardless of the prompt's domain. The pre-registered scoping of F22 is thereby empirically vindicated by its own follow-up---the original ``decoding'' claim would have been false.
+
+The deeper lesson concerns the metric. A review-mandated per-domain decomposition (reproduced bit-identically on a second machine) showed the child-speech specialist scoring best \emph{even on Wikipedia-only prompts} (3.27--3.78), while the Wikipedia specialist generating its own home style on its own domain scores 5.10--5.49: the judge, trained on the child-speech-heavy BabyLM mix, carries a $\approx$2-nat style prior that dwarfs every between-system effect. The verdict is therefore scoped as judge-relative. Two observations survive independently of the judge: the auction's output measurably diverges from its teacher-forced behavior, and the auction exhibits the \emph{lowest} degeneration \citep{Holtzman2020} of all systems (3-gram repetition $0.39$--$0.48$) while uniform logit averaging collapses ($0.78$--$0.83$)---bid competition acts as an implicit anti-repetition regularizer. Exposure bias \citep{Bengio2015} compounding across models, and context-aware bids (bid on the prefix's domain rather than own confidence), are the identified follow-ups.
+
+\section{Related Work}
+
+\paragraph{Equilibria in learning dynamics.} MMD's last-iterate guarantees \citep{Sokota2023} and the cycling behavior of simultaneous gradient play \citep{Mertikopoulos2018} frame our Section~\ref{sec:convergence}; regularized Nash dynamics \citep{Perolat2021} motivates the reference-reset result. QRE originates with \citet{McKelvey1995}.
+
+\paragraph{Implicit depth and weight tying.} DEQ models \citep{Bai2019} with Anderson \citep{Anderson1965} and Broyden \citep{Broyden1965} solvers, Jacobian-free training \citep{Geng2021}, and contraction-by-construction \citep{Winston2020} are the architectural substrate. Weight tying across depth appears in Universal Transformers \citep{Dehghani2019} and ALBERT \citep{Lan2020}; our F14 diagnosis---that an unbounded residual map iterated under weight tying is not an equilibrium model at all---is a cautionary bridge between those literatures. Anytime supervision transplants deep supervision \citep{Lee2015} to implicit depth, and the resulting budget dial realizes adaptive computation \citep{Graves2016} without a halting mechanism.
+
+\paragraph{Preference optimization.} DPO \citep{Rafailov2023} and self-play preference optimization \citep{Wu2024} define the landscape our H3 addresses; our contribution is a controlled isolation of the proximal-anchor term and a negative dose-response result for it, plus the drift-resistance contrast between architectures. Wang et al.'s Magnetic Preference Optimization \citep{Wang2025MPO} applies magnetic mirror descent in policy space with self-play to achieve last-iterate convergence to the Nash equilibrium of a preference game---a different mechanism from our parameter-space magnetic anchoring (PMA) applied inside AdamW under the standard DPO loss.
+
+\paragraph{Model aggregation as mechanism design.} \citet{Duetting2024} establish the auction framing for LLM aggregation; our results give it an empirical scoring-time validation, a truthfulness verification, and a closed-loop boundary.
+
+\paragraph{Benchmarks.} Evaluation uses BLiMP \citep{Warstadt2020} under the BabyLM data diet \citep{Warstadt2023}; the explicit baselines are GPT-2-class decoders \citep{Radford2019} at matched scale.
+
+\section{Threats to Validity and Limitations}
+
+\textbf{Scale.} All LM results are at 11M--124M parameters on a 10M-word corpus; transfer to production scales is untested. \textbf{Budget confounds.} The 11M vs.\ 121M comparison differs in step budget (20k vs.\ 10k, identical across arms); the width-trend magnitude is confounded, its direction robust. \textbf{Eval-path scoping.} Anytime results attach to the Anderson solver path used at eval, not to plain-iteration equivalence. \textbf{Judge bias.} The closed-loop generation verdict is judge-relative; no style-neutral judge exists at this scale in-repo. \textbf{Single benchmark.} BLiMP measures grammatical preference, not broad capability; a 1000-pair subset bounds resolution at $\approx$1.4pp ($1\sigma$). \textbf{Memory determinism.} Peak-memory figures are deterministic allocator peaks for fixed graphs, an architecture-level measurement, not per-run distributions. \textbf{Two-specialist auctions.} Auction results cover $n = 2$ specialists with confidence bids; richer bid languages and larger $n$ are untested.
+
+\section{Reproducibility}
+
+Every number in this paper traces to a results JSON carrying the resolved-config SHA-256 and git commit of its run; the findings ledger records per-finding evidence paths, adversarial-review verdicts, and operator sign-offs. Per-seed results tables appear in Appendix~\ref{app:tables}; hyperparameters in Appendix~\ref{app:hparams}.
+\begin{itemize}\sloppy
+\item Code: \texttt{pip install kinetic-ai} (v1.0.0), source at \url{https://github.com/SharathSPhD/game-llm}.
+\item Checkpoints (Hugging Face, all under \texttt{qbz506/}): \texttt{kinetic-eqlm-anytime-}\allowbreak\texttt{121m-babylm} (the parity model); \texttt{kinetic-eqlm-121m-babylm}; \texttt{kinetic-}\allowbreak\texttt{explicitlm-124m-babylm}.
+\item Interactive findings explorer: \url{https://sharathsphd.github.io/game-llm/}.
+\end{itemize}
+
+\section{Scaling the Program to Open-Weight Models}
+
+The BabyLM results above validate the core methods at 11M--124M parameters. Extending to realistic production-class LLMs introduces a feasibility-driven decision point. Training a 1B-parameter model from scratch at Chinchilla optimality (20B tokens) costs $\approx$23 GPU-days on one RTX 5090 and would still fall far short of instruction-tuned open-weight baselines like Qwen3-1.7B, which has seen $\approx$36T tokens. The established route in the literature is uptraining: converting a pretrained open-weight model to the EqLMCore topology and refining it with 10--100B tokens via teacher distillation and anytime-unrolled supervision \citep{RecursiveTransformers2024}. This ensures like-for-like comparison: every system runs on the same evaluation harness against the same base.
+
+We measure the conversion damage curve on Qwen3-1.7B (28 layers, 1.721B parameters) prior to uptraining (F25). The topology divides the 28 layers into explicit outer blocks and a core block that iterates to a fixed point. A sweep over outer-layer count ($n_{\mathrm{pre}} = n_{\mathrm{post}} \in \{6, 8\}$), number of core iterations ($n_{\mathrm{cores}} \in \{1, 2, 4\}$), and initialization strategy (average or stepwise layer averaging) yields: (1) average initialization preserves far more function than stepwise (e.g., $1.9 \times 10^3$ vs $2.2 \times 10^5$ ppl for 8+8 outer layers with 1 core); (2) explicit outer layers matter more than the number of cores (8+8 with 1 core: ppl 1909 vs 1 core with 2 cores: ppl 1933); (3) all configurations start heavily damaged pre-uptraining (300--3000$\times$ the base's 6.01 ppl). We selected 8+8 explicit outer layers with 1 core and average initialization: 1.167B parameters (68\% of base), starting ppl 1909. Uptraining results are in progress; no numbers are reported for this stage. The program will benchmark against Qwen3-1.7B under the same public evaluation harness (MMLU, GSM8K, ARC-C, HellaSwag, IFEval) to ensure comparability.
+
+\section{Conclusion}
+
+Implemented end-to-end and audited adversarially, the equilibrium view of language modeling yields a mixed but legible ledger. The strongest positive is architectural: a weight-tied single block at parity with an explicit 12-layer transformer when trained with anytime supervision---while training faster and serving multiple inference budgets---together with a separately achieved certified equilibrium, and a precisely posed open problem where the two meet. The strongest negatives are just as informative: the magnetic anchor does not buy preference-phase drift control at any tested dose; auction aggregation's advantage is a scoring-time phenomenon; and a judge-based generation metric can be dominated by the judge's own style prior. Half of this paper's claims were sharpened or overturned by an adversarial reviewer before publication; we commend the practice to any group whose agents can produce plausible numbers faster than humans can check them.
+
+\bibliographystyle{plainnat}
+\bibliography{references}
+
+\appendix
+
+\section{Per-Seed Results}
+\label{app:tables}
+
+\begin{table}[h]
+\centering
+\small
+\caption{H1/H6 pretraining, all seeds (BLiMP on the 1000-pair subset; conv.\ = solver convergence rate at eval, rel-tol $10^{-3}$, budget 12).}
+\begin{tabular}{@{}llcccc@{}}
+\toprule
+Arm & Regime & Seed & BLiMP & Conv. & Mean iters \\
+\midrule
+A1 & explicit 12-layer & 42/43/44 & .682 / .675 / .693 & --- & --- \\
+A3 & EqLM implicit & 42/43/44 & .537 / .532 / .544 & 0.0 & 12.0 \\
+B1 & EqLM anytime & 42/43/44 & .662 / .697 / .672 & 0.0 & 12.0 \\
+B2 & EqLM + traj.\ penalty & 42 & .577 & \textbf{1.0} & \textbf{4.0} \\
+B3 & EqLM bottleneck-core & 42 & .642 & 0.2 & 11.6 \\
+B4 & anytime + raw penalty & 42 & .529 & 0.0 & 12.0 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[h]
+\centering
+\small
+\caption{H3 preference optimization (400 held-out pairs from unseen phenomena; KL in nats/token to the frozen base).}
+\begin{tabular}{@{}llcc@{}}
+\toprule
+Base & Arm & Held-out acc.\ (3 seeds) & KL to base (mean) \\
+\midrule
+explicit & DPO ($\tau{=}0$) & .610 / .600 / .625 & 1.241 \\
+explicit & MPO $\tau{=}10^{-2}$ & .610 / .600 / .625 & 1.240 \\
+explicit & MPO $\tau{=}10$ (rider) & .608 / .600 / .627 & 1.226 \\
+EqLM & DPO ($\tau{=}0$) & .613 / .555 / .637 & 0.00075 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[h]
+\centering
+\small
+\caption{H4/H5 auction systems. Left: teacher-forced mixed-domain perplexity (F22). Right: closed-loop generation judge NLL/token (F23; judge-relative, see \S\ref{sec:closedloop}).}
+\begin{tabular}{@{}lcc@{}}
+\toprule
+System & Mixed ppl (mean) & Judge NLL (per seed) \\
+\midrule
+Best single (S$_A$) & 236.8 & 3.39 / 3.37 / 3.69 \\
+Worst single (S$_B$) & 1242.4 & 5.73 / 5.75 / 5.51 \\
+Logit-avg ensemble & 207.9 & 5.37 / 5.19 / 5.70 \\
+Second-price auction & \textbf{182.8} & 4.74 / 4.23 / 4.60 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Hyperparameters}
+\label{app:hparams}
+
+\textbf{121M pretraining (exp10/exp13):} vocab 50{,}257 (GPT-2 BPE); sequence length 128; batch 32; 10{,}000 steps; AdamW, lr $3\times 10^{-4}$, weight decay $0.01$, gradient clip $1.0$; EqLM $d = 1704$, 12 heads, $d_{\mathrm{ff}} = 6807$, post-LN map, Anderson solver (history 5), budget 12, rel-tol $10^{-3}$; explicit baseline $d = 768$, 12 layers, $d_{\mathrm{ff}} = 3072$. Anytime supervision at iterates $\{4, 8, 12\}$, weights $\{0.15, 0.3, 1.0\}$. Trajectory penalty $\lambda_c = 0.1$, $\gamma = 0.9$, probe $\epsilon = 10^{-3}$, one probe per step at a uniform random point on the solve ray. Bottleneck core: $d_{\mathrm{core}} = 256$, 4 heads, $d_{\mathrm{ff,core}} = 1024$, 2 encoder + 2 decoder explicit layers at $d = 1152$. \textbf{Preference (exp11):} DPO $\beta = 0.1$, lr $10^{-5}$, 3 epochs, batch 8 pairs. \textbf{Specialists (exp12):} $d = 384$, 6 layers, 6 heads, 3000 steps, lr $3\times 10^{-4}$; line-level 5\% held-out split. \textbf{Generation (exp14):} 32-token prefixes, 32 generated tokens, greedy; judge excludes prompt tokens. Seeds are 42/43/44 throughout, md5-distinct by loss-curve audit.
+
+\end{document}

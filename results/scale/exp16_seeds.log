@@ -1,0 +1,6 @@
+2026-08-28T10:00:20+01:00 exp16 seed 43 starting
+Loading weights:   0%|          | 0/338 [00:00<?, ?it/s]Loading weights: 100%|██████████| 338/338 [00:00<00:00, 10212.32it/s]
+Loading weights:   0%|          | 0/338 [00:00<?, ?it/s]Loading weights: 100%|██████████| 338/338 [00:00<00:00, 11274.56it/s]
+Loading weights:   0%|          | 0/338 [00:00<?, ?it/s]Loading weights: 100%|██████████| 338/338 [00:00<00:00, 9414.26it/s]
+[models] ['S_math', 'S_code', 'S_gen'] loaded, shared vocab 151665
+[tasks] 80 prompts: 40 math / 40 general
