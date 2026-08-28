@@ -199,7 +199,8 @@ def main() -> int:
             acc = accuracy(rows, "uniform", 1.0)
             rout = router_accuracy(rows)
             paired = paired_vs_router(rows, "uniform", 1.0)
-            tw += paired["wins"]; tl += paired["losses"]
+            tw += paired["wins"]
+            tl += paired["losses"]
             per_seed[seed] = {
                 "mechanism": round(acc, 4), "router": round(rout, 4),
                 "margin": round(acc - rout, 4), "paired": paired,
