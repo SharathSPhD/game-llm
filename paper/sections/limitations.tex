@@ -18,3 +18,29 @@ BLiMP serves as the sole linguistic benchmark applied to all models. The evaluat
 The peak activation memory reported for both small and large scales (F4, F20) reflects the architecture's deterministic allocator peak rather than a stochastic measurement across independent runs. For the 121~million equilibrium models, peak memory is 6.29~gigabytes, bit-identical across seeds 42, 43, and 44. This exact reproducibility indicates that the peak is determined by the static computational graph (the number of solver iterations, activation storage pattern) rather than varying with initialization or random sampling during training. The memory advantage is therefore an architecture-level property and no confidence interval is computed; the claim is that the equilibrium depth-memory relationship holds for the specified graph structure, not that per-run variability is negligible.
 
 Finally, the token-auction studies (F22, F23) operate on exactly two 30~million-parameter domain specialists (one trained on childes, one on simple-wiki) aggregated via second-price mechanism. The mechanism's truthfulness (F6, empirical regret exactly 0.0) and the per-token selection advantage at scoring time (23\% ppl improvement, F22) are validated for this two-specialist configuration. Whether the benefits persist with larger expert sets (three, five, or more specialists), with finer-grained domain decomposition, or with learned bid functions rather than confidence-only bids remains untested. The confidence-bid restriction is theoretically sound for auction mechanism design but limits the model's adaptability: specialists bid only their own max-probability confidence, not the prefix's measured difficulty or domain, so the mechanism cannot bias selection toward the specialist most suited to the current context in a principled way. Addressing this limitation requires a multi-input learned bidding function and revalidating truthfulness under that new mechanism—a follow-up program.
+
+The answer-level aggregation results of Section~\ref{sec:results:aggregation}
+carry four constraints on their interpretation. Each council member was evaluated
+under a single seed at a sample limit of 150 questions per task, so the
+per-player accuracies in Table~\ref{tab:ladder} carry the sampling error of that
+limit rather than of the full task; the aggregation comparisons pool 8{,}301
+questions and are correspondingly tighter, but they inherit any bias common to
+the subsample. The best influence-game setting is a maximum over 45 grid points
+and the best aggregation rule a maximum over eleven, so both are optimistically
+biased and neither margin should be read as an expected improvement under
+repetition. Competence weights, the learned gate and the per-player temperatures
+are fitted on half of each task and scored on the other half, which controls
+overfitting to the evaluation set but leaves the fitted quantities dependent on
+tasks drawn from the same distribution as the evaluation --- a council deployed
+on unseen domains would not have those weights.
+
+The scope constraint is the most consequential. These measurements bind
+aggregation over frozen per-option distributions and say nothing about
+aggregation during generation, where the consensus prefix is jointly authored and
+each player conditions on tokens it did not choose. The construction's
+distinctive claim lives in that setting, so the results here bound one arena
+rather than the method. GSM8K is excluded from Table~\ref{tab:ladder} for a
+related reason: strict-match scored zero for all four models, which measures
+whether an instruction-tuned model emits a particular answer convention rather
+than whether it can carry out the arithmetic, and no generative claim is made
+from a harness configuration exhibiting that failure.

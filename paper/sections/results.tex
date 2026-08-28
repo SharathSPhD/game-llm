@@ -1,5 +1,8 @@
 % Results section for Kinetic AI paper.
-% Numbers sourced from: research/memory/findings.md (F1–F25), results/exp01_mmd_vs_gda/ through results/scale/damage_sweep.json
+% Numbers sourced from: research/memory/findings.md (F1–F30), results/exp01_mmd_vs_gda/ through
+% results/scale/damage_sweep.json; answer-level aggregation from results/scale/ladder/,
+% results/scale/agree/, exp18_equilibrium_mc.json, exp19_influence_signal.json,
+% exp20_learned_competence.json, exp21_verification_market.json, exp22_calibrated_game.json
 % All statistics from at least 3 md5-distinct seeds except F25 (design measurement, single seed); every config hash and commit recorded.
 
 \subsection{Magnetic Dynamics and Solver Engineering}
@@ -188,3 +191,220 @@ Conversion of Qwen3-1.7B (28 layers, $d=2048$, 1.721B params) to EqLM topology w
 Average-layer initialization preserves far more function than stepwise. At 8+8 outer/1 core: average ppl $1.9 \times 10^3$ versus stepwise $2.2 \times 10^5$ (two orders of magnitude). This settles an open choice in published recursive-uptraining recipes for this model family: layer tying via averaging is far more principled than stepwise adoption. Explicit outer layers matter more than the number of recursive cores. Going 6+6 $\to$ 8+8 outer layers with a single core improves ppl $18{,}465 \to 1{,}909$ (10-fold); going 1 $\to$ 2 cores at 8+8 changes ppl only $1{,}909 \to 1{,}933$ (negligible). This suggests that the residual paths around the tied core (especially input embedding and output head) carry more function than depth-wise redundancy. Parameter saving is therefore best bought in the middle. All configurations start heavily damaged (300--3000$\times$ base ppl of $6.01$); conversion is not a free lunch at any tying level tested. Uptraining budget, not surgery, is the binding constraint---consistent with published recipes using 10--100B tokens.
 
 Operating point selected pre-uptraining: $n_{\text{pre}}=n_{\text{post}}=8$, $n_{\text{cores}}=1$, average init; 1.167B parameters ($68\%$ of base), starting ppl $1{,}909$. The pre-registered H1 gate required $\leq 60\%$ parameter retention. F25 shows that 56--59\% configs start 3--10$\times$ more damaged pre-uptraining. The amendment to $\leq 70\%$ (selecting the 8+8/1-core configuration: 1.167B params, 68\% of base) was recorded before any uptraining ran, following the pre-registration principle: amend the gate based on evidence, not outcomes. The 1.167B operating point starts at ppl 1909 before uptraining and is within the amended gate. Uptraining (continued training on 10B+ tokens with anytime-unrolled supervision) is in progress; results are not available in the present paper. When available, results will benchmark against Qwen3-1.7B on public benchmarks (MMLU, GSM8K, ARC-C, HellaSwag, IFEval) to ensure like-for-like comparison at scale. The damage curve provides a baseline: any recovery above 1909 ppl starting point is progress; reaching base ppl of 6.01 would represent full recovery.
+
+\subsection{Answer-Level Aggregation and the Limits of Reweighting}
+\label{sec:results:aggregation}
+
+The equilibrium-decoding construction of Section~\ref{sec:method} predicts
+that solving the influence game should beat both of its degenerate cases,
+uniform averaging at $\beta = 0$ and routing as $\beta$ grows. Testing that
+prediction on generated text costs a forward pass per parameter setting, which
+confines any sweep to a few dozen prompts and leaves margins of a point or two
+indistinguishable from sampling noise. Multiple choice removes the constraint.
+Each player's per-option loglikelihoods are computed once and stored, after
+which every aggregation rule and every parameter setting is evaluated offline on
+identical examples, so the entire grid costs one evaluation pass and the
+comparison runs over thousands of questions rather than tens.
+
+Four instruction-tuned models of comparable active size form the council:
+Qwen3-1.7B, Qwen2.5-1.5B-Instruct, and the mathematics and coder variants of the
+latter. They were scored under one harness invocation on 61 tasks --- the 57 MMLU
+subjects together with ARC-Challenge, HellaSwag, PIQA and WinoGrande --- yielding
+8{,}301 questions on which all four players are aligned. Aggregating over answer
+options rather than tokens removes the shared-tokenizer requirement that
+constrains token-level councils, since options are scored as text.
+
+One methodological step is load-bearing enough to state. Tasks disagree about
+what their answer labels mean: WinoGrande numbers its options from one, and ARC
+records a zero-based \texttt{target} alongside a one-based \texttt{answerKey} for
+the same question. Rather than assume a convention, each task's label mapping was
+recovered from the harness's own per-record scoring, by selecting the mapping
+under which ``the top-scoring option is the labelled one'' reproduces the
+accuracy the harness recorded. All 61 tasks reconcile at 100\% agreement under
+the recovered mapping. The step is reported because the assumed mapping scored
+players at $0.13$ on WinoGrande where the calibrated mapping gives $0.62$, an
+error large enough to invert any conclusion drawn from it and invisible in the
+output, since a wrong index still produces a plausible number.
+
+\subsubsection{The council is complementary but its ceiling is not reachable by routing}
+
+Table~\ref{tab:ladder} reports each player alone. The parameter-matched
+comparison is not the strongest player: Qwen2.5-1.5B-Instruct leads on MMLU at
+$0.626$ against Qwen3-1.7B's $0.583$, so the latter would have been a four-point
+easier bar had it been adopted as the baseline on nominal grounds.
+
+The players are complementary in the sense that matters for a council. Subject
+wins divide 42, 10, 3 and 2 across the four, and the weaker players win their
+subjects by real margins: the mathematics variant takes abstract algebra
+($0.420$ against $0.380$), college mathematics ($0.440$ against $0.400$) and
+elementary mathematics ($0.520$ against $0.480$), while Qwen3-1.7B takes
+conceptual physics ($0.670$ against $0.575$) and college chemistry ($0.430$
+against $0.350$). Yet an aggregator granted advance knowledge of which player is
+best on each subject reaches only $0.635$, $0.96$ points above always using the
+strongest player. Subject-granularity routing therefore has almost no room, and a
+system could route perfectly and still win by under a point.
+
+Per-example complementarity tells a different story. Some player answers
+correctly on $82.6\%$ of the 8{,}301 questions while the best single player
+manages $62.5\%$. The information required to gain twenty points is present in
+the council on every question; the difficulty is entirely one of extraction, and
+the remainder of this subsection measures how much of it any rule extracts.
+
+\begin{table}[t]
+\centering
+\caption{Council members measured under one harness invocation
+(\texttt{lm\_eval}, bfloat16, \texttt{limit} 200 for the ladder and 150 for the
+aligned set; single seed per model, loglikelihood tasks only). MMLU is weighted
+over the 57 subjects by subject size. The oracle rows bound what selection could
+achieve: the per-subject oracle knows which player is best on each subject, and
+the per-example oracle knows which is right on each question.}
+\label{tab:ladder}
+\begin{tabular}{lccccc}
+\toprule
+Model & MMLU & ARC-C & HellaSwag & PIQA & WinoGrande \\
+\midrule
+Qwen2.5-1.5B-Instruct       & \textbf{0.626} & 0.460 & \textbf{0.635} & \textbf{0.780} & \textbf{0.650} \\
+Qwen3-1.7B                  & 0.583 & \textbf{0.465} & 0.485 & 0.745 & 0.625 \\
+Qwen2.5-Coder-1.5B-Instruct & 0.520 & 0.400 & 0.560 & 0.730 & 0.565 \\
+Qwen2.5-Math-1.5B-Instruct  & 0.391 & 0.350 & 0.450 & 0.600 & 0.525 \\
+\midrule
+Per-subject oracle (MMLU)   & 0.635 & --- & --- & --- & --- \\
+Per-example oracle (pooled) & \multicolumn{5}{c}{0.826 over all 8{,}301 aligned questions} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsubsection{Solving the game does not beat averaging, and concentrating influence harms}
+
+Sweeping the influence rationality $\beta$ over nine values and the magnetic
+strength $\tau$ over five, all 45 settings were evaluated on the pooled 8{,}301
+questions. Uniform averaging scores $0.6304$. The best setting in the entire grid
+scores $0.6311$, at $\beta = 0.25$ and $\tau = 0$, a margin of $0.0007$ against a
+standard error of $0.0053$ --- and that margin is the maximum over 45 settings,
+so its expectation under repetition is smaller still. Decomposed by task, the
+best setting is better on 16 tasks, worse on 12, and unchanged on 33.
+
+The direction of the effect is more informative than its size. Accuracy falls
+monotonically as influence concentrates, from $0.6304$ at $\beta = 0$ to $0.5486$
+at $\beta = 8$, an eight-point loss. The magnetic term mitigates without
+reversing: at $\tau = 0.5$ the same setting recovers only to $0.6119$. Since
+large $\beta$ approaches routing, this is a second and independent measurement
+that routing behaviour is worse than blending on this council, consistent with
+the thin per-subject oracle margin of Table~\ref{tab:ladder}.
+
+The mechanism responsible is visible in the payoff. A player's influence follows
+$\langle y, \ell_i \rangle$, its agreement with the emerging consensus, which is
+a measure of confidence rather than of competence. The mathematics variant
+answers $40\%$ of these questions correctly and is no less emphatic for it, so
+the game transfers weight toward it exactly when it is most assertive. Majority
+voting, which commits the same error in cruder form, scores $0.5905$ --- below the
+best single player, because the three weaker members outvote the strongest.
+
+\subsubsection{Eleven rules, and why none of them helps}
+
+If the payoff is the defect, replacing it should repair the result. Three
+families of replacement were measured, and Table~\ref{tab:aggregation} reports
+all of them against the same baseline.
+
+Substituting a different confidence signal changes nothing. Influence following
+per-example sharpness rather than agreement scores $0.6289$ to $0.6318$ across
+the settings tried; reversing the payoff so that dissent earns influence scores
+$0.6280$ to $0.6316$. Neither is distinguishable from averaging.
+
+Mechanism design, applied in the form this work validated for token auctions,
+also fails. Pricing each player's proposed answer by what it is worth to every
+other player --- excluding the proposer's own enthusiasm, which is the
+second-price intuition transferred from tokens to answers --- scores $0.6257$,
+worse than averaging at $z = -2.63$ over the 320 questions where the two rules
+disagree. Dropping each option's keenest supporter before averaging is a
+statistical tie at $0.6302$. The median scores $0.6144$ and Borda count $0.5922$,
+so discarding magnitude and retaining only preference is worse still.
+
+Only competence weighting moves the aggregate. Weighting players by accuracy
+measured on a held-out half of each task scores $0.6415$, $1.14$ points above
+averaging. Adding the solved game on top of those weights reaches $0.6422$, a
+further $0.07$ points, which places the game inside the noise of the weights
+alone and attributes the gain to the weighting rather than to the equilibrium.
+Making competence context-dependent does not extend the gain: a gate predicting
+per-question, per-player correctness from label-free descriptors of the score
+field --- entropy, top-two margin, divergence from the field, field entropy ---
+reaches $0.6345$ averaged over three fits, below the constant weights it was
+intended to improve upon. Whether a player is right on a given question is not
+legible from the shape of the scores.
+
+Miscalibration is excluded as an explanation by direct measurement. Fitting one
+temperature per player on a held-out half reduces expected calibration error from
+$0.151$ to $0.037$ for the worst-calibrated player and improves all four, so
+afterwards the players' stated confidences approximate their realised accuracies.
+The aggregate does not follow. Calibrated averaging scores $0.6277$ against raw
+averaging's $0.6301$ on the same evaluation half, and the influence game still
+degrades monotonically in $\beta$, from $0.6270$ to $0.5960$. Well-calibrated
+confidence is still not competence.
+
+\begin{table}[t]
+\centering
+\caption{Aggregation rules over identical stored per-option loglikelihoods,
+8{,}301 questions, standard error $0.0053$ on a single accuracy. The paired
+$z$ compares each rule against the mean on the subset where the two disagree,
+since agreeing predictions contribute nothing to the variance of the difference.
+Competence weights and temperatures are fitted on a held-out half of each task
+and scored on the other; those rows are marked and their baseline is the
+half-sample average of $0.6301$.}
+\label{tab:aggregation}
+\begin{tabular}{llcc}
+\toprule
+Family & Rule & Accuracy & Paired $z$ vs.\ mean \\
+\midrule
+\multirow{2}{*}{Reference} & Best single player & 0.6253 & --- \\
+ & Uniform average (mean) & 0.6304 & --- \\
+\midrule
+\multirow{4}{*}{Influence game} & $\beta = 0.25$, $\tau = 0$ (grid best) & 0.6311 & --- \\
+ & $\beta = 2$, $\tau = 0$ & 0.6003 & --- \\
+ & $\beta = 8$, $\tau = 0$ & 0.5486 & --- \\
+ & $\beta = 8$, $\tau = 0.5$ & 0.6119 & --- \\
+\midrule
+\multirow{4}{*}{Voting and market} & Drop keenest supporter & 0.6302 & $-0.23$ \\
+ & Leave-one-out proposal pricing & 0.6257 & $-2.63$ \\
+ & Median over players & 0.6144 & $-5.14$ \\
+ & Borda count & 0.5922 & $-10.65$ \\
+\midrule
+\multirow{3}{*}{Confidence signals} & Majority vote & 0.5905 & --- \\
+ & Sharpness-driven influence & 0.6318 & --- \\
+ & Dissent-driven influence & 0.6316 & --- \\
+\midrule
+\multirow{4}{*}{Competence} & Constant weights, $\gamma = 20$\textsuperscript{$\dagger$} & 0.6415 & --- \\
+ & Constant weights $+$ game\textsuperscript{$\dagger$} & 0.6422 & --- \\
+ & Learned per-question gate\textsuperscript{$\dagger$} & 0.6345 & --- \\
+ & Temperature-calibrated average\textsuperscript{$\dagger$} & 0.6277 & --- \\
+\midrule
+Ceiling & Per-example oracle & 0.8258 & --- \\
+\bottomrule
+\multicolumn{4}{l}{\footnotesize \textsuperscript{$\dagger$} fitted on a held-out half; baseline on that half is 0.6301.} \\
+\end{tabular}
+\end{table}
+
+\subsubsection{Why reweighting cannot reach the ceiling}
+
+Eleven rules across five experiments land at or below a plain average, and the
+one that moves the aggregate does so by a point while twenty points remain
+unclaimed. The pattern admits a single explanation that survives all of the
+measurements above. Every rule tested reweights one fixed body of evidence: four
+distributions over the same options, produced from the same prompt by players
+that never see anything the others produced. The influence game concentrates
+weight on a subset of those distributions, which discards part of the evidence,
+and evidence is exactly what a council with a twenty-point per-example ceiling
+cannot afford to discard. Averaging is the rule that retains all of it, which is
+why nothing beats it and why every rule that concentrates harder does worse in
+proportion to how hard it concentrates.
+
+The consequence for the construction is specific rather than general. What fails
+here is answer-level aggregation, in which each player sees the prompt once and
+no consensus is carried forward; the equilibrium machinery itself solves the game
+it is given, and does so in a handful of iterations. What has not been tested is
+the setting where the evidence set is not fixed --- where players generate, so
+that each produces a chain of reasoning the others never had, and scoring a
+peer's chain is genuine new evidence rather than a re-reading of one's own
+beliefs. That the answer-level analogue of such cross-examination fails here, in
+the leave-one-out proposal pricing row of Table~\ref{tab:aggregation}, is
+consistent with this reading rather than contrary to it: pricing a peer's chosen
+option adds nothing precisely because nothing new is on the table.
