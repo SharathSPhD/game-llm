@@ -1454,6 +1454,580 @@ async def publish_models_endpoint(
         ) from e
 
 
+# ─── Leaderboard & Baseline Ladder (Product-focused APIs) ─────────────────────
+
+def _scan_ladder_directory() -> list[dict[str, Any]]:
+    """Scan results/scale/ladder/ for baseline measurement results.
+
+    Traverses the directory structure and collects model eval results in a
+    flat list for leaderboard consumption. Each entry carries the model name,
+    per-benchmark scores, and provenance (run timestamp, git commit, config hash).
+
+    Returns:
+        List of dicts with keys: model_name, benchmarks (dict), provenance
+    """
+    results: list[dict[str, Any]] = []
+    ladder_dir = Path(get_results_dir()) / "scale" / "ladder"
+
+    if not ladder_dir.exists():
+        return results
+
+    # Traverse ladder/ → Model_Name/ → Model_Details/ → results_*.json
+    for model_dir in sorted(ladder_dir.iterdir()):
+        if not model_dir.is_dir():
+            continue
+
+        # Extract model name from directory (format: Provider_ModelName)
+        model_name = model_dir.name.replace("_", " ").replace("Qwen ", "Qwen/")
+
+        for detail_dir in sorted(model_dir.iterdir()):
+            if not detail_dir.is_dir():
+                continue
+
+            # Find results JSON files in this detail directory
+            for results_file in sorted(detail_dir.glob("results_*.json")):
+                try:
+                    with open(results_file) as f:
+                        eval_data = json.load(f)
+
+                    # Extract benchmark scores from the lm_eval results
+                    benchmarks = {}
+                    if "results" in eval_data:
+                        # lm_eval results: task → score (with various key formats)
+                        results_dict = eval_data["results"]
+                        for task_name, task_results in results_dict.items():
+                            # Extract the main accuracy metric (try multiple key formats)
+                            if isinstance(task_results, dict):
+                                # Try keys in order: acc,none, acc_norm, acc
+                                score = None
+                                for key in ["acc,none", "acc_norm", "acc"]:
+                                    if key in task_results:
+                                        score = float(task_results[key])
+                                        break
+                                if score is not None:
+                                    benchmarks[task_name] = score
+
+                    # Extract provenance
+                    git_commit = eval_data.get("git_hash", "unknown")
+                    run_timestamp = eval_data.get("date", "unknown")
+                    model_name_from_eval = eval_data.get("model_name", model_name)
+
+                    # Aggregate per-domain scores (MMLU, ARC, etc.)
+                    mmlu_scores = [v for k, v in benchmarks.items() if k.startswith("mmlu")]
+                    arc_scores = [v for k, v in benchmarks.items() if k.startswith("arc")]
+                    hellaswag_scores = [v for k, v in benchmarks.items() if k.startswith("hellaswag")]
+
+                    domain_summary = {}
+                    if mmlu_scores:
+                        domain_summary["mmlu"] = sum(mmlu_scores) / len(mmlu_scores)
+                    if arc_scores:
+                        domain_summary["arc"] = sum(arc_scores) / len(arc_scores)
+                    if hellaswag_scores:
+                        domain_summary["hellaswag"] = sum(hellaswag_scores) / len(hellaswag_scores)
+
+                    results.append({
+                        "model": model_name_from_eval,
+                        "model_path": model_dir.name,
+                        "benchmarks": benchmarks,
+                        "domain_summary": domain_summary,
+                        "provenance": {
+                            "git_commit": git_commit,
+                            "timestamp": run_timestamp,
+                            "results_file": str(results_file.relative_to(ladder_dir)),
+                        }
+                    })
+                except (json.JSONDecodeError, OSError):
+                    continue
+
+    return results
+
+
+@app.get("/api/leaderboard")
+async def get_leaderboard(
+    authorization: str | None = Header(None),
+) -> dict[str, Any]:
+    """Get baseline leaderboard (measured on our harness).
+
+    Returns all baseline models (Qwen2.5-1.5B, Qwen3-1.7B, Math, Coder variants)
+    with their per-benchmark scores and domain summaries. Serves as the target
+    ladder that the council is benchmarked against.
+
+    Returns:
+        {
+            "baselines": [
+                {
+                    "model": "Qwen/Qwen2.5-1.5B-Instruct",
+                    "benchmarks": {
+                        "mmlu_abstract_algebra": 0.42,
+                        "mmlu_anatomy": 0.55,
+                        ...
+                    },
+                    "domain_summary": {
+                        "mmlu": 0.626,
+                        "arc": 0.52,
+                        "hellaswag": 0.61
+                    },
+                    "provenance": {
+                        "git_commit": "...",
+                        "timestamp": "...",
+                        "results_file": "Qwen_Qwen2.5-1.5B-Instruct/..."
+                    }
+                },
+                ...
+            ]
+        }
+    """
+    require_bearer_auth(authorization)
+    baselines = _scan_ladder_directory()
+    return {"baselines": baselines}
+
+
+def _load_council_comparison() -> dict[str, Any]:
+    """Load council aggregation comparison from exp18/exp21/exp24 files.
+
+    These files contain the results of aggregation experiments over the
+    8,301-question answer-level evaluation and the mixed-arena comparisons.
+
+    Returns a merged summary with measured performance of each aggregation rule
+    and the final verdict on which mechanism performs best.
+    """
+    results_dir = Path(get_results_dir()) / "scale"
+    comparison: dict[str, Any] = {
+        "exp18_equilibrium": None,
+        "exp21_market": None,
+        "exp24_coupling": None,
+        "ceiling": None,
+        "summary": {},
+    }
+
+    # Load exp18: equilibrium solve vs averaging
+    exp18_file = results_dir / "exp18_equilibrium_mc.json"
+    if exp18_file.exists():
+        try:
+            with open(exp18_file) as f:
+                data = json.load(f)
+            # The sweep records accuracies under "acc"; the significance verdict
+            # is decided against the run's own standard error rather than a fixed
+            # threshold, so a larger or smaller experiment is judged on its own
+            # terms.
+            margin = float(data.get("margin_over_averaging", 0.0))
+            stderr = float(data.get("stderr", 0.0))
+            pooled = data.get("pooled", {})
+            comparison["exp18_equilibrium"] = {
+                "players": data.get("players", []),
+                "n_questions": pooled.get("n"),
+                "averaging_score": data.get("averaging", {}).get("acc"),
+                "best_solve_score": data.get("best", {}).get("acc"),
+                "best_solve_setting": {
+                    k: data.get("best", {}).get(k) for k in ("beta", "tau")
+                },
+                "best_single": pooled.get("best_single"),
+                "oracle_any_correct": pooled.get("oracle_any_correct"),
+                "margin_over_averaging": margin,
+                "stderr": stderr,
+                "verdict": (
+                    "INDISTINGUISHABLE"
+                    if stderr > 0 and abs(margin) < 2 * stderr
+                    else "SEPARATED"
+                ),
+            }
+        except (json.JSONDecodeError, OSError, KeyError, TypeError) as exc:
+            comparison["exp18_equilibrium"] = {"error": f"unreadable: {type(exc).__name__}"}
+
+    # Load exp21: mechanism design verification
+    exp21_file = results_dir / "exp21_verification_market.json"
+    if exp21_file.exists():
+        try:
+            with open(exp21_file) as f:
+                data = json.load(f)
+            rules = data.get("rules", {})
+            best_rule = max(rules, key=lambda k: rules[k]) if rules else None
+            comparison["exp21_market"] = {
+                "rules": rules,
+                "mechanisms_tested": sorted(rules),
+                "best_mechanism": best_rule,
+                "averaging_baseline": rules.get("mean"),
+                "best_single": data.get("best_single"),
+                "oracle_any_correct": data.get("oracle_any_correct"),
+                "paired_z_vs_mean": {
+                    k: v.get("z") for k, v in data.get("vs_mean", {}).items()
+                },
+                # Decided from the numbers: averaging wins unless some rule beats
+                # it by more than two standard errors on the paired comparison.
+                "verdict": (
+                    "AVERAGING_WINS"
+                    if best_rule in (None, "mean")
+                    or all(
+                        (v.get("z") or 0) <= 2.0
+                        for v in data.get("vs_mean", {}).values()
+                    )
+                    else f"{best_rule.upper()}_WINS"
+                ),
+            }
+        except (json.JSONDecodeError, OSError, KeyError, TypeError) as exc:
+            comparison["exp21_market"] = {"error": f"unreadable: {type(exc).__name__}"}
+
+    # The realistic ceiling, measured rather than asserted. Serving the ungated
+    # oracle alone would overstate what any mechanism can reach, which is the
+    # reading finding F32 withdrew.
+    gated_file = results_dir / "oracle_gated.json"
+    if gated_file.exists():
+        try:
+            with open(gated_file) as f:
+                gated = json.load(f)
+            comparison["ceiling"] = {
+                "best_single": gated.get("best_single"),
+                "oracle_by_confidence_gate": gated.get("oracle_by_confidence_gate"),
+                "realistic_ceiling": gated.get("realistic_ceiling"),
+                "realistic_ceiling_gate": gated.get("realistic_ceiling_gate"),
+                "note": gated.get("note"),
+            }
+        except (json.JSONDecodeError, OSError) as exc:
+            comparison["ceiling"] = {"error": f"unreadable: {type(exc).__name__}"}
+
+    # Load exp24: coupling and error correlation simulation
+    exp24_file = results_dir / "exp24_coupling_threshold.json"
+    if exp24_file.exists():
+        try:
+            with open(exp24_file) as f:
+                data = json.load(f)
+            # The file stores the sweep under "sweep", one entry per
+            # (coupling, error_correlation) cell. The direction of the coupling
+            # effect is derived here rather than asserted, so that re-running the
+            # simulation with different numbers changes what the API reports.
+            sweep = data.get("sweep", [])
+            couplings = sorted({c["coupling"] for c in sweep}) if sweep else []
+            margin_by_coupling = {
+                k: sum(
+                    c["best_game_minus_mean"] for c in sweep if c["coupling"] == k
+                )
+                / max(sum(1 for c in sweep if c["coupling"] == k), 1)
+                for k in couplings
+            }
+            trend = None
+            if len(couplings) >= 2:
+                trend = (
+                    "margin falls as confidence tracks competence"
+                    if margin_by_coupling[couplings[-1]] < margin_by_coupling[couplings[0]]
+                    else "margin rises as confidence tracks competence"
+                )
+            comparison["exp24_coupling"] = {
+                "sweep": sweep,
+                "mean_margin_by_coupling": margin_by_coupling,
+                "measured_confidence_competence_correlation": data.get(
+                    "measured_confidence_competence_correlation"
+                ),
+                "trend": trend,
+                "regimes_where_game_wins": data.get("regimes_where_game_wins", []),
+                "at_measured_regime": data.get("at_measured_regime"),
+            }
+        except (json.JSONDecodeError, OSError, KeyError) as exc:
+            comparison["exp24_coupling"] = {"error": f"unreadable: {type(exc).__name__}"}
+
+    # Compute summary finding
+    if comparison["exp18_equilibrium"]:
+        comparison["summary"]["answer_level_verdict"] = "NOT MET"
+        comparison["summary"]["reason"] = "Equilibrium solve indistinguishable from averaging at answer level"
+
+    return comparison
+
+
+@app.get("/api/council/comparison")
+async def get_council_comparison(
+    authorization: str | None = Header(None),
+) -> dict[str, Any]:
+    """Get council aggregation comparison results (F29–F31, answer-level findings).
+
+    Returns the measured performance of the equilibrium solve, market mechanisms,
+    and calibration-training simulations over the 8,301-question evaluation.
+    This API reports the findings that led to the current hypothesis (sequential
+    cross-examination) after answer-level aggregation was ruled out.
+
+    Returns:
+        {
+            "exp18_equilibrium": {
+                "averaging_score": 0.6304,
+                "best_solve_score": 0.6311,
+                "margin_over_averaging": 0.0007,
+                "stderr": 0.0053,
+                "verdict": "INDISTINGUISHABLE"
+            },
+            "exp21_market": {...},
+            "exp24_coupling": {...},
+            "summary": {"answer_level_verdict": "NOT MET", ...}
+        }
+    """
+    require_bearer_auth(authorization)
+    return _load_council_comparison()
+
+
+def _load_mixed_arena_results() -> dict[str, Any]:
+    """Load mixed-arena baseline measurements from corrected GSM8K evaluation.
+
+    The mixed arena combines MMLU (knowledge tasks) with GSM8K (mathematics
+    generative tasks) in equal proportion. This is where the council paradigm
+    shows measurable headroom over single-model selection (10 points of
+    routable headroom vs 1 point on MMLU alone).
+    """
+    results_dir = Path(get_results_dir()) / "scale"
+    baseline_measurements: list[dict[str, Any]] = []
+
+    mixed_arena: dict[str, Any] = {
+        "baseline_measurements": baseline_measurements,
+        "oracle_ceiling": None,
+        "best_single_player": None,
+        "perfect_router": None,
+        "findings": ["F28 baseline ladder", "F33 corrected GSM8K measurement"],
+    }
+
+    # Scan gsm8k_fixed for per-model results
+    gsm8k_dir = results_dir / "gsm8k_fixed"
+    if gsm8k_dir.exists():
+        for model_dir in sorted(gsm8k_dir.iterdir()):
+            if not model_dir.is_dir():
+                continue
+
+            for results_file in sorted(model_dir.glob("results_*.json")):
+                try:
+                    with open(results_file) as f:
+                        eval_data = json.load(f)
+
+                    model_name = eval_data.get("model_name", model_dir.name)
+                    results_dict = eval_data.get("results", {})
+
+                    # Extract GSM8K scores (try multiple key formats)
+                    gsm8k_score = None
+                    if "gsm8k" in results_dict:
+                        gsm8k_item = results_dict["gsm8k"]
+                        if isinstance(gsm8k_item, dict):
+                            for key in ["acc,none", "acc_norm", "acc"]:
+                                if key in gsm8k_item:
+                                    gsm8k_score = float(gsm8k_item[key])
+                                    break
+
+                    # Extract MMLU score (already measured in ladder)
+                    mmlu_scores = [
+                        v for k, v in results_dict.items()
+                        if k.startswith("mmlu") and isinstance(v, (int, float))
+                    ]
+                    mmlu_score = sum(mmlu_scores) / len(mmlu_scores) if mmlu_scores else None
+
+                    if gsm8k_score is not None and mmlu_score is not None:
+                        mixed_score = (gsm8k_score + mmlu_score) / 2
+                        baseline_measurements.append({
+                            "model": model_name,
+                            "mmlu": mmlu_score,
+                            "gsm8k": gsm8k_score,
+                            "mixed_arena_score": mixed_score,
+                        })
+                except (json.JSONDecodeError, OSError):
+                    continue
+
+    # Compute the ceiling and best single player from measurements
+    if baseline_measurements:
+        scores: list[float] = []
+        for m in baseline_measurements:
+            score = m.get("mixed_arena_score")
+            if isinstance(score, (int, float)):
+                scores.append(float(score))
+        if scores:
+            best_score = max(scores)
+            mixed_arena["best_single_player"] = best_score
+            # The router ceiling is the best available player on each half,
+            # recomputed from the measurements rather than pinned to a literal.
+            # A literal here would keep reporting today's number after the
+            # underlying results change, which is the failure mode that makes a
+            # dashboard worse than no dashboard.
+            best_math = max(
+                (m["gsm8k"] for m in baseline_measurements
+                 if isinstance(m.get("gsm8k"), (int, float))),
+                default=None,
+            )
+            best_knowledge = max(
+                (m["mmlu"] for m in baseline_measurements
+                 if isinstance(m.get("mmlu"), (int, float))),
+                default=None,
+            )
+            if best_math is not None and best_knowledge is not None:
+                ceiling = 0.5 * best_math + 0.5 * best_knowledge
+                mixed_arena["oracle_ceiling"] = ceiling
+                mixed_arena["routable_headroom"] = ceiling - best_score
+                mixed_arena["ceiling_basis"] = {
+                    "best_on_mathematics": best_math,
+                    "best_on_knowledge": best_knowledge,
+                    "weighting": "equal halves",
+                }
+
+    return mixed_arena
+
+
+@app.get("/api/council/mixed-arena")
+async def get_mixed_arena(
+    authorization: str | None = Header(None),
+) -> dict[str, Any]:
+    """Get mixed-arena baseline measurements (knowledge + mathematics, F28/F33).
+
+    The mixed arena (equal parts MMLU and GSM8K with chat templates applied)
+    is where the council paradigm has demonstrable headroom for selection. This
+    endpoint serves the corrected baseline ladder on the mixed evaluation.
+
+    Returns:
+        {
+            "baseline_measurements": [
+                {
+                    "model": "Qwen/Qwen2.5-1.5B-Instruct",
+                    "mmlu": 0.626,
+                    "gsm8k": 0.595,
+                    "mixed_arena_score": 0.611
+                },
+                ...
+            ],
+            "best_single_player": 0.611,
+            "oracle_ceiling": 0.711,
+            "routable_headroom": 0.100,
+            "findings": ["F28 baseline ladder", "F33 corrected GSM8K measurement"]
+        }
+    """
+    require_bearer_auth(authorization)
+    return _load_mixed_arena_results()
+
+
+# ─── Machine Status & Infrastructure (Product + Operations) ───────────────────
+
+@app.get("/api/machines/status")
+async def get_machines_status(
+    authorization: str | None = Header(None),
+) -> dict[str, Any]:
+    """Get current machine and GPU lock status.
+
+    Reports which machine is running which job, current GPU lock state,
+    and thermal/health status for planning next work. Reads from
+    research/memory/state.json as the single source of truth for machine
+    allocation.
+
+    Returns:
+        {
+            "machines": {
+                "5090": {"status": "ready|busy", "current_job": "...", "since": "..."},
+                "gb10": {"status": "ready|busy", "current_job": "...", "since": "..."}
+            },
+            "gpu_lock": {"locked": false, "holder": "..."},
+            "phase": "Phase 1b: ...",
+            "next_action": "..."
+        }
+    """
+    require_bearer_auth(authorization)
+
+    state_file = Path("research/memory/state.json")
+    state: dict[str, Any] = {}
+
+    if state_file.exists():
+        try:
+            with open(state_file) as f:
+                state = json.load(f)
+        except (json.JSONDecodeError, OSError):
+            pass
+
+    # Parse machine allocation from gpu_lock_holder string
+    machines: dict[str, dict[str, Any]] = {
+        "5090": {"status": "unknown", "current_job": None, "info": None},
+        "gb10": {"status": "unknown", "current_job": None, "info": None},
+    }
+
+    lock_holder = state.get("gpu_lock_holder", "")
+    if isinstance(lock_holder, str) and lock_holder:
+        # Format: "5090: exp15 KineticLM uptraining | GB10: exp16 auction (parallel, both authorized)"
+        for machine_line in lock_holder.split("|"):
+            machine_line = machine_line.strip()
+            if "5090:" in machine_line:
+                job_info = machine_line.replace("5090:", "").strip()
+                machines["5090"]["status"] = "busy" if job_info else "ready"
+                machines["5090"]["current_job"] = job_info if job_info else None
+            elif "gb10:" in machine_line or "GB10:" in machine_line:
+                job_info = machine_line.replace("gb10:", "").replace("GB10:", "").strip()
+                machines["gb10"]["status"] = "busy" if job_info else "ready"
+                machines["gb10"]["current_job"] = job_info if job_info else None
+
+    return {
+        "machines": machines,
+        "gpu_lock": {
+            "locked": state.get("gpu_lock", False),
+            "holder": state.get("gpu_lock_holder", ""),
+        },
+        "phase": state.get("phase", "unknown"),
+        "current_rq": state.get("current_rq", ""),
+        "next_action": state.get("next_action", ""),
+    }
+
+
+# ─── Autoresearch Status (EFE Cycle Tracking) ──────────────────────────────────
+
+@app.get("/api/autoresearch/status")
+async def get_autoresearch_status(
+    authorization: str | None = Header(None),
+) -> dict[str, Any]:
+    """Get EFE autoresearch cycle status (defensive, graceful degradation).
+
+    Attempts to load the research/cycles/run.md plan and research/memory/
+    state to report current autoresearch progress, cycle number, and open
+    research questions. Degrades gracefully if kinetic_ai.research.efe is
+    not available (another agent may be writing it concurrently).
+
+    Returns:
+        {
+            "available": bool,
+            "cycle": int,
+            "phase": str,
+            "open_questions": [str, ...],
+            "closed_questions": [str, ...],
+            "known_defects": [str, ...],
+            "message": "... or 'EFE module not yet available'"
+        }
+    """
+    require_bearer_auth(authorization)
+
+    result: dict[str, Any] = {
+        "available": False,
+        "cycle": None,
+        "phase": None,
+        "open_questions": [],
+        "closed_questions": [],
+        "known_defects": [],
+        "message": "EFE autoresearch state not yet available",
+    }
+
+    # Try to read state.json (always available)
+    state_file = Path("research/memory/state.json")
+    if state_file.exists():
+        try:
+            with open(state_file) as f:
+                state = json.load(f)
+                result["cycle"] = state.get("cycle", None)
+                result["phase"] = state.get("phase", "unknown")
+                result["open_questions"] = state.get("open_questions", [])
+                result["closed_questions"] = state.get("closed_questions", [])
+                result["known_defects"] = state.get("known_defects", [])
+                result["available"] = True
+                result["message"] = "EFE autoresearch state loaded from research/memory/state.json"
+        except (json.JSONDecodeError, OSError):
+            result["message"] = "Failed to read research/memory/state.json"
+
+    # Try to import EFE module (optional; may not be available)
+    try:
+        import kinetic_ai.research.efe as efe
+        if hasattr(efe, "get_cycle_info"):
+            cycle_info = efe.get_cycle_info()
+            if cycle_info:
+                result["available"] = True
+                result.update(cycle_info)
+                result["message"] = "EFE autoresearch state from kinetic_ai.research.efe"
+    except (ImportError, AttributeError):
+        # Expected during concurrent development; not an error
+        pass
+
+    return result
+
+
 if __name__ == "__main__":
     import uvicorn
 

@@ -1,0 +1,20 @@
+{
+  "n": 8301,
+  "note": "The ungated oracle credits the council for answers held by a single member with no confidence, which no mechanism can identify. The gated figures require the correct player to reach the stated confidence and are the realistic ceiling; see finding F32.",
+  "per_player_accuracy": {
+    "Qwen3-1.7B": 0.5826,
+    "Qwen2.5-1.5B-Instruct": 0.6253,
+    "Qwen2.5-Math-1.5B-Instruct": 0.4,
+    "Qwen2.5-Coder-1.5B-Instruct": 0.5215
+  },
+  "best_single": 0.6253,
+  "oracle_by_confidence_gate": {
+    "0.0": 0.8258,
+    "0.3": 0.8027,
+    "0.5": 0.6581,
+    "0.7": 0.5033,
+    "0.9": 0.3233
+  },
+  "realistic_ceiling_gate": 0.5,
+  "realistic_ceiling": 0.6581
+}
