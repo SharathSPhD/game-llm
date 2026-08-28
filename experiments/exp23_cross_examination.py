@@ -118,7 +118,10 @@ def main() -> int:
     torch.manual_seed(args.seed)
 
     names: list[str] = list(cfg["players"])
-    tasks = build_tasks(cfg)
+    # Seeded on both halves: greedy decoding makes a fixed slice identical
+    # across seeds, which would leave the mathematics half — the domain where
+    # the council is most heterogeneous — with no seed variation at all.
+    tasks = build_tasks(cfg, shuffle_math=True)
     budget = {
         "number": int(cfg["generation"]["max_new_tokens_math"]),
         "letter": int(cfg["generation"]["max_new_tokens_general"]),

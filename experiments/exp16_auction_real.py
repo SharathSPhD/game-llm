@@ -67,8 +67,19 @@ def compute_config_hash(cfg: dict) -> str:
 # ── task construction ────────────────────────────────────────────────────────
 
 
-def build_tasks(cfg: dict) -> list[dict]:
-    """Mixed-domain prompt set with objective answers."""
+def build_tasks(cfg: dict, shuffle_math: bool = False) -> list[dict]:
+    """Mixed-domain prompt set with objective answers.
+
+    Args:
+        cfg: Resolved experiment config; ``tasks.n_gsm8k`` and ``tasks.n_mmlu``
+            set the counts and ``seed`` drives sampling.
+        shuffle_math: Draw the mathematics questions with the seed rather than
+            taking the first ``n_gsm8k``. Defaults to False so that runs already
+            published under this function reproduce exactly. Seeded selection
+            matters wherever decoding is greedy: with a fixed slice and greedy
+            generation every seed produces byte-identical mathematics results,
+            so a multi-seed claim would carry no variation on that half at all.
+    """
     from datasets import load_dataset
 
     n_math = int(cfg["tasks"]["n_gsm8k"])
@@ -76,6 +87,8 @@ def build_tasks(cfg: dict) -> list[dict]:
     tasks: list[dict] = []
 
     gsm = load_dataset("openai/gsm8k", "main", split="test")
+    if shuffle_math:
+        gsm = gsm.shuffle(seed=cfg["seed"])
     for row in gsm.select(range(n_math)):
         gold = row["answer"].split("####")[-1].strip().replace(",", "")
         tasks.append(
