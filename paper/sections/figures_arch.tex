@@ -69,3 +69,51 @@ Section~\ref{sec:results} select.}
 \label{fig:topologies}
 \end{figure}
 
+
+\begin{figure}[t]
+\centering
+\begin{tikzpicture}[
+  font=\small,
+  player/.style={draw, rounded corners=2pt, minimum width=2.5cm, minimum height=0.6cm, align=center, fill=black!5},
+  cls/.style={draw, rounded corners=2pt, minimum width=1.55cm, minimum height=0.6cm, align=center, fill=blue!8, draw=blue!50},
+  anchorbox/.style={draw, rounded corners=2pt, minimum width=2.1cm, minimum height=0.6cm, align=center, fill=orange!12, draw=orange!70},
+  out/.style={draw, rounded corners=6pt, minimum width=2.4cm, minimum height=0.62cm, align=center, fill=black!3},
+  ar/.style={-{Latex[length=2mm]}, gray!70},
+  mag/.style={-{Latex[length=2.2mm]}, orange!80!black, very thick},
+  lbl/.style={font=\scriptsize, text=black!65, align=center}
+]
+\node[player] (p1) at (0,3.0) {generalist};
+\node[player] (p2) at (0,2.2) {mathematics};
+\node[player] (p3) at (0,1.4) {coder};
+\node[player] (p4) at (0,0.6) {reasoner};
+\node[lbl] at (0,-0.1) {each writes a full solution\\(own tokenizer, any length)};
+
+\node[cls] (cA) at (4.1,2.6) {class $A$};
+\node[cls] (cB) at (4.1,1.0) {class $B$};
+\node[lbl] at (4.1,0.25) {answer equivalence classes\\one vote per player};
+
+\draw[ar] (p1.east) -- (cA.west);
+\draw[ar] (p2.east) -- (cB.west);
+\draw[ar] (p3.east) -- (cB.west);
+\draw[ar] (p4.east) -- (cA.west);
+
+\node[anchorbox] (rt) at (4.1,4.0) {router's class};
+\draw[mag] (rt.south) -- (cA.north) node[lbl, midway, right=2pt, text=orange!80!black] {$+\tau$};
+\node[lbl, anchor=west] at (5.6,4.0) {reference policy fixed\\in advance from the ladder};
+
+\node[out] (sel) at (8.6,1.8) {$\arg\max_c \sum_i w_i \mathbb{1}[a_i \in c] + \tau \mathbb{1}[c = c_{\mathrm{ref}}]$};
+\draw[ar] (cA.east) -- (sel.west |- cA.east);
+\draw[ar] (cB.east) -- (sel.west |- cB.east);
+\node[lbl] at (8.6,1.05) {council overrides the anchor only\\beyond a net margin of $\tau$};
+\end{tikzpicture}
+\caption{The magnetically anchored answer vote. Players generate independently
+and are collapsed to answer equivalence classes, so tokenizer differences and
+solution length cannot influence the outcome; the class chosen by the
+ladder-fixed domain router receives a magnetic bonus $\tau$, making the router
+the reference policy of the vote. As $\tau \to \infty$ the mechanism reproduces
+the router exactly, so its floor is the baseline by construction; the council's
+collective evidence moves the answer only when its net weighted margin exceeds
+$\tau$. The protocol of Section~\ref{sec:results:anchored} evaluates the
+pre-registered setting of uniform weights and $\tau = 1$.}
+\label{fig:anchored_vote}
+\end{figure}
