@@ -1,6 +1,6 @@
 {
   "cycle": 26,
-  "phase": "Phase 1b: exp23 cross-examination running (3 seeds) on the mixed arena; F32/F33 corrections landed",
+  "phase": "Cycle 27: H10 closed NOT MET (F35); exp23 re-running on corrected arena; router is the bar (F34)",
   "current_rq": "RQ-3b (H1-prime a/b/c per ADR 0004)",
   "gpu_lock": false,
   "open_questions": [

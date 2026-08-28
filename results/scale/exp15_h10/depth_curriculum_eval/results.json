@@ -1,0 +1,46 @@
+{
+  "experiment": "exp15_eval",
+  "spec": "0011",
+  "checkpoint": "results/exp15_depth_curriculum/checkpoint",
+  "unique_params": 1166878976,
+  "recursion_depth": 12,
+  "harness": {
+    "tasks": "arc_challenge,hellaswag,gsm8k",
+    "num_fewshot": 0,
+    "limit": 300,
+    "note": "identical invocation to the recorded base run on the same machine"
+  },
+  "base_rates": {
+    "arc_challenge/acc,none": 0.4067,
+    "arc_challenge/acc_norm,none": 0.4433,
+    "hellaswag/acc,none": 0.43,
+    "hellaswag/acc_norm,none": 0.5067,
+    "gsm8k/exact_match,flexible-extract": 0.4567
+  },
+  "scores": {
+    "arc_challenge/sample_len": 300.0,
+    "arc_challenge/acc,none": 0.25333333333333335,
+    "arc_challenge/acc_norm,none": 0.3,
+    "hellaswag/sample_len": 300.0,
+    "hellaswag/acc,none": 0.3933333333333333,
+    "hellaswag/acc_norm,none": 0.44666666666666666,
+    "gsm8k/sample_len": 300.0,
+    "gsm8k/exact_match,strict-match": 0.0,
+    "gsm8k/exact_match,flexible-extract": 0.016666666666666666
+  },
+  "retention_per_metric": {
+    "arc_challenge/acc,none": 0.6228997623145645,
+    "arc_challenge/acc_norm,none": 0.6767426122264831,
+    "hellaswag/acc,none": 0.9147286821705426,
+    "hellaswag/acc_norm,none": 0.8815209525689098,
+    "gsm8k/exact_match,flexible-extract": 0.03649368659221955
+  },
+  "mean_retention_headline": 0.5315857504625375,
+  "heldout_ppl_by_budget": {
+    "3": 21.363757965719262,
+    "6": 20.874783784040666,
+    "12": 20.823071009083456
+  },
+  "base_heldout_ppl": 17.485818368204825,
+  "ppl_ratio_vs_base": 1.1908548156343024
+}

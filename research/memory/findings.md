@@ -1027,3 +1027,56 @@ margin over every council rule is far too large to be an artefact of it.
 
 **Status:** VALIDATED (single seed; re-measured across three seeds in the
 corrected run) · supersedes the headroom framing in F33 · Tarka PENDING
+
+## F35 — Conversion damage is not recoverable at this budget, and reasoning is what is lost
+
+**Cycle 27 · 2026-08-28 · exp15 H10 arms · RTX 5090 · ~4.2 h and 98M tokens per arm**
+
+H10 asked whether the conversion damage measured in F25 could be recovered on a
+low budget by either of two TRIZ-derived interventions: a depth curriculum that
+introduces recursion gradually, and a rank-annealed depth-LoRA that relaxes
+weight tying during uptraining and merges the adapter away at the end. Both were
+run to completion on Qwen3-1.7B converted to 1.167B unique parameters at
+recursion depth 12, evaluated against the base model under an identical harness
+invocation on the same machine.
+
+- **The two interventions are indistinguishable.** Mean headline retention 0.5316
+  for the depth curriculum against 0.5314 for the rank-annealed LoRA, a
+  difference of 0.0002. Two structurally different repairs arriving at the same
+  number is stronger evidence that the budget binds than either arm alone.
+- **The headline retention figure overstates what survives, and is corrected
+  here.** Retention measured as a ratio of raw accuracies credits the converted
+  model for the chance floor: ARC-Challenge is four-way, so a model answering at
+  random scores 0.25 and appears to retain 56% of a 0.443 baseline while knowing
+  nothing. Measured above chance, the depth curriculum retains 0.259 of
+  ARC-Challenge, 0.766 of HellaSwag and 0.036 of GSM8K, for a mean of **0.354
+  rather than 0.532**. The corrected figure is the one that should be quoted.
+- **Reasoning is destroyed while fluency survives.** GSM8K falls from 0.457 to
+  0.017 and 0.010 across the two arms — between two and four percent of the base
+  model's arithmetic — while HellaSwag retains over three quarters and held-out
+  perplexity sits at 1.19 to 1.20 times base. A model 20% worse by perplexity is
+  27 times worse at grade-school arithmetic.
+- **This is the perplexity–capability dissociation of F26 at its most extreme,**
+  and it is the reason a perplexity-only report of this experiment would have
+  read as a near-success. Anyone selecting an operating point from the damage
+  curve on perplexity alone, as F25 did by necessity before capability
+  measurements existed, would have chosen a configuration whose reasoning was
+  already gone.
+- **Interpretation.** Weight-tied recursive conversion of a pretrained model
+  preserves the statistics of text and loses the computation that multi-step
+  reasoning needs, and 98M tokens of uptraining under either repair does not
+  bring it back. The verdict on H10 is NOT MET on both arms, and the broader
+  reading is that the conversion route to a competitive small model is not viable
+  at budgets available here — published recursive-uptraining recipes use 10 to
+  100 billion tokens, two to three orders of magnitude beyond what was spent.
+- **Consequence for the programme.** This strengthens the case for building on
+  strong models as they are rather than converting them, which is the council
+  direction, and it removes conversion from the candidate set the autoresearch
+  loop ranks. It does not rescue the council: F34's domain router remains the bar
+  and nothing has yet beaten it.
+- **Provenance note.** The RTX 5090's system clock is skewed by roughly three
+  hours against GB10's, so timestamps in these logs are not comparable across
+  machines; durations and exit codes are self-consistent and are what the record
+  relies on.
+- **Status:** VALIDATED (both arms to completion, single seed each) · verdict
+  NOT MET · Tarka PENDING
