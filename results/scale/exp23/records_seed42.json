@@ -1,0 +1,3122 @@
+[
+  {
+    "domain": "math",
+    "gold": "109",
+    "cross_exam": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "leave_one_out": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "self_preference": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "equilibrium": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": false,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": false
+    }
+  },
+  {
+    "domain": "math",
+    "gold": "89",
+    "cross_exam": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "leave_one_out": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "self_preference": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "equilibrium": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": false,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": false,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": false
+    }
+  },
+  {
+    "domain": "math",
+    "gold": "13",
+    "cross_exam": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "leave_one_out": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "self_preference": {
+      "winner": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+      "correct": false
+    },
+    "equilibrium": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": false
+    }
+  },
+  {
+    "domain": "math",
+    "gold": "5",
+    "cross_exam": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "leave_one_out": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "self_preference": {
+      "winner": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+      "correct": true
+    },
+    "equilibrium": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": true
+    }
+  },
+  {
+    "domain": "math",
+    "gold": "25",
+    "cross_exam": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "leave_one_out": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "self_preference": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "equilibrium": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": false,
+      "Qwen/Qwen3-1.7B": true,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": false
+    }
+  },
+  {
+    "domain": "math",
+    "gold": "452",
+    "cross_exam": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "leave_one_out": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "self_preference": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "equilibrium": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": false,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": false,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": false
+    }
+  },
+  {
+    "domain": "math",
+    "gold": "43",
+    "cross_exam": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "leave_one_out": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "self_preference": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "equilibrium": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": false
+    }
+  },
+  {
+    "domain": "math",
+    "gold": "34",
+    "cross_exam": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "leave_one_out": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "self_preference": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "equilibrium": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": false
+    }
+  },
+  {
+    "domain": "math",
+    "gold": "120",
+    "cross_exam": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "leave_one_out": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "self_preference": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "equilibrium": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": false,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": true
+    }
+  },
+  {
+    "domain": "math",
+    "gold": "11",
+    "cross_exam": {
+      "winner": "Qwen/Qwen2.5-1.5B-Instruct",
+      "correct": false
+    },
+    "leave_one_out": {
+      "winner": "Qwen/Qwen2.5-1.5B-Instruct",
+      "correct": false
+    },
+    "self_preference": {
+      "winner": "Qwen/Qwen3-1.7B",
+      "correct": true
+    },
+    "equilibrium": {
+      "winner": "Qwen/Qwen2.5-1.5B-Instruct",
+      "correct": false
+    },
+    "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": false,
+      "Qwen/Qwen3-1.7B": true,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": false,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": false
+    }
+  },
+  {
+    "domain": "math",
+    "gold": "34",
+    "cross_exam": {
+      "winner": "Qwen/Qwen2.5-1.5B-Instruct",
+      "correct": false
+    },
+    "leave_one_out": {
+      "winner": "Qwen/Qwen2.5-1.5B-Instruct",
+      "correct": false
+    },
+    "self_preference": {
+      "winner": "Qwen/Qwen3-1.7B",
+      "correct": false
+    },
+    "equilibrium": {
+      "winner": "Qwen/Qwen2.5-1.5B-Instruct",
+      "correct": false
+    },
+    "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": false,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": false,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": false
+    }
+  },
+  {
+    "domain": "math",
+    "gold": "12",
+    "cross_exam": {
+      "winner": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+      "correct": true
+    },
+    "leave_one_out": {
+      "winner": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+      "correct": true
+    },
+    "self_preference": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "equilibrium": {
+      "winner": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+      "correct": true
+    },
+    "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": true
+    }
+  },
+  {
+    "domain": "math",
+    "gold": "15",
+    "cross_exam": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "leave_one_out": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "self_preference": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "equilibrium": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": false,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": false
+    }
+  },
+  {
+    "domain": "math",
+    "gold": "24",
+    "cross_exam": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "leave_one_out": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "self_preference": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "equilibrium": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": true,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": true
+    }
+  },
+  {
+    "domain": "math",
+    "gold": "105",
+    "cross_exam": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "leave_one_out": {
+      "winner": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+      "correct": true
+    },
+    "self_preference": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "equilibrium": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": true
+    }
+  },
+  {
+    "domain": "math",
+    "gold": "120",
+    "cross_exam": {
+      "winner": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+      "correct": true
+    },
+    "leave_one_out": {
+      "winner": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+      "correct": true
+    },
+    "self_preference": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "equilibrium": {
+      "winner": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+      "correct": true
+    },
+    "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": true
+    }
+  },
+  {
+    "domain": "math",
+    "gold": "17",
+    "cross_exam": {
+      "winner": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+      "correct": false
+    },
+    "leave_one_out": {
+      "winner": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+      "correct": false
+    },
+    "self_preference": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "equilibrium": {
+      "winner": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+      "correct": false
+    },
+    "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": false
+    }
+  },
+  {
+    "domain": "math",
+    "gold": "36",
+    "cross_exam": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "leave_one_out": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "self_preference": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "equilibrium": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": true
+    }
+  },
+  {
+    "domain": "math",
+    "gold": "12",
+    "cross_exam": {
+      "winner": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+      "correct": true
+    },
+    "leave_one_out": {
+      "winner": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+      "correct": true
+    },
+    "self_preference": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "equilibrium": {
+      "winner": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+      "correct": true
+    },
+    "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": true
+    }
+  },
+  {
+    "domain": "math",
+    "gold": "45",
+    "cross_exam": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "leave_one_out": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "self_preference": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "equilibrium": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": true
+    }
+  },
+  {
+    "domain": "math",
+    "gold": "45",
+    "cross_exam": {
+      "winner": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+      "correct": true
+    },
+    "leave_one_out": {
+      "winner": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+      "correct": true
+    },
+    "self_preference": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "equilibrium": {
+      "winner": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+      "correct": true
+    },
+    "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": true
+    }
+  },
+  {
+    "domain": "math",
+    "gold": "8",
+    "cross_exam": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "leave_one_out": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "self_preference": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "equilibrium": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": true
+    }
+  },
+  {
+    "domain": "math",
+    "gold": "36",
+    "cross_exam": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "leave_one_out": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "self_preference": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "equilibrium": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": false
+    }
+  },
+  {
+    "domain": "math",
+    "gold": "1",
+    "cross_exam": {
+      "winner": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+      "correct": false
+    },
+    "leave_one_out": {
+      "winner": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+      "correct": false
+    },
+    "self_preference": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "equilibrium": {
+      "winner": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+      "correct": false
+    },
+    "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": true,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": false
+    }
+  },
+  {
+    "domain": "math",
+    "gold": "18",
+    "cross_exam": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "leave_one_out": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "self_preference": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "equilibrium": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": false,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": false,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": false
+    }
+  },
+  {
+    "domain": "math",
+    "gold": "33",
+    "cross_exam": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "leave_one_out": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "self_preference": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "equilibrium": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": false
+    }
+  },
+  {
+    "domain": "math",
+    "gold": "1248",
+    "cross_exam": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "leave_one_out": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "self_preference": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "equilibrium": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": false,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": false
+    }
+  },
+  {
+    "domain": "math",
+    "gold": "25",
+    "cross_exam": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "leave_one_out": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "self_preference": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "equilibrium": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": false,
+      "Qwen/Qwen3-1.7B": true,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": false,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": false
+    }
+  },
+  {
+    "domain": "math",
+    "gold": "1",
+    "cross_exam": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "leave_one_out": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "self_preference": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "equilibrium": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": true
+    }
+  },
+  {
+    "domain": "math",
+    "gold": "32",
+    "cross_exam": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "leave_one_out": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "self_preference": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "equilibrium": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": true
+    }
+  },
+  {
+    "domain": "math",
+    "gold": "2",
+    "cross_exam": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "leave_one_out": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "self_preference": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "equilibrium": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": false
+    }
+  },
+  {
+    "domain": "math",
+    "gold": "30",
+    "cross_exam": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "leave_one_out": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "self_preference": {
+      "winner": "Qwen/Qwen3-1.7B",
+      "correct": false
+    },
+    "equilibrium": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": true
+    }
+  },
+  {
+    "domain": "math",
+    "gold": "4",
+    "cross_exam": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "leave_one_out": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "self_preference": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "equilibrium": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": true,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": true
+    }
+  },
+  {
+    "domain": "math",
+    "gold": "54",
+    "cross_exam": {
+      "winner": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+      "correct": false
+    },
+    "leave_one_out": {
+      "winner": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+      "correct": false
+    },
+    "self_preference": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "equilibrium": {
+      "winner": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+      "correct": false
+    },
+    "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": false,
+      "Qwen/Qwen3-1.7B": true,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": false
+    }
+  },
+  {
+    "domain": "math",
+    "gold": "250",
+    "cross_exam": {
+      "winner": "Qwen/Qwen2.5-1.5B-Instruct",
+      "correct": false
+    },
+    "leave_one_out": {
+      "winner": "Qwen/Qwen2.5-1.5B-Instruct",
+      "correct": false
+    },
+    "self_preference": {
+      "winner": "Qwen/Qwen3-1.7B",
+      "correct": false
+    },
+    "equilibrium": {
+      "winner": "Qwen/Qwen2.5-1.5B-Instruct",
+      "correct": false
+    },
+    "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": false,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": false
+    }
+  },
+  {
+    "domain": "math",
+    "gold": "324",
+    "cross_exam": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "leave_one_out": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "self_preference": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "equilibrium": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": false,
+      "Qwen/Qwen3-1.7B": true,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": false,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": false
+    }
+  },
+  {
+    "domain": "math",
+    "gold": "129200",
+    "cross_exam": {
+      "winner": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+      "correct": true
+    },
+    "leave_one_out": {
+      "winner": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+      "correct": true
+    },
+    "self_preference": {
+      "winner": "Qwen/Qwen3-1.7B",
+      "correct": false
+    },
+    "equilibrium": {
+      "winner": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+      "correct": true
+    },
+    "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": true
+    }
+  },
+  {
+    "domain": "math",
+    "gold": "4400",
+    "cross_exam": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "leave_one_out": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "self_preference": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "equilibrium": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": false,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": false
+    }
+  },
+  {
+    "domain": "math",
+    "gold": "70",
+    "cross_exam": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "leave_one_out": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "self_preference": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "equilibrium": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": true
+    }
+  },
+  {
+    "domain": "math",
+    "gold": "276000",
+    "cross_exam": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "leave_one_out": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "self_preference": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "equilibrium": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": false
+    }
+  },
+  {
+    "domain": "math",
+    "gold": "108",
+    "cross_exam": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "leave_one_out": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "self_preference": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "equilibrium": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": false,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": false,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": false
+    }
+  },
+  {
+    "domain": "math",
+    "gold": "160",
+    "cross_exam": {
+      "winner": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+      "correct": true
+    },
+    "leave_one_out": {
+      "winner": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+      "correct": true
+    },
+    "self_preference": {
+      "winner": "Qwen/Qwen3-1.7B",
+      "correct": false
+    },
+    "equilibrium": {
+      "winner": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+      "correct": true
+    },
+    "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": true
+    }
+  },
+  {
+    "domain": "math",
+    "gold": "90",
+    "cross_exam": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "leave_one_out": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "self_preference": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "equilibrium": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": true,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": true
+    }
+  },
+  {
+    "domain": "math",
+    "gold": "20",
+    "cross_exam": {
+      "winner": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+      "correct": true
+    },
+    "leave_one_out": {
+      "winner": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+      "correct": true
+    },
+    "self_preference": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "equilibrium": {
+      "winner": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+      "correct": true
+    },
+    "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": true,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": true
+    }
+  },
+  {
+    "domain": "math",
+    "gold": "296",
+    "cross_exam": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "leave_one_out": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "self_preference": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "equilibrium": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": true,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": false
+    }
+  },
+  {
+    "domain": "math",
+    "gold": "4800",
+    "cross_exam": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "leave_one_out": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "self_preference": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "equilibrium": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": true
+    }
+  },
+  {
+    "domain": "math",
+    "gold": "30",
+    "cross_exam": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "leave_one_out": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "self_preference": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "equilibrium": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": true
+    }
+  },
+  {
+    "domain": "math",
+    "gold": "8",
+    "cross_exam": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "leave_one_out": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "self_preference": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "equilibrium": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": true,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": false
+    }
+  },
+  {
+    "domain": "math",
+    "gold": "1920",
+    "cross_exam": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "leave_one_out": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "self_preference": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "equilibrium": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": true,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": true
+    }
+  },
+  {
+    "domain": "math",
+    "gold": "6",
+    "cross_exam": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "leave_one_out": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "self_preference": {
+      "winner": "Qwen/Qwen3-1.7B",
+      "correct": false
+    },
+    "equilibrium": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": true
+    }
+  },
+  {
+    "domain": "math",
+    "gold": "13",
+    "cross_exam": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "leave_one_out": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "self_preference": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "equilibrium": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": true
+    }
+  },
+  {
+    "domain": "math",
+    "gold": "420",
+    "cross_exam": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "leave_one_out": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "self_preference": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "equilibrium": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": true
+    }
+  },
+  {
+    "domain": "math",
+    "gold": "10",
+    "cross_exam": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "leave_one_out": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "self_preference": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "equilibrium": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": false
+    }
+  },
+  {
+    "domain": "math",
+    "gold": "12",
+    "cross_exam": {
+      "winner": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+      "correct": true
+    },
+    "leave_one_out": {
+      "winner": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+      "correct": true
+    },
+    "self_preference": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "equilibrium": {
+      "winner": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+      "correct": true
+    },
+    "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": true
+    }
+  },
+  {
+    "domain": "math",
+    "gold": "50",
+    "cross_exam": {
+      "winner": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+      "correct": true
+    },
+    "leave_one_out": {
+      "winner": "Qwen/Qwen2.5-1.5B-Instruct",
+      "correct": true
+    },
+    "self_preference": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "equilibrium": {
+      "winner": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+      "correct": true
+    },
+    "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": true
+    }
+  },
+  {
+    "domain": "math",
+    "gold": "92",
+    "cross_exam": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "leave_one_out": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "self_preference": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "equilibrium": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": false
+    }
+  },
+  {
+    "domain": "math",
+    "gold": "623",
+    "cross_exam": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "leave_one_out": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "self_preference": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "equilibrium": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": true
+    }
+  },
+  {
+    "domain": "math",
+    "gold": "40",
+    "cross_exam": {
+      "winner": "Qwen/Qwen2.5-1.5B-Instruct",
+      "correct": false
+    },
+    "leave_one_out": {
+      "winner": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+      "correct": false
+    },
+    "self_preference": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "equilibrium": {
+      "winner": "Qwen/Qwen2.5-1.5B-Instruct",
+      "correct": false
+    },
+    "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": false,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": false
+    }
+  },
+  {
+    "domain": "math",
+    "gold": "17",
+    "cross_exam": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "leave_one_out": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "self_preference": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "equilibrium": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": true
+    }
+  },
+  {
+    "domain": "math",
+    "gold": "940",
+    "cross_exam": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "leave_one_out": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "self_preference": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "equilibrium": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": true,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": true
+    }
+  },
+  {
+    "domain": "general",
+    "gold": "A",
+    "cross_exam": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "leave_one_out": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "self_preference": {
+      "winner": "Qwen/Qwen3-1.7B",
+      "correct": true
+    },
+    "equilibrium": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": false,
+      "Qwen/Qwen3-1.7B": true,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": false
+    }
+  },
+  {
+    "domain": "general",
+    "gold": "B",
+    "cross_exam": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "leave_one_out": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "self_preference": {
+      "winner": "Qwen/Qwen3-1.7B",
+      "correct": false
+    },
+    "equilibrium": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": false,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": false,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": false
+    }
+  },
+  {
+    "domain": "general",
+    "gold": "C",
+    "cross_exam": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "leave_one_out": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "self_preference": {
+      "winner": "Qwen/Qwen2.5-1.5B-Instruct",
+      "correct": true
+    },
+    "equilibrium": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": false,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": false
+    }
+  },
+  {
+    "domain": "general",
+    "gold": "C",
+    "cross_exam": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "leave_one_out": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "self_preference": {
+      "winner": "Qwen/Qwen3-1.7B",
+      "correct": false
+    },
+    "equilibrium": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": false,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": false
+    }
+  },
+  {
+    "domain": "general",
+    "gold": "A",
+    "cross_exam": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "leave_one_out": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "self_preference": {
+      "winner": "Qwen/Qwen3-1.7B",
+      "correct": true
+    },
+    "equilibrium": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": false,
+      "Qwen/Qwen3-1.7B": true,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": false
+    }
+  },
+  {
+    "domain": "general",
+    "gold": "C",
+    "cross_exam": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "leave_one_out": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "self_preference": {
+      "winner": "Qwen/Qwen2.5-1.5B-Instruct",
+      "correct": false
+    },
+    "equilibrium": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": false,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": false,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": false
+    }
+  },
+  {
+    "domain": "general",
+    "gold": "B",
+    "cross_exam": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "leave_one_out": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "self_preference": {
+      "winner": "Qwen/Qwen2.5-1.5B-Instruct",
+      "correct": false
+    },
+    "equilibrium": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": false,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": false,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": false
+    }
+  },
+  {
+    "domain": "general",
+    "gold": "C",
+    "cross_exam": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "leave_one_out": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "self_preference": {
+      "winner": "Qwen/Qwen2.5-1.5B-Instruct",
+      "correct": true
+    },
+    "equilibrium": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": true,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": false,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": false
+    }
+  },
+  {
+    "domain": "general",
+    "gold": "C",
+    "cross_exam": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "leave_one_out": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "self_preference": {
+      "winner": "Qwen/Qwen3-1.7B",
+      "correct": false
+    },
+    "equilibrium": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": false,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": false,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": false
+    }
+  },
+  {
+    "domain": "general",
+    "gold": "B",
+    "cross_exam": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "leave_one_out": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "self_preference": {
+      "winner": "Qwen/Qwen2.5-1.5B-Instruct",
+      "correct": false
+    },
+    "equilibrium": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": false,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": false,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": false
+    }
+  },
+  {
+    "domain": "general",
+    "gold": "A",
+    "cross_exam": {
+      "winner": "Qwen/Qwen3-1.7B",
+      "correct": false
+    },
+    "leave_one_out": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "self_preference": {
+      "winner": "Qwen/Qwen3-1.7B",
+      "correct": false
+    },
+    "equilibrium": {
+      "winner": "Qwen/Qwen3-1.7B",
+      "correct": false
+    },
+    "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": false,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": false,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": false
+    }
+  },
+  {
+    "domain": "general",
+    "gold": "C",
+    "cross_exam": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "leave_one_out": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "self_preference": {
+      "winner": "Qwen/Qwen3-1.7B",
+      "correct": false
+    },
+    "equilibrium": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": false,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": false
+    }
+  },
+  {
+    "domain": "general",
+    "gold": "D",
+    "cross_exam": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "leave_one_out": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "self_preference": {
+      "winner": "Qwen/Qwen3-1.7B",
+      "correct": true
+    },
+    "equilibrium": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": false,
+      "Qwen/Qwen3-1.7B": true,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": false,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": true
+    }
+  },
+  {
+    "domain": "general",
+    "gold": "B",
+    "cross_exam": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "leave_one_out": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "self_preference": {
+      "winner": "Qwen/Qwen2.5-1.5B-Instruct",
+      "correct": false
+    },
+    "equilibrium": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": false,
+      "Qwen/Qwen3-1.7B": true,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": false,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": false
+    }
+  },
+  {
+    "domain": "general",
+    "gold": "B",
+    "cross_exam": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "leave_one_out": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "self_preference": {
+      "winner": "Qwen/Qwen2.5-1.5B-Instruct",
+      "correct": true
+    },
+    "equilibrium": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": true,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": false,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": true
+    }
+  },
+  {
+    "domain": "general",
+    "gold": "A",
+    "cross_exam": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "leave_one_out": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "self_preference": {
+      "winner": "Qwen/Qwen2.5-1.5B-Instruct",
+      "correct": false
+    },
+    "equilibrium": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": false,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": false
+    }
+  },
+  {
+    "domain": "general",
+    "gold": "C",
+    "cross_exam": {
+      "winner": "Qwen/Qwen3-1.7B",
+      "correct": false
+    },
+    "leave_one_out": {
+      "winner": "Qwen/Qwen3-1.7B",
+      "correct": false
+    },
+    "self_preference": {
+      "winner": "Qwen/Qwen3-1.7B",
+      "correct": false
+    },
+    "equilibrium": {
+      "winner": "Qwen/Qwen3-1.7B",
+      "correct": false
+    },
+    "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": false,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": false,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": false
+    }
+  },
+  {
+    "domain": "general",
+    "gold": "C",
+    "cross_exam": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "leave_one_out": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "self_preference": {
+      "winner": "Qwen/Qwen2.5-1.5B-Instruct",
+      "correct": true
+    },
+    "equilibrium": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": true,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": false,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": true
+    }
+  },
+  {
+    "domain": "general",
+    "gold": "C",
+    "cross_exam": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "leave_one_out": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "self_preference": {
+      "winner": "Qwen/Qwen2.5-1.5B-Instruct",
+      "correct": false
+    },
+    "equilibrium": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": false,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": false,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": false
+    }
+  },
+  {
+    "domain": "general",
+    "gold": "C",
+    "cross_exam": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "leave_one_out": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "self_preference": {
+      "winner": "Qwen/Qwen2.5-1.5B-Instruct",
+      "correct": true
+    },
+    "equilibrium": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": true,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": false,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": false
+    }
+  },
+  {
+    "domain": "general",
+    "gold": "C",
+    "cross_exam": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "leave_one_out": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "self_preference": {
+      "winner": "Qwen/Qwen3-1.7B",
+      "correct": false
+    },
+    "equilibrium": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": false,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": false,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": false
+    }
+  },
+  {
+    "domain": "general",
+    "gold": "B",
+    "cross_exam": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "leave_one_out": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "self_preference": {
+      "winner": "Qwen/Qwen3-1.7B",
+      "correct": true
+    },
+    "equilibrium": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": false,
+      "Qwen/Qwen3-1.7B": true,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": false,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": true
+    }
+  },
+  {
+    "domain": "general",
+    "gold": "A",
+    "cross_exam": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "leave_one_out": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "self_preference": {
+      "winner": "Qwen/Qwen2.5-1.5B-Instruct",
+      "correct": true
+    },
+    "equilibrium": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": true,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": false,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": true
+    }
+  },
+  {
+    "domain": "general",
+    "gold": "D",
+    "cross_exam": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "leave_one_out": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "self_preference": {
+      "winner": "Qwen/Qwen3-1.7B",
+      "correct": false
+    },
+    "equilibrium": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": false,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": false,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": false
+    }
+  },
+  {
+    "domain": "general",
+    "gold": "D",
+    "cross_exam": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "leave_one_out": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "self_preference": {
+      "winner": "Qwen/Qwen2.5-1.5B-Instruct",
+      "correct": true
+    },
+    "equilibrium": {
+      "winner": "Qwen/Qwen2.5-1.5B-Instruct",
+      "correct": true
+    },
+    "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": true,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": false,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": true
+    }
+  },
+  {
+    "domain": "general",
+    "gold": "A",
+    "cross_exam": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "leave_one_out": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "self_preference": {
+      "winner": "Qwen/Qwen3-1.7B",
+      "correct": false
+    },
+    "equilibrium": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": false,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": true
+    }
+  },
+  {
+    "domain": "general",
+    "gold": "B",
+    "cross_exam": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "leave_one_out": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "self_preference": {
+      "winner": "Qwen/Qwen3-1.7B",
+      "correct": false
+    },
+    "equilibrium": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": false
+    }
+  },
+  {
+    "domain": "general",
+    "gold": "A",
+    "cross_exam": {
+      "winner": "Qwen/Qwen3-1.7B",
+      "correct": true
+    },
+    "leave_one_out": {
+      "winner": "Qwen/Qwen3-1.7B",
+      "correct": true
+    },
+    "self_preference": {
+      "winner": "Qwen/Qwen2.5-1.5B-Instruct",
+      "correct": true
+    },
+    "equilibrium": {
+      "winner": "Qwen/Qwen3-1.7B",
+      "correct": true
+    },
+    "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": true,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": false
+    }
+  },
+  {
+    "domain": "general",
+    "gold": "A",
+    "cross_exam": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "leave_one_out": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "self_preference": {
+      "winner": "Qwen/Qwen2.5-1.5B-Instruct",
+      "correct": true
+    },
+    "equilibrium": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": true,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": false,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": true
+    }
+  },
+  {
+    "domain": "general",
+    "gold": "C",
+    "cross_exam": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "leave_one_out": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "self_preference": {
+      "winner": "Qwen/Qwen3-1.7B",
+      "correct": false
+    },
+    "equilibrium": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": false,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": true
+    }
+  },
+  {
+    "domain": "general",
+    "gold": "B",
+    "cross_exam": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "leave_one_out": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "self_preference": {
+      "winner": "Qwen/Qwen2.5-1.5B-Instruct",
+      "correct": false
+    },
+    "equilibrium": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": false,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": false,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": true
+    }
+  },
+  {
+    "domain": "general",
+    "gold": "C",
+    "cross_exam": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "leave_one_out": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "self_preference": {
+      "winner": "Qwen/Qwen3-1.7B",
+      "correct": true
+    },
+    "equilibrium": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": true,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": false,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": false
+    }
+  },
+  {
+    "domain": "general",
+    "gold": "D",
+    "cross_exam": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "leave_one_out": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "self_preference": {
+      "winner": "Qwen/Qwen3-1.7B",
+      "correct": true
+    },
+    "equilibrium": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": true,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": false,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": true
+    }
+  },
+  {
+    "domain": "general",
+    "gold": "C",
+    "cross_exam": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "leave_one_out": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "self_preference": {
+      "winner": "Qwen/Qwen3-1.7B",
+      "correct": true
+    },
+    "equilibrium": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": false,
+      "Qwen/Qwen3-1.7B": true,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": false
+    }
+  },
+  {
+    "domain": "general",
+    "gold": "D",
+    "cross_exam": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "leave_one_out": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "self_preference": {
+      "winner": "Qwen/Qwen3-1.7B",
+      "correct": true
+    },
+    "equilibrium": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": false,
+      "Qwen/Qwen3-1.7B": true,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": false,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": true
+    }
+  },
+  {
+    "domain": "general",
+    "gold": "D",
+    "cross_exam": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "leave_one_out": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "self_preference": {
+      "winner": "Qwen/Qwen3-1.7B",
+      "correct": true
+    },
+    "equilibrium": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": true,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": false,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": true
+    }
+  },
+  {
+    "domain": "general",
+    "gold": "D",
+    "cross_exam": {
+      "winner": "Qwen/Qwen3-1.7B",
+      "correct": false
+    },
+    "leave_one_out": {
+      "winner": "Qwen/Qwen3-1.7B",
+      "correct": false
+    },
+    "self_preference": {
+      "winner": "Qwen/Qwen3-1.7B",
+      "correct": false
+    },
+    "equilibrium": {
+      "winner": "Qwen/Qwen3-1.7B",
+      "correct": false
+    },
+    "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": false,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": false,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": false
+    }
+  },
+  {
+    "domain": "general",
+    "gold": "B",
+    "cross_exam": {
+      "winner": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+      "correct": false
+    },
+    "leave_one_out": {
+      "winner": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+      "correct": false
+    },
+    "self_preference": {
+      "winner": "Qwen/Qwen2.5-1.5B-Instruct",
+      "correct": true
+    },
+    "equilibrium": {
+      "winner": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+      "correct": false
+    },
+    "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": true,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": false,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": false
+    }
+  },
+  {
+    "domain": "general",
+    "gold": "C",
+    "cross_exam": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "leave_one_out": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "self_preference": {
+      "winner": "Qwen/Qwen3-1.7B",
+      "correct": false
+    },
+    "equilibrium": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": false,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": false,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": false
+    }
+  },
+  {
+    "domain": "general",
+    "gold": "A",
+    "cross_exam": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "leave_one_out": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "self_preference": {
+      "winner": "Qwen/Qwen3-1.7B",
+      "correct": false
+    },
+    "equilibrium": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": false,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": false,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": false
+    }
+  },
+  {
+    "domain": "general",
+    "gold": "B",
+    "cross_exam": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "leave_one_out": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "self_preference": {
+      "winner": "Qwen/Qwen2.5-1.5B-Instruct",
+      "correct": true
+    },
+    "equilibrium": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": true,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": false,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": true
+    }
+  },
+  {
+    "domain": "general",
+    "gold": "A",
+    "cross_exam": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "leave_one_out": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "self_preference": {
+      "winner": "Qwen/Qwen3-1.7B",
+      "correct": false
+    },
+    "equilibrium": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": false,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": false,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": true
+    }
+  },
+  {
+    "domain": "general",
+    "gold": "A",
+    "cross_exam": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "leave_one_out": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "self_preference": {
+      "winner": "Qwen/Qwen2.5-1.5B-Instruct",
+      "correct": false
+    },
+    "equilibrium": {
+      "winner": "Qwen/Qwen2.5-1.5B-Instruct",
+      "correct": false
+    },
+    "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": false,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": false
+    }
+  },
+  {
+    "domain": "general",
+    "gold": "B",
+    "cross_exam": {
+      "winner": "Qwen/Qwen3-1.7B",
+      "correct": false
+    },
+    "leave_one_out": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "self_preference": {
+      "winner": "Qwen/Qwen3-1.7B",
+      "correct": false
+    },
+    "equilibrium": {
+      "winner": "Qwen/Qwen3-1.7B",
+      "correct": false
+    },
+    "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": false,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": false,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": true
+    }
+  },
+  {
+    "domain": "general",
+    "gold": "A",
+    "cross_exam": {
+      "winner": "Qwen/Qwen3-1.7B",
+      "correct": true
+    },
+    "leave_one_out": {
+      "winner": "Qwen/Qwen3-1.7B",
+      "correct": true
+    },
+    "self_preference": {
+      "winner": "Qwen/Qwen2.5-1.5B-Instruct",
+      "correct": true
+    },
+    "equilibrium": {
+      "winner": "Qwen/Qwen3-1.7B",
+      "correct": true
+    },
+    "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": true,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": false
+    }
+  },
+  {
+    "domain": "general",
+    "gold": "B",
+    "cross_exam": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "leave_one_out": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "self_preference": {
+      "winner": "Qwen/Qwen3-1.7B",
+      "correct": false
+    },
+    "equilibrium": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": false,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": false,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": true
+    }
+  },
+  {
+    "domain": "general",
+    "gold": "A",
+    "cross_exam": {
+      "winner": "Qwen/Qwen3-1.7B",
+      "correct": false
+    },
+    "leave_one_out": {
+      "winner": "Qwen/Qwen3-1.7B",
+      "correct": false
+    },
+    "self_preference": {
+      "winner": "Qwen/Qwen2.5-1.5B-Instruct",
+      "correct": true
+    },
+    "equilibrium": {
+      "winner": "Qwen/Qwen3-1.7B",
+      "correct": false
+    },
+    "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": false,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": false
+    }
+  },
+  {
+    "domain": "general",
+    "gold": "A",
+    "cross_exam": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "leave_one_out": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "self_preference": {
+      "winner": "Qwen/Qwen3-1.7B",
+      "correct": false
+    },
+    "equilibrium": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": false,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": false
+    }
+  },
+  {
+    "domain": "general",
+    "gold": "C",
+    "cross_exam": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "leave_one_out": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "self_preference": {
+      "winner": "Qwen/Qwen2.5-1.5B-Instruct",
+      "correct": true
+    },
+    "equilibrium": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": false,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": true
+    }
+  },
+  {
+    "domain": "general",
+    "gold": "A",
+    "cross_exam": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "leave_one_out": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "self_preference": {
+      "winner": "Qwen/Qwen2.5-1.5B-Instruct",
+      "correct": true
+    },
+    "equilibrium": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": true,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": false
+    }
+  },
+  {
+    "domain": "general",
+    "gold": "C",
+    "cross_exam": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "leave_one_out": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "self_preference": {
+      "winner": "Qwen/Qwen2.5-1.5B-Instruct",
+      "correct": true
+    },
+    "equilibrium": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": true,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": false,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": true
+    }
+  },
+  {
+    "domain": "general",
+    "gold": "C",
+    "cross_exam": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "leave_one_out": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "self_preference": {
+      "winner": "Qwen/Qwen3-1.7B",
+      "correct": false
+    },
+    "equilibrium": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": false,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": true
+    }
+  },
+  {
+    "domain": "general",
+    "gold": "C",
+    "cross_exam": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "leave_one_out": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "self_preference": {
+      "winner": "Qwen/Qwen2.5-1.5B-Instruct",
+      "correct": true
+    },
+    "equilibrium": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": false,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": false
+    }
+  },
+  {
+    "domain": "general",
+    "gold": "A",
+    "cross_exam": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "leave_one_out": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "self_preference": {
+      "winner": "Qwen/Qwen3-1.7B",
+      "correct": false
+    },
+    "equilibrium": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": false,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": false,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": false
+    }
+  },
+  {
+    "domain": "general",
+    "gold": "D",
+    "cross_exam": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "leave_one_out": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "self_preference": {
+      "winner": "Qwen/Qwen2.5-1.5B-Instruct",
+      "correct": true
+    },
+    "equilibrium": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": true,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": false,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": true
+    }
+  },
+  {
+    "domain": "general",
+    "gold": "B",
+    "cross_exam": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "leave_one_out": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "self_preference": {
+      "winner": "Qwen/Qwen2.5-1.5B-Instruct",
+      "correct": true
+    },
+    "equilibrium": {
+      "winner": "Qwen/Qwen2.5-1.5B-Instruct",
+      "correct": true
+    },
+    "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": true,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": false,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": true
+    }
+  },
+  {
+    "domain": "general",
+    "gold": "A",
+    "cross_exam": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "leave_one_out": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "self_preference": {
+      "winner": "Qwen/Qwen2.5-1.5B-Instruct",
+      "correct": false
+    },
+    "equilibrium": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": false,
+      "Qwen/Qwen3-1.7B": true,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": false
+    }
+  },
+  {
+    "domain": "general",
+    "gold": "D",
+    "cross_exam": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "leave_one_out": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "self_preference": {
+      "winner": "Qwen/Qwen3-1.7B",
+      "correct": false
+    },
+    "equilibrium": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": false,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": false,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": false
+    }
+  },
+  {
+    "domain": "general",
+    "gold": "D",
+    "cross_exam": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "leave_one_out": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "self_preference": {
+      "winner": "Qwen/Qwen2.5-1.5B-Instruct",
+      "correct": false
+    },
+    "equilibrium": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": false
+    },
+    "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": false,
+      "Qwen/Qwen3-1.7B": true,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": false,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": true
+    }
+  },
+  {
+    "domain": "general",
+    "gold": "A",
+    "cross_exam": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "leave_one_out": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "self_preference": {
+      "winner": "Qwen/Qwen3-1.7B",
+      "correct": false
+    },
+    "equilibrium": {
+      "winner": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "correct": true
+    },
+    "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": false,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": false
+    }
+  }
+]

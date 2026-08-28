@@ -1,0 +1,81 @@
+{
+  "entropy_nats": 2.821032108711208,
+  "cost_weight": 0.0417,
+  "degenerate": false,
+  "ranking": [
+    {
+      "name": "exp23_cross_examination",
+      "epistemic": 0.37038627025024035,
+      "pragmatic": 0.6660000000000001,
+      "cost": 0.1251,
+      "total": -0.9112862702502404,
+      "per_hypothesis": {
+        "verification_beats_aggregation": {
+          "epistemic": 0.179442594786689,
+          "pragmatic": 0.29000000000000004
+        },
+        "mixed_arena_headroom_is_reachable": {
+          "epistemic": 0.19094367546355134,
+          "pragmatic": 0.3760000000000001
+        }
+      },
+      "description": "Players write full solutions and price each other's reasoning (running)"
+    },
+    {
+      "name": "serving_latency_measurement",
+      "epistemic": 0.33898115317265964,
+      "pragmatic": 0.4960000000000001,
+      "cost": 0.02085,
+      "total": -0.8141311531726597,
+      "per_hypothesis": {
+        "solve_is_affordable_at_serving": {
+          "epistemic": 0.33898115317265964,
+          "pragmatic": 0.4960000000000001
+        }
+      },
+      "description": "Wall-clock council serving against single-model on matched prompts; ADR 0009 flagged the quadratic cross-examination cost as obliging this"
+    },
+    {
+      "name": "domain_router_baseline",
+      "epistemic": 0.26798608798866175,
+      "pragmatic": 0.3255,
+      "cost": 0.01251,
+      "total": -0.5809760879886617,
+      "per_hypothesis": {
+        "mixed_arena_headroom_is_reachable": {
+          "epistemic": 0.26798608798866175,
+          "pragmatic": 0.3255
+        }
+      },
+      "description": "Measure a simple learned domain router on the mixed arena; establishes whether F33's 10-point headroom is reachable by the cheapest possible mechanism before any council machinery is credited"
+    },
+    {
+      "name": "second_model_family_check",
+      "epistemic": 0.20787194058002395,
+      "pragmatic": 0.19499999999999998,
+      "cost": 0.0834,
+      "total": -0.3194719405800239,
+      "per_hypothesis": {
+        "complementarity_generalises": {
+          "epistemic": 0.20787194058002395,
+          "pragmatic": 0.19499999999999998
+        }
+      },
+      "description": "Repeat the complementarity measurement on a different model family"
+    },
+    {
+      "name": "teacher_distillation_run",
+      "epistemic": 0.10174925905449209,
+      "pragmatic": 0.29000000000000004,
+      "cost": 0.3336,
+      "total": -0.058149259054492086,
+      "per_hypothesis": {
+        "better_players_raise_the_ceiling": {
+          "epistemic": 0.10174925905449209,
+          "pragmatic": 0.29000000000000004
+        }
+      },
+      "description": "Distil a domain specialist and re-measure the ceiling"
+    }
+  ]
+}

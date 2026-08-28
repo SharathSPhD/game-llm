@@ -1,0 +1,42 @@
+{
+  "n_tasks": 120,
+  "seed": 42,
+  "players": [
+    "Qwen/Qwen2.5-1.5B-Instruct",
+    "Qwen/Qwen3-1.7B",
+    "Qwen/Qwen2.5-Math-1.5B-Instruct",
+    "Qwen/Qwen2.5-Coder-1.5B-Instruct"
+  ],
+  "accuracy": {
+    "cross_exam": 0.4917,
+    "equilibrium": 0.5,
+    "leave_one_out": 0.4917,
+    "majority": 0.6167,
+    "oracle": 0.8333,
+    "self_preference": 0.625,
+    "single::Qwen/Qwen2.5-1.5B-Instruct": 0.5917,
+    "single::Qwen/Qwen2.5-Coder-1.5B-Instruct": 0.45,
+    "single::Qwen/Qwen2.5-Math-1.5B-Instruct": 0.5333,
+    "single::Qwen/Qwen3-1.7B": 0.3417
+  },
+  "per_domain": {
+    "math": {
+      "cross_exam": 0.7833,
+      "leave_one_out": 0.7833,
+      "self_preference": 0.7833,
+      "equilibrium": 0.7833,
+      "majority": 0.75,
+      "oracle": 0.9167,
+      "n": 60
+    },
+    "general": {
+      "cross_exam": 0.2,
+      "leave_one_out": 0.2,
+      "self_preference": 0.4667,
+      "equilibrium": 0.2167,
+      "majority": 0.4833,
+      "oracle": 0.75,
+      "n": 60
+    }
+  }
+}

@@ -59,7 +59,14 @@ never two GPU jobs at once (GPU lock in state.json).
   are the contract; amend the spec before the code. **Config-driven:** everything that
   varies lives in `configs/*.yaml`; no magic numbers in code; resolved config hash
   recorded with every run.
-- **EFE autoresearch loop:** `research/cycles/run.md` is the idempotent cycle runner;
+- **EFE autoresearch loop:** invoke the **`efe-autoresearch` skill** to choose what
+  to run next; it carries the method and `scripts/efe_rank.py`, which ranks
+  candidates from a JSON file and exits non-zero when every candidate scores
+  alike — the failure mode where the likelihood does not condition on the action
+  and the agent is decorative. The belief state and candidates for the current
+  cycle live in `research/cycles/cycle<N>_candidates.json`, and the implementation
+  bound to this project's hypotheses is `kinetic_ai/research/efe.py`.
+  `research/cycles/run.md` is the idempotent cycle runner;
   durable state in `research/memory/state.json`. GPU busy → do GPU-free work
   (paper, app, specs). ralph-loop drives closures; triz-engine for inventive steps
   when an RQ stalls.

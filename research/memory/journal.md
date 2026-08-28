@@ -546,3 +546,31 @@ transformers 4.45, which had been erroring 22 KineticLM tests; aligning it to
 Running at close of cycle: GSM8K re-measured with chat templates on GB10, then
 the cross-examination arena at three seeds; the depth-curriculum recovery arm on
 the 5090 at step 4440 of 6000.
+
+## Cycle 27 opening — the loop is a computation now
+
+The autoresearch loop had been prose: `run.md` described choosing experiments by
+expected free energy and `CLAUDE.md` cited it, while `kinetic_ai/` contained no
+implementation and the choosing was done by judgement. A first attempt at the
+implementation, produced by a fan-out, scored all five candidates at exactly
+-5.607 because its likelihood never referenced the action; its tests passed
+because they only checked a number came back. That is the failure mode worth
+naming, and it is now guarded twice: the project's agent has a test asserting the
+scores are mutually distinct, and the portable script exits non-zero rather than
+print a ranking that selects nothing.
+
+Cycle 27's ranking, from a belief state of 2.821 nats over five hypotheses:
+cross-examination first at G=-0.911, serving latency second at -0.814, a plain
+domain-router baseline third at -0.581, a second model family at -0.320, and
+teacher distillation last at -0.058. Distillation carries the second-highest
+pragmatic value and still ranks last, because F31 drove the belief that better
+players raise the ceiling down to 0.15 and eight GPU-hours is no longer worth
+spending on a question that far settled.
+
+Two of those the programme had not planned. Serving latency is owed under ADR
+0009, whose quadratic cross-examination cost invalidates the PRD's ensemble-cost
+argument until re-measured. The domain-router baseline is the more useful
+suggestion: F33 showed ten points of routable headroom on the mixed arena, and
+before any council machinery is credited with capturing it, the cheapest possible
+mechanism should be measured, so that the equilibrium is compared against a
+trivial router rather than only against the best single player.
