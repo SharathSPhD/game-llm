@@ -503,3 +503,46 @@
 - Next: EFE-driven (beta,tau) probe on 20 prompts to cut uncertainty cheaply,
   then the decisive 80-prompt comparison against ENS/AUC/best-single/oracle,
   then the ladder.
+
+## Cycle 26 — 2026-08-28 — the answer-level arena, opened and closed
+
+Phase 0 finished: four players measured on one harness (F28). The ladder
+corrected an assumption worth naming, since the parameter-matched model was not
+the strongest — Qwen2.5-1.5B-Instruct leads MMLU at 0.626 against Qwen3-1.7B's
+0.583, so adopting the nominal comparison as the bar would have flattered every
+later result by four points. GSM8K was excluded rather than reported: strict
+match scored zero for all four models, which measures answer formatting and not
+arithmetic.
+
+The decisive design choice of the cycle was cheap rather than clever. Instead of
+sweeping the equilibrium's parameters over a handful of generated prompts, one
+evaluation pass stored every player's per-option loglikelihoods, after which the
+entire grid was swept offline over 8,301 questions at no further GPU cost. That
+is what made a 0.0007 margin legible as noise rather than arguable as a win.
+
+Two defects surfaced along the way and both would have been invisible in the
+output. Answer-label conventions disagree between tasks — WinoGrande numbers
+from one, ARC carries two conventions in one record — and the assumed mapping
+scored players at 0.13 where the truth was 0.63; the fix derives each task's
+mapping from the harness's own scoring and verifies it reconciles. Separately,
+the thermal governor was found guarding the wrong process for the third time,
+having SIGSTOPped the 5090 training watchdog while the GB10 job ran to 90C
+unprotected; it now takes a PID rather than a pattern, which removes the failure
+mode rather than the instance.
+
+The science: solving the influence game is indistinguishable from averaging
+(F29), and eleven rules including mechanism design and calibration all land at
+or below the mean (F30), while twenty points of per-example complementarity sit
+unclaimed. The explanation that survives is that every rule reweights one fixed
+body of evidence and the game discards part of it. SPEC 0016 was amended to
+record that its own pre-committed response — move to better players — is not
+being taken, because the same data shows player quality is not the constraint.
+
+Housekeeping that mattered: the test venv could not construct a Qwen3 config on
+transformers 4.45, which had been erroring 22 KineticLM tests; aligning it to
+5.16.1 and repairing the two API changes that surfaced restored 383 passing at
+87% coverage.
+
+Running at close of cycle: GSM8K re-measured with chat templates on GB10, then
+the cross-examination arena at three seeds; the depth-curriculum recovery arm on
+the 5090 at step 4440 of 6000.

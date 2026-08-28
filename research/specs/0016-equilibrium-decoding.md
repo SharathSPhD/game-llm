@@ -55,6 +55,53 @@ conclusion is that aggregation quality is bounded by player quality at this
 scale, and effort moves to Phase 2 teacher construction with averaging as the
 aggregation rule. That is a redirection of build effort, not a softened claim.
 
+## Amendment, 2026-08-28: the answer-level arena is closed
+
+The measurement ran and separated nothing. Over 8,301 questions the best of 45
+settings scored 0.6311 against uniform averaging's 0.6304 at a standard error of
+0.0053, and accuracy fell monotonically as influence concentrated, by eight
+points at the largest rationality tested (F29). Eleven aggregation rules, five
+experiments and two families of repair — mechanism design and per-player
+calibration — all landed at or below the mean (F30).
+
+The pre-committed response above was to move effort to player quality. That
+response is **not** taken, and the reason is a second measurement in the same
+data: some player answers correctly on 82.6% of the questions while the best
+single player manages 62.5%. Player quality is demonstrably not the binding
+constraint; selection is. Redirecting to teacher construction would have been
+the specified move and the wrong one, which is recorded here because a spec that
+silently drops its own pre-commitment is worth less than one that says why.
+
+What the arena could not test is what the amendment turns on. Answer-level
+aggregation fixes the evidence: four distributions over the same options, from
+players that never see what the others produced, so every rule is a reweighting
+and reweighting cannot recover what it discards. The sequential setting supplies
+evidence that is not fixed — each player writes a chain of reasoning the others
+never had, and pricing a peer's chain is new information rather than a re-reading
+of one's own beliefs.
+
+## Phase 1b: cross-examination over generated solutions
+
+Each council member answers the prompt in full, then every member scores every
+member's solution, and selection rules operate on that matrix of valuations:
+each candidate priced by the whole council, priced by everyone except its author
+(the second-price intuition of F6 carried from tokens to solutions), chosen by
+the influence game of ADR 0008 with candidates as options, chosen by
+self-consistency over extracted answers, and the per-candidate oracle as the
+ceiling. Best-single from the ladder is the bar.
+
+Scoring solutions as text rather than tokens removes the shared-tokenizer
+constraint, so the arena also widens which models may sit on a council. The
+target is separation from best-single and from self-consistency by more than
+seed noise across three seeds; a rule that merely matches self-consistency is
+reproducing a known technique and does not support the paradigm.
+
+Two prerequisites are stated because F28 found them violated. Generation must
+apply each model's chat template and allow a per-domain token budget, since the
+ladder's GSM8K column measured answer formatting rather than arithmetic; and
+candidate valuations must be per-token rather than summed, or the market prices
+brevity.
+
 ## Provenance
 
 Every run records its resolved configuration hash and commit, writes per-seed
