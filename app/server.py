@@ -677,6 +677,8 @@ async def playground_generate(
     max_new_tokens = min(int(body.get("max_new_tokens", 16)), 64)
     warm_start = bool(body.get("warm_start", False))
     solver_budget = min(max(int(body.get("solver_budget", 6)), 4), 64)
+    temperature = min(max(float(body.get("temperature", 0.8)), 0.0), 2.0)
+    top_k = min(max(int(body.get("top_k", 50)), 0), 200)
 
     # Validate inputs
     if not checkpoint_path_str:
@@ -761,16 +763,22 @@ async def playground_generate(
             # Equilibrium path: the solver budget is the "think-harder" dial and
             # warm_start reuses the previous token's equilibrium (H1'a).
             original_max_iter = model.deq.config.max_iter
+            original_depth = model.config.deq_max_iter
             model.deq.config.max_iter = solver_budget
+            # In unrolled decode mode the budget dial IS the unroll depth.
+            model.config.deq_max_iter = solver_budget
             try:
                 output_ids, gen_info = model.generate(
                     token_ids.unsqueeze(0),
                     max_new_tokens,
                     warm_start=warm_start,
                     return_iter_counts=True,
+                    temperature=temperature,
+                    top_k=top_k,
                 )
             finally:
                 model.deq.config.max_iter = original_max_iter
+                model.config.deq_max_iter = original_depth
             generated_ids = [int(t) for t in output_ids[0, token_ids.shape[0]:]]
             raw_iters = gen_info.get("iter_counts", [])
             iters = list(raw_iters) if isinstance(raw_iters, (list, tuple)) else []
@@ -780,10 +788,14 @@ async def playground_generate(
             # Explicit stack: fixed depth, no solver iterations to report.
             generated_ids = []
             current_ids = token_ids.clone()
+            from kinetic_ai.models.eqlm import sample_next_token
+
             for _ in range(max_new_tokens):
                 with torch.no_grad():
                     logits = model(current_ids.unsqueeze(0))[0, -1, :]
-                next_token_id = int(torch.argmax(logits).item())
+                next_token_id = int(
+                    sample_next_token(logits.unsqueeze(0), temperature, top_k)[0, 0].item()
+                )
                 generated_ids.append(next_token_id)
                 current_ids = torch.cat(
                     [current_ids, torch.tensor([next_token_id], device=device)]

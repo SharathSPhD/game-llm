@@ -514,3 +514,24 @@ traces to a real run with config hash + seeds. All statuses: operator sign-off: 
   applied above.
 - **Status:** VALIDATED (3 seeds for B1; screen-level for B2/B3/B4) ·
   verdict PARTIAL (quality half at parity) · SIGNED-OFF (operator, 2026-08-27)
+
+### F24 addendum — generation exposes the decode-path mismatch (resolved 2026-08-28)
+
+Operator review of the live playground showed the anytime (B1) checkpoint
+generating degenerate text (punctuation/word loops) while scoring 0.697
+BLiMP. Bisect (results in-session, reproducible via B1 seed-43 checkpoint):
+explicit baseline through the identical greedy path generates coherent
+English (exonerates tokenizer/serving); B1 through Anderson-12 produces a
+near-flat next-token distribution (top-5 logits 6.87..6.62); B1 through its
+TRAINING-TIME computation (plain 12x unrolled from z0=x) produces a sharp
+distribution (8.44 top) and baseline-class text. Conclusion: the
+Anderson-vs-plain eval-path mismatch Tarka scoped in F24 corrupts ABSOLUTE
+distributions while leaving RELATIVE (BLiMP) comparisons intact —
+generation is the sensitive assay. Resolution shipped: (a) checkpoints
+carry decode_mode ("solver" | "unrolled") and EqLM.generate routes through
+the training-matched computation (B1 checkpoints patched); (b) sampling
+(temperature/top-k, shared helper) added to generate(), the serving layer,
+and the playground UI — greedy loops are ordinary small-LM degeneration
+(both architectures loop; Holtzman et al.). Sampled unrolled B1 output is
+grammatical BabyLM-register English. Published F24 BLiMP numbers are
+unchanged (they attach to the Anderson eval path, as scoped).

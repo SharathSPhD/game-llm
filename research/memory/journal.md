@@ -416,3 +416,12 @@
   via Vercel on push.
 - Suite 330 green. All artifacts final: paper 16pp, site F1-F24, app,
   PyPI 1.0.0, HF x3 checkpoints, findings ledger fully signed off.
+
+## [cycle 22 | 2026-08-28] OPERATOR CAUGHT IT: garbage generation -> decode-path fix
+- Operator flagged playground output quality; bisect proved the F24
+  Anderson-vs-plain mismatch corrupts absolute next-token distributions
+  (BLiMP relative scoring had masked it). decode_mode in checkpoints +
+  training-matched generate() + temperature/top-k sampling shipped through
+  model, server, and UI (suite 76 green on touched files). Lesson recorded:
+  a working app with unexamined outputs is not a tested app — generation is
+  the sensitive assay for eval-path bugs.

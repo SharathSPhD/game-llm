@@ -45,6 +45,8 @@ export default function PlaygroundPage() {
   const [maxNewTokens, setMaxNewTokens] = useState(16);
   const [warmStart, setWarmStart] = useState(false);
   const [solverBudget, setSolverBudget] = useState(6);
+  const [temperature, setTemperature] = useState(0.8);
+  const [topK, setTopK] = useState(50);
 
   const [generating, setGenerating] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -99,6 +101,8 @@ export default function PlaygroundPage() {
           max_new_tokens: maxNewTokens,
           warm_start: warmStart,
           solver_budget: solverBudget,
+          temperature,
+          top_k: topK,
         }),
       });
 
@@ -201,6 +205,37 @@ export default function PlaygroundPage() {
                 />
                 <div className="slider-value">{solverBudget}</div>
               </div>
+
+          <div>
+            <label>
+              Temperature ({temperature.toFixed(2)}):
+              <input
+                type="range"
+                min={0}
+                max={1.5}
+                step={0.05}
+                value={temperature}
+                onChange={(e) => setTemperature(Number(e.target.value))}
+              />
+            </label>
+            <div style={{ color: "var(--text-tertiary)", fontSize: "0.75rem" }}>
+              0 = greedy (deterministic, loops); 0.8 recommended
+            </div>
+          </div>
+
+          <div>
+            <label>
+              Top-k ({topK}):
+              <input
+                type="range"
+                min={0}
+                max={200}
+                step={10}
+                value={topK}
+                onChange={(e) => setTopK(Number(e.target.value))}
+              />
+            </label>
+          </div>
             </div>
           </div>
 

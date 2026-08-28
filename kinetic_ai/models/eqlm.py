@@ -82,6 +82,11 @@ class EqLMConfig:
         lambda_aux: Weight for the auxiliary residual loss. Only used if aux_residual=True.
                     Total loss = L_ce + lambda_aux * aux_residual.
                     Default 0.1.
+        decode_mode: Which forward computation generate() uses: 'solver'
+                     (Anderson/implicit — matches implicit-trained checkpoints)
+                     or 'unrolled' (plain deq_max_iter map applications from
+                     z0=x — matches anytime-unrolled training, F24/B1). BLiMP
+                     and training are unaffected; this only routes decoding.
     """
 
     vocab_size: int = 50257
@@ -99,11 +104,28 @@ class EqLMConfig:
     map_form: str = "residual"
     aux_residual: bool = False
     lambda_aux: float = 0.1
+    decode_mode: str = "solver"
 
 
 # ============================================================================
 # EqLMBlock: Single Transformer Block as Fixed-Point Map
 # ============================================================================
+
+
+def sample_next_token(logits_last: Tensor, temperature: float, top_k: int) -> Tensor:
+    """Greedy when temperature<=0; else temperature softmax with optional top-k.
+
+    Shared by EqLM.generate and the serving layer's explicit-model loop so
+    both architectures decode identically.
+    """
+    if temperature <= 0.0:
+        return torch.argmax(logits_last, dim=-1, keepdim=True)
+    scaled = logits_last / temperature
+    if top_k > 0 and top_k < scaled.shape[-1]:
+        kth = torch.topk(scaled, top_k, dim=-1).values[..., -1:]
+        scaled = scaled.masked_fill(scaled < kth, float("-inf"))
+    probs = torch.softmax(scaled, dim=-1)
+    return torch.multinomial(probs, num_samples=1)
 
 
 class EqLMBlock(nn.Module):
@@ -510,12 +532,17 @@ class EqLM(nn.Module):
         f1 = self.block(z_pt + eps * v, x)
         return cast(Tensor, (f1 - f0).norm() / eps)
 
+    def _sample_next(self, logits_last: Tensor, temperature: float, top_k: int) -> Tensor:
+        return sample_next_token(logits_last, temperature, top_k)
+
     def generate(
         self,
         input_ids: Tensor,
         max_new_tokens: int,
         warm_start: bool = False,
         return_iter_counts: bool = False,
+        temperature: float = 0.0,
+        top_k: int = 0,
     ) -> Tensor | tuple[Tensor, dict[str, object]]:
         """Greedy decoding with optional warm-start (H1′a).
 
@@ -561,21 +588,29 @@ class EqLM(nn.Module):
                     # map is smooth, so z*(t-1) is a good guess for z*(t)).
                     z_init = torch.cat([prev_z, prev_z[:, -1:, :]], dim=1)
 
-                # Forward pass: predict logits for next token
-                logits = self(output_ids, z_init=z_init)  # [B, T, V]
+                # Forward pass through the computation matching the training
+                # regime (F24 lesson: Anderson at eval corrupts the absolute
+                # next-token distribution of anytime-unrolled checkpoints).
+                if self.config.decode_mode == "unrolled":
+                    depth = self.config.deq_max_iter
+                    logits = self.forward_unrolled(output_ids, supervise_at=[depth])[0][1]
+                else:
+                    logits = self(output_ids, z_init=z_init)  # [B, T, V]
                 prev_z = self.last_z_star
 
                 # Get logits for the last position
                 logits_last = logits[:, -1, :]  # [B, V]
 
-                # Greedy decoding: argmax
-                next_token = torch.argmax(logits_last, dim=-1, keepdim=True)  # [B, 1]
+                next_token = self._sample_next(logits_last, temperature, top_k)  # [B, 1]
 
                 # Append to sequence
                 output_ids = torch.cat([output_ids, next_token], dim=1)
 
-                # Record iteration count from last forward (if available)
-                if (
+                # Record iteration count: unrolled mode always applies the
+                # map exactly deq_max_iter times; solver mode reads telemetry.
+                if self.config.decode_mode == "unrolled":
+                    iter_counts.append(self.config.deq_max_iter)
+                elif (
                     hasattr(self.deq, "last_info")
                     and isinstance(self.deq.last_info, dict)
                     and "iterations" in self.deq.last_info

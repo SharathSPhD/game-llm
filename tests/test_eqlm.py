@@ -17,6 +17,8 @@ import torch
 
 from kinetic_ai.config import BregmanType, MMDConfig
 from kinetic_ai.models.eqlm import (
+    load_checkpoint,
+    save_checkpoint,
     EqLM,
     EqLMBlock,
     EqLMConfig,
@@ -1409,3 +1411,54 @@ class TestExplicitCheckpointRoundtrip:
         ids = torch.randint(0, 50, (2, 8))
         with torch.no_grad():
             assert torch.allclose(m(ids), m2(ids), atol=1e-5)
+
+
+class TestDecodeModeAndSampling:
+    """Anytime-trained checkpoints must decode through their training-time
+    computation (plain unrolled iteration), not the Anderson solver; and
+    generate() must support temperature/top-k sampling (greedy loops are
+    degenerate for small LMs)."""
+
+    def _model(self, decode_mode: str = "solver") -> "EqLM":
+        torch.manual_seed(0)
+        return EqLM(config=EqLMConfig(
+            vocab_size=211, d_model=16, n_heads=2, d_ff=32, max_seq_len=64,
+            deq_max_iter=6, map_form="postln", dropout=0.0,
+            decode_mode=decode_mode,
+        ))
+
+    def test_decode_mode_roundtrips_through_checkpoint(self, tmp_path) -> None:
+        m = self._model("unrolled")
+        save_checkpoint(m, tmp_path / "m.pt")
+        m2 = load_checkpoint(tmp_path / "m.pt")
+        assert m2.config.decode_mode == "unrolled"
+
+    def test_old_checkpoints_default_to_solver(self) -> None:
+        assert EqLMConfig().decode_mode == "solver"
+
+    def test_unrolled_generate_matches_forward_unrolled_logits(self) -> None:
+        m = self._model("unrolled")
+        ids = torch.randint(0, 211, (1, 6))
+        out = m.generate(ids, max_new_tokens=1)
+        ref_logits = m.forward_unrolled(ids, supervise_at=[6])[0][1]
+        expected = ref_logits[:, -1, :].argmax(dim=-1)
+        assert out[0, -1].item() == expected.item()
+
+    def test_sampling_is_seeded_and_diverse(self) -> None:
+        m = self._model()
+        ids = torch.randint(0, 211, (1, 6))
+        torch.manual_seed(1)
+        a = m.generate(ids, max_new_tokens=8, temperature=1.0, top_k=50)
+        torch.manual_seed(1)
+        b = m.generate(ids, max_new_tokens=8, temperature=1.0, top_k=50)
+        torch.manual_seed(2)
+        c = m.generate(ids, max_new_tokens=8, temperature=1.0, top_k=50)
+        assert torch.equal(a, b), "same seed must reproduce"
+        assert not torch.equal(a, c), "different seeds should diverge (prob ~1)"
+
+    def test_temperature_zero_is_greedy(self) -> None:
+        m = self._model()
+        ids = torch.randint(0, 211, (1, 6))
+        a = m.generate(ids, max_new_tokens=4, temperature=0.0)
+        b = m.generate(ids, max_new_tokens=4)
+        assert torch.equal(a, b)
