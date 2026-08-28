@@ -574,3 +574,37 @@ suggestion: F33 showed ten points of routable headroom on the mixed arena, and
 before any council machinery is credited with capturing it, the cheapest possible
 mechanism should be measured, so that the equilibrium is compared against a
 trivial router rather than only against the best single player.
+
+## Cycle 28 — the inventive step, taken deliberately
+
+Cycle 27 ended with the autoresearch loop reporting every action at near-zero
+expected value — selection exhausted, generation required. The operator's
+direction was to generate. The TRIZ engine was applied to the standing
+contradiction (adaptability of collective evidence against reliability where a
+specialist dominates); matrix cells 35/27 and 35/28 returned inversion,
+counterbalance, intermediary and preliminary action, which compose into one
+mechanism rather than four suggestions: make the router the reference policy of
+the game. The magnetically anchored answer vote scores each answer equivalence
+class by its votes plus a magnetic bonus on the router's class, so the council
+overrides the incumbent only beyond a margin, and at large magnet strength the
+mechanism IS the router — the first rule in the programme whose floor is the bar
+itself.
+
+Offline over the 360 stored candidates it beats the router in every grid cell
+in-sample and on all three held-out folds (mean +0.0597; one fold 21W/1L,
+another 14W/0L), gaining on both domains at once. The result evades F30's
+impossibility because it is not a reweighting of fixed distributions: extracted
+answers from independent chains are new evidence, and the anchor injects the
+ladder's prior knowledge of who is reliable where.
+
+Discipline held: SPEC 0017 pre-registered uniform/tau=1.0 on fresh seeds before
+any confirmation data existed, and the confirmation is running now. F39 is
+recorded as preliminary-positive, gated on it. The mechanism was promoted into
+the package with ten property tests and reproduces the experiment's numbers
+exactly; the paper and site carry it marked as pending confirmation.
+
+The EFE skill drove the cycle: the belief state ranked the free offline test
+ahead of everything costly, and the observation moved
+P(anchored_vote_beats_router) from 0.5 to 0.8. One skill-script limitation
+surfaced — it cannot express that the confirmation run is conditional on the
+offline result — noted for a future revision rather than patched mid-cycle.

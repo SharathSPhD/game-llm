@@ -9,7 +9,7 @@ in — a plan that survives contact unchanged was not specific enough.
 
 | # | Objective | Standing |
 |---|---|---|
-| O1 | A new paradigm, not incremental mimicry: the token distribution as a solved game | Refuted at answer level (F29): indistinguishable from averaging, and higher influence rationality is harmful. Open in the sequential arena, where influence can follow verification of a jointly-authored prefix rather than confidence |
+| O1 | A new paradigm, not incremental mimicry | Confidence-driven influence refuted (F29/F30); verification-driven cross-examination ties the router (F36). **The live construction is the anchored answer vote (F39): the router as the magnetic reference policy of a QRE over answer classes — the kinetic magnet aimed at the incumbent. All held-out folds beat the router; pre-registered confirmation (SPEC 0017) running** |
 | O2 | Retain the kinetic core — MMD, QRE, implicit depth, truthful auctions | Every component of O1 is one of these strands; F21's correction is what placed the magnet in policy space |
 | O3 | Beat the baseline ladder | **The bar is a domain router, not a single model (F34).** A router fixed from the ladder scores 0.667 on the mixed arena against the best single player's 0.592, and beats every council rule measured so far. A council earns its machinery only by beating the router |
 | O4 | Domain teachers chosen from measured eval gaps, not a preset list | Reopened by F32/F33: the answer-level headroom was ~3 points once the oracle is gated on identifiable confidence, not 20, so better players are back in contention — and F33 shows the council already holds one genuine specialist whose strength only appears on generative work |
@@ -59,6 +59,18 @@ variant scores 0.795 on GSM8K against the generalist's 0.595, while placing last
 on MMLU. A mixed arena carries ten points of routable headroom where the tested
 set carried one (F33). The aggregation results stand for what they measured; what
 they cannot support is a claim about councils whose members genuinely differ.
+
+**Phase 1c — the anchored answer vote (current).** With every competing-with-
+the-router route closed (F34–F38), the TRIZ engine inverted the dependency:
+the router became the reference policy, and the council overrides it only when
+its net vote margin exceeds the magnet strength. Offline, every parameter cell
+beats the router and all three held-out folds are positive at a mean of +0.06.
+SPEC 0017 pre-registers uniform weighting and tau = 1.0 on fresh seeds 45–47;
+the claim stands or falls on that run. If confirmed, the mechanism ships as the
+council's serving mode (it needs only one generation per player and answer
+extraction — no cross-scoring passes, so it costs N single-model decodes and
+nothing quadratic); if refuted, the finding is recorded and the programme
+returns to candidate generation.
 
 **Phase 1b — influence from verification rather than confidence.** What answer
 level cannot test is the only part of the construction an ensemble cannot
