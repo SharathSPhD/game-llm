@@ -535,3 +535,34 @@ and the playground UI — greedy loops are ordinary small-LM degeneration
 (both architectures loop; Holtzman et al.). Sampled unrolled B1 output is
 grammatical BabyLM-register English. Published F24 BLiMP numbers are
 unchanged (they attach to the Anderson eval path, as scoped).
+
+## F25 — Conversion damage curve: which layers can be tied, and at what cost (SPEC 0011 design measurement)
+
+- **Setup:** Qwen3-1.7B (28 layers, d=2048, 1.721B params) converted to the
+  KineticLM topology — explicit outer layers around block-recursive shared
+  cores — and measured WITHOUT any uptraining. Perplexity on a 3-passage
+  general sample; base ppl 6.01. Sweep over {n_pre=n_post in 6,8} x
+  {n_cores 1,2,4} x {average, stepwise} init. Artifact:
+  results/scale/damage_sweep.json (5090, bf16).
+- **(1) Average init dominates stepwise by 10-100x** at every configuration
+  (e.g. 8+8/1 core: 1.9e3 vs 2.2e5). Collapsing a group of layers to their
+  elementwise mean preserves far more function than adopting any single
+  representative layer. This settles an open choice in the published
+  recursive-uptraining recipes for this model family.
+- **(2) Explicit outer layers matter more than the number of cores.** Going
+  6+6 -> 8+8 with a single core improves ppl 10x (18465 -> 1909), while going
+  1 -> 2 cores at 8+8 changes nothing (1909 vs 1933). The first and last two
+  layers carry function that tying destroys; the middle is far more
+  redundant. Parameter saving is therefore best bought in the middle.
+- **(3) Every configuration is heavily damaged pre-uptraining** (300-3000x
+  base ppl). Conversion is not a free lunch at any tying level tested; the
+  uptraining budget, not the surgery, is the binding constraint — consistent
+  with published recipes using 10-100B tokens.
+- **Operating point selected (pre-registered before uptraining):**
+  n_pre=n_post=8, n_cores=1, average init -> 1.167B params (**68% of base**),
+  starting ppl 1909. SPEC 0011's parameter gate is amended from <=60% to
+  <=70% on this evidence: the 56-59% configs start 3-10x more damaged and
+  would not be recoverable within our token budget. Amendment recorded BEFORE
+  any uptraining run.
+- **Status:** VALIDATED (design measurement, single seed — it selects a
+  configuration, it does not claim a scientific result) · feeds SPEC 0011

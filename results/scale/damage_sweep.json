@@ -1,0 +1,114 @@
+{
+  "base_params": 1720574976,
+  "base_ppl": 6.008508205413818,
+  "rows": [
+    {
+      "n_pre": 6,
+      "n_post": 6,
+      "n_cores": 1,
+      "init": "average",
+      "params": 965534976,
+      "pct": 56.11699515964598,
+      "ppl": 18465.068359375
+    },
+    {
+      "n_pre": 6,
+      "n_post": 6,
+      "n_cores": 1,
+      "init": "stepwise",
+      "params": 965534976,
+      "pct": 56.11699515964598,
+      "ppl": 3279368.5
+    },
+    {
+      "n_pre": 6,
+      "n_post": 6,
+      "n_cores": 2,
+      "init": "average",
+      "params": 1015870976,
+      "pct": 59.042528815669584,
+      "ppl": 5175.26220703125
+    },
+    {
+      "n_pre": 6,
+      "n_post": 6,
+      "n_cores": 2,
+      "init": "stepwise",
+      "params": 1015870976,
+      "pct": 59.042528815669584,
+      "ppl": 81565.4609375
+    },
+    {
+      "n_pre": 6,
+      "n_post": 6,
+      "n_cores": 4,
+      "init": "average",
+      "params": 1116542976,
+      "pct": 64.89359612771679,
+      "ppl": 20989.63671875
+    },
+    {
+      "n_pre": 6,
+      "n_post": 6,
+      "n_cores": 4,
+      "init": "stepwise",
+      "params": 1116542976,
+      "pct": 64.89359612771679,
+      "ppl": 115214.2421875
+    },
+    {
+      "n_pre": 8,
+      "n_post": 8,
+      "n_cores": 1,
+      "init": "average",
+      "params": 1166878976,
+      "pct": 67.81912978374038,
+      "ppl": 1908.61376953125
+    },
+    {
+      "n_pre": 8,
+      "n_post": 8,
+      "n_cores": 1,
+      "init": "stepwise",
+      "params": 1166878976,
+      "pct": 67.81912978374038,
+      "ppl": 218270.09375
+    },
+    {
+      "n_pre": 8,
+      "n_post": 8,
+      "n_cores": 2,
+      "init": "average",
+      "params": 1217214976,
+      "pct": 70.74466343976398,
+      "ppl": 1932.8907470703125
+    },
+    {
+      "n_pre": 8,
+      "n_post": 8,
+      "n_cores": 2,
+      "init": "stepwise",
+      "params": 1217214976,
+      "pct": 70.74466343976398,
+      "ppl": 8914.86328125
+    },
+    {
+      "n_pre": 8,
+      "n_post": 8,
+      "n_cores": 4,
+      "init": "average",
+      "params": 1317886976,
+      "pct": 76.59573075181119,
+      "ppl": 2481.400390625
+    },
+    {
+      "n_pre": 8,
+      "n_post": 8,
+      "n_cores": 4,
+      "init": "stepwise",
+      "params": 1317886976,
+      "pct": 76.59573075181119,
+      "ppl": 11871.048828125
+    }
+  ]
+}

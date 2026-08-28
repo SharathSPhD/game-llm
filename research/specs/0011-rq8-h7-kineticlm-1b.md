@@ -38,7 +38,9 @@ Benchmarks via lm-evaluation-harness: MMLU (5-shot), ARC-Challenge, HellaSwag,
 GSM8K (8-shot), average reported as the headline "retention ratio" vs the base
 run under the same harness on the same machine.
 
-- **MET:** retention >= 0.90 of base average at <= 60% of base parameters,
+- **MET:** retention >= 0.90 of base average at <= 70% of base parameters
+  (gate amended 2026-08-28 from 60% on the F25 damage-curve evidence, before
+  any uptraining run),
   with monotone graceful degradation across budgets {K/4, K/2, K}.
 - **PARTIAL:** retention >= 0.75, or MET on the budget dial but not quality.
 - **MISSED:** below 0.75 retention. A documented miss with the diagnostic arc
