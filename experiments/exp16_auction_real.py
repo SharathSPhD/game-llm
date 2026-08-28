@@ -45,6 +45,11 @@ import yaml
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
+from kinetic_ai.decode.equilibrium import (  # noqa: E402
+    EquilibriumConfig,
+    solve_equilibrium,
+)
+
 
 def get_git_commit() -> str:
     try:
@@ -153,12 +158,15 @@ def generate_system(
     device: str,
     ctx_bids: torch.Tensor | None = None,
     trace_limit: int = 0,
+    eq_config: EquilibriumConfig | None = None,
 ) -> tuple[list[int], list[dict]]:
     """Closed-loop greedy generation under one aggregation rule."""
+    eq_config = eq_config or EquilibriumConfig()
     ctx = input_ids.to(device)
     caches: dict[str, Any] = {name: None for name in order}
     generated: list[int] = []
     traces: list[dict] = []
+    prev_eq: torch.Tensor | None = None  # warm start for equilibrium decoding
 
     for pos in range(max_new_tokens):
         logits: dict[str, torch.Tensor] = {}
@@ -177,6 +185,24 @@ def generate_system(
             stacked = torch.stack([logits[n] for n in order])
             nxt = int(stacked.mean(0).argmax(dim=-1).item())
             winner, payment = "ENS", None
+        elif system.startswith("EQ"):
+            # Equilibrium decoding (ADR 0008): the token distribution is the
+            # solved QRE of the influence game among players, warm-started from
+            # the previous position because consecutive equilibria are close.
+            stacked = torch.stack([logits[n][0] for n in order])  # [N, V]
+            y, eq_info = solve_equilibrium(
+                stacked, eq_config, y_init=prev_eq, return_info=True
+            )
+            prev_eq = y
+            nxt = int(y.argmax().item())
+            winner, payment = system, None
+            if pos < trace_limit:
+                traces.append({
+                    "position": pos,
+                    "eq_iterations": eq_info["iterations"],
+                    "eq_converged": eq_info["converged"],
+                    "token": nxt,
+                })
         elif system in ("AUC", "AUC_CTX"):
             if system == "AUC":
                 bids = torch.tensor(
@@ -264,7 +290,10 @@ def main() -> None:
           f"{sum(t['domain']=='math' for t in tasks)} math / "
           f"{sum(t['domain']=='general' for t in tasks)} general", flush=True)
 
-    systems = order + ["ENS", "AUC", "AUC_CTX", "ORACLE"]
+    eq_variants: dict[str, EquilibriumConfig] = {}
+    for name, params in (cfg.get("equilibrium") or {}).items():
+        eq_variants[name] = EquilibriumConfig(**params)
+    systems = order + ["ENS", "AUC", "AUC_CTX", "ORACLE"] + list(eq_variants)
     oracle_map: dict[str, str] = cfg["oracle_map"]
     eos_ids = {tokenizer.eos_token_id} | {
         tokenizer.convert_tokens_to_ids(t)
@@ -301,7 +330,8 @@ def main() -> None:
                 eos_ids,
                 device,
                 ctx_bids=ctx_bids,
-                trace_limit=trace_limit if (system == "AUC" and i == 0) else 0,
+                trace_limit=trace_limit if (system in ("AUC",) and i == 0) else 0,
+                eq_config=eq_variants.get(system),
             )
             text = tokenizer.decode(gen, skip_special_tokens=True)
             pred = extract_answer(text, task["kind"])
@@ -334,6 +364,7 @@ def main() -> None:
         for s in systems
     }
     best_single = max(order, key=lambda s: summary[s]["overall"])
+    best_eq = max(eq_variants, key=lambda s: summary[s]["overall"]) if eq_variants else None
     verdict = (
         "MET"
         if summary["AUC"]["overall"] > summary[best_single]["overall"]
@@ -354,6 +385,8 @@ def main() -> None:
         "n_tasks": len(tasks),
         "summary": summary,
         "best_single": best_single,
+        "best_equilibrium": best_eq,
+        "equilibrium_configs": {k: vars(v) for k, v in eq_variants.items()},
         "h9_score": verdict,
         "records": records,
         "wall_clock_s": time.time() - t0,

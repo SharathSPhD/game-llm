@@ -478,3 +478,28 @@
 - Paper brought to the ACD standard and encoded as the academic-paper-style
   SKILL (~/.claude/skills/), whose check_style.sh caught 8 figures included
   but never referenced from prose — a defect manual review had missed.
+
+## [cycle 25 | 2026-08-28] NEW PARADIGM: equilibrium decoding (ADR 0008)
+- Operator redirection: not incremental mimicry of existing architectures — a
+  new paradigm that still beats the baselines, with the kinetic strands (MMD,
+  QRE, DEQ, auctions) retained as its substance, EFE loop driving the search.
+- Paradigm: the next-token distribution is the tau-regularized QRE of an
+  influence game among model-players, solved at decode time by MMD under the
+  entropy mirror map. Not a blend (averaging) and not a choice (routing) —
+  both are its degenerate cases (beta=0 gives logit averaging exactly; large
+  beta approaches routing), so the equilibrium strictly generalises them.
+- Uses every validated strand: F1 (linear last-iterate convergence of exactly
+  this update), F21 (the magnet belongs in POLICY space, which decode time is —
+  the parameter-space version was second-order), F6 (truthful bids make the
+  influence weights ungameable), F19 (warm start: adjacent equilibria are
+  close), F24 (anytime truncation), QRE (tau/beta as rationality parameters).
+- Cost: after one forward per player the solve is softmax/dot products over the
+  vocabulary — measured under 50ms for 20 solves at vocab 32k, i.e. ensemble
+  cost with strictly richer aggregation.
+- Implemented with 11 TDD tests; the Euclidean proximal form was tried first
+  and rejected (its fixed point is the arithmetic mean of distributions, while
+  the simplex geometry and ensembling practice both call for the geometric
+  mean).
+- Next: EFE-driven (beta,tau) probe on 20 prompts to cut uncertainty cheaply,
+  then the decisive 80-prompt comparison against ENS/AUC/best-single/oracle,
+  then the ladder.

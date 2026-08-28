@@ -12,7 +12,6 @@ from __future__ import annotations
 import sys
 from pathlib import Path
 
-import pytest
 import torch
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
@@ -81,7 +80,7 @@ class TestEquilibriumProperties:
         """F19's property: consecutive positions have nearby equilibria."""
         a = _logits([[2.0, 1.0, 0.0], [0.0, 2.0, 1.0]])
         b = a + 0.05 * torch.randn_like(a)
-        first, info_a = solve_equilibrium(a, EquilibriumConfig(), return_info=True)
+        first, _ = solve_equilibrium(a, EquilibriumConfig(), return_info=True)
         _, cold = solve_equilibrium(b, EquilibriumConfig(), return_info=True)
         _, warm = solve_equilibrium(b, EquilibriumConfig(), y_init=first, return_info=True)
         assert warm["iterations"] <= cold["iterations"]
@@ -106,7 +105,6 @@ class TestEquilibriumProperties:
     def test_disagreement_is_resolved_not_blurred(self) -> None:
         """Two confident players disagreeing: averaging splits mass evenly and
         leaves the argmax ambiguous, while the influence game should commit."""
-        ell = _logits([[6.0, 5.9, 0.0]])
         ell = _logits([[7.0, 0.0, 0.0], [0.0, 6.0, 0.0], [0.1, 0.0, 0.0]])
         avg = torch.softmax(ell.mean(dim=0), dim=-1)
         eq = solve_equilibrium(ell, EquilibriumConfig(beta=4.0))

@@ -1,0 +1,16 @@
+seed: 42
+device: cuda
+specialists:
+  S_math: Qwen/Qwen2.5-Math-1.5B-Instruct
+  S_code: Qwen/Qwen2.5-Coder-1.5B-Instruct
+  S_gen: Qwen/Qwen2.5-1.5B-Instruct
+chat_template_from: Qwen/Qwen2.5-1.5B-Instruct
+oracle_map: {math: S_math, general: S_gen}
+tasks: {n_gsm8k: 10, n_mmlu: 10}
+generation: {max_new_tokens_math: 512, max_new_tokens_general: 160, trace_positions: 32}
+extra_eos: ["<|im_end|>"]
+equilibrium:
+  EQ_b1: {beta: 1.0, tau: 0.0, eta: 0.5, max_iter: 16}
+  EQ_b3: {beta: 3.0, tau: 0.0, eta: 0.5, max_iter: 16}
+  EQ_b6: {beta: 6.0, tau: 0.0, eta: 0.5, max_iter: 16}
+  EQ_b3t05: {beta: 3.0, tau: 0.5, eta: 0.5, max_iter: 16}
