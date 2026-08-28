@@ -63,6 +63,11 @@ never two GPU jobs at once (GPU lock in state.json).
 
 ## Artifact standard (paper + app) — binding
 
+Invoke the **`academic-paper-style` skill** for any manuscript work; it carries the
+full standard plus `scripts/check_style.sh <paper-dir> <main.tex>`, which gates on
+first-person voice, list environments, banned vocabulary, unreferenced figures and
+duplicate labels. The summary below binds even when the skill is not invoked.
+
 The paper is benchmarked against `/home/sharaths/projects/ActiveCIrcuitDiscovery/paper`
 (MDPI submission: 2183 lines of prose, ZERO bullet lists, 12 figures, 12 tables,
 modular `sections/*.tex`, appendix). Every paper edit obeys:

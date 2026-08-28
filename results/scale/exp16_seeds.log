@@ -6,3 +6,4 @@
 [tasks] 80 prompts: 40 math / 40 general
   [5/80] {'S_math': 0.6, 'S_code': 0.4, 'S_gen': 0.8, 'ENS': 0.6, 'AUC': 0.6, 'AUC_CTX': 0.6, 'ORACLE': 0.6} 9.6min
   [10/80] {'S_math': 0.6, 'S_code': 0.4, 'S_gen': 0.6, 'ENS': 0.6, 'AUC': 0.6, 'AUC_CTX': 0.6, 'ORACLE': 0.6} 21.4min
+  [15/80] {'S_math': 0.667, 'S_code': 0.4, 'S_gen': 0.667, 'ENS': 0.667, 'AUC': 0.667, 'AUC_CTX': 0.667, 'ORACLE': 0.667} 33.0min
