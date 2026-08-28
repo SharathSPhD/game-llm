@@ -1,0 +1,62 @@
+{
+  "n_fit": 4148,
+  "n_eval": 4153,
+  "eval_singles": {
+    "qwen3-1.7b": 0.5793,
+    "qwen2.5-base": 0.6256,
+    "qwen2.5-math": 0.4,
+    "qwen2.5-coder": 0.5218
+  },
+  "best_single": 0.6256,
+  "oracle_any_correct": 0.8312,
+  "uniform_average": 0.6301,
+  "stderr": 0.0075,
+  "seeds": {
+    "42": {
+      "gate_average_gamma1": 0.633,
+      "gate_game_beta0.25_gamma1": 0.6328,
+      "gate_average_gamma2": 0.6328,
+      "gate_game_beta0.25_gamma2": 0.6323,
+      "gate_average_gamma4": 0.6342,
+      "gate_game_beta0.25_gamma4": 0.6321,
+      "gate_average_gamma8": 0.635,
+      "gate_game_beta0.25_gamma8": 0.634
+    },
+    "43": {
+      "gate_average_gamma1": 0.6333,
+      "gate_game_beta0.25_gamma1": 0.6333,
+      "gate_average_gamma2": 0.634,
+      "gate_game_beta0.25_gamma2": 0.6318,
+      "gate_average_gamma4": 0.633,
+      "gate_game_beta0.25_gamma4": 0.633,
+      "gate_average_gamma8": 0.6345,
+      "gate_game_beta0.25_gamma8": 0.6347
+    },
+    "44": {
+      "gate_average_gamma1": 0.633,
+      "gate_game_beta0.25_gamma1": 0.6335,
+      "gate_average_gamma2": 0.634,
+      "gate_game_beta0.25_gamma2": 0.6323,
+      "gate_average_gamma4": 0.6333,
+      "gate_game_beta0.25_gamma4": 0.6328,
+      "gate_average_gamma8": 0.634,
+      "gate_game_beta0.25_gamma8": 0.6342
+    }
+  },
+  "arm_means": {
+    "gate_average_gamma1": 0.6331,
+    "gate_game_beta0.25_gamma1": 0.6332,
+    "gate_average_gamma2": 0.6336,
+    "gate_game_beta0.25_gamma2": 0.6321,
+    "gate_average_gamma4": 0.6335,
+    "gate_game_beta0.25_gamma4": 0.6326,
+    "gate_average_gamma8": 0.6345,
+    "gate_game_beta0.25_gamma8": 0.6343
+  },
+  "best_arm": {
+    "name": "gate_average_gamma8",
+    "acc": 0.6345
+  },
+  "margin_over_averaging": 0.0044,
+  "fraction_of_oracle_gap_closed": 0.0217
+}

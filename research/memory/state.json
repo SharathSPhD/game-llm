@@ -1,6 +1,6 @@
 {
   "cycle": 26,
-  "phase": "Phase 0 closing (ladder measured, F28); Phase 1 agreement sweep running",
+  "phase": "Phase 1: influence game refuted at answer level (F29); moving to the sequential arena",
   "current_rq": "RQ-3b (H1-prime a/b/c per ADR 0004)",
   "gpu_lock": false,
   "open_questions": [

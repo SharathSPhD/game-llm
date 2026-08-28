@@ -730,3 +730,64 @@ Qwen2.5-1.5B-Instruct, Qwen2.5-Math-1.5B-Instruct, Qwen2.5-Coder-1.5B-Instruct.
   generation.
 - **Status:** VALIDATED (single seed per model; loglikelihood tasks only) ·
   informs O3 (baseline identity) and O4 (domain selection) · Tarka PENDING
+
+## F29 — The influence game does not beat averaging at answer level, and confidence is the reason
+
+**Cycle 26 · 2026-08-28 · SPEC 0016, ADR 0008 · exp18/exp19/exp20 · GB10**
+
+Four players (Qwen3-1.7B, Qwen2.5-1.5B/Math/Coder-Instruct) were scored once on
+8,301 questions across 61 tasks with per-example option loglikelihoods logged,
+after which every aggregation rule was computed offline on the same stored
+scores. Each task's answer-label convention was recovered from the harness's own
+per-record scoring rather than assumed; all 61 tasks reconciled exactly, which
+matters because two conventions silently disagreed (WinoGrande labels from one,
+and ARC carries `target` and `answerKey` under different conventions) and the
+uncalibrated reading scored players at 0.13 where the truth was 0.63.
+
+- **Solving the equilibrium is indistinguishable from averaging.** Uniform
+  averaging scores 0.6304. The best of 45 grid points over the influence
+  rationality and magnet strength scores 0.6311 at $\beta = 0.25$, a margin of
+  0.0007 against a standard error of 0.0053 — and that margin is a hindsight
+  maximum over the whole grid, so the true expected margin is smaller still. Per
+  task the split is 16 better, 12 worse, 33 unchanged.
+- **Raising the influence rationality is monotonically harmful.** Accuracy falls
+  from 0.6304 at $\beta = 0$ to 0.5486 at $\beta = 8$, an eight-point loss. The
+  magnet mitigates but never reverses it: at $\tau = 0.5$ the same setting
+  recovers only to 0.6119. Routing-like behaviour, which the construction
+  approaches as $\beta$ grows, is therefore actively worse than blending here.
+- **The diagnosis is the payoff, not the solver.** Influence follows
+  $\langle y, \ell_i \rangle$, which rewards a player for agreeing with the
+  emerging consensus — that is confidence, and confidence is not competence. The
+  Math specialist is right on 40% of these questions and no less emphatic for it,
+  so the game hands it weight exactly when it is emphatic. Majority vote, which
+  is the same error in cruder form, scores 0.5905, *below* the best single player.
+- **Three interventions, one of which works and none of which is the game.**
+  Reversing the payoff so dissent earns influence: 0.6280–0.6316, no gain.
+  Influence from per-example sharpness instead of agreement: 0.6289–0.6318, no
+  gain. Weighting by each player's reliability measured on a held-out half:
+  0.6415, **+1.14 points**, the only arm that moves. Adding the solved game on
+  top of those competence weights reaches 0.6422, a further 0.07 points — within
+  noise of the weights alone, so the aggregation is doing the work and the game
+  is not.
+- **Context-dependent competence was tried and does not help either.** A gate
+  predicting per-question, per-player correctness from label-free descriptors of
+  the score field (entropy, top-two margin, divergence from the field, field
+  entropy) reaches 0.6345 averaged over three fits — *below* the constant
+  competence weights it was meant to improve on. Whether a player is right on a
+  given question is not legible from the shape of the scores.
+- **Twenty points sit unclaimed.** Some player answers correctly on 83.1% of the
+  questions while the best single player manages 62.6% and the best aggregation
+  64.2%. The complementarity is real and large; no rule tested extracts more
+  than a twentieth of it.
+- **Interpretation.** In this arena the paradigm's central claim fails: solving
+  the game is not better than averaging, and the mechanism by which it was
+  supposed to win — reallocating influence per position — is the mechanism that
+  hurts. The result is confined to answer-level aggregation, where every player
+  sees the same prompt once and no consensus is carried forward; it does not
+  test the sequential setting in which the consensus prefix changes what each
+  player conditions on, which is the only part of the construction an ensemble
+  cannot replicate and where F27 measured a gain. That setting is now the
+  decisive one, and the requirement it inherits from this finding is that
+  influence must be driven by something other than confidence.
+- **Status:** VALIDATED (8,301 examples, 3 gate seeds, held-out fitting) ·
+  verdict NOT MET for answer-level aggregation · Tarka PENDING

@@ -1,0 +1,43 @@
+{
+  "n_fit": 4148,
+  "n_eval": 4153,
+  "competence_on_fit_half": {
+    "qwen3-1.7b": 0.5858,
+    "qwen2.5-base": 0.6251,
+    "qwen2.5-math": 0.4,
+    "qwen2.5-coder": 0.5212
+  },
+  "eval_singles": {
+    "qwen3-1.7b": 0.5793,
+    "qwen2.5-base": 0.6256,
+    "qwen2.5-math": 0.4,
+    "qwen2.5-coder": 0.5218
+  },
+  "oracle_any_correct": 0.8312,
+  "uniform_average": 0.6301,
+  "arms": {
+    "competence_average_gamma2": 0.6318,
+    "competence_average_gamma5": 0.6335,
+    "competence_average_gamma10": 0.64,
+    "competence_average_gamma20": 0.6415,
+    "competence_average_gamma40": 0.6393,
+    "entropy_influence_beta0.5": 0.6289,
+    "dissent_game_beta0.5": 0.628,
+    "entropy_influence_beta2": 0.6318,
+    "dissent_game_beta2": 0.6316,
+    "entropy_influence_beta8": 0.6304,
+    "dissent_game_beta8": 0.6301,
+    "competence_game_beta0.25_gamma5": 0.6347,
+    "competence_game_beta0.25_gamma20": 0.6422,
+    "competence_game_beta0.25_gamma40": 0.6362,
+    "competence_game_beta2_gamma5": 0.6208,
+    "competence_game_beta2_gamma20": 0.633,
+    "competence_game_beta2_gamma40": 0.6275
+  },
+  "stderr": 0.0075,
+  "best_arm": {
+    "name": "competence_game_beta0.25_gamma20",
+    "acc": 0.6422
+  },
+  "margin_over_averaging": 0.0121
+}
