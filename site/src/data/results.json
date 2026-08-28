@@ -680,8 +680,9 @@
         "majority_vote": 0.5905,
         "competence_weighted": 0.6415,
         "learned_gate": 0.6345,
-        "oracle_any_correct": 0.8258,
-        "path": "results/scale/exp18_equilibrium_mc.json"
+        "path": "results/scale/exp18_equilibrium_mc.json",
+        "oracle_any_correct_ungated": 0.8258,
+        "oracle_confidence_gated_0p5": 0.6581
       },
       "status": "VALIDATED",
       "verdict": "NOT MET for answer-level aggregation"
@@ -689,7 +690,7 @@
     {
       "id": "F30",
       "title": "Eleven aggregation rules, none better than the mean, and the reason",
-      "claim": "Mechanism design and calibration both fail to repair the game. Pricing a player's proposal by what it is worth to everyone else scores 0.6257 (paired z = -2.63); the median 0.6144; Borda 0.5922. Per-player temperature calibration cuts expected calibration error from 0.151 to 0.037 without moving the aggregate. Every rule reweights one fixed body of evidence, and the game discards part of what a council with a twenty-point ceiling cannot afford to lose.",
+      "claim": "Mechanism design and calibration both fail to repair the game. Pricing a player's proposal by what it is worth to everyone else scores 0.6257 (paired z = -2.63); the median 0.6144; Borda 0.5922. Per-player temperature calibration cuts expected calibration error from 0.151 to 0.037 without moving the aggregate. Every rule reweights one fixed body of evidence, and the game discards part of what a council cannot afford to lose. The ceiling itself was later corrected (F32): gating the oracle on the correct player being even modestly confident reduces it from 0.826 to 0.658, so the best rule at 0.6415 sits within 1.6 points of what these distributions support.",
       "evidence": {
         "exp": "exp21/exp22",
         "n": 8301,
@@ -705,6 +706,26 @@
       },
       "status": "VALIDATED",
       "verdict": "NOT MET; closes the answer-level arena"
+    },
+    {
+      "id": "F32",
+      "title": "Correction: the twenty-point oracle gap is mostly not extractable",
+      "claim": "A mechanism cannot use a correct answer it cannot identify. Gating the per-example oracle on the correct player reaching confidence 0.5 - twice chance on a four-option question - drops the ceiling from 0.826 to 0.658, and at 0.7 to 0.503, below the best single player. The realistic headroom over the best single player is about 3 points, not 20, and competence-weighted averaging at 0.6415 already sits within 1.6 points of it. This supersedes the headroom claim in F29, F30 and F31.",
+      "evidence": {
+        "exp": "audit of exp18-exp24",
+        "n": 8301,
+        "oracle_ungated": 0.8258,
+        "oracle_gate_0p3": 0.8027,
+        "oracle_gate_0p5": 0.6581,
+        "oracle_gate_0p7": 0.5033,
+        "best_single": 0.6253,
+        "best_rule": 0.6415,
+        "oracle_if_errors_independent": 0.9551,
+        "error_agreement_vs_chance": 1.66,
+        "path": "research/memory/findings.md#F32"
+      },
+      "status": "VALIDATED",
+      "verdict": "supersedes the headroom claim in F29-F31"
     }
   ]
 }

@@ -34,6 +34,14 @@ overfitting to the evaluation set but leaves the fitted quantities dependent on
 tasks drawn from the same distribution as the evaluation --- a council deployed
 on unseen domains would not have those weights.
 
+A statistic reported in earlier drafts of this work required correction and the
+correction is recorded rather than absorbed. The per-example oracle of $0.826$
+was read as twenty points of extractable complementary knowledge; it is not,
+because most of that margin comes from questions where the single correct player
+is correct at low confidence, and gating on even a lenient confidence threshold
+reduces the ceiling to $0.658$. Conclusions drawn against the ungated figure
+overstated how much any aggregation rule had left to find.
+
 The scope constraint is the most consequential. These measurements bind
 aggregation over frozen per-option distributions and say nothing about
 aggregation during generation, where the consensus prefix is jointly authored and

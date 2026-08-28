@@ -777,8 +777,10 @@ uncalibrated reading scored players at 0.13 where the truth was 0.63.
   given question is not legible from the shape of the scores.
 - **Twenty points sit unclaimed.** Some player answers correctly on 83.1% of the
   questions while the best single player manages 62.6% and the best aggregation
-  64.2%. The complementarity is real and large; no rule tested extracts more
-  than a twentieth of it.
+  64.2%. **[Superseded by F32: this ceiling is not extractable. Gating on the
+  correct player reaching even modest confidence reduces it to 0.658, so the
+  real headroom over the best single player is about three points and the best
+  aggregation already sits within 1.6 of it.]**
 - **Interpretation.** In this arena the paradigm's central claim fails: solving
   the game is not better than averaging, and the mechanism by which it was
   supposed to win — reallocating influence per position — is the mechanism that
@@ -890,3 +892,50 @@ standing competences set to the four measured in F28.
   more evidence weighed and harmed by having evidence discarded.
 - **Status:** VALIDATED (16 regimes, 5 seeds) · closes the calibration-training
   branch · simulation, not measurement, and scoped accordingly · Tarka PENDING
+
+## F32 — Correction: the twenty-point oracle gap is mostly not extractable
+
+**Cycle 26 · 2026-08-28 · audit of F29–F31 · same 8,301 questions**
+
+F29, F30 and F31 each reported that some player answers correctly on 82.6% of
+the questions against a best single player's 62.5%, and drew the inference that
+twenty points of complementary knowledge sat unclaimed and the whole difficulty
+was extraction. That inference does not survive an audit of the statistic and is
+withdrawn.
+
+A mechanism cannot use a correct answer it has no way of identifying. Requiring
+the correct player to be at least somewhat confident collapses the ceiling: at a
+confidence gate of 0.5 — only twice chance on a four-option question — the oracle
+falls from 0.826 to 0.658, which is 3.3 points above the best single player
+rather than 20. At a gate of 0.7 it falls to 0.503, below the best single player
+outright. Most of the apparent headroom consists of questions where the one
+correct player is correct at low confidence, which is indistinguishable from
+being correct by chance and carries no signal any rule could key on.
+
+- **The realistic ceiling is about 0.66, and aggregation has nearly reached it.**
+  The best measured rule, competence-weighted averaging, scores 0.6415 against a
+  0.658 confidence-gated ceiling. The programme's aggregation rules were
+  therefore operating within roughly 1.6 points of what this council's answer
+  distributions can support, not 20 points short of it.
+- **This explains the earlier results rather than contradicting them.** Eleven
+  rules landed within noise of averaging because there was little left to
+  extract, and F31's finding that concentration only helps when confidence is
+  uninformative is the same fact seen from the other side. The measurements were
+  right; the ceiling they were compared against was wrong.
+- **Error correlation is corroborated independently.** Were the players' errors
+  independent, the oracle would be 0.955 given the measured per-player
+  accuracies; the observed 0.826 falls well short, consistent with the 1.66-times-
+  chance error agreement measured in F31.
+- **Consequence for the direction, which is sharpened rather than reversed.**
+  The case for ADR 0009 no longer rests on a large unclaimed reserve. It rests
+  on the opposite: the fixed-evidence ceiling is close to reached, so improving
+  the aggregation rule over these four distributions cannot produce a
+  competitive system, and the only remaining routes are players that are right
+  more often or a mechanism that puts new candidates on the table.
+  Cross-examination over generated solutions is the latter, which is why it
+  remains the live arm.
+- **Artifacts corrected in this cycle:** the paper's aggregation section and
+  Table~\ref{tab:ladder}, the site's F29 and F30 entries, and the interpretation
+  paragraphs of F29, F30 and F31 above, each of which asserted the twenty-point
+  reading.
+- **Status:** VALIDATED · supersedes the headroom claim in F29–F31 · Tarka PENDING

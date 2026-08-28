@@ -1,13 +1,13 @@
 # Fdb version 4
-["bibtex kinetic_ai"] 1787927217.67828 "kinetic_ai.aux" "kinetic_ai.bbl" "kinetic_ai" 1787927218.36801 0
+["bibtex kinetic_ai"] 1787928013.74863 "kinetic_ai.aux" "kinetic_ai.bbl" "kinetic_ai" 1787928014.47014 0
   "./references.bib" 1787901775.6296 8171 a24297a2d8788e7c0089d49499d82c37 ""
   "/home/sharaths/.TinyTeX/texmf-dist/bibtex/bst/natbib/plainnat.bst" 1233624470 26816 ffe5423d2019860bad9f54bc402fac15 ""
-  "kinetic_ai.aux" 1787927218.2864 37148 0e100535771866742f297599f2739596 "pdflatex"
+  "kinetic_ai.aux" 1787928014.3941 37490 bf0243260d47ca37d5ef56b9e52cfc42 "pdflatex"
   (generated)
   "kinetic_ai.bbl"
   "kinetic_ai.blg"
   (rewritten before read)
-["pdflatex"] 1787927217.69367 "kinetic_ai.tex" "kinetic_ai.pdf" "kinetic_ai" 1787927218.36828 0
+["pdflatex"] 1787928013.77631 "kinetic_ai.tex" "kinetic_ai.pdf" "kinetic_ai" 1787928014.47036 0
   "/home/sharaths/.TinyTeX/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc" 1136849721 2900 1537cc8184ad1792082cd229ecc269f4 ""
   "/home/sharaths/.TinyTeX/texmf-dist/fonts/tfm/jknappen/ec/tcrm1095.tfm" 1136768653 1536 02c06700a42be0f5a28664c7273f82e7 ""
   "/home/sharaths/.TinyTeX/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex7.tfm" 1246382020 1004 54797486969f23fa377b128694d548df ""
@@ -263,9 +263,9 @@
   "figures/fig_mmd_convergence.pdf" 1787854393.13531 28688 809771059334309365d904d9059616aa ""
   "figures/fig_parity_budget.pdf" 1787854393.64431 19277 23aa242ef54ccf363c2e7c19df197f51 ""
   "figures/fig_warm_start.pdf" 1787854393.50631 26112 efd0957d7bb071c68dd6327f8ae6ea2f ""
-  "kinetic_ai.aux" 1787927218.2864 37148 0e100535771866742f297599f2739596 "pdflatex"
-  "kinetic_ai.bbl" 1787927217.6884 8498 d11b8993808330d017ec814acfaca76d "bibtex kinetic_ai"
-  "kinetic_ai.out" 1787927218.2884 14548 238b96b1765808e38dbf7aab4151f808 "pdflatex"
+  "kinetic_ai.aux" 1787928014.3941 37490 bf0243260d47ca37d5ef56b9e52cfc42 "pdflatex"
+  "kinetic_ai.bbl" 1787928013.7701 8498 d11b8993808330d017ec814acfaca76d "bibtex kinetic_ai"
+  "kinetic_ai.out" 1787928014.3961 14548 238b96b1765808e38dbf7aab4151f808 "pdflatex"
   "kinetic_ai.tex" 1787914410.67081 3329 d57666ce9b8d12bb16d62d8a19dad24d ""
   "sections/abstract.tex" 1787907581.56673 2116 567008321450706c6c6ff95fface2fa4 ""
   "sections/appendix.tex" 1787914735.38125 22859 5521af214a66c68cf98037845b1d2bd8 ""
@@ -277,9 +277,9 @@
   "sections/figures_arch.tex" 1787914411.56998 3606 a2e42c015417ea32a49899ad381c569e ""
   "sections/figures_protocol.tex" 1787914411.6256 2467 b9c60df772b34e7465d17b5d50946fca ""
   "sections/introduction.tex" 1787914410.75284 10339 c3a55015e4d77fe2c0d43cac9a8f91da ""
-  "sections/limitations.tex" 1787925849.53633 9783 cd1ecc682f2fd0978969fc60a10b083c ""
+  "sections/limitations.tex" 1787928012.9764 10317 8f94557cf4efeb5185cafc6314602769 ""
   "sections/methodology.tex" 1787914410.91551 22166 83f3b8de19a53a016d17c4c70b43fb1f ""
-  "sections/results.tex" 1787927097.55815 46252 abbf2032808c1a2fce5d88ff3e68711b ""
+  "sections/results.tex" 1787927995.41861 48134 450548e0eca13250c4dacfe333ef323a ""
   (generated)
   "kinetic_ai.aux"
   "kinetic_ai.log"

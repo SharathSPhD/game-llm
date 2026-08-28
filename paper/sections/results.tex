@@ -244,11 +244,30 @@ best on each subject reaches only $0.635$, $0.96$ points above always using the
 strongest player. Subject-granularity routing therefore has almost no room, and a
 system could route perfectly and still win by under a point.
 
-Per-example complementarity tells a different story. Some player answers
-correctly on $82.6\%$ of the 8{,}301 questions while the best single player
-manages $62.5\%$. The information required to gain twenty points is present in
-the council on every question; the difficulty is entirely one of extraction, and
-the remainder of this subsection measures how much of it any rule extracts.
+Per-example complementarity appears at first to tell a different story. Some
+player answers correctly on $82.6\%$ of the 8{,}301 questions while the best
+single player manages $62.5\%$, which invites the reading that twenty points of
+complementary knowledge sit in the council awaiting extraction. That reading does
+not survive scrutiny and is not adopted here.
+
+A mechanism cannot use a correct answer it has no means of identifying.
+Requiring the correct player to be at least somewhat confident collapses the
+ceiling: at a confidence gate of $0.5$, only twice chance on a four-option
+question, the oracle falls to $0.658$, which is $3.3$ points above the best
+single player rather than twenty; at a gate of $0.7$ it falls to $0.503$, below
+the best single player outright. Most of the apparent headroom consists of
+questions on which the single correct player is correct at low confidence, which
+is not distinguishable from being correct by chance and carries no signal a rule
+could key on. The realistic ceiling for any rule over these distributions is
+therefore near $0.66$, and the measurements below should be read against that
+figure.
+
+The gap between the two ceilings is itself informative about the council. Were
+the players' errors independent, the ungated oracle would stand at $0.955$ given
+the measured per-player accuracies. It stands at $0.826$ because the players fail
+together: when two of them are wrong they select the same wrong option $56.6\%$
+of the time against the $34.2\%$ expected under independence, a ratio of $1.66$
+that rises to $0.68$ between the base and coder variants.
 
 \begin{table}[t]
 \centering
@@ -257,7 +276,9 @@ the remainder of this subsection measures how much of it any rule extracts.
 aligned set; single seed per model, loglikelihood tasks only). MMLU is weighted
 over the 57 subjects by subject size. The oracle rows bound what selection could
 achieve: the per-subject oracle knows which player is best on each subject, and
-the per-example oracle knows which is right on each question.}
+the per-example oracle knows which is right on each question. The gated figure
+is the realistic ceiling: an ungated oracle credits the council for answers its
+sole correct member holds with no confidence, which no rule can identify.}
 \label{tab:ladder}
 \begin{tabular}{lccccc}
 \toprule
@@ -269,7 +290,7 @@ Qwen2.5-Coder-1.5B-Instruct & 0.520 & 0.400 & 0.560 & 0.730 & 0.565 \\
 Qwen2.5-Math-1.5B-Instruct  & 0.391 & 0.350 & 0.450 & 0.600 & 0.525 \\
 \midrule
 Per-subject oracle (MMLU)   & 0.635 & --- & --- & --- & --- \\
-Per-example oracle (pooled) & \multicolumn{5}{c}{0.826 over all 8{,}301 aligned questions} \\
+Per-example oracle (pooled) & \multicolumn{5}{c}{0.826; gated on the correct player reaching confidence 0.5, 0.658} \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -380,7 +401,8 @@ Family & Rule & Accuracy & Paired $z$ vs.\ mean \\
  & Learned per-question gate\textsuperscript{$\dagger$} & 0.6345 & --- \\
  & Temperature-calibrated average\textsuperscript{$\dagger$} & 0.6277 & --- \\
 \midrule
-Ceiling & Per-example oracle & 0.8258 & --- \\
+\multirow{2}{*}{Ceiling} & Per-example oracle (ungated) & 0.8258 & --- \\
+ & Per-example oracle (confidence $\geq 0.5$) & 0.6581 & --- \\
 \bottomrule
 \multicolumn{4}{l}{\footnotesize \textsuperscript{$\dagger$} fitted on a held-out half; baseline on that half is 0.6301.} \\
 \end{tabular}
@@ -389,16 +411,20 @@ Ceiling & Per-example oracle & 0.8258 & --- \\
 \subsubsection{Why reweighting cannot reach the ceiling}
 
 Eleven rules across five experiments land at or below a plain average, and the
-one that moves the aggregate does so by a point while twenty points remain
-unclaimed. The pattern admits a single explanation that survives all of the
-measurements above. Every rule tested reweights one fixed body of evidence: four
+best of them reaches $0.6415$ against a confidence-gated ceiling of $0.658$ ---
+within $1.6$ points of what these distributions can support. Two facts therefore
+need explaining together: that no rule beats the mean, and that the mean is
+already close to the achievable maximum. Every rule tested reweights one fixed body of evidence: four
 distributions over the same options, produced from the same prompt by players
 that never see anything the others produced. The influence game concentrates
 weight on a subset of those distributions, which discards part of the evidence,
 and evidence is exactly what a council with a twenty-point per-example ceiling
 cannot afford to discard. Averaging is the rule that retains all of it, which is
 why nothing beats it and why every rule that concentrates harder does worse in
-proportion to how hard it concentrates.
+proportion to how hard it concentrates. That the ceiling is close is the second
+half of the explanation: there was little left for a better rule to find, so the
+uniformity of the results across eleven rules reflects an exhausted supply of
+extractable signal rather than eleven separate failures of ingenuity.
 
 The consequence for the construction is specific rather than general. What fails
 here is answer-level aggregation, in which each player sees the prompt once and
