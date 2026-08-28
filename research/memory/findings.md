@@ -1080,3 +1080,59 @@ invocation on the same machine.
   relies on.
 - **Status:** VALIDATED (both arms to completion, single seed each) · verdict
   NOT MET · Tarka PENDING
+
+## F36 — Cross-examination ties the domain router and beats nothing
+
+**Cycle 27 · 2026-08-28 · exp23, three seeds, 360 questions · GB10**
+
+ADR 0009 moved the paradigm from answer-level aggregation to cross-examination
+over generated candidates, on the argument that a peer's chain of reasoning is
+evidence its reader did not have and is therefore the one channel by which a
+council can learn something at inference time. Each of four players wrote a full
+solution to every prompt and priced every peer's; five selection rules operated
+on the resulting valuations. The arena was an equal mix of grade-school
+mathematics and multiple-choice knowledge, both halves eliciting reasoning after
+a first run showed the inherited multiple-choice prompt forbade explanation and
+so left nothing to cross-examine.
+
+Measured against the domain router that F34 established as the bar, paired over
+the 360 questions:
+
+- **The equilibrium over candidates ties the router exactly**, 32 wins against 32
+  losses, $z = 0.00$, both at 0.5611.
+- **Cross-examination is a coin flip against it**, 31 against 32, $z = -0.13$,
+  at 0.5583. Leave-one-out pricing scores 0.5444 ($z = -0.77$) and
+  self-preference 0.5250 ($z = -1.50$). Self-consistency by majority vote reaches
+  0.5722, nominally 1.1 points above the router but 0.4 standard errors on a
+  standard error of 2.6 points.
+- **The best single player scores 0.5472**, so the rules do clear that bar. They
+  clear it by less than the router does, which is why the router and not the
+  single player is the comparison that matters.
+- **The verbosity confound is gone.** Winning candidates average 731 characters
+  against a field average of 810, so the rules are no longer selecting the
+  longest answer; the earlier catastrophic reading was the prompt artefact it
+  appeared to be, and correcting it moved cross-examination from ten points below
+  the best single player to slightly above it.
+
+**The one structure in the result.** Split by domain, the council rules beat the
+router where no specialist dominates and lose where one does: on general
+knowledge the equilibrium scores 0.333 against the router's 0.300, while on
+mathematics the router's 0.822 beats the equilibrium's 0.789. Routing wins when
+there is a clear champion and aggregation wins when there is not, and over an
+equal mix the two effects cancel almost exactly. A hybrid that routes on
+mathematics and solves on general knowledge reaches 0.5778, but which rule serves
+which domain was chosen after seeing these numbers, so that figure is a hindsight
+maximum ($z = 0.83$ against the router) and is recorded as a hypothesis for a
+held-out test rather than as a result.
+
+**Interpretation.** Three routes have now been tested and none has beaten a
+trivial baseline. Answer-level aggregation could not beat uniform averaging and
+was operating near its achievable ceiling (F29, F30, F32). Conversion to the
+recursive topology destroys reasoning at any budget available here (F35).
+Cross-examination over generated candidates ties a domain router built from a
+twenty-line classifier (this finding). The paradigm as constructed does not beat
+what a competent engineer would build, and saying otherwise would require
+comparing against the best single player, which is the wrong bar.
+
+**Status:** VALIDATED (3 seeds, 360 questions, paired against the router) ·
+verdict NOT MET · closes ADR 0009's Phase 1b · Tarka PENDING
