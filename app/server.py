@@ -1688,7 +1688,9 @@ def _load_council_comparison() -> dict[str, Any]:
                     for fo in folds
                 ],
                 "mean_held_out_margin": av.get("mean_held_out_margin"),
-                "status": "preliminary; pre-registered confirmation per SPEC 0017",
+                "status": ("superseded by F40: margin decomposes into extraction "
+                           "redundancy; fair bar is the fallback router — see "
+                           "SPEC 0017 Amendment 1"),
             }
         except (json.JSONDecodeError, OSError) as exc:
             comparison["anchored_vote"] = {"error": f"unreadable: {type(exc).__name__}"}

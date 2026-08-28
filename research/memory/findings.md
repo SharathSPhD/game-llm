@@ -1300,8 +1300,9 @@ net-negative override the review reported from fold-fitted cells.
 - **What genuinely survives, stated at its honest size.** The council system —
   ladder-prior routing plus redundancy against single-model extraction failure —
   beats the strongest single baseline model 0.6278 to 0.5472 on the mixed arena,
-  eight points, at roughly 1.2x expected serving cost since the fallback only
-  generates further candidates on the 16% of failures. Both ingredients are this
+  eight points, at a measured 1.25 expected generations per request (worst case
+  four), since the fallback generates further candidates in ladder order only on
+  the 16.1% of champion extraction failures. Both ingredients are this
   programme's constructions and the second is the $\tau \to \infty$ limit of the
   anchored vote. What no tested mechanism contributes is extraction of knowledge
   complementarity beyond redundancy: the per-example oracle stands twelve points
