@@ -12,20 +12,20 @@ auctions) are all equilibrium computations, benchmarked against GPT/BERT-class b
 Deliverables: validated science → researcher-facing app (`apps/web` + GB10 gateway) →
 paper (`paper/`) + GitHub Pages site (`site/`).
 
-## Pre-registered hypotheses
+## Objective (operator direction, 2026-08-28)
 
-- **H1 (EqLM parity):** A weight-tied DEQ transformer LM pretrained on BabyLM
-  strict-small (10M words) reaches ≥95% of a parameter-matched explicit GPT-2-class
-  baseline's BLiMP average, at ≤50% of its peak activation memory for depth.
-  Status: PENDING (Phase 2 Tier B). Threshold changes require an ADR.
-- **H2 (MMD convergence):** MMD achieves last-iterate convergence to the τ-regularized
-  QRE on matrix games and Kuhn poker where simultaneous GDA cycles; empirical linear
-  rate (log-linear fit R²≥0.9 over final 50% of trajectory). Status: ACTIVE (Phase 1c/2A).
-- **H3 (MPO alignment):** MMD-regularized preference optimization matches or exceeds
-  DPO win-rate on a held-out preference set with lower reward-hacking drift
-  (KL-to-reference). Status: PENDING (Phase 2 Tier C).
-- **H4 (auction decoding):** Truthful token-auction aggregation of 2–3 specialist models
-  beats the best single model on mixed-domain eval. Status: PENDING (Phase 2 Tier C).
+The programme builds a game-theoretic LLM system — the Equilibrium Council
+(SPEC 0015) — that **outperforms strong open-weight baselines** on public
+benchmarks and ships as a usable product: models and data on Hugging Face, an
+OpenAI-compatible API, and an application that exposes the system's routing and
+equilibrium controls. Hypothesis falsification is a tool for steering the build,
+not the output; the paper reports a working system and its measured advantage,
+not a ledger of verdicts. Numbers must still be real, traceable and measured on
+our own harness — that discipline is what makes the advantage credible.
+
+Component hypotheses (H1–H10, findings F1–F27) remain the record of what was
+measured and why the architecture looks as it does. They are inputs to the
+system, not the deliverable.
 
 Hypotheses inform the next iteration/invention toward operator intent; a well-documented
 null is a valid closure state, not an endpoint.
