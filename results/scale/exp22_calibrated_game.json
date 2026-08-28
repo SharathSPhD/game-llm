@@ -1,0 +1,43 @@
+{
+  "n_eval": 4153,
+  "temperatures": {
+    "qwen3-1.7b": 1.768,
+    "qwen2.5-base": 1.214,
+    "qwen2.5-math": 1.153,
+    "qwen2.5-coder": 0.642
+  },
+  "ece_before": {
+    "qwen3-1.7b": 0.1514,
+    "qwen2.5-base": 0.0487,
+    "qwen2.5-math": 0.0245,
+    "qwen2.5-coder": 0.0827
+  },
+  "ece_after": {
+    "qwen3-1.7b": 0.0372,
+    "qwen2.5-base": 0.0259,
+    "qwen2.5-math": 0.009,
+    "qwen2.5-coder": 0.0212
+  },
+  "raw": {
+    "average": 0.6301,
+    "game_beta0.25": 0.6299,
+    "game_beta1": 0.6203,
+    "game_beta2": 0.6106,
+    "game_beta4": 0.5986,
+    "game_beta8": 0.5887
+  },
+  "calibrated": {
+    "average": 0.6277,
+    "game_beta0.25": 0.627,
+    "game_beta1": 0.6222,
+    "game_beta2": 0.6143,
+    "game_beta4": 0.6049,
+    "game_beta8": 0.596
+  },
+  "stderr": 0.0075,
+  "best_calibrated": {
+    "name": "average",
+    "acc": 0.6277
+  },
+  "margin_over_raw_average": -0.0024
+}

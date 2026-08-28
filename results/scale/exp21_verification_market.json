@@ -1,0 +1,57 @@
+{
+  "n": 8301,
+  "singles": {
+    "qwen3-1.7b": 0.5826,
+    "qwen2.5-base": 0.6253,
+    "qwen2.5-math": 0.4,
+    "qwen2.5-coder": 0.5215
+  },
+  "best_single": 0.6253,
+  "oracle_any_correct": 0.8258,
+  "rules": {
+    "mean": 0.6305,
+    "median": 0.6144,
+    "trimmed_drop_keenest": 0.6302,
+    "leave_one_out_proposal": 0.6257,
+    "leave_one_out_all_options": 0.6302,
+    "borda": 0.5922
+  },
+  "stderr": 0.0053,
+  "vs_mean": {
+    "median": {
+      "delta": -0.0161,
+      "disagreements": 932,
+      "wins": 273,
+      "losses": 407,
+      "z": -5.14
+    },
+    "trimmed_drop_keenest": {
+      "delta": -0.0004,
+      "disagreements": 245,
+      "wins": 84,
+      "losses": 87,
+      "z": -0.23
+    },
+    "leave_one_out_proposal": {
+      "delta": -0.0048,
+      "disagreements": 320,
+      "wins": 96,
+      "losses": 136,
+      "z": -2.63
+    },
+    "leave_one_out_all_options": {
+      "delta": -0.0004,
+      "disagreements": 245,
+      "wins": 84,
+      "losses": 87,
+      "z": -0.23
+    },
+    "borda": {
+      "delta": -0.0383,
+      "disagreements": 1190,
+      "wins": 287,
+      "losses": 605,
+      "z": -10.65
+    }
+  }
+}

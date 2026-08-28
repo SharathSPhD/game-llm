@@ -791,3 +791,48 @@ uncalibrated reading scored players at 0.13 where the truth was 0.63.
   influence must be driven by something other than confidence.
 - **Status:** VALIDATED (8,301 examples, 3 gate seeds, held-out fitting) ·
   verdict NOT MET for answer-level aggregation · Tarka PENDING
+
+## F30 — Eleven aggregation rules, none better than the mean, and the reason
+
+**Cycle 26 · 2026-08-28 · exp21/exp22 · same 8,301 questions as F29**
+
+F29 attributed the influence game's failure to a payoff that rewards confidence
+rather than competence. Two families of repair follow from that diagnosis, and
+both were tried.
+
+- **Mechanism design does not repair it.** Rules that refuse to let a player
+  vote for its own proposal — the second-price intuition of F6 applied to
+  answers — do not beat the mean. Valuing each player's proposal by what it is
+  worth to everyone else scores 0.6257 against the mean's 0.6304 ($z = -2.63$ on
+  the 320 questions where the two disagree). Dropping each option's keenest
+  supporter before averaging is a statistical tie (0.6302, $z = -0.23$). The
+  median scores 0.6144 ($z = -5.14$) and Borda count 0.5922 ($z = -10.65$), so
+  discarding magnitude and keeping only preference is worse still.
+- **Calibration does not repair it either, though it does calibrate.** Fitting
+  one temperature per player on a held-out half cuts expected calibration error
+  from 0.151 to 0.037 for the worst-calibrated player and improves all four, so
+  the players' stated confidences afterwards mean close to what they claim. The
+  aggregate does not follow: calibrated averaging scores 0.6277 against raw
+  averaging's 0.6301, and the influence game still degrades monotonically in
+  $\beta$ (0.6270 at 0.25, 0.5960 at 8). Miscalibration was therefore not the
+  cause.
+- **The mechanism, stated plainly.** Every rule tested is a reweighting of one
+  fixed body of evidence: four distributions over the same options, produced
+  from the same prompt. The influence game concentrates weight on a subset of
+  players, which *discards* part of that evidence, and discarding evidence from
+  a council whose members are jointly right 83% of the time while individually
+  right 63% is the wrong direction. Averaging is the rule that keeps all of it.
+  No reweighting can recover information that reweighting removed, which is why
+  eleven rules across three experiments — six voting and market rules, three
+  confidence signals, competence weighting, and calibration — all land at or
+  below the mean.
+- **What this leaves open, and it is the whole paradigm.** New information, not
+  new weights, is the only route to the unclaimed twenty points. The sequential
+  setting supplies it and answer-level aggregation cannot: when players generate,
+  each produces a reasoning chain the others never saw, so scoring a peer's
+  chain is genuine evidence rather than a re-reading of one's own. Cross-
+  examination over generated candidates is the mechanism the next arm tests, and
+  the answer-level version of it (players pricing each other's proposed options)
+  correctly fails here precisely because nothing new is on the table.
+- **Status:** VALIDATED (8,301 examples, held-out fitting for both repairs) ·
+  verdict NOT MET · closes the answer-level arena · Tarka PENDING
