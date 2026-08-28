@@ -19,6 +19,11 @@ while true; do
     exe=$(readlink -f "/proc/$pid/exe" 2>/dev/null)
     case "$exe" in *python*) ;; *) continue ;; esac   # compute jobs only
     [ -n "${guarded[$pid]:-}" ] && continue
+    # A second supervisor, or a restart of this one, must not attach a second
+    # governor to the same process: two governors race, one resuming what the
+    # other paused, which leaves the job running hot while both logs claim it is
+    # paused. Check the live process table, not just this instance's memory.
+    pgrep -f "thermal_governor.sh $pid( |$)" >/dev/null 2>&1 && continue
     guarded[$pid]=1
     nohup bash "$HERE/thermal_governor.sh" "$pid" "$PAUSE" "$RESUME" >/dev/null 2>&1 &
   done
