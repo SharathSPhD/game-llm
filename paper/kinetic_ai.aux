@@ -5,114 +5,173 @@
 \citation{Sokota2023}
 \citation{Bai2019}
 \citation{Duetting2024}
+\citation{Mertikopoulos2018}
+\citation{McKelvey1995}
 \providecommand \oddpage@label [2]{}
 \@writefile{toc}{\contentsline {section}{\numberline {1}Introduction}{1}{section.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{Contributions.}{2}{section*.1}\protected@file@percent }
+\newlabel{sec:intro}{{1}{1}{Introduction}{section.1}{}}
+\citation{Sokota2023,Bai2019,Duetting2024,Wu2024}
 \citation{McKelvey1995}
+\@writefile{toc}{\contentsline {section}{\numberline {2}Background and Related Work}{3}{section.2}\protected@file@percent }
+\newlabel{sec:background}{{2}{3}{Background and Related Work}{section.2}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {3}Background and Related Work}{3}{section.3}\protected@file@percent }
+\newlabel{sec:background}{{3}{3}{Background and Related Work}{section.3}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.1}Quantal Response Equilibrium and Softmax as Bounded Rationality}{3}{subsection.3.1}\protected@file@percent }
 \citation{Sokota2023}
 \citation{Mertikopoulos2018}
 \citation{Perolat2021}
 \citation{Loshchilov2019}
 \citation{Bai2019}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.2}Mirror Descent, Optimization Geometry, and Regularized Learning}{4}{subsection.3.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.3}Magnetic Mirror Descent and Convergence in Two-Player Games}{4}{subsection.3.3}\protected@file@percent }
+\newlabel{eq:mmd}{{1}{4}{Magnetic Mirror Descent and Convergence in Two-Player Games}{equation.1}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.4}Deep Equilibrium Models: Implicit Depth and Fixed-Point Computation}{4}{subsection.3.4}\protected@file@percent }
 \citation{Anderson1965}
 \citation{Broyden1965}
 \citation{Geng2021}
 \citation{Miyato2018}
 \citation{Winston2020}
-\citation{Dehghani2019,Lan2020}
-\@writefile{toc}{\contentsline {section}{\numberline {2}Background}{3}{section.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {2.1}Quantal Response Equilibrium}{3}{subsection.2.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {2.2}Magnetic Mirror Descent}{3}{subsection.2.2}\protected@file@percent }
-\newlabel{eq:mmd}{{1}{3}{Magnetic Mirror Descent}{equation.1}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {2.3}Deep Equilibrium Models}{3}{subsection.2.3}\protected@file@percent }
-\citation{Duetting2024}
-\citation{Vickrey1961}
-\@writefile{toc}{\contentsline {subsection}{\numberline {2.4}Mechanism Design for Model Aggregation}{4}{subsection.2.4}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {3}The EqLM Architecture}{4}{section.3}\protected@file@percent }
-\newlabel{sec:arch}{{3}{4}{The EqLM Architecture}{section.3}{}}
-\@writefile{toc}{\contentsline {paragraph}{The fixed-point map.}{4}{section*.2}\protected@file@percent }
-\newlabel{eq:postln}{{3}{4}{The fixed-point map}{equation.3}{}}
-\@writefile{toc}{\contentsline {paragraph}{Solvers and training modes.}{4}{section*.3}\protected@file@percent }
-\citation{Perolat2021}
-\@writefile{toc}{\contentsline {paragraph}{Equilibrium-native inference.}{5}{section*.4}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {4}Methodology: Pre-registration and Adversarial Audit}{5}{section.4}\protected@file@percent }
-\newlabel{sec:method}{{4}{5}{Methodology: Pre-registration and Adversarial Audit}{section.4}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {5}Convergence Results: Magnetic Dynamics}{5}{section.5}\protected@file@percent }
-\newlabel{sec:convergence}{{5}{5}{Convergence Results: Magnetic Dynamics}{section.5}{}}
-\@writefile{toc}{\contentsline {paragraph}{Linear last-iterate convergence where GDA cycles (F1).}{5}{section*.5}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{A discovery on asymmetric games (F2).}{5}{section*.6}\protected@file@percent }
-\citation{Vickrey1961}
-\citation{Warstadt2023}
-\citation{Warstadt2020}
-\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Fixed-magnet MMD converges linearly (log scale) where simultaneous GDA cycles at the same step size (matching pennies shown; 10 seeds).}}{6}{figure.caption.9}\protected@file@percent }
-\providecommand*\caption@xref[2]{\@setref\relax\@undefined{#1}}
-\newlabel{fig:mmd}{{1}{6}{Fixed-magnet MMD converges linearly (log scale) where simultaneous GDA cycles at the same step size (matching pennies shown; 10 seeds)}{figure.caption.9}{}}
-\@writefile{toc}{\contentsline {paragraph}{Nash via reference resets (F3).}{6}{section*.7}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{QRE solver engineering (F7, F8).}{6}{section*.8}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {6}Mechanism Results: Token Auctions Are Exactly Truthful}{6}{section.6}\protected@file@percent }
-\newlabel{sec:mechanism}{{6}{6}{Mechanism Results: Token Auctions Are Exactly Truthful}{section.6}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {7}EqLM at Scale: the Full Diagnostic Arc}{6}{section.7}\protected@file@percent }
-\newlabel{sec:eqlm}{{7}{6}{EqLM at Scale: the Full Diagnostic Arc}{section.7}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {7.1}From Pipeline to First Miss (F9--F13)}{7}{subsection.7.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {7.2}Discovery: No Fixed Point, then Learned Contraction (F14--F16)}{7}{subsection.7.2}\protected@file@percent }
-\newlabel{sec:diagnostic}{{7.2}{7}{Discovery: No Fixed Point, then Learned Contraction (F14--F16)}{subsection.7.2}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {7.3}The 11M Verdict: an Honest Miss at 93.0\% (F17--F18)}{7}{subsection.7.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {7.4}Warm-Started Decoding (F19)}{7}{subsection.7.4}\protected@file@percent }
-\citation{Lee2015}
-\citation{Graves2016}
-\@writefile{toc}{\contentsline {subsection}{\numberline {7.5}The 121M Verdict and a Refuted Mechanism (F20)}{8}{subsection.7.5}\protected@file@percent }
-\newlabel{sec:scale}{{7.5}{8}{The 121M Verdict and a Refuted Mechanism (F20)}{subsection.7.5}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {7.6}Anytime Training Reaches Parity (F24)}{8}{subsection.7.6}\protected@file@percent }
-\newlabel{sec:parity}{{7.6}{8}{Anytime Training Reaches Parity (F24)}{subsection.7.6}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {7.7}Certification, and the Open Problem (F24, arms B2--B4)}{8}{subsection.7.7}\protected@file@percent }
-\newlabel{sec:h6}{{7.7}{8}{Certification, and the Open Problem (F24, arms B2--B4)}{subsection.7.7}{}}
-\citation{Rafailov2023}
-\citation{Wang2025MPO}
-\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces Main pretraining results at 121M parameters (BabyLM strict-small, batch 32 $\times $ 10k steps, 3 seeds; BLiMP subset of 1000 pairs). Ratio is per-seed EqLM/explicit. The anytime-unrolled regime closes the gap solver-based training had widened.}}{9}{table.caption.10}\protected@file@percent }
-\newlabel{tab:main}{{1}{9}{Main pretraining results at 121M parameters (BabyLM strict-small, batch 32 $\times $ 10k steps, 3 seeds; BLiMP subset of 1000 pairs). Ratio is per-seed EqLM/explicit. The anytime-unrolled regime closes the gap solver-based training had widened}{table.caption.10}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Left: the width gap belongs to the training regime, not the architecture --- per-seed BLiMP ratio against the explicit baseline at 121M under implicit (F20) vs.\ anytime-unrolled (F24) training. Right: the anytime checkpoint evaluated at Anderson budgets $\{4,8,12\}$ degrades gracefully; dashes mark the explicit baseline's mean.}}{9}{figure.caption.11}\protected@file@percent }
-\newlabel{fig:parity}{{2}{9}{Left: the width gap belongs to the training regime, not the architecture --- per-seed BLiMP ratio against the explicit baseline at 121M under implicit (F20) vs.\ anytime-unrolled (F24) training. Right: the anytime checkpoint evaluated at Anderson budgets $\{4,8,12\}$ degrades gracefully; dashes mark the explicit baseline's mean}{figure.caption.11}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {8}Parameter-Space Magnetic Anchoring vs.\ DPO}{10}{section.8}\protected@file@percent }
-\newlabel{sec:mpo}{{8}{10}{Parameter-Space Magnetic Anchoring vs.\ DPO}{section.8}{}}
-\@writefile{toc}{\contentsline {paragraph}{Verdict: \textsc  {partial} on the letter, missed in spirit.}{10}{section*.12}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{Two secondary findings survive audit.}{10}{section*.13}\protected@file@percent }
-\citation{Holtzman2020}
-\citation{Bengio2015}
-\citation{Sokota2023}
-\citation{Mertikopoulos2018}
-\citation{Perolat2021}
-\citation{McKelvey1995}
-\@writefile{toc}{\contentsline {section}{\numberline {9}Auction Decoding: Where Selection Wins and Where It Does Not}{11}{section.9}\protected@file@percent }
-\newlabel{sec:auction}{{9}{11}{Auction Decoding: Where Selection Wins and Where It Does Not}{section.9}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {9.1}Scoring-Time Selection: \textsc  {met} (F22)}{11}{subsection.9.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {9.2}Closed-Loop Generation: \textsc  {missed}, and a Metric Lesson (F23)}{11}{subsection.9.2}\protected@file@percent }
-\newlabel{sec:closedloop}{{9.2}{11}{Closed-Loop Generation: \textsc {missed}, and a Metric Lesson (F23)}{subsection.9.2}{}}
-\citation{Bai2019}
-\citation{Anderson1965}
-\citation{Broyden1965}
-\citation{Geng2021}
-\citation{Winston2020}
 \citation{Dehghani2019}
 \citation{Lan2020}
-\citation{Lee2015}
 \citation{Graves2016}
+\citation{Lee2015}
+\citation{RecursiveTransformers2024}
 \citation{Rafailov2023}
-\citation{Wu2024}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.5}Weight Tying, Recursive Uptraining, and Deep Supervision}{5}{subsection.3.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.6}Preference Optimization: Mechanisms and the Critical Distinction Between Policy and Parameter Space}{5}{subsection.3.6}\protected@file@percent }
 \citation{Wang2025MPO}
+\citation{Wu2024}
 \citation{Duetting2024}
+\citation{Vickrey1961}
+\citation{Holtzman2020}
+\citation{Bengio2015}
 \citation{Warstadt2020}
 \citation{Warstadt2023}
 \citation{Radford2019}
-\@writefile{toc}{\contentsline {section}{\numberline {10}Related Work}{12}{section.10}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{Equilibria in learning dynamics.}{12}{section*.14}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{Implicit depth and weight tying.}{12}{section*.15}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{Preference optimization.}{12}{section*.16}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{Model aggregation as mechanism design.}{12}{section*.17}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{Benchmarks.}{12}{section*.18}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {11}Threats to Validity and Limitations}{12}{section.11}\protected@file@percent }
-\citation{RecursiveTransformers2024}
-\@writefile{toc}{\contentsline {section}{\numberline {12}Reproducibility}{13}{section.12}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {13}Scaling the Program to Open-Weight Models}{13}{section.13}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.7}Mechanism Design and Truthful Aggregation of Multiple Models}{6}{subsection.3.7}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.8}Language Model Benchmarks and Sample-Efficient Evaluation}{7}{subsection.3.8}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.9}Equilibrium, Depth, and Certification: A Comparative Landscape}{7}{subsection.3.9}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces Equilibrium-theoretic and depth-implicit architectures: parameter sharing, fixed-point semantics, convergence guarantees, and certification status. No single architecture achieves certified convergence while preserving linguistic quality at the BabyLM scale in the present work.}}{7}{table.caption.1}\protected@file@percent }
+\providecommand*\caption@xref[2]{\@setref\relax\@undefined{#1}}
+\newlabel{tab:equil_comparison}{{1}{7}{Equilibrium-theoretic and depth-implicit architectures: parameter sharing, fixed-point semantics, convergence guarantees, and certification status. No single architecture achieves certified convergence while preserving linguistic quality at the BabyLM scale in the present work}{table.caption.1}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Depth as an explicit stack, as a fixed point, and as a converted hybrid. The explicit stack (a) spends parameters and activation memory linearly in depth. EqLM{} (b) replaces the stack with one weight-tied block iterated to a fixed point, making activation memory constant in effective depth at the cost of solving a nonlinear system each forward pass. KineticLM{} (c) is the conversion applied to a pretrained model: the first and last $n$ layers are retained as initialized, and the middle layers collapse into a single shared core applied $K$ times, which is the configuration the damage measurements of Section~\ref {sec:results} select.}}{8}{figure.caption.2}\protected@file@percent }
+\newlabel{fig:topologies}{{1}{8}{Depth as an explicit stack, as a fixed point, and as a converted hybrid. The explicit stack (a) spends parameters and activation memory linearly in depth. \EqLM {} (b) replaces the stack with one weight-tied block iterated to a fixed point, making activation memory constant in effective depth at the cost of solving a nonlinear system each forward pass. \KineticLM {} (c) is the conversion applied to a pretrained model: the first and last $n$ layers are retained as initialized, and the middle layers collapse into a single shared core applied $K$ times, which is the configuration the damage measurements of Section~\ref {sec:results} select}{figure.caption.2}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {4}Equilibrium Language Models}{8}{section.4}\protected@file@percent }
+\newlabel{sec:method}{{4}{8}{Equilibrium Language Models}{section.4}{}}
+\newlabel{eq:v1_map}{{2}{8}{Fixed-Point Maps: Two Forms and a Critical Discovery}{equation.2}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces The closure protocol applied to every hypothesis reported here. A quantitative gate is fixed before execution; each run records the SHA-256 of its resolved configuration and the commit that produced it; an adversarial review recomputes every number from raw results and may refute or rescope the claim before it is scored. Outcomes are named rather than binary, so a documented miss terminates a line of enquiry with the same standing as a pass.}}{9}{figure.caption.3}\protected@file@percent }
+\newlabel{fig:protocol}{{2}{9}{The closure protocol applied to every hypothesis reported here. A quantitative gate is fixed before execution; each run records the SHA-256 of its resolved configuration and the commit that produced it; an adversarial review recomputes every number from raw results and may refute or rescope the claim before it is scored. Outcomes are named rather than binary, so a documented miss terminates a line of enquiry with the same standing as a pass}{figure.caption.3}{}}
+\newlabel{eq:postln_map}{{3}{9}{Fixed-Point Maps: Two Forms and a Critical Discovery}{equation.3}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces Three training regimes for EqLM{}: objective, computational cost, and convergence certification. All use the same Anderson solver at evaluation time (history 5, 12 iterations, relative tol $10^{-3}$).}}{10}{table.caption.9}\protected@file@percent }
+\newlabel{tab:regimes}{{2}{10}{Three training regimes for \EqLM {}: objective, computational cost, and convergence certification. All use the same Anderson solver at evaluation time (history 5, 12 iterations, relative tol $10^{-3}$)}{table.caption.9}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {5}Experimental Setup}{14}{section.5}\protected@file@percent }
+\newlabel{sec:setup}{{5}{14}{Experimental Setup}{section.5}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {6}Experimental Setup and Closure Protocol}{14}{section.6}\protected@file@percent }
+\newlabel{sec:setup}{{6}{14}{Experimental Setup and Closure Protocol}{section.6}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.1}Hypotheses and Verdicts}{14}{subsection.6.1}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {3}{\ignorespaces Pre-registered hypotheses with quantitative gates, verdicts, and finding references. Gates were locked before any experiment ran; verdicts are named outcomes (MET/PARTIAL/MISSED) assigned by adversarial review. H7–H10 target 1–3B-parameter models and are in progress.}}{15}{table.caption.14}\protected@file@percent }
+\newlabel{tab:hypotheses}{{3}{15}{Pre-registered hypotheses with quantitative gates, verdicts, and finding references. Gates were locked before any experiment ran; verdicts are named outcomes (MET/PARTIAL/MISSED) assigned by adversarial review. H7–H10 target 1–3B-parameter models and are in progress}{table.caption.14}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.2}Corpora}{15}{subsection.6.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.3}Evaluation Harness and Benchmark}{15}{subsection.6.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.4}Hardware and Thermal Constraints}{16}{subsection.6.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.5}Statistical Protocol}{16}{subsection.6.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Paired bootstrap over seeds (main pretraining and preference arms).}{16}{section*.15}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Binomial test (steering and causal interventions).}{16}{section*.16}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Like-for-like audit (all comparisons).}{17}{section*.17}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.6}Configuration Hashing and Provenance}{17}{subsection.6.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.7}Adversarial Review Procedure}{17}{subsection.6.7}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.8}Scale and Token Limits}{17}{subsection.6.8}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {7}Results}{18}{section.7}\protected@file@percent }
+\newlabel{sec:results}{{7}{18}{Results}{section.7}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.1}Magnetic Mirror Descent Convergence and Solver Engineering}{18}{subsection.7.1}\protected@file@percent }
+\newlabel{sec:results:mmd}{{7.1}{18}{Magnetic Mirror Descent Convergence and Solver Engineering}{subsection.7.1}{}}
+\@writefile{toc}{\contentsline {paragraph}{Last-iterate convergence where simultaneous play cycles (F1).}{18}{section*.18}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Asymmetric games and context-dependent attractors (F2).}{18}{section*.19}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Nash recovery via periodic reference resets (F3).}{18}{section*.20}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{QRE solver engineering (F7, F8).}{18}{section*.21}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.2}Mechanism Validation: Token Auction Truthfulness}{18}{subsection.7.2}\protected@file@percent }
+\newlabel{sec:results:auction_mech}{{7.2}{18}{Mechanism Validation: Token Auction Truthfulness}{subsection.7.2}{}}
+\@writefile{toc}{\contentsline {paragraph}{Second-price auctions are exactly truthful (F6).}{18}{section*.22}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.3}EqLM at Smoke Scale: Pipeline Validation and Optimizer Fixes}{19}{subsection.7.3}\protected@file@percent }
+\newlabel{sec:results:eqlm_smoke}{{7.3}{19}{EqLM at Smoke Scale: Pipeline Validation and Optimizer Fixes}{subsection.7.3}{}}
+\@writefile{toc}{\contentsline {paragraph}{Parity at smoke scale after initialization fix (F10).}{19}{section*.23}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Magnetic anchor is loss-neutral in pretraining; weight-decay bug fixed (F12, F11).}{19}{section*.24}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.4}The Fixed-Point Map Discovery and Solver-Aware Loss}{19}{subsection.7.4}\protected@file@percent }
+\newlabel{sec:results:diagnosis}{{7.4}{19}{The Fixed-Point Map Discovery and Solver-Aware Loss}{subsection.7.4}{}}
+\@writefile{toc}{\contentsline {paragraph}{The v1 residual map admits no fixed point (F14).}{19}{section*.25}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{The v3 post-LN map restores fixed points and learned contraction (F15, F16).}{19}{section*.26}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.5}H1 Iteration 1--2: The 11M-Parameter Verdict}{19}{subsection.7.5}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {4}{\ignorespaces Pretraining results at 121M parameters (BabyLM strict-small, batch $32 \times 10$k steps, 3 seeds, 1000-pair BLiMP). Ratio is per-seed EqLM / explicit. Anytime-unrolled training recovers the gap solver-based training had worsened.}}{20}{table.caption.27}\protected@file@percent }
+\newlabel{tab:main_results}{{4}{20}{Pretraining results at 121M parameters (BabyLM strict-small, batch $32 \times 10$k steps, 3 seeds, 1000-pair BLiMP). Ratio is per-seed EqLM / explicit. Anytime-unrolled training recovers the gap solver-based training had worsened}{table.caption.27}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.6}The 121M-Parameter Study and Mechanism Correction}{20}{subsection.7.6}\protected@file@percent }
+\newlabel{sec:results:scale}{{7.6}{20}{The 121M-Parameter Study and Mechanism Correction}{subsection.7.6}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.7}Anytime-Unrolled Training Reaches Parity}{20}{subsection.7.7}\protected@file@percent }
+\newlabel{sec:results:parity}{{7.7}{20}{Anytime-Unrolled Training Reaches Parity}{subsection.7.7}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.8}Certification and the Quality-Preservation Challenge}{20}{subsection.7.8}\protected@file@percent }
+\newlabel{sec:results:certification}{{7.8}{20}{Certification and the Quality-Preservation Challenge}{subsection.7.8}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.9}Preference Optimization: Where Magnetic Anchoring Does Not Help}{21}{subsection.7.9}\protected@file@percent }
+\newlabel{sec:results:mpo}{{7.9}{21}{Preference Optimization: Where Magnetic Anchoring Does Not Help}{subsection.7.9}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.10}Token Auctions at Scoring Time}{21}{subsection.7.10}\protected@file@percent }
+\newlabel{sec:results:auction}{{7.10}{21}{Token Auctions at Scoring Time}{subsection.7.10}{}}
+\@writefile{toc}{\contentsline {paragraph}{Scoring-time selection beats the best specialist by 23\% (F22).}{21}{section*.28}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.11}Auction Decoding in Closed Loop: Negative Result and Metric Lesson}{21}{subsection.7.11}\protected@file@percent }
+\newlabel{sec:results:closedloop}{{7.11}{21}{Auction Decoding in Closed Loop: Negative Result and Metric Lesson}{subsection.7.11}{}}
+\@writefile{toc}{\contentsline {paragraph}{Scoring advantage inverts in closed loop; the judge carries a style prior (F23).}{21}{section*.29}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.12}Conversion at 1.7B: The Damage Curve}{22}{subsection.7.12}\protected@file@percent }
+\newlabel{sec:results:conversion}{{7.12}{22}{Conversion at 1.7B: The Damage Curve}{subsection.7.12}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {5}{\ignorespaces Magnetic dynamics summary: convergence rates and final exploitability under fixed-magnet MMD (F1--F3). GDA provided for comparison; no damping applied to GDA.}}{22}{table.caption.30}\protected@file@percent }
+\newlabel{tab:mmd_stats}{{5}{22}{Magnetic dynamics summary: convergence rates and final exploitability under fixed-magnet MMD (F1--F3). GDA provided for comparison; no damping applied to GDA}{table.caption.30}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.13}Why Gradient Descent-Ascent Cycles and MMD Converges}{22}{subsection.7.13}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.14}The Auction Truthfulness Gate}{23}{subsection.7.14}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.15}EqLM's Diagnostic Journey: Smoke to 11M to 121M}{23}{subsection.7.15}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.16}The Scale Trend and Mechanism Correction}{23}{subsection.7.16}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.17}Training Regime as the Pivot}{23}{subsection.7.17}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.18}The Certification Paradox}{24}{subsection.7.18}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.19}Why the Magnetic Anchor Fails in Preference Optimization}{24}{subsection.7.19}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.20}The Auction's Scoring-Time Advantage and Closed-Loop Collapse}{24}{subsection.7.20}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.21}The 1.7B Conversion and Uptraining}{24}{subsection.7.21}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.22}The Implicit versus Anytime Training Boundary}{24}{subsection.7.22}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {6}{\ignorespaces H1 pre-registration gates and verdicts across iterations. Each iteration refined the architecture or training strategy in response to diagnosed defects. BLiMP measured on 1000-pair subset at each scale.}}{25}{table.caption.31}\protected@file@percent }
+\newlabel{tab:h1_progression}{{6}{25}{H1 pre-registration gates and verdicts across iterations. Each iteration refined the architecture or training strategy in response to diagnosed defects. BLiMP measured on 1000-pair subset at each scale}{table.caption.31}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.23}Convergence Rate as a Diagnostic Signal}{25}{subsection.7.23}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.24}The Anytime Property Across Budgets}{25}{subsection.7.24}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.25}Memory, Wall-Clock, and the Speed--Memory Trade-off}{25}{subsection.7.25}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.26}Preference Optimization and the Drift-Resistance Architecture}{26}{subsection.7.26}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.27}Auction Selection Within and Across Domains}{26}{subsection.7.27}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.28}Why the Judge's Style Prior Matters}{26}{subsection.7.28}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.29}Layer Tying and Conversion Damage}{26}{subsection.7.29}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.30}The Amendment of the Parameter Gate}{27}{subsection.7.30}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.31}Summary of Alternatives Ruled Out}{27}{subsection.7.31}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {7}{\ignorespaces Preference optimization results (F21): PMA vs.\ DPO held-out accuracy and KL drift to base, across three seeds and two base architectures (explicit / EqLM).}}{27}{table.caption.32}\protected@file@percent }
+\newlabel{tab:h3}{{7}{27}{Preference optimization results (F21): PMA vs.\ DPO held-out accuracy and KL drift to base, across three seeds and two base architectures (explicit / EqLM)}{table.caption.32}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.32}Preference Optimization: Protocol and Interpretation}{27}{subsection.7.32}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.33}The Drift-Resistance Property: Mechanism and Implications}{28}{subsection.7.33}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.34}Auction Aggregation: Scoring Time vs.\ Generation Time}{28}{subsection.7.34}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.35}Truthfulness and Incentive Compatibility}{29}{subsection.7.35}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.36}Scale-dependent Architecture Properties}{29}{subsection.7.36}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.37}Reproducibility and Audit Trail}{30}{subsection.7.37}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {8}{\ignorespaces Auction decoding at scoring time (F22) and closed-loop generation (F23). Scoring-time advantage inverts in closed-loop due to exposure bias and the judge's style prior.}}{30}{table.caption.33}\protected@file@percent }
+\newlabel{tab:auction}{{8}{30}{Auction decoding at scoring time (F22) and closed-loop generation (F23). Scoring-time advantage inverts in closed-loop due to exposure bias and the judge's style prior}{table.caption.33}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.38}The Scoring-Time Win: Per-Token Specialist Selection}{30}{subsection.7.38}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.39}The Generation-Time Loss: Exposure Bias and Style Drift}{30}{subsection.7.39}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.40}Identified Follow-Ups: Context-Aware Bids and Style-Neutral Judges}{31}{subsection.7.40}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.41}Conversion and Uptraining: Design Measurements and Future Work}{31}{subsection.7.41}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.42}The Meta-Pattern: Diagnosis Drives Invention}{32}{subsection.7.42}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.43}The Closure Contract in Practice}{32}{subsection.7.43}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {8}Discussion}{32}{section.8}\protected@file@percent }
+\newlabel{sec:discussion}{{8}{32}{Discussion}{section.8}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {9}Discussion}{32}{section.9}\protected@file@percent }
+\citation{Wang2025MPO}
+\citation{Bengio2015}
+\citation{Holtzman2020}
+\citation{Warstadt2023}
+\@writefile{toc}{\contentsline {section}{\numberline {10}Limitations}{34}{section.10}\protected@file@percent }
+\newlabel{sec:limitations}{{10}{34}{Limitations}{section.10}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {11}Limitations}{34}{section.11}\protected@file@percent }
+\newlabel{sec:limitations}{{11}{34}{Limitations}{section.11}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {12}Conclusions and Future Work}{36}{section.12}\protected@file@percent }
+\newlabel{sec:conclusion}{{12}{36}{Conclusions and Future Work}{section.12}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {13}Conclusion}{36}{section.13}\protected@file@percent }
 \bibstyle{plainnat}
 \bibdata{references}
 \bibcite{Anderson1965}{{1}{1965}{{Anderson}}{{}}}
@@ -125,7 +184,6 @@
 \bibcite{Geng2021}{{8}{2021}{{Geng et~al.}}{{Geng, Zhang, Bai, Wang, and Lin}}}
 \bibcite{Graves2016}{{9}{2016}{{Graves}}{{}}}
 \bibcite{Holtzman2020}{{10}{2020}{{Holtzman et~al.}}{{Holtzman, Buys, Du, Forbes, and Choi}}}
-\@writefile{toc}{\contentsline {section}{\numberline {14}Conclusion}{14}{section.14}\protected@file@percent }
 \bibcite{Lan2020}{{11}{2020}{{Lan et~al.}}{{Lan, Chen, Goodman, Gimpel, Sharma, and Soricut}}}
 \bibcite{Lee2015}{{12}{2015}{{Lee et~al.}}{{Lee, Xie, Gallagher, Zhang, and Tu}}}
 \bibcite{Loshchilov2019}{{13}{2019}{{Loshchilov and Hutter}}{{}}}
@@ -142,11 +200,36 @@
 \bibcite{Warstadt2023}{{24}{2023}{{Warstadt et~al.}}{{Warstadt, Mueller, Choshen, Wilcox, Zhuang, Ciro, Mosquera, Paranjabe, Williams, Linzen, and Cotterell}}}
 \bibcite{Winston2020}{{25}{2020}{{Winston and Kolter}}{{}}}
 \bibcite{Wu2024}{{26}{2024}{{Wu et~al.}}{{Wu, Sun, Yuan, Ji, Yang, and Gu}}}
-\@writefile{toc}{\contentsline {section}{\numberline {A}Per-Seed Results}{16}{appendix.A}\protected@file@percent }
-\newlabel{app:tables}{{A}{16}{Per-Seed Results}{appendix.A}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces H1/H6 pretraining, all seeds (BLiMP on the 1000-pair subset; conv.\ = solver convergence rate at eval, rel-tol $10^{-3}$, budget 12).}}{16}{table.caption.20}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {3}{\ignorespaces H3 preference optimization (400 held-out pairs from unseen phenomena; KL in nats/token to the frozen base).}}{16}{table.caption.21}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {B}Hyperparameters}{16}{appendix.B}\protected@file@percent }
-\newlabel{app:hparams}{{B}{16}{Hyperparameters}{appendix.B}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {4}{\ignorespaces H4/H5 auction systems. Left: teacher-forced mixed-domain perplexity (F22). Right: closed-loop generation judge NLL/token (F23; judge-relative, see \S  \ref {sec:closedloop}).}}{17}{table.caption.22}\protected@file@percent }
-\gdef \@abspage@last{17}
+\@writefile{toc}{\contentsline {section}{\numberline {A}Per-Seed Results}{39}{appendix.A}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {A.1}121M Pretraining: Main Verdict and Anytime Training}{39}{subsection.A.1}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {9}{\ignorespaces Main 121M pretraining results (10k steps on BabyLM strict-small, batch 32, 1000-pair BLiMP subset). A1 explicit 12-layer baseline; A3 EqLM trained by implicit differentiation (F20); B1 anytime-unrolled EqLM (F24). Conv.\ indicates solver convergence rate; mean iters is the average count per forward pass.}}{40}{table.caption.36}\protected@file@percent }
+\newlabel{tab:pretraining_main}{{9}{40}{Main 121M pretraining results (10k steps on BabyLM strict-small, batch 32, 1000-pair BLiMP subset). A1 explicit 12-layer baseline; A3 EqLM trained by implicit differentiation (F20); B1 anytime-unrolled EqLM (F24). Conv.\ indicates solver convergence rate; mean iters is the average count per forward pass}{table.caption.36}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {A.2}Anytime Inference Budget Sweep}{40}{subsection.A.2}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {10}{\ignorespaces Anytime inference budget sweep: B1 checkpoints evaluated at Anderson solver iterations $\{4, 8, 12\}$ (F24). One anytime-trained model serves three compute budgets; dashes indicate explicit baseline's mean 0.683.}}{40}{table.caption.37}\protected@file@percent }
+\newlabel{tab:budget_sweep}{{10}{40}{Anytime inference budget sweep: B1 checkpoints evaluated at Anderson solver iterations $\{4, 8, 12\}$ (F24). One anytime-trained model serves three compute budgets; dashes indicate explicit baseline's mean 0.683}{table.caption.37}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {A.3}Single-Seed Certification and Ablation Arms}{41}{subsection.A.3}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {11}{\ignorespaces Certification arms (seed 42 only, F24): B2 trains a finite-difference trajectory-local Lipschitz penalty; B3 uses a bottleneck-core topology (256-dimensional); B4 combines anytime supervision with raw trajectory penalty (pre-registered prediction refuted).}}{41}{table.caption.38}\protected@file@percent }
+\newlabel{tab:certification}{{11}{41}{Certification arms (seed 42 only, F24): B2 trains a finite-difference trajectory-local Lipschitz penalty; B3 uses a bottleneck-core topology (256-dimensional); B4 combines anytime supervision with raw trajectory penalty (pre-registered prediction refuted)}{table.caption.38}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {A.4}Preference Optimization Held-Out Accuracy and KL Drift}{41}{subsection.A.4}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {12}{\ignorespaces H3 preference optimization on explicit bases (F21): held-out accuracy (400-pair unseen-phenomena test set) and KL divergence to frozen base in nats per token. Arms P1 (DPO, $\tau =0$), P2a ($\tau =1 \times 10^{-3}$), P2b ($\tau =1 \times 10^{-2}$).}}{42}{table.caption.39}\protected@file@percent }
+\newlabel{tab:preference_explicit}{{12}{42}{H3 preference optimization on explicit bases (F21): held-out accuracy (400-pair unseen-phenomena test set) and KL divergence to frozen base in nats per token. Arms P1 (DPO, $\tau =0$), P2a ($\tau =1 \times 10^{-3}$), P2b ($\tau =1 \times 10^{-2}$)}{table.caption.39}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {A.5}Auction Scoring-Time Selection: Mixed-Domain Perplexity}{42}{subsection.A.5}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {13}{\ignorespaces H4 auction scoring-time selection (F22): teacher-forced mixed-domain perplexity (lower is better). Auction selects the highest-confidence specialist at each token; ensemble averages logits uniformly; best/worst single specialists in isolation. Means and per-seed values shown.}}{42}{table.caption.40}\protected@file@percent }
+\newlabel{tab:auction_scoring}{{13}{42}{H4 auction scoring-time selection (F22): teacher-forced mixed-domain perplexity (lower is better). Auction selects the highest-confidence specialist at each token; ensemble averages logits uniformly; best/worst single specialists in isolation. Means and per-seed values shown}{table.caption.40}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {A.6}Auction Closed-Loop Generation: Judge NLL}{42}{subsection.A.6}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {14}{\ignorespaces H5 closed-loop generation (F23): judge NLL/token (lower is better) on generated text. Each system generates its own context, removing the scoring-time anchor that re-centers specialist selection at every position. H5 is pre-registered as \textsc  {missed}.}}{43}{table.caption.41}\protected@file@percent }
+\newlabel{tab:auction_closedloop}{{14}{43}{H5 closed-loop generation (F23): judge NLL/token (lower is better) on generated text. Each system generates its own context, removing the scoring-time anchor that re-centers specialist selection at every position. H5 is pre-registered as \textsc {missed}}{table.caption.41}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {A.7}Damage Curve: Layer-Tying Topology Search on Qwen3-1.7B}{43}{subsection.A.7}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {15}{\ignorespaces F25 damage curve: perplexity under layer-tying topology variants, no uptraining. All configurations show severe damage pre-uptraining. Average initialization (elementwise mean of layer weights) preserves function 10--100$\times $ better than stepwise. Explicit outer layers are the primary driver of recovery; additional cores show diminishing returns.}}{43}{table.caption.42}\protected@file@percent }
+\newlabel{tab:damage_curve}{{15}{43}{F25 damage curve: perplexity under layer-tying topology variants, no uptraining. All configurations show severe damage pre-uptraining. Average initialization (elementwise mean of layer weights) preserves function 10--100$\times $ better than stepwise. Explicit outer layers are the primary driver of recovery; additional cores show diminishing returns}{table.caption.42}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {B}Hyperparameters}{44}{appendix.B}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {B.1}121M Pretraining: Data and Optimizer}{44}{subsection.B.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {B.2}EqLM Architecture Details}{44}{subsection.B.2}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {16}{\ignorespaces EqLM architecture parameters for the 121M experiments. The block is solved by Anderson acceleration with 12-iteration budget and relative-tolerance gate at $10^{-3}$. All iterates at training time supervise cross-entropy loss (anytime arm B1).}}{44}{table.caption.43}\protected@file@percent }
+\newlabel{tab:eqlm_arch}{{16}{44}{EqLM architecture parameters for the 121M experiments. The block is solved by Anderson acceleration with 12-iteration budget and relative-tolerance gate at $10^{-3}$. All iterates at training time supervise cross-entropy loss (anytime arm B1)}{table.caption.43}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {B.3}Anytime Training}{45}{subsection.B.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {B.4}Solver-Aware Auxiliary Loss}{45}{subsection.B.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {B.5}Preference Optimization}{45}{subsection.B.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {B.6}Specialist Models and Auction Setup}{45}{subsection.B.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {B.7}Qwen3 Conversion (F25)}{45}{subsection.B.7}\protected@file@percent }
+\gdef \@abspage@last{46}
