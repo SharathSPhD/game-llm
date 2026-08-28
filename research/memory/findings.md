@@ -1223,3 +1223,50 @@ constraint has moved from selection to generation, and generating genuinely new
 candidates is an inventive step the loop cannot perform on its own.
 
 **Status:** VALIDATED (3 held-out folds) · closes the hybrid lead · Tarka PENDING
+
+## F39 — The anchored answer vote beats the router held-out (offline; confirmation pre-registered)
+
+**Cycle 28 · 2026-08-28 · exp27 over exp23's stored candidates · zero GPU · TRIZ-generated**
+
+With the action set exhausted (F38), the TRIZ engine was applied to the standing
+contradiction: per-question collective evidence improves adaptability but
+dilutes the dominant specialist exactly where the router wins. The matrix cells
+35/27 and 35/28 recommend inversion, counterbalance, an intermediary and
+preliminary action, which compose into one mechanism: make the router the
+*reference policy* of the game rather than its competitor. Players' generated
+answers are collapsed into equivalence classes — the intermediary that
+neutralises both the tokenizer mismatch (F37) and the verbosity confound — and a
+class's score is its vote count plus a magnetic bonus tau on the router's class.
+The council moves the answer only when its net margin exceeds tau; at large tau
+the mechanism is exactly the router, so its floor is the bar by construction, a
+property no previously tested rule had. This is the kinetic core aimed at the
+incumbent: the MMD magnet in policy space with the baseline as the magnet, the
+QRE argmax over discrete classes reducing to a thresholded vote, and weights
+fixed in advance from the ladder as truthful bids.
+
+- **Every cell of the grid beats the router in-sample.** Fourteen
+  (weighting, tau) settings score 0.6222 to 0.6333 against the router's 0.5611
+  over the pooled 360 questions. Parameter choice barely moves the result, which
+  distinguishes this from F38's hybrid, whose selected rule flipped every fold.
+- **All three held-out folds are positive.** Fitting (weighting, tau) on one
+  seed and evaluating on the other two: +0.0833 (z = 4.26, 21W/1L), +0.0375
+  (z = 1.73, 18W/9L), +0.0583 (z = 3.74, 14W/0L). Mean held-out margin +0.0597.
+- **It wins on both domains rather than trading one for the other.** Held-out,
+  mathematics 0.833 against the router's 0.800 in the strongest fold and never
+  materially below; general knowledge 0.492 against 0.358. The anchor protects
+  the specialist where it dominates while the vote repairs the domain where no
+  one does — which is exactly the division of labour F36 observed and F38 failed
+  to exploit by rule selection.
+- **Why this evades the F30 impossibility.** The earlier result held that
+  reweighting one fixed body of evidence cannot beat retaining all of it. The
+  vote is not a reweighting of distributions: extracted answers from independent
+  reasoning chains are new evidence (self-consistency), and the anchor injects a
+  second signal — the ladder's measurement of who is reliable where — that no
+  purely per-question rule contained.
+- **Caution, and the reason for SPEC 0017.** The 360 questions used here are the
+  same data that produced F34 and F36, so the arena, though not the parameters,
+  has been seen. A confirmation at pre-registered uniform/tau = 1.0 on fresh
+  seeds 45-47 was registered before any confirmation data existed and is running
+  now; the claim stands or falls on it.
+- **Status:** PRELIMINARY POSITIVE (3 held-out folds, offline) · confirmation
+  pre-registered and running · Tarka PENDING
