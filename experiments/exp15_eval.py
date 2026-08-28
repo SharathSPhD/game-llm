@@ -97,6 +97,9 @@ def main() -> None:
     ap.add_argument("--token-cache", default=None,
                     help="token cache .pt from exp15 for the held-out perplexity sweep")
     ap.add_argument("--skip-harness", action="store_true")
+    ap.add_argument("--base-model", default="Qwen/Qwen3-1.7B",
+                    help="base model scored on the SAME held-out tokens, so the "
+                         "perplexity ratio is like-for-like")
     args = ap.parse_args()
 
     checkpoint = Path(args.checkpoint)
@@ -118,6 +121,22 @@ def main() -> None:
             budget_ppl[str(d)] = heldout_ppl(model, heldout, device, 8, 4)
             print(f"  budget {d:3d}: held-out ppl {budget_ppl[str(d)]:.3f}", flush=True)
         model.set_recursion_depth(full_depth)
+
+    base_ppl: float | None = None
+    if args.token_cache and Path(args.token_cache).exists():
+        from transformers import AutoModelForCausalLM
+
+        blob = torch.load(args.token_cache, weights_only=True)
+        heldout = blob["tokens"][:64]
+        base = (
+            AutoModelForCausalLM.from_pretrained(args.base_model, dtype=torch.bfloat16)
+            .to(device)
+            .eval()
+        )
+        base_ppl = heldout_ppl(base, heldout, device, 8, 4)
+        print(f"[base] {args.base_model} held-out ppl {base_ppl:.3f} (same tokens)", flush=True)
+        del base
+        torch.cuda.empty_cache()
 
     scores: dict[str, float] = {}
     retention: dict[str, float] = {}
@@ -147,6 +166,12 @@ def main() -> None:
         "retention_per_metric": retention,
         "mean_retention_headline": mean_retention,
         "heldout_ppl_by_budget": budget_ppl,
+        "base_heldout_ppl": base_ppl,
+        "ppl_ratio_vs_base": (
+            budget_ppl[str(full_depth)] / base_ppl
+            if base_ppl and str(full_depth) in budget_ppl
+            else None
+        ),
     }
     (out_dir / "results.json").write_text(json.dumps(results, indent=2))
 
@@ -159,6 +184,10 @@ def main() -> None:
         print(f"  mean headline retention: {mean_retention:.3f}")
     if budget_ppl:
         print(f"  budget sweep (held-out ppl): {budget_ppl}")
+    if base_ppl:
+        full = budget_ppl.get(str(full_depth))
+        print(f"  base held-out ppl {base_ppl:.3f}"
+              + (f" | converted/base ratio {full/base_ppl:.2f}x" if full else ""))
 
 
 if __name__ == "__main__":
