@@ -5,7 +5,7 @@
     "better_players_raise_the_ceiling": 0.042,
     "solve_is_affordable_at_serving": 0.944,
     "complementarity_generalises": 0.182,
-    "anchored_vote_beats_router": 0.8
+    "anchored_vote_beats_router": 0.2
   },
   "cost_weight": 0.0417,
   "cost_units": "GPU-hours; one day of GPU time trades against one nat",
@@ -74,6 +74,13 @@
       "outcome": "positive",
       "prior": 0.5,
       "posterior": 0.8
+    },
+    {
+      "exp": "tarka_f40_fair_bar",
+      "hypothesis": "anchored_vote_beats_router",
+      "outcome": "negative x2 (offline positive retracted; grid ties fair bar)",
+      "prior": 0.8,
+      "posterior": 0.2
     }
   ]
 }

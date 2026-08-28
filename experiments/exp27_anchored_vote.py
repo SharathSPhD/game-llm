@@ -190,20 +190,54 @@ def main() -> int:
     report: dict[str, Any] = {"seeds": sorted(seeds), "router": ROUTER}
 
     if args.preregistered:
+        # Amendment 1: the fair bar is the router with a majority-vote fallback
+        # on extraction failure, and every margin is decomposed into abstention
+        # rescues versus overrides of an answering champion.
+        from collections import Counter as _Counter
+
+        def fallback_router(r: dict[str, Any]) -> str | None:
+            if r["router_class"] is not None:
+                return r["router_class"]
+            votes = _Counter(c for c in r["answers"].values() if c is not None)
+            return votes.most_common(1)[0][0] if votes else None
+
         # SPEC 0017: one cell, chosen before this data existed. Per-seed and
         # pooled paired statistics against the router; the success criterion is
         # mean margin > 0 and pooled paired z >= 2.
         per_seed = {}
-        tw = tl = 0
+        tw = tl = fw = fl = 0
         for seed, rows in sorted(seeds.items()):
             acc = accuracy(rows, "uniform", 1.0)
             rout = router_accuracy(rows)
             paired = paired_vs_router(rows, "uniform", 1.0)
             tw += paired["wins"]
             tl += paired["losses"]
+            decomp = _Counter()
+            f_hits = 0
+            for r in rows:
+                m = anchored_vote(r, "uniform", 1.0)
+                fb = fallback_router(r)
+                m_ok = m is not None and is_correct(m, r["gold"], r["kind"])
+                f_ok = fb is not None and is_correct(fb, r["gold"], r["kind"])
+                r_ok = r["router_class"] is not None and is_correct(
+                    r["router_class"], r["gold"], r["kind"]
+                )
+                f_hits += int(f_ok)
+                if m_ok and not r_ok:
+                    decomp[
+                        "win_abstain" if r["router_class"] is None else "win_override"
+                    ] += 1
+                if r_ok and not m_ok:
+                    decomp["loss_vs_plain_router"] += 1
+                fw += int(m_ok and not f_ok)
+                fl += int(f_ok and not m_ok)
             per_seed[seed] = {
                 "mechanism": round(acc, 4), "router": round(rout, 4),
-                "margin": round(acc - rout, 4), "paired": paired,
+                "fallback_router": round(f_hits / len(rows), 4),
+                "margin_vs_plain": round(acc - rout, 4),
+                "margin_vs_fallback": round(acc - f_hits / len(rows), 4),
+                "decomposition": dict(decomp),
+                "paired_vs_plain": paired,
                 "per_domain": {
                     dom: {
                         "mechanism": round(accuracy(
@@ -213,14 +247,22 @@ def main() -> int:
                     } for dom in ("math", "general")
                 },
             }
-        margins = [v["margin"] for v in per_seed.values()]
-        z = (tw - tl) / math.sqrt(max(tw + tl, 1))
+        margins_fb = [v["margin_vs_fallback"] for v in per_seed.values()]
+        z_plain = (tw - tl) / math.sqrt(max(tw + tl, 1))
+        z_fb = (fw - fl) / math.sqrt(max(fw + fl, 1))
         report.update({
-            "protocol": "SPEC 0017 pre-registered: uniform weighting, tau = 1.0",
+            "protocol": (
+                "SPEC 0017 pre-registered uniform/tau=1.0; Amendment 1 primary "
+                "comparison is the router with majority fallback, threshold "
+                "z >= 2.807"
+            ),
             "per_seed": per_seed,
-            "mean_margin": round(sum(margins) / len(margins), 4),
-            "pooled_paired": {"wins": tw, "losses": tl, "z": round(z, 2)},
-            "success": bool(sum(margins) / len(margins) > 0 and z >= 2.0),
+            "mean_margin_vs_fallback": round(sum(margins_fb) / len(margins_fb), 4),
+            "pooled_vs_plain_router": {"wins": tw, "losses": tl, "z": round(z_plain, 2)},
+            "pooled_vs_fallback": {"wins": fw, "losses": fl, "z": round(z_fb, 2)},
+            "success": bool(
+                sum(margins_fb) / len(margins_fb) > 0 and z_fb >= 2.807
+            ),
         })
         Path(args.out).write_text(json.dumps(report, indent=2))
         print(json.dumps(report, indent=2))

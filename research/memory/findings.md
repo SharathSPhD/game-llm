@@ -1268,5 +1268,52 @@ fixed in advance from the ladder as truthful bids.
   has been seen. A confirmation at pre-registered uniform/tau = 1.0 on fresh
   seeds 45-47 was registered before any confirmation data existed and is running
   now; the claim stands or falls on it.
-- **Status:** PRELIMINARY POSITIVE (3 held-out folds, offline) · confirmation
-  pre-registered and running · Tarka PENDING
+- **Status:** SUPERSEDED BY F40 — the Tarka review found the comparison
+  structurally unfair before the confirmation reported; the margin decomposes
+  into extraction redundancy, not anchoring
+
+## F40 — The anchored vote's margin is redundancy, not anchoring
+
+**Cycle 28 · 2026-08-28 · Tarka review of F39, author recount, fair-bar sweep · zero GPU**
+
+The Tarka review of the offline analysis, run while the confirmation was still
+generating, found the comparison structurally unfair: the router row abstains
+whenever its single champion emits an unparseable answer — 58 of 360 questions,
+16% — while the mechanism has four extraction attempts. The author recount at
+the pre-registered cell confirms the defect and corrects one reviewer figure:
+24 of the mechanism's 26 paired wins are abstention rescues, and on questions
+both systems answered the record is 2W/1L ($z = 0.58$), noise rather than the
+net-negative override the review reported from fold-fitted cells.
+
+- **Against the fair bar the margin evaporates.** A router with a majority-vote
+  fallback on extraction failure — the one-line repair a competent engineer would
+  ship — scores 0.6278. No cell of the fourteen-point grid separates from it:
+  the best is 3W/1L ($z = 1.00$), and at $\tau \geq 2$ the mechanism reproduces
+  the fallback router exactly, 0W/0L. The anchored vote contains the fair bar as
+  a limit and adds nothing measurable to it.
+- **The magnet threshold does exactly what F29 predicted, which is why it
+  neither helps nor hurts.** At $\tau = 1$ the council overrides an answering
+  champion three times in 360 questions. The anchor makes overriding rare enough
+  to be harmless and thereby rare enough to be worthless; the earlier finding
+  that per-question signals cannot identify when a council should overrule a
+  competent incumbent holds at the answer level too.
+- **What genuinely survives, stated at its honest size.** The council system —
+  ladder-prior routing plus redundancy against single-model extraction failure —
+  beats the strongest single baseline model 0.6278 to 0.5472 on the mixed arena,
+  eight points, at roughly 1.2x expected serving cost since the fallback only
+  generates further candidates on the 16% of failures. Both ingredients are this
+  programme's constructions and the second is the $\tau \to \infty$ limit of the
+  anchored vote. What no tested mechanism contributes is extraction of knowledge
+  complementarity beyond redundancy: the per-example oracle stands twelve points
+  above the fair bar and remains unclaimed, consistent with F30 and F32 at
+  generation level.
+- **Process note.** SPEC 0017 was amended before any confirmation data was
+  scored: primary comparison moved to the fallback router, threshold raised to
+  the Bonferroni $z \geq 2.807$ for the roughly fifteen mechanisms examined on
+  the development arena, and every margin now reported with its
+  abstention-versus-override decomposition. The amended scorer reports
+  `success: False` on the development data, which is the honest reading of F39.
+  The confirmation's fresh-seed generation continues unchanged and will test
+  whether the decomposition replicates.
+- **Status:** VALIDATED (author-verified recount and sweep) · supersedes F39's
+  claim · Tarka RESOLVED with one reviewer figure corrected
