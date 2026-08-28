@@ -1,0 +1,3655 @@
+{
+  "experiment": "exp16_auction_real",
+  "spec": "0013",
+  "seed": 43,
+  "config_hash": "f8dd9aac41e7e496418b187e45dc96a0d883ec2161a32e81c317345a49d7c4b3",
+  "git_commit": "787b48936e305bc0b70238dbdf3634f1d7cf8226",
+  "specialists": {
+    "S_math": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+    "S_code": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+    "S_gen": "Qwen/Qwen2.5-1.5B-Instruct"
+  },
+  "n_tasks": 80,
+  "summary": {
+    "S_math": {
+      "overall": 0.475,
+      "math": 0.775,
+      "general": 0.175
+    },
+    "S_code": {
+      "overall": 0.5,
+      "math": 0.55,
+      "general": 0.45
+    },
+    "S_gen": {
+      "overall": 0.575,
+      "math": 0.625,
+      "general": 0.525
+    },
+    "ENS": {
+      "overall": 0.6375,
+      "math": 0.775,
+      "general": 0.5
+    },
+    "AUC": {
+      "overall": 0.6375,
+      "math": 0.8,
+      "general": 0.475
+    },
+    "AUC_CTX": {
+      "overall": 0.6125,
+      "math": 0.775,
+      "general": 0.45
+    },
+    "ORACLE": {
+      "overall": 0.65,
+      "math": 0.775,
+      "general": 0.525
+    }
+  },
+  "best_single": "S_gen",
+  "h9_score": "MET",
+  "records": [
+    {
+      "idx": 0,
+      "domain": "math",
+      "gold": "18",
+      "S_math": {
+        "correct": true,
+        "pred": "18",
+        "n_tokens": 256
+      },
+      "S_code": {
+        "correct": true,
+        "pred": "18",
+        "n_tokens": 315
+      },
+      "S_gen": {
+        "correct": true,
+        "pred": "18",
+        "n_tokens": 375
+      },
+      "ENS": {
+        "correct": true,
+        "pred": "18",
+        "n_tokens": 276
+      },
+      "AUC": {
+        "correct": true,
+        "pred": "18",
+        "n_tokens": 312
+      },
+      "AUC_CTX": {
+        "correct": true,
+        "pred": "18",
+        "n_tokens": 256
+      },
+      "ORACLE": {
+        "correct": true,
+        "pred": "18",
+        "n_tokens": 256
+      },
+      "ctx_bids": [
+        0.03323,
+        0.02024,
+        0.01702
+      ]
+    },
+    {
+      "idx": 1,
+      "domain": "math",
+      "gold": "3",
+      "S_math": {
+        "correct": true,
+        "pred": "3",
+        "n_tokens": 158
+      },
+      "S_code": {
+        "correct": true,
+        "pred": "3",
+        "n_tokens": 229
+      },
+      "S_gen": {
+        "correct": true,
+        "pred": "3",
+        "n_tokens": 213
+      },
+      "ENS": {
+        "correct": true,
+        "pred": "3",
+        "n_tokens": 221
+      },
+      "AUC": {
+        "correct": true,
+        "pred": "3",
+        "n_tokens": 221
+      },
+      "AUC_CTX": {
+        "correct": true,
+        "pred": "3",
+        "n_tokens": 158
+      },
+      "ORACLE": {
+        "correct": true,
+        "pred": "3",
+        "n_tokens": 158
+      },
+      "ctx_bids": [
+        0.01919,
+        0.00736,
+        0.01166
+      ]
+    },
+    {
+      "idx": 2,
+      "domain": "math",
+      "gold": "70000",
+      "S_math": {
+        "correct": true,
+        "pred": "70000",
+        "n_tokens": 345
+      },
+      "S_code": {
+        "correct": false,
+        "pred": "195000",
+        "n_tokens": 345
+      },
+      "S_gen": {
+        "correct": true,
+        "pred": "70000",
+        "n_tokens": 333
+      },
+      "ENS": {
+        "correct": true,
+        "pred": "70000",
+        "n_tokens": 379
+      },
+      "AUC": {
+        "correct": false,
+        "pred": "-10000",
+        "n_tokens": 334
+      },
+      "AUC_CTX": {
+        "correct": true,
+        "pred": "70000",
+        "n_tokens": 345
+      },
+      "ORACLE": {
+        "correct": true,
+        "pred": "70000",
+        "n_tokens": 345
+      },
+      "ctx_bids": [
+        0.05336,
+        0.02447,
+        0.0368
+      ]
+    },
+    {
+      "idx": 3,
+      "domain": "math",
+      "gold": "540",
+      "S_math": {
+        "correct": false,
+        "pred": "180",
+        "n_tokens": 175
+      },
+      "S_code": {
+        "correct": false,
+        "pred": "180",
+        "n_tokens": 150
+      },
+      "S_gen": {
+        "correct": true,
+        "pred": "540",
+        "n_tokens": 209
+      },
+      "ENS": {
+        "correct": false,
+        "pred": "180",
+        "n_tokens": 160
+      },
+      "AUC": {
+        "correct": false,
+        "pred": "180",
+        "n_tokens": 160
+      },
+      "AUC_CTX": {
+        "correct": false,
+        "pred": "180",
+        "n_tokens": 175
+      },
+      "ORACLE": {
+        "correct": false,
+        "pred": "180",
+        "n_tokens": 175
+      },
+      "ctx_bids": [
+        0.03148,
+        0.01422,
+        0.01278
+      ]
+    },
+    {
+      "idx": 4,
+      "domain": "math",
+      "gold": "20",
+      "S_math": {
+        "correct": false,
+        "pred": "140",
+        "n_tokens": 403
+      },
+      "S_code": {
+        "correct": false,
+        "pred": "1",
+        "n_tokens": 512
+      },
+      "S_gen": {
+        "correct": false,
+        "pred": "25",
+        "n_tokens": 512
+      },
+      "ENS": {
+        "correct": false,
+        "pred": "7",
+        "n_tokens": 424
+      },
+      "AUC": {
+        "correct": true,
+        "pred": "20",
+        "n_tokens": 319
+      },
+      "AUC_CTX": {
+        "correct": false,
+        "pred": "140",
+        "n_tokens": 403
+      },
+      "ORACLE": {
+        "correct": false,
+        "pred": "140",
+        "n_tokens": 403
+      },
+      "ctx_bids": [
+        0.04608,
+        0.04408,
+        0.04321
+      ]
+    },
+    {
+      "idx": 5,
+      "domain": "math",
+      "gold": "64",
+      "S_math": {
+        "correct": true,
+        "pred": "64",
+        "n_tokens": 266
+      },
+      "S_code": {
+        "correct": false,
+        "pred": "48",
+        "n_tokens": 248
+      },
+      "S_gen": {
+        "correct": false,
+        "pred": "16",
+        "n_tokens": 512
+      },
+      "ENS": {
+        "correct": true,
+        "pred": "64",
+        "n_tokens": 347
+      },
+      "AUC": {
+        "correct": true,
+        "pred": "64",
+        "n_tokens": 297
+      },
+      "AUC_CTX": {
+        "correct": true,
+        "pred": "64",
+        "n_tokens": 266
+      },
+      "ORACLE": {
+        "correct": true,
+        "pred": "64",
+        "n_tokens": 266
+      },
+      "ctx_bids": [
+        0.05486,
+        0.02506,
+        0.02983
+      ]
+    },
+    {
+      "idx": 6,
+      "domain": "math",
+      "gold": "260",
+      "S_math": {
+        "correct": true,
+        "pred": "260",
+        "n_tokens": 373
+      },
+      "S_code": {
+        "correct": true,
+        "pred": "260",
+        "n_tokens": 361
+      },
+      "S_gen": {
+        "correct": true,
+        "pred": "260",
+        "n_tokens": 182
+      },
+      "ENS": {
+        "correct": true,
+        "pred": "260",
+        "n_tokens": 346
+      },
+      "AUC": {
+        "correct": true,
+        "pred": "260",
+        "n_tokens": 360
+      },
+      "AUC_CTX": {
+        "correct": true,
+        "pred": "260",
+        "n_tokens": 373
+      },
+      "ORACLE": {
+        "correct": true,
+        "pred": "260",
+        "n_tokens": 373
+      },
+      "ctx_bids": [
+        0.039,
+        0.02305,
+        0.0304
+      ]
+    },
+    {
+      "idx": 7,
+      "domain": "math",
+      "gold": "160",
+      "S_math": {
+        "correct": false,
+        "pred": "140",
+        "n_tokens": 345
+      },
+      "S_code": {
+        "correct": false,
+        "pred": "100",
+        "n_tokens": 284
+      },
+      "S_gen": {
+        "correct": false,
+        "pred": "120",
+        "n_tokens": 364
+      },
+      "ENS": {
+        "correct": false,
+        "pred": "120",
+        "n_tokens": 347
+      },
+      "AUC": {
+        "correct": false,
+        "pred": "120",
+        "n_tokens": 338
+      },
+      "AUC_CTX": {
+        "correct": false,
+        "pred": "140",
+        "n_tokens": 345
+      },
+      "ORACLE": {
+        "correct": false,
+        "pred": "140",
+        "n_tokens": 345
+      },
+      "ctx_bids": [
+        0.03065,
+        0.0266,
+        0.02186
+      ]
+    },
+    {
+      "idx": 8,
+      "domain": "math",
+      "gold": "45",
+      "S_math": {
+        "correct": false,
+        "pred": "60",
+        "n_tokens": 512
+      },
+      "S_code": {
+        "correct": false,
+        "pred": "495",
+        "n_tokens": 512
+      },
+      "S_gen": {
+        "correct": false,
+        "pred": "315",
+        "n_tokens": 331
+      },
+      "ENS": {
+        "correct": false,
+        "pred": "120",
+        "n_tokens": 512
+      },
+      "AUC": {
+        "correct": false,
+        "pred": "15",
+        "n_tokens": 512
+      },
+      "AUC_CTX": {
+        "correct": false,
+        "pred": "60",
+        "n_tokens": 512
+      },
+      "ORACLE": {
+        "correct": false,
+        "pred": "60",
+        "n_tokens": 512
+      },
+      "ctx_bids": [
+        0.05528,
+        0.03654,
+        0.05338
+      ]
+    },
+    {
+      "idx": 9,
+      "domain": "math",
+      "gold": "460",
+      "S_math": {
+        "correct": true,
+        "pred": "460",
+        "n_tokens": 262
+      },
+      "S_code": {
+        "correct": true,
+        "pred": "460",
+        "n_tokens": 324
+      },
+      "S_gen": {
+        "correct": true,
+        "pred": "460",
+        "n_tokens": 236
+      },
+      "ENS": {
+        "correct": true,
+        "pred": "460",
+        "n_tokens": 345
+      },
+      "AUC": {
+        "correct": true,
+        "pred": "460",
+        "n_tokens": 321
+      },
+      "AUC_CTX": {
+        "correct": true,
+        "pred": "460",
+        "n_tokens": 262
+      },
+      "ORACLE": {
+        "correct": true,
+        "pred": "460",
+        "n_tokens": 262
+      },
+      "ctx_bids": [
+        0.06895,
+        0.03415,
+        0.04378
+      ]
+    },
+    {
+      "idx": 10,
+      "domain": "math",
+      "gold": "366",
+      "S_math": {
+        "correct": true,
+        "pred": "366",
+        "n_tokens": 303
+      },
+      "S_code": {
+        "correct": true,
+        "pred": "366",
+        "n_tokens": 316
+      },
+      "S_gen": {
+        "correct": true,
+        "pred": "366",
+        "n_tokens": 303
+      },
+      "ENS": {
+        "correct": true,
+        "pred": "366",
+        "n_tokens": 278
+      },
+      "AUC": {
+        "correct": true,
+        "pred": "366",
+        "n_tokens": 278
+      },
+      "AUC_CTX": {
+        "correct": true,
+        "pred": "366",
+        "n_tokens": 303
+      },
+      "ORACLE": {
+        "correct": true,
+        "pred": "366",
+        "n_tokens": 303
+      },
+      "ctx_bids": [
+        0.0714,
+        0.03806,
+        0.05551
+      ]
+    },
+    {
+      "idx": 11,
+      "domain": "math",
+      "gold": "694",
+      "S_math": {
+        "correct": true,
+        "pred": "694",
+        "n_tokens": 321
+      },
+      "S_code": {
+        "correct": false,
+        "pred": "794",
+        "n_tokens": 345
+      },
+      "S_gen": {
+        "correct": true,
+        "pred": "694",
+        "n_tokens": 264
+      },
+      "ENS": {
+        "correct": true,
+        "pred": "694",
+        "n_tokens": 291
+      },
+      "AUC": {
+        "correct": true,
+        "pred": "694",
+        "n_tokens": 326
+      },
+      "AUC_CTX": {
+        "correct": true,
+        "pred": "694",
+        "n_tokens": 321
+      },
+      "ORACLE": {
+        "correct": true,
+        "pred": "694",
+        "n_tokens": 321
+      },
+      "ctx_bids": [
+        0.05384,
+        0.02787,
+        0.0338
+      ]
+    },
+    {
+      "idx": 12,
+      "domain": "math",
+      "gold": "13",
+      "S_math": {
+        "correct": false,
+        "pred": "12",
+        "n_tokens": 365
+      },
+      "S_code": {
+        "correct": false,
+        "pred": "1",
+        "n_tokens": 217
+      },
+      "S_gen": {
+        "correct": false,
+        "pred": "12",
+        "n_tokens": 206
+      },
+      "ENS": {
+        "correct": false,
+        "pred": "12",
+        "n_tokens": 411
+      },
+      "AUC": {
+        "correct": false,
+        "pred": "12",
+        "n_tokens": 291
+      },
+      "AUC_CTX": {
+        "correct": false,
+        "pred": "12",
+        "n_tokens": 365
+      },
+      "ORACLE": {
+        "correct": false,
+        "pred": "12",
+        "n_tokens": 365
+      },
+      "ctx_bids": [
+        0.05965,
+        0.03048,
+        0.02858
+      ]
+    },
+    {
+      "idx": 13,
+      "domain": "math",
+      "gold": "18",
+      "S_math": {
+        "correct": true,
+        "pred": "18",
+        "n_tokens": 379
+      },
+      "S_code": {
+        "correct": false,
+        "pred": "15",
+        "n_tokens": 512
+      },
+      "S_gen": {
+        "correct": true,
+        "pred": "18",
+        "n_tokens": 452
+      },
+      "ENS": {
+        "correct": true,
+        "pred": "18",
+        "n_tokens": 433
+      },
+      "AUC": {
+        "correct": true,
+        "pred": "18",
+        "n_tokens": 415
+      },
+      "AUC_CTX": {
+        "correct": true,
+        "pred": "18",
+        "n_tokens": 379
+      },
+      "ORACLE": {
+        "correct": true,
+        "pred": "18",
+        "n_tokens": 379
+      },
+      "ctx_bids": [
+        0.04183,
+        0.02491,
+        0.03484
+      ]
+    },
+    {
+      "idx": 14,
+      "domain": "math",
+      "gold": "60",
+      "S_math": {
+        "correct": true,
+        "pred": "60",
+        "n_tokens": 384
+      },
+      "S_code": {
+        "correct": true,
+        "pred": "60",
+        "n_tokens": 380
+      },
+      "S_gen": {
+        "correct": true,
+        "pred": "60",
+        "n_tokens": 349
+      },
+      "ENS": {
+        "correct": true,
+        "pred": "60",
+        "n_tokens": 382
+      },
+      "AUC": {
+        "correct": true,
+        "pred": "60",
+        "n_tokens": 382
+      },
+      "AUC_CTX": {
+        "correct": true,
+        "pred": "60",
+        "n_tokens": 384
+      },
+      "ORACLE": {
+        "correct": true,
+        "pred": "60",
+        "n_tokens": 384
+      },
+      "ctx_bids": [
+        0.04747,
+        0.03013,
+        0.04153
+      ]
+    },
+    {
+      "idx": 15,
+      "domain": "math",
+      "gold": "125",
+      "S_math": {
+        "correct": false,
+        "pred": "96",
+        "n_tokens": 355
+      },
+      "S_code": {
+        "correct": false,
+        "pred": "2971",
+        "n_tokens": 498
+      },
+      "S_gen": {
+        "correct": false,
+        "pred": "2971",
+        "n_tokens": 305
+      },
+      "ENS": {
+        "correct": false,
+        "pred": "96",
+        "n_tokens": 361
+      },
+      "AUC": {
+        "correct": false,
+        "pred": "8096",
+        "n_tokens": 328
+      },
+      "AUC_CTX": {
+        "correct": false,
+        "pred": "2971",
+        "n_tokens": 305
+      },
+      "ORACLE": {
+        "correct": false,
+        "pred": "96",
+        "n_tokens": 355
+      },
+      "ctx_bids": [
+        0.03913,
+        0.02973,
+        0.0457
+      ]
+    },
+    {
+      "idx": 16,
+      "domain": "math",
+      "gold": "230",
+      "S_math": {
+        "correct": true,
+        "pred": "230",
+        "n_tokens": 208
+      },
+      "S_code": {
+        "correct": true,
+        "pred": "230",
+        "n_tokens": 252
+      },
+      "S_gen": {
+        "correct": true,
+        "pred": "230",
+        "n_tokens": 414
+      },
+      "ENS": {
+        "correct": true,
+        "pred": "230",
+        "n_tokens": 228
+      },
+      "AUC": {
+        "correct": true,
+        "pred": "230",
+        "n_tokens": 224
+      },
+      "AUC_CTX": {
+        "correct": true,
+        "pred": "230",
+        "n_tokens": 208
+      },
+      "ORACLE": {
+        "correct": true,
+        "pred": "230",
+        "n_tokens": 208
+      },
+      "ctx_bids": [
+        0.02867,
+        0.01906,
+        0.02739
+      ]
+    },
+    {
+      "idx": 17,
+      "domain": "math",
+      "gold": "57500",
+      "S_math": {
+        "correct": true,
+        "pred": "57500",
+        "n_tokens": 369
+      },
+      "S_code": {
+        "correct": false,
+        "pred": "1150",
+        "n_tokens": 280
+      },
+      "S_gen": {
+        "correct": true,
+        "pred": "57500",
+        "n_tokens": 497
+      },
+      "ENS": {
+        "correct": true,
+        "pred": "57500",
+        "n_tokens": 392
+      },
+      "AUC": {
+        "correct": true,
+        "pred": "57500",
+        "n_tokens": 358
+      },
+      "AUC_CTX": {
+        "correct": true,
+        "pred": "57500",
+        "n_tokens": 369
+      },
+      "ORACLE": {
+        "correct": true,
+        "pred": "57500",
+        "n_tokens": 369
+      },
+      "ctx_bids": [
+        0.05731,
+        0.02939,
+        0.03618
+      ]
+    },
+    {
+      "idx": 18,
+      "domain": "math",
+      "gold": "7",
+      "S_math": {
+        "correct": true,
+        "pred": "7",
+        "n_tokens": 322
+      },
+      "S_code": {
+        "correct": true,
+        "pred": "7",
+        "n_tokens": 356
+      },
+      "S_gen": {
+        "correct": true,
+        "pred": "7",
+        "n_tokens": 290
+      },
+      "ENS": {
+        "correct": true,
+        "pred": "7",
+        "n_tokens": 347
+      },
+      "AUC": {
+        "correct": true,
+        "pred": "7",
+        "n_tokens": 347
+      },
+      "AUC_CTX": {
+        "correct": true,
+        "pred": "7",
+        "n_tokens": 322
+      },
+      "ORACLE": {
+        "correct": true,
+        "pred": "7",
+        "n_tokens": 322
+      },
+      "ctx_bids": [
+        0.0336,
+        0.01052,
+        0.01525
+      ]
+    },
+    {
+      "idx": 19,
+      "domain": "math",
+      "gold": "6",
+      "S_math": {
+        "correct": true,
+        "pred": "6",
+        "n_tokens": 414
+      },
+      "S_code": {
+        "correct": false,
+        "pred": "2",
+        "n_tokens": 370
+      },
+      "S_gen": {
+        "correct": true,
+        "pred": "6",
+        "n_tokens": 509
+      },
+      "ENS": {
+        "correct": true,
+        "pred": "6",
+        "n_tokens": 492
+      },
+      "AUC": {
+        "correct": true,
+        "pred": "6",
+        "n_tokens": 402
+      },
+      "AUC_CTX": {
+        "correct": true,
+        "pred": "6",
+        "n_tokens": 414
+      },
+      "ORACLE": {
+        "correct": true,
+        "pred": "6",
+        "n_tokens": 414
+      },
+      "ctx_bids": [
+        0.07398,
+        0.03879,
+        0.04931
+      ]
+    },
+    {
+      "idx": 20,
+      "domain": "math",
+      "gold": "15",
+      "S_math": {
+        "correct": true,
+        "pred": "15",
+        "n_tokens": 355
+      },
+      "S_code": {
+        "correct": false,
+        "pred": "5",
+        "n_tokens": 512
+      },
+      "S_gen": {
+        "correct": false,
+        "pred": "44",
+        "n_tokens": 459
+      },
+      "ENS": {
+        "correct": true,
+        "pred": "15",
+        "n_tokens": 384
+      },
+      "AUC": {
+        "correct": true,
+        "pred": "15",
+        "n_tokens": 400
+      },
+      "AUC_CTX": {
+        "correct": true,
+        "pred": "15",
+        "n_tokens": 355
+      },
+      "ORACLE": {
+        "correct": true,
+        "pred": "15",
+        "n_tokens": 355
+      },
+      "ctx_bids": [
+        0.04934,
+        0.02241,
+        0.03479
+      ]
+    },
+    {
+      "idx": 21,
+      "domain": "math",
+      "gold": "14",
+      "S_math": {
+        "correct": false,
+        "pred": "60",
+        "n_tokens": 332
+      },
+      "S_code": {
+        "correct": false,
+        "pred": "23",
+        "n_tokens": 212
+      },
+      "S_gen": {
+        "correct": false,
+        "pred": "2",
+        "n_tokens": 171
+      },
+      "ENS": {
+        "correct": false,
+        "pred": "29",
+        "n_tokens": 263
+      },
+      "AUC": {
+        "correct": false,
+        "pred": "2",
+        "n_tokens": 213
+      },
+      "AUC_CTX": {
+        "correct": false,
+        "pred": "60",
+        "n_tokens": 332
+      },
+      "ORACLE": {
+        "correct": false,
+        "pred": "60",
+        "n_tokens": 332
+      },
+      "ctx_bids": [
+        0.04936,
+        0.02143,
+        0.03548
+      ]
+    },
+    {
+      "idx": 22,
+      "domain": "math",
+      "gold": "7",
+      "S_math": {
+        "correct": true,
+        "pred": "7",
+        "n_tokens": 211
+      },
+      "S_code": {
+        "correct": true,
+        "pred": "7",
+        "n_tokens": 258
+      },
+      "S_gen": {
+        "correct": true,
+        "pred": "7",
+        "n_tokens": 218
+      },
+      "ENS": {
+        "correct": true,
+        "pred": "7",
+        "n_tokens": 275
+      },
+      "AUC": {
+        "correct": true,
+        "pred": "7",
+        "n_tokens": 196
+      },
+      "AUC_CTX": {
+        "correct": true,
+        "pred": "7",
+        "n_tokens": 211
+      },
+      "ORACLE": {
+        "correct": true,
+        "pred": "7",
+        "n_tokens": 211
+      },
+      "ctx_bids": [
+        0.0426,
+        0.02748,
+        0.03151
+      ]
+    },
+    {
+      "idx": 23,
+      "domain": "math",
+      "gold": "8",
+      "S_math": {
+        "correct": true,
+        "pred": "8",
+        "n_tokens": 216
+      },
+      "S_code": {
+        "correct": true,
+        "pred": "8",
+        "n_tokens": 274
+      },
+      "S_gen": {
+        "correct": false,
+        "pred": "92",
+        "n_tokens": 392
+      },
+      "ENS": {
+        "correct": true,
+        "pred": "8",
+        "n_tokens": 337
+      },
+      "AUC": {
+        "correct": true,
+        "pred": "8",
+        "n_tokens": 406
+      },
+      "AUC_CTX": {
+        "correct": true,
+        "pred": "8",
+        "n_tokens": 216
+      },
+      "ORACLE": {
+        "correct": true,
+        "pred": "8",
+        "n_tokens": 216
+      },
+      "ctx_bids": [
+        0.0477,
+        0.01824,
+        0.02789
+      ]
+    },
+    {
+      "idx": 24,
+      "domain": "math",
+      "gold": "26",
+      "S_math": {
+        "correct": true,
+        "pred": "26",
+        "n_tokens": 193
+      },
+      "S_code": {
+        "correct": true,
+        "pred": "26",
+        "n_tokens": 178
+      },
+      "S_gen": {
+        "correct": true,
+        "pred": "26",
+        "n_tokens": 380
+      },
+      "ENS": {
+        "correct": true,
+        "pred": "26",
+        "n_tokens": 201
+      },
+      "AUC": {
+        "correct": true,
+        "pred": "26",
+        "n_tokens": 201
+      },
+      "AUC_CTX": {
+        "correct": true,
+        "pred": "26",
+        "n_tokens": 193
+      },
+      "ORACLE": {
+        "correct": true,
+        "pred": "26",
+        "n_tokens": 193
+      },
+      "ctx_bids": [
+        0.06988,
+        0.02165,
+        0.02728
+      ]
+    },
+    {
+      "idx": 25,
+      "domain": "math",
+      "gold": "2",
+      "S_math": {
+        "correct": true,
+        "pred": "2",
+        "n_tokens": 315
+      },
+      "S_code": {
+        "correct": true,
+        "pred": "2",
+        "n_tokens": 363
+      },
+      "S_gen": {
+        "correct": true,
+        "pred": "2",
+        "n_tokens": 289
+      },
+      "ENS": {
+        "correct": true,
+        "pred": "2",
+        "n_tokens": 325
+      },
+      "AUC": {
+        "correct": true,
+        "pred": "2",
+        "n_tokens": 327
+      },
+      "AUC_CTX": {
+        "correct": true,
+        "pred": "2",
+        "n_tokens": 315
+      },
+      "ORACLE": {
+        "correct": true,
+        "pred": "2",
+        "n_tokens": 315
+      },
+      "ctx_bids": [
+        0.07131,
+        0.03001,
+        0.04507
+      ]
+    },
+    {
+      "idx": 26,
+      "domain": "math",
+      "gold": "243",
+      "S_math": {
+        "correct": true,
+        "pred": "243",
+        "n_tokens": 367
+      },
+      "S_code": {
+        "correct": true,
+        "pred": "243",
+        "n_tokens": 338
+      },
+      "S_gen": {
+        "correct": true,
+        "pred": "243",
+        "n_tokens": 329
+      },
+      "ENS": {
+        "correct": true,
+        "pred": "243",
+        "n_tokens": 330
+      },
+      "AUC": {
+        "correct": true,
+        "pred": "243",
+        "n_tokens": 326
+      },
+      "AUC_CTX": {
+        "correct": true,
+        "pred": "243",
+        "n_tokens": 367
+      },
+      "ORACLE": {
+        "correct": true,
+        "pred": "243",
+        "n_tokens": 367
+      },
+      "ctx_bids": [
+        0.07701,
+        0.0453,
+        0.05184
+      ]
+    },
+    {
+      "idx": 27,
+      "domain": "math",
+      "gold": "16",
+      "S_math": {
+        "correct": true,
+        "pred": "16",
+        "n_tokens": 326
+      },
+      "S_code": {
+        "correct": true,
+        "pred": "16",
+        "n_tokens": 348
+      },
+      "S_gen": {
+        "correct": true,
+        "pred": "16",
+        "n_tokens": 313
+      },
+      "ENS": {
+        "correct": true,
+        "pred": "16",
+        "n_tokens": 320
+      },
+      "AUC": {
+        "correct": true,
+        "pred": "16",
+        "n_tokens": 341
+      },
+      "AUC_CTX": {
+        "correct": true,
+        "pred": "16",
+        "n_tokens": 326
+      },
+      "ORACLE": {
+        "correct": true,
+        "pred": "16",
+        "n_tokens": 326
+      },
+      "ctx_bids": [
+        0.06119,
+        0.03076,
+        0.02569
+      ]
+    },
+    {
+      "idx": 28,
+      "domain": "math",
+      "gold": "25",
+      "S_math": {
+        "correct": true,
+        "pred": "25",
+        "n_tokens": 251
+      },
+      "S_code": {
+        "correct": true,
+        "pred": "25",
+        "n_tokens": 204
+      },
+      "S_gen": {
+        "correct": false,
+        "pred": "20",
+        "n_tokens": 244
+      },
+      "ENS": {
+        "correct": true,
+        "pred": "25",
+        "n_tokens": 212
+      },
+      "AUC": {
+        "correct": true,
+        "pred": "25",
+        "n_tokens": 263
+      },
+      "AUC_CTX": {
+        "correct": true,
+        "pred": "25",
+        "n_tokens": 251
+      },
+      "ORACLE": {
+        "correct": true,
+        "pred": "25",
+        "n_tokens": 251
+      },
+      "ctx_bids": [
+        0.06096,
+        0.02811,
+        0.03504
+      ]
+    },
+    {
+      "idx": 29,
+      "domain": "math",
+      "gold": "104",
+      "S_math": {
+        "correct": true,
+        "pred": "104",
+        "n_tokens": 267
+      },
+      "S_code": {
+        "correct": false,
+        "pred": "94",
+        "n_tokens": 193
+      },
+      "S_gen": {
+        "correct": false,
+        "pred": "71",
+        "n_tokens": 227
+      },
+      "ENS": {
+        "correct": true,
+        "pred": "104",
+        "n_tokens": 252
+      },
+      "AUC": {
+        "correct": true,
+        "pred": "104",
+        "n_tokens": 303
+      },
+      "AUC_CTX": {
+        "correct": true,
+        "pred": "104",
+        "n_tokens": 267
+      },
+      "ORACLE": {
+        "correct": true,
+        "pred": "104",
+        "n_tokens": 267
+      },
+      "ctx_bids": [
+        0.05081,
+        0.02447,
+        0.03046
+      ]
+    },
+    {
+      "idx": 30,
+      "domain": "math",
+      "gold": "109",
+      "S_math": {
+        "correct": false,
+        "pred": "10",
+        "n_tokens": 512
+      },
+      "S_code": {
+        "correct": true,
+        "pred": "109",
+        "n_tokens": 469
+      },
+      "S_gen": {
+        "correct": false,
+        "pred": "9",
+        "n_tokens": 512
+      },
+      "ENS": {
+        "correct": false,
+        "pred": "8",
+        "n_tokens": 512
+      },
+      "AUC": {
+        "correct": true,
+        "pred": "109",
+        "n_tokens": 494
+      },
+      "AUC_CTX": {
+        "correct": false,
+        "pred": "10",
+        "n_tokens": 512
+      },
+      "ORACLE": {
+        "correct": false,
+        "pred": "10",
+        "n_tokens": 512
+      },
+      "ctx_bids": [
+        0.04621,
+        0.01786,
+        0.02928
+      ]
+    },
+    {
+      "idx": 31,
+      "domain": "math",
+      "gold": "80",
+      "S_math": {
+        "correct": true,
+        "pred": "80",
+        "n_tokens": 250
+      },
+      "S_code": {
+        "correct": true,
+        "pred": "80",
+        "n_tokens": 342
+      },
+      "S_gen": {
+        "correct": true,
+        "pred": "80",
+        "n_tokens": 192
+      },
+      "ENS": {
+        "correct": true,
+        "pred": "80",
+        "n_tokens": 351
+      },
+      "AUC": {
+        "correct": true,
+        "pred": "80",
+        "n_tokens": 308
+      },
+      "AUC_CTX": {
+        "correct": true,
+        "pred": "80",
+        "n_tokens": 250
+      },
+      "ORACLE": {
+        "correct": true,
+        "pred": "80",
+        "n_tokens": 250
+      },
+      "ctx_bids": [
+        0.05001,
+        0.0279,
+        0.04354
+      ]
+    },
+    {
+      "idx": 32,
+      "domain": "math",
+      "gold": "35",
+      "S_math": {
+        "correct": true,
+        "pred": "35",
+        "n_tokens": 228
+      },
+      "S_code": {
+        "correct": true,
+        "pred": "35",
+        "n_tokens": 239
+      },
+      "S_gen": {
+        "correct": false,
+        "pred": "350",
+        "n_tokens": 289
+      },
+      "ENS": {
+        "correct": true,
+        "pred": "35",
+        "n_tokens": 252
+      },
+      "AUC": {
+        "correct": true,
+        "pred": "35",
+        "n_tokens": 249
+      },
+      "AUC_CTX": {
+        "correct": true,
+        "pred": "35",
+        "n_tokens": 228
+      },
+      "ORACLE": {
+        "correct": true,
+        "pred": "35",
+        "n_tokens": 228
+      },
+      "ctx_bids": [
+        0.03842,
+        0.01622,
+        0.02195
+      ]
+    },
+    {
+      "idx": 33,
+      "domain": "math",
+      "gold": "70",
+      "S_math": {
+        "correct": true,
+        "pred": "70",
+        "n_tokens": 285
+      },
+      "S_code": {
+        "correct": true,
+        "pred": "70",
+        "n_tokens": 265
+      },
+      "S_gen": {
+        "correct": true,
+        "pred": "70",
+        "n_tokens": 245
+      },
+      "ENS": {
+        "correct": true,
+        "pred": "70",
+        "n_tokens": 279
+      },
+      "AUC": {
+        "correct": true,
+        "pred": "70",
+        "n_tokens": 279
+      },
+      "AUC_CTX": {
+        "correct": true,
+        "pred": "70",
+        "n_tokens": 285
+      },
+      "ORACLE": {
+        "correct": true,
+        "pred": "70",
+        "n_tokens": 285
+      },
+      "ctx_bids": [
+        0.06001,
+        0.01753,
+        0.02464
+      ]
+    },
+    {
+      "idx": 34,
+      "domain": "math",
+      "gold": "23",
+      "S_math": {
+        "correct": true,
+        "pred": "23",
+        "n_tokens": 223
+      },
+      "S_code": {
+        "correct": true,
+        "pred": "23",
+        "n_tokens": 213
+      },
+      "S_gen": {
+        "correct": true,
+        "pred": "23",
+        "n_tokens": 221
+      },
+      "ENS": {
+        "correct": true,
+        "pred": "23",
+        "n_tokens": 225
+      },
+      "AUC": {
+        "correct": true,
+        "pred": "23",
+        "n_tokens": 222
+      },
+      "AUC_CTX": {
+        "correct": true,
+        "pred": "23",
+        "n_tokens": 223
+      },
+      "ORACLE": {
+        "correct": true,
+        "pred": "23",
+        "n_tokens": 223
+      },
+      "ctx_bids": [
+        0.03638,
+        0.01958,
+        0.02519
+      ]
+    },
+    {
+      "idx": 35,
+      "domain": "math",
+      "gold": "9",
+      "S_math": {
+        "correct": true,
+        "pred": "9",
+        "n_tokens": 263
+      },
+      "S_code": {
+        "correct": true,
+        "pred": "9",
+        "n_tokens": 267
+      },
+      "S_gen": {
+        "correct": true,
+        "pred": "9",
+        "n_tokens": 236
+      },
+      "ENS": {
+        "correct": true,
+        "pred": "9",
+        "n_tokens": 235
+      },
+      "AUC": {
+        "correct": true,
+        "pred": "9",
+        "n_tokens": 235
+      },
+      "AUC_CTX": {
+        "correct": true,
+        "pred": "9",
+        "n_tokens": 263
+      },
+      "ORACLE": {
+        "correct": true,
+        "pred": "9",
+        "n_tokens": 263
+      },
+      "ctx_bids": [
+        0.07152,
+        0.03165,
+        0.04115
+      ]
+    },
+    {
+      "idx": 36,
+      "domain": "math",
+      "gold": "75",
+      "S_math": {
+        "correct": true,
+        "pred": "75.00",
+        "n_tokens": 324
+      },
+      "S_code": {
+        "correct": true,
+        "pred": "75",
+        "n_tokens": 304
+      },
+      "S_gen": {
+        "correct": true,
+        "pred": "75",
+        "n_tokens": 301
+      },
+      "ENS": {
+        "correct": true,
+        "pred": "75",
+        "n_tokens": 314
+      },
+      "AUC": {
+        "correct": true,
+        "pred": "75",
+        "n_tokens": 239
+      },
+      "AUC_CTX": {
+        "correct": true,
+        "pred": "75.00",
+        "n_tokens": 324
+      },
+      "ORACLE": {
+        "correct": true,
+        "pred": "75.00",
+        "n_tokens": 324
+      },
+      "ctx_bids": [
+        0.04147,
+        0.01902,
+        0.01835
+      ]
+    },
+    {
+      "idx": 37,
+      "domain": "math",
+      "gold": "2",
+      "S_math": {
+        "correct": false,
+        "pred": "0",
+        "n_tokens": 467
+      },
+      "S_code": {
+        "correct": false,
+        "pred": "160",
+        "n_tokens": 441
+      },
+      "S_gen": {
+        "correct": false,
+        "pred": "2.67",
+        "n_tokens": 512
+      },
+      "ENS": {
+        "correct": false,
+        "pred": "0",
+        "n_tokens": 501
+      },
+      "AUC": {
+        "correct": false,
+        "pred": "0",
+        "n_tokens": 441
+      },
+      "AUC_CTX": {
+        "correct": false,
+        "pred": "0",
+        "n_tokens": 467
+      },
+      "ORACLE": {
+        "correct": false,
+        "pred": "0",
+        "n_tokens": 467
+      },
+      "ctx_bids": [
+        0.05859,
+        0.03133,
+        0.03904
+      ]
+    },
+    {
+      "idx": 38,
+      "domain": "math",
+      "gold": "10",
+      "S_math": {
+        "correct": true,
+        "pred": "10",
+        "n_tokens": 254
+      },
+      "S_code": {
+        "correct": false,
+        "pred": "30",
+        "n_tokens": 342
+      },
+      "S_gen": {
+        "correct": true,
+        "pred": "10",
+        "n_tokens": 279
+      },
+      "ENS": {
+        "correct": true,
+        "pred": "10",
+        "n_tokens": 308
+      },
+      "AUC": {
+        "correct": true,
+        "pred": "10",
+        "n_tokens": 272
+      },
+      "AUC_CTX": {
+        "correct": true,
+        "pred": "10",
+        "n_tokens": 254
+      },
+      "ORACLE": {
+        "correct": true,
+        "pred": "10",
+        "n_tokens": 254
+      },
+      "ctx_bids": [
+        0.04232,
+        0.01648,
+        0.02016
+      ]
+    },
+    {
+      "idx": 39,
+      "domain": "math",
+      "gold": "18",
+      "S_math": {
+        "correct": true,
+        "pred": "18",
+        "n_tokens": 435
+      },
+      "S_code": {
+        "correct": false,
+        "pred": "36",
+        "n_tokens": 438
+      },
+      "S_gen": {
+        "correct": false,
+        "pred": "24",
+        "n_tokens": 401
+      },
+      "ENS": {
+        "correct": true,
+        "pred": "18",
+        "n_tokens": 473
+      },
+      "AUC": {
+        "correct": true,
+        "pred": "18",
+        "n_tokens": 420
+      },
+      "AUC_CTX": {
+        "correct": true,
+        "pred": "18",
+        "n_tokens": 435
+      },
+      "ORACLE": {
+        "correct": true,
+        "pred": "18",
+        "n_tokens": 435
+      },
+      "ctx_bids": [
+        0.08173,
+        0.03644,
+        0.0493
+      ]
+    },
+    {
+      "idx": 40,
+      "domain": "general",
+      "gold": "B",
+      "S_math": {
+        "correct": false,
+        "pred": "A",
+        "n_tokens": 160
+      },
+      "S_code": {
+        "correct": false,
+        "pred": "D",
+        "n_tokens": 2
+      },
+      "S_gen": {
+        "correct": false,
+        "pred": "D",
+        "n_tokens": 2
+      },
+      "ENS": {
+        "correct": false,
+        "pred": "D",
+        "n_tokens": 2
+      },
+      "AUC": {
+        "correct": false,
+        "pred": "D",
+        "n_tokens": 2
+      },
+      "AUC_CTX": {
+        "correct": false,
+        "pred": "D",
+        "n_tokens": 2
+      },
+      "ORACLE": {
+        "correct": false,
+        "pred": "D",
+        "n_tokens": 2
+      },
+      "ctx_bids": [
+        0.01713,
+        0.01865,
+        0.02283
+      ]
+    },
+    {
+      "idx": 41,
+      "domain": "general",
+      "gold": "C",
+      "S_math": {
+        "correct": false,
+        "pred": null,
+        "n_tokens": 160
+      },
+      "S_code": {
+        "correct": true,
+        "pred": "C",
+        "n_tokens": 2
+      },
+      "S_gen": {
+        "correct": true,
+        "pred": "C",
+        "n_tokens": 2
+      },
+      "ENS": {
+        "correct": true,
+        "pred": "C",
+        "n_tokens": 2
+      },
+      "AUC": {
+        "correct": true,
+        "pred": "C",
+        "n_tokens": 2
+      },
+      "AUC_CTX": {
+        "correct": true,
+        "pred": "C",
+        "n_tokens": 2
+      },
+      "ORACLE": {
+        "correct": true,
+        "pred": "C",
+        "n_tokens": 2
+      },
+      "ctx_bids": [
+        0.02161,
+        0.0264,
+        0.02942
+      ]
+    },
+    {
+      "idx": 42,
+      "domain": "general",
+      "gold": "C",
+      "S_math": {
+        "correct": true,
+        "pred": "C",
+        "n_tokens": 160
+      },
+      "S_code": {
+        "correct": false,
+        "pred": "B",
+        "n_tokens": 2
+      },
+      "S_gen": {
+        "correct": false,
+        "pred": "A",
+        "n_tokens": 2
+      },
+      "ENS": {
+        "correct": false,
+        "pred": "A",
+        "n_tokens": 2
+      },
+      "AUC": {
+        "correct": false,
+        "pred": "A",
+        "n_tokens": 2
+      },
+      "AUC_CTX": {
+        "correct": true,
+        "pred": "C",
+        "n_tokens": 160
+      },
+      "ORACLE": {
+        "correct": false,
+        "pred": "A",
+        "n_tokens": 2
+      },
+      "ctx_bids": [
+        0.02148,
+        0.01735,
+        0.01754
+      ]
+    },
+    {
+      "idx": 43,
+      "domain": "general",
+      "gold": "B",
+      "S_math": {
+        "correct": false,
+        "pred": null,
+        "n_tokens": 160
+      },
+      "S_code": {
+        "correct": false,
+        "pred": "C",
+        "n_tokens": 2
+      },
+      "S_gen": {
+        "correct": false,
+        "pred": "C",
+        "n_tokens": 2
+      },
+      "ENS": {
+        "correct": false,
+        "pred": "C",
+        "n_tokens": 2
+      },
+      "AUC": {
+        "correct": false,
+        "pred": "C",
+        "n_tokens": 2
+      },
+      "AUC_CTX": {
+        "correct": false,
+        "pred": null,
+        "n_tokens": 160
+      },
+      "ORACLE": {
+        "correct": false,
+        "pred": "C",
+        "n_tokens": 2
+      },
+      "ctx_bids": [
+        0.01859,
+        0.01154,
+        0.01197
+      ]
+    },
+    {
+      "idx": 44,
+      "domain": "general",
+      "gold": "C",
+      "S_math": {
+        "correct": false,
+        "pred": "A",
+        "n_tokens": 160
+      },
+      "S_code": {
+        "correct": true,
+        "pred": "C",
+        "n_tokens": 2
+      },
+      "S_gen": {
+        "correct": true,
+        "pred": "C",
+        "n_tokens": 2
+      },
+      "ENS": {
+        "correct": true,
+        "pred": "C",
+        "n_tokens": 2
+      },
+      "AUC": {
+        "correct": true,
+        "pred": "C",
+        "n_tokens": 2
+      },
+      "AUC_CTX": {
+        "correct": true,
+        "pred": "C",
+        "n_tokens": 2
+      },
+      "ORACLE": {
+        "correct": true,
+        "pred": "C",
+        "n_tokens": 2
+      },
+      "ctx_bids": [
+        0.01425,
+        0.01657,
+        0.017
+      ]
+    },
+    {
+      "idx": 45,
+      "domain": "general",
+      "gold": "D",
+      "S_math": {
+        "correct": false,
+        "pred": "A",
+        "n_tokens": 160
+      },
+      "S_code": {
+        "correct": true,
+        "pred": "D",
+        "n_tokens": 2
+      },
+      "S_gen": {
+        "correct": true,
+        "pred": "D",
+        "n_tokens": 2
+      },
+      "ENS": {
+        "correct": true,
+        "pred": "D",
+        "n_tokens": 2
+      },
+      "AUC": {
+        "correct": true,
+        "pred": "D",
+        "n_tokens": 2
+      },
+      "AUC_CTX": {
+        "correct": true,
+        "pred": "D",
+        "n_tokens": 2
+      },
+      "ORACLE": {
+        "correct": true,
+        "pred": "D",
+        "n_tokens": 2
+      },
+      "ctx_bids": [
+        0.01035,
+        0.03225,
+        0.03436
+      ]
+    },
+    {
+      "idx": 46,
+      "domain": "general",
+      "gold": "C",
+      "S_math": {
+        "correct": false,
+        "pred": "D",
+        "n_tokens": 160
+      },
+      "S_code": {
+        "correct": false,
+        "pred": "B",
+        "n_tokens": 2
+      },
+      "S_gen": {
+        "correct": true,
+        "pred": "C",
+        "n_tokens": 2
+      },
+      "ENS": {
+        "correct": false,
+        "pred": "B",
+        "n_tokens": 6
+      },
+      "AUC": {
+        "correct": false,
+        "pred": "D",
+        "n_tokens": 160
+      },
+      "AUC_CTX": {
+        "correct": true,
+        "pred": "C",
+        "n_tokens": 2
+      },
+      "ORACLE": {
+        "correct": true,
+        "pred": "C",
+        "n_tokens": 2
+      },
+      "ctx_bids": [
+        0.05007,
+        0.05037,
+        0.05902
+      ]
+    },
+    {
+      "idx": 47,
+      "domain": "general",
+      "gold": "D",
+      "S_math": {
+        "correct": false,
+        "pred": null,
+        "n_tokens": 160
+      },
+      "S_code": {
+        "correct": true,
+        "pred": "D",
+        "n_tokens": 2
+      },
+      "S_gen": {
+        "correct": false,
+        "pred": "C",
+        "n_tokens": 2
+      },
+      "ENS": {
+        "correct": false,
+        "pred": "A",
+        "n_tokens": 2
+      },
+      "AUC": {
+        "correct": false,
+        "pred": "A",
+        "n_tokens": 160
+      },
+      "AUC_CTX": {
+        "correct": false,
+        "pred": "C",
+        "n_tokens": 2
+      },
+      "ORACLE": {
+        "correct": false,
+        "pred": "C",
+        "n_tokens": 2
+      },
+      "ctx_bids": [
+        0.01695,
+        0.07012,
+        0.08354
+      ]
+    },
+    {
+      "idx": 48,
+      "domain": "general",
+      "gold": "C",
+      "S_math": {
+        "correct": false,
+        "pred": "D",
+        "n_tokens": 160
+      },
+      "S_code": {
+        "correct": true,
+        "pred": "C",
+        "n_tokens": 2
+      },
+      "S_gen": {
+        "correct": true,
+        "pred": "C",
+        "n_tokens": 2
+      },
+      "ENS": {
+        "correct": true,
+        "pred": "C",
+        "n_tokens": 2
+      },
+      "AUC": {
+        "correct": false,
+        "pred": "A",
+        "n_tokens": 160
+      },
+      "AUC_CTX": {
+        "correct": false,
+        "pred": "D",
+        "n_tokens": 160
+      },
+      "ORACLE": {
+        "correct": true,
+        "pred": "C",
+        "n_tokens": 2
+      },
+      "ctx_bids": [
+        0.03057,
+        0.01997,
+        0.01766
+      ]
+    },
+    {
+      "idx": 49,
+      "domain": "general",
+      "gold": "D",
+      "S_math": {
+        "correct": false,
+        "pred": "A",
+        "n_tokens": 126
+      },
+      "S_code": {
+        "correct": true,
+        "pred": "D",
+        "n_tokens": 2
+      },
+      "S_gen": {
+        "correct": true,
+        "pred": "D",
+        "n_tokens": 2
+      },
+      "ENS": {
+        "correct": true,
+        "pred": "D",
+        "n_tokens": 2
+      },
+      "AUC": {
+        "correct": true,
+        "pred": "D",
+        "n_tokens": 2
+      },
+      "AUC_CTX": {
+        "correct": true,
+        "pred": "D",
+        "n_tokens": 2
+      },
+      "ORACLE": {
+        "correct": true,
+        "pred": "D",
+        "n_tokens": 2
+      },
+      "ctx_bids": [
+        0.01031,
+        0.01514,
+        0.01381
+      ]
+    },
+    {
+      "idx": 50,
+      "domain": "general",
+      "gold": "D",
+      "S_math": {
+        "correct": false,
+        "pred": "C",
+        "n_tokens": 160
+      },
+      "S_code": {
+        "correct": false,
+        "pred": "B",
+        "n_tokens": 2
+      },
+      "S_gen": {
+        "correct": false,
+        "pred": "B",
+        "n_tokens": 2
+      },
+      "ENS": {
+        "correct": false,
+        "pred": "B",
+        "n_tokens": 2
+      },
+      "AUC": {
+        "correct": false,
+        "pred": "C",
+        "n_tokens": 160
+      },
+      "AUC_CTX": {
+        "correct": false,
+        "pred": "B",
+        "n_tokens": 2
+      },
+      "ORACLE": {
+        "correct": false,
+        "pred": "B",
+        "n_tokens": 2
+      },
+      "ctx_bids": [
+        0.03137,
+        0.08234,
+        0.0943
+      ]
+    },
+    {
+      "idx": 51,
+      "domain": "general",
+      "gold": "A",
+      "S_math": {
+        "correct": false,
+        "pred": null,
+        "n_tokens": 160
+      },
+      "S_code": {
+        "correct": true,
+        "pred": "A",
+        "n_tokens": 2
+      },
+      "S_gen": {
+        "correct": true,
+        "pred": "A",
+        "n_tokens": 2
+      },
+      "ENS": {
+        "correct": true,
+        "pred": "A",
+        "n_tokens": 2
+      },
+      "AUC": {
+        "correct": false,
+        "pred": "B",
+        "n_tokens": 160
+      },
+      "AUC_CTX": {
+        "correct": true,
+        "pred": "A",
+        "n_tokens": 2
+      },
+      "ORACLE": {
+        "correct": true,
+        "pred": "A",
+        "n_tokens": 2
+      },
+      "ctx_bids": [
+        0.00615,
+        0.03179,
+        0.04384
+      ]
+    },
+    {
+      "idx": 52,
+      "domain": "general",
+      "gold": "D",
+      "S_math": {
+        "correct": false,
+        "pred": "B",
+        "n_tokens": 160
+      },
+      "S_code": {
+        "correct": true,
+        "pred": "D",
+        "n_tokens": 2
+      },
+      "S_gen": {
+        "correct": false,
+        "pred": "A",
+        "n_tokens": 2
+      },
+      "ENS": {
+        "correct": false,
+        "pred": "A",
+        "n_tokens": 2
+      },
+      "AUC": {
+        "correct": false,
+        "pred": "A",
+        "n_tokens": 2
+      },
+      "AUC_CTX": {
+        "correct": false,
+        "pred": "B",
+        "n_tokens": 160
+      },
+      "ORACLE": {
+        "correct": false,
+        "pred": "A",
+        "n_tokens": 2
+      },
+      "ctx_bids": [
+        0.01621,
+        0.01308,
+        0.01361
+      ]
+    },
+    {
+      "idx": 53,
+      "domain": "general",
+      "gold": "D",
+      "S_math": {
+        "correct": false,
+        "pred": "A",
+        "n_tokens": 160
+      },
+      "S_code": {
+        "correct": false,
+        "pred": "C",
+        "n_tokens": 2
+      },
+      "S_gen": {
+        "correct": false,
+        "pred": "B",
+        "n_tokens": 2
+      },
+      "ENS": {
+        "correct": false,
+        "pred": "A",
+        "n_tokens": 2
+      },
+      "AUC": {
+        "correct": false,
+        "pred": "A",
+        "n_tokens": 160
+      },
+      "AUC_CTX": {
+        "correct": false,
+        "pred": "B",
+        "n_tokens": 2
+      },
+      "ORACLE": {
+        "correct": false,
+        "pred": "B",
+        "n_tokens": 2
+      },
+      "ctx_bids": [
+        0.01185,
+        0.02485,
+        0.03381
+      ]
+    },
+    {
+      "idx": 54,
+      "domain": "general",
+      "gold": "C",
+      "S_math": {
+        "correct": false,
+        "pred": null,
+        "n_tokens": 160
+      },
+      "S_code": {
+        "correct": false,
+        "pred": null,
+        "n_tokens": 160
+      },
+      "S_gen": {
+        "correct": false,
+        "pred": "A",
+        "n_tokens": 6
+      },
+      "ENS": {
+        "correct": false,
+        "pred": "A",
+        "n_tokens": 2
+      },
+      "AUC": {
+        "correct": false,
+        "pred": null,
+        "n_tokens": 160
+      },
+      "AUC_CTX": {
+        "correct": false,
+        "pred": null,
+        "n_tokens": 160
+      },
+      "ORACLE": {
+        "correct": false,
+        "pred": "A",
+        "n_tokens": 6
+      },
+      "ctx_bids": [
+        0.07097,
+        0.04495,
+        0.04331
+      ]
+    },
+    {
+      "idx": 55,
+      "domain": "general",
+      "gold": "B",
+      "S_math": {
+        "correct": false,
+        "pred": "A",
+        "n_tokens": 160
+      },
+      "S_code": {
+        "correct": true,
+        "pred": "B",
+        "n_tokens": 2
+      },
+      "S_gen": {
+        "correct": true,
+        "pred": "B",
+        "n_tokens": 2
+      },
+      "ENS": {
+        "correct": false,
+        "pred": "A",
+        "n_tokens": 2
+      },
+      "AUC": {
+        "correct": false,
+        "pred": "A",
+        "n_tokens": 160
+      },
+      "AUC_CTX": {
+        "correct": true,
+        "pred": "B",
+        "n_tokens": 2
+      },
+      "ORACLE": {
+        "correct": true,
+        "pred": "B",
+        "n_tokens": 2
+      },
+      "ctx_bids": [
+        0.01382,
+        0.02507,
+        0.03478
+      ]
+    },
+    {
+      "idx": 56,
+      "domain": "general",
+      "gold": "D",
+      "S_math": {
+        "correct": false,
+        "pred": "A",
+        "n_tokens": 160
+      },
+      "S_code": {
+        "correct": false,
+        "pred": "A",
+        "n_tokens": 2
+      },
+      "S_gen": {
+        "correct": false,
+        "pred": "A",
+        "n_tokens": 2
+      },
+      "ENS": {
+        "correct": false,
+        "pred": "A",
+        "n_tokens": 2
+      },
+      "AUC": {
+        "correct": false,
+        "pred": "A",
+        "n_tokens": 2
+      },
+      "AUC_CTX": {
+        "correct": false,
+        "pred": "A",
+        "n_tokens": 2
+      },
+      "ORACLE": {
+        "correct": false,
+        "pred": "A",
+        "n_tokens": 2
+      },
+      "ctx_bids": [
+        0.01197,
+        0.03556,
+        0.04692
+      ]
+    },
+    {
+      "idx": 57,
+      "domain": "general",
+      "gold": "D",
+      "S_math": {
+        "correct": false,
+        "pred": "C",
+        "n_tokens": 160
+      },
+      "S_code": {
+        "correct": true,
+        "pred": "D",
+        "n_tokens": 2
+      },
+      "S_gen": {
+        "correct": true,
+        "pred": "D",
+        "n_tokens": 2
+      },
+      "ENS": {
+        "correct": true,
+        "pred": "D",
+        "n_tokens": 2
+      },
+      "AUC": {
+        "correct": true,
+        "pred": "D",
+        "n_tokens": 2
+      },
+      "AUC_CTX": {
+        "correct": true,
+        "pred": "D",
+        "n_tokens": 2
+      },
+      "ORACLE": {
+        "correct": true,
+        "pred": "D",
+        "n_tokens": 2
+      },
+      "ctx_bids": [
+        0.02429,
+        0.02903,
+        0.02617
+      ]
+    },
+    {
+      "idx": 58,
+      "domain": "general",
+      "gold": "A",
+      "S_math": {
+        "correct": true,
+        "pred": "A",
+        "n_tokens": 160
+      },
+      "S_code": {
+        "correct": true,
+        "pred": "A",
+        "n_tokens": 2
+      },
+      "S_gen": {
+        "correct": true,
+        "pred": "A",
+        "n_tokens": 2
+      },
+      "ENS": {
+        "correct": true,
+        "pred": "A",
+        "n_tokens": 3
+      },
+      "AUC": {
+        "correct": true,
+        "pred": "A",
+        "n_tokens": 2
+      },
+      "AUC_CTX": {
+        "correct": true,
+        "pred": "A",
+        "n_tokens": 2
+      },
+      "ORACLE": {
+        "correct": true,
+        "pred": "A",
+        "n_tokens": 2
+      },
+      "ctx_bids": [
+        0.00992,
+        0.01146,
+        0.01157
+      ]
+    },
+    {
+      "idx": 59,
+      "domain": "general",
+      "gold": "A",
+      "S_math": {
+        "correct": false,
+        "pred": null,
+        "n_tokens": 160
+      },
+      "S_code": {
+        "correct": false,
+        "pred": null,
+        "n_tokens": 160
+      },
+      "S_gen": {
+        "correct": false,
+        "pred": "C",
+        "n_tokens": 2
+      },
+      "ENS": {
+        "correct": false,
+        "pred": "C",
+        "n_tokens": 2
+      },
+      "AUC": {
+        "correct": false,
+        "pred": "C",
+        "n_tokens": 2
+      },
+      "AUC_CTX": {
+        "correct": false,
+        "pred": null,
+        "n_tokens": 160
+      },
+      "ORACLE": {
+        "correct": false,
+        "pred": "C",
+        "n_tokens": 2
+      },
+      "ctx_bids": [
+        0.06398,
+        0.04968,
+        0.04935
+      ]
+    },
+    {
+      "idx": 60,
+      "domain": "general",
+      "gold": "B",
+      "S_math": {
+        "correct": false,
+        "pred": "C",
+        "n_tokens": 160
+      },
+      "S_code": {
+        "correct": true,
+        "pred": "B",
+        "n_tokens": 2
+      },
+      "S_gen": {
+        "correct": true,
+        "pred": "B",
+        "n_tokens": 2
+      },
+      "ENS": {
+        "correct": true,
+        "pred": "B",
+        "n_tokens": 2
+      },
+      "AUC": {
+        "correct": true,
+        "pred": "B",
+        "n_tokens": 2
+      },
+      "AUC_CTX": {
+        "correct": false,
+        "pred": "C",
+        "n_tokens": 160
+      },
+      "ORACLE": {
+        "correct": true,
+        "pred": "B",
+        "n_tokens": 2
+      },
+      "ctx_bids": [
+        0.03477,
+        0.02887,
+        0.03141
+      ]
+    },
+    {
+      "idx": 61,
+      "domain": "general",
+      "gold": "C",
+      "S_math": {
+        "correct": false,
+        "pred": "D",
+        "n_tokens": 160
+      },
+      "S_code": {
+        "correct": false,
+        "pred": "B",
+        "n_tokens": 2
+      },
+      "S_gen": {
+        "correct": true,
+        "pred": "C",
+        "n_tokens": 2
+      },
+      "ENS": {
+        "correct": true,
+        "pred": "C",
+        "n_tokens": 2
+      },
+      "AUC": {
+        "correct": true,
+        "pred": "C",
+        "n_tokens": 2
+      },
+      "AUC_CTX": {
+        "correct": true,
+        "pred": "C",
+        "n_tokens": 2
+      },
+      "ORACLE": {
+        "correct": true,
+        "pred": "C",
+        "n_tokens": 2
+      },
+      "ctx_bids": [
+        0.01362,
+        0.017,
+        0.02072
+      ]
+    },
+    {
+      "idx": 62,
+      "domain": "general",
+      "gold": "D",
+      "S_math": {
+        "correct": false,
+        "pred": null,
+        "n_tokens": 160
+      },
+      "S_code": {
+        "correct": false,
+        "pred": "B",
+        "n_tokens": 2
+      },
+      "S_gen": {
+        "correct": false,
+        "pred": "B",
+        "n_tokens": 2
+      },
+      "ENS": {
+        "correct": false,
+        "pred": "B",
+        "n_tokens": 2
+      },
+      "AUC": {
+        "correct": false,
+        "pred": "B",
+        "n_tokens": 2
+      },
+      "AUC_CTX": {
+        "correct": false,
+        "pred": "B",
+        "n_tokens": 2
+      },
+      "ORACLE": {
+        "correct": false,
+        "pred": "B",
+        "n_tokens": 2
+      },
+      "ctx_bids": [
+        0.02384,
+        0.07264,
+        0.07575
+      ]
+    },
+    {
+      "idx": 63,
+      "domain": "general",
+      "gold": "B",
+      "S_math": {
+        "correct": false,
+        "pred": "A",
+        "n_tokens": 160
+      },
+      "S_code": {
+        "correct": false,
+        "pred": "C",
+        "n_tokens": 2
+      },
+      "S_gen": {
+        "correct": false,
+        "pred": "C",
+        "n_tokens": 2
+      },
+      "ENS": {
+        "correct": false,
+        "pred": "C",
+        "n_tokens": 2
+      },
+      "AUC": {
+        "correct": false,
+        "pred": "C",
+        "n_tokens": 2
+      },
+      "AUC_CTX": {
+        "correct": false,
+        "pred": "C",
+        "n_tokens": 2
+      },
+      "ORACLE": {
+        "correct": false,
+        "pred": "C",
+        "n_tokens": 2
+      },
+      "ctx_bids": [
+        0.01568,
+        0.07633,
+        0.08436
+      ]
+    },
+    {
+      "idx": 64,
+      "domain": "general",
+      "gold": "A",
+      "S_math": {
+        "correct": true,
+        "pred": "A",
+        "n_tokens": 160
+      },
+      "S_code": {
+        "correct": true,
+        "pred": "A",
+        "n_tokens": 2
+      },
+      "S_gen": {
+        "correct": true,
+        "pred": "A",
+        "n_tokens": 2
+      },
+      "ENS": {
+        "correct": true,
+        "pred": "A",
+        "n_tokens": 2
+      },
+      "AUC": {
+        "correct": true,
+        "pred": "A",
+        "n_tokens": 2
+      },
+      "AUC_CTX": {
+        "correct": true,
+        "pred": "A",
+        "n_tokens": 2
+      },
+      "ORACLE": {
+        "correct": true,
+        "pred": "A",
+        "n_tokens": 2
+      },
+      "ctx_bids": [
+        0.02225,
+        0.02553,
+        0.02514
+      ]
+    },
+    {
+      "idx": 65,
+      "domain": "general",
+      "gold": "C",
+      "S_math": {
+        "correct": false,
+        "pred": "D",
+        "n_tokens": 160
+      },
+      "S_code": {
+        "correct": true,
+        "pred": "C",
+        "n_tokens": 2
+      },
+      "S_gen": {
+        "correct": true,
+        "pred": "C",
+        "n_tokens": 2
+      },
+      "ENS": {
+        "correct": true,
+        "pred": "C",
+        "n_tokens": 2
+      },
+      "AUC": {
+        "correct": true,
+        "pred": "C",
+        "n_tokens": 2
+      },
+      "AUC_CTX": {
+        "correct": true,
+        "pred": "C",
+        "n_tokens": 2
+      },
+      "ORACLE": {
+        "correct": true,
+        "pred": "C",
+        "n_tokens": 2
+      },
+      "ctx_bids": [
+        0.0169,
+        0.01784,
+        0.01631
+      ]
+    },
+    {
+      "idx": 66,
+      "domain": "general",
+      "gold": "A",
+      "S_math": {
+        "correct": true,
+        "pred": "A",
+        "n_tokens": 160
+      },
+      "S_code": {
+        "correct": false,
+        "pred": "B",
+        "n_tokens": 2
+      },
+      "S_gen": {
+        "correct": false,
+        "pred": "D",
+        "n_tokens": 2
+      },
+      "ENS": {
+        "correct": true,
+        "pred": "A",
+        "n_tokens": 2
+      },
+      "AUC": {
+        "correct": true,
+        "pred": "A",
+        "n_tokens": 160
+      },
+      "AUC_CTX": {
+        "correct": false,
+        "pred": "D",
+        "n_tokens": 2
+      },
+      "ORACLE": {
+        "correct": false,
+        "pred": "D",
+        "n_tokens": 2
+      },
+      "ctx_bids": [
+        0.01366,
+        0.02101,
+        0.02166
+      ]
+    },
+    {
+      "idx": 67,
+      "domain": "general",
+      "gold": "D",
+      "S_math": {
+        "correct": false,
+        "pred": "A",
+        "n_tokens": 160
+      },
+      "S_code": {
+        "correct": true,
+        "pred": "D",
+        "n_tokens": 2
+      },
+      "S_gen": {
+        "correct": true,
+        "pred": "D",
+        "n_tokens": 2
+      },
+      "ENS": {
+        "correct": true,
+        "pred": "D",
+        "n_tokens": 2
+      },
+      "AUC": {
+        "correct": true,
+        "pred": "D",
+        "n_tokens": 2
+      },
+      "AUC_CTX": {
+        "correct": true,
+        "pred": "D",
+        "n_tokens": 2
+      },
+      "ORACLE": {
+        "correct": true,
+        "pred": "D",
+        "n_tokens": 2
+      },
+      "ctx_bids": [
+        0.03964,
+        0.0516,
+        0.05772
+      ]
+    },
+    {
+      "idx": 68,
+      "domain": "general",
+      "gold": "D",
+      "S_math": {
+        "correct": false,
+        "pred": null,
+        "n_tokens": 160
+      },
+      "S_code": {
+        "correct": true,
+        "pred": "D",
+        "n_tokens": 2
+      },
+      "S_gen": {
+        "correct": true,
+        "pred": "D",
+        "n_tokens": 2
+      },
+      "ENS": {
+        "correct": true,
+        "pred": "D",
+        "n_tokens": 2
+      },
+      "AUC": {
+        "correct": true,
+        "pred": "D",
+        "n_tokens": 2
+      },
+      "AUC_CTX": {
+        "correct": true,
+        "pred": "D",
+        "n_tokens": 2
+      },
+      "ORACLE": {
+        "correct": true,
+        "pred": "D",
+        "n_tokens": 2
+      },
+      "ctx_bids": [
+        0.00807,
+        0.03908,
+        0.04767
+      ]
+    },
+    {
+      "idx": 69,
+      "domain": "general",
+      "gold": "C",
+      "S_math": {
+        "correct": true,
+        "pred": "C",
+        "n_tokens": 160
+      },
+      "S_code": {
+        "correct": false,
+        "pred": "B",
+        "n_tokens": 2
+      },
+      "S_gen": {
+        "correct": false,
+        "pred": "A",
+        "n_tokens": 2
+      },
+      "ENS": {
+        "correct": false,
+        "pred": "A",
+        "n_tokens": 2
+      },
+      "AUC": {
+        "correct": false,
+        "pred": "A",
+        "n_tokens": 2
+      },
+      "AUC_CTX": {
+        "correct": false,
+        "pred": "B",
+        "n_tokens": 2
+      },
+      "ORACLE": {
+        "correct": false,
+        "pred": "A",
+        "n_tokens": 2
+      },
+      "ctx_bids": [
+        0.01874,
+        0.03914,
+        0.0354
+      ]
+    },
+    {
+      "idx": 70,
+      "domain": "general",
+      "gold": "D",
+      "S_math": {
+        "correct": false,
+        "pred": "C",
+        "n_tokens": 134
+      },
+      "S_code": {
+        "correct": false,
+        "pred": "B",
+        "n_tokens": 2
+      },
+      "S_gen": {
+        "correct": true,
+        "pred": "D",
+        "n_tokens": 2
+      },
+      "ENS": {
+        "correct": true,
+        "pred": "D",
+        "n_tokens": 2
+      },
+      "AUC": {
+        "correct": true,
+        "pred": "D",
+        "n_tokens": 2
+      },
+      "AUC_CTX": {
+        "correct": true,
+        "pred": "D",
+        "n_tokens": 2
+      },
+      "ORACLE": {
+        "correct": true,
+        "pred": "D",
+        "n_tokens": 2
+      },
+      "ctx_bids": [
+        0.01264,
+        0.05889,
+        0.07365
+      ]
+    },
+    {
+      "idx": 71,
+      "domain": "general",
+      "gold": "D",
+      "S_math": {
+        "correct": false,
+        "pred": "A",
+        "n_tokens": 160
+      },
+      "S_code": {
+        "correct": false,
+        "pred": "B",
+        "n_tokens": 2
+      },
+      "S_gen": {
+        "correct": true,
+        "pred": "D",
+        "n_tokens": 2
+      },
+      "ENS": {
+        "correct": true,
+        "pred": "D",
+        "n_tokens": 2
+      },
+      "AUC": {
+        "correct": true,
+        "pred": "D",
+        "n_tokens": 2
+      },
+      "AUC_CTX": {
+        "correct": false,
+        "pred": "B",
+        "n_tokens": 2
+      },
+      "ORACLE": {
+        "correct": true,
+        "pred": "D",
+        "n_tokens": 2
+      },
+      "ctx_bids": [
+        0.00773,
+        0.01544,
+        0.01239
+      ]
+    },
+    {
+      "idx": 72,
+      "domain": "general",
+      "gold": "C",
+      "S_math": {
+        "correct": false,
+        "pred": "A",
+        "n_tokens": 160
+      },
+      "S_code": {
+        "correct": false,
+        "pred": "D",
+        "n_tokens": 2
+      },
+      "S_gen": {
+        "correct": false,
+        "pred": "D",
+        "n_tokens": 2
+      },
+      "ENS": {
+        "correct": false,
+        "pred": "D",
+        "n_tokens": 2
+      },
+      "AUC": {
+        "correct": false,
+        "pred": null,
+        "n_tokens": 2
+      },
+      "AUC_CTX": {
+        "correct": false,
+        "pred": "A",
+        "n_tokens": 160
+      },
+      "ORACLE": {
+        "correct": false,
+        "pred": "D",
+        "n_tokens": 2
+      },
+      "ctx_bids": [
+        0.01357,
+        0.01123,
+        0.00816
+      ]
+    },
+    {
+      "idx": 73,
+      "domain": "general",
+      "gold": "A",
+      "S_math": {
+        "correct": true,
+        "pred": "A",
+        "n_tokens": 160
+      },
+      "S_code": {
+        "correct": false,
+        "pred": "B",
+        "n_tokens": 2
+      },
+      "S_gen": {
+        "correct": false,
+        "pred": "B",
+        "n_tokens": 2
+      },
+      "ENS": {
+        "correct": false,
+        "pred": "B",
+        "n_tokens": 2
+      },
+      "AUC": {
+        "correct": true,
+        "pred": "A",
+        "n_tokens": 160
+      },
+      "AUC_CTX": {
+        "correct": false,
+        "pred": "B",
+        "n_tokens": 2
+      },
+      "ORACLE": {
+        "correct": false,
+        "pred": "B",
+        "n_tokens": 2
+      },
+      "ctx_bids": [
+        0.01091,
+        0.01857,
+        0.01943
+      ]
+    },
+    {
+      "idx": 74,
+      "domain": "general",
+      "gold": "C",
+      "S_math": {
+        "correct": false,
+        "pred": "A",
+        "n_tokens": 160
+      },
+      "S_code": {
+        "correct": false,
+        "pred": "D",
+        "n_tokens": 2
+      },
+      "S_gen": {
+        "correct": true,
+        "pred": "C",
+        "n_tokens": 2
+      },
+      "ENS": {
+        "correct": true,
+        "pred": "C",
+        "n_tokens": 2
+      },
+      "AUC": {
+        "correct": true,
+        "pred": "C",
+        "n_tokens": 2
+      },
+      "AUC_CTX": {
+        "correct": false,
+        "pred": "D",
+        "n_tokens": 2
+      },
+      "ORACLE": {
+        "correct": true,
+        "pred": "C",
+        "n_tokens": 2
+      },
+      "ctx_bids": [
+        0.00826,
+        0.01555,
+        0.01407
+      ]
+    },
+    {
+      "idx": 75,
+      "domain": "general",
+      "gold": "D",
+      "S_math": {
+        "correct": false,
+        "pred": "A",
+        "n_tokens": 160
+      },
+      "S_code": {
+        "correct": false,
+        "pred": "C",
+        "n_tokens": 2
+      },
+      "S_gen": {
+        "correct": false,
+        "pred": "A",
+        "n_tokens": 2
+      },
+      "ENS": {
+        "correct": false,
+        "pred": "A",
+        "n_tokens": 2
+      },
+      "AUC": {
+        "correct": false,
+        "pred": null,
+        "n_tokens": 160
+      },
+      "AUC_CTX": {
+        "correct": false,
+        "pred": "A",
+        "n_tokens": 160
+      },
+      "ORACLE": {
+        "correct": false,
+        "pred": "A",
+        "n_tokens": 2
+      },
+      "ctx_bids": [
+        0.07133,
+        0.0524,
+        0.05316
+      ]
+    },
+    {
+      "idx": 76,
+      "domain": "general",
+      "gold": "B",
+      "S_math": {
+        "correct": false,
+        "pred": "D",
+        "n_tokens": 160
+      },
+      "S_code": {
+        "correct": true,
+        "pred": "B",
+        "n_tokens": 2
+      },
+      "S_gen": {
+        "correct": false,
+        "pred": "A",
+        "n_tokens": 2
+      },
+      "ENS": {
+        "correct": false,
+        "pred": "A",
+        "n_tokens": 2
+      },
+      "AUC": {
+        "correct": false,
+        "pred": "A",
+        "n_tokens": 2
+      },
+      "AUC_CTX": {
+        "correct": true,
+        "pred": "B",
+        "n_tokens": 2
+      },
+      "ORACLE": {
+        "correct": false,
+        "pred": "A",
+        "n_tokens": 2
+      },
+      "ctx_bids": [
+        0.0116,
+        0.02214,
+        0.01832
+      ]
+    },
+    {
+      "idx": 77,
+      "domain": "general",
+      "gold": "D",
+      "S_math": {
+        "correct": true,
+        "pred": "D",
+        "n_tokens": 160
+      },
+      "S_code": {
+        "correct": false,
+        "pred": "C",
+        "n_tokens": 2
+      },
+      "S_gen": {
+        "correct": false,
+        "pred": "C",
+        "n_tokens": 6
+      },
+      "ENS": {
+        "correct": false,
+        "pred": "C",
+        "n_tokens": 2
+      },
+      "AUC": {
+        "correct": false,
+        "pred": "A",
+        "n_tokens": 160
+      },
+      "AUC_CTX": {
+        "correct": false,
+        "pred": "C",
+        "n_tokens": 6
+      },
+      "ORACLE": {
+        "correct": false,
+        "pred": "C",
+        "n_tokens": 6
+      },
+      "ctx_bids": [
+        0.03038,
+        0.04966,
+        0.05688
+      ]
+    },
+    {
+      "idx": 78,
+      "domain": "general",
+      "gold": "B",
+      "S_math": {
+        "correct": false,
+        "pred": "A",
+        "n_tokens": 160
+      },
+      "S_code": {
+        "correct": true,
+        "pred": "B",
+        "n_tokens": 2
+      },
+      "S_gen": {
+        "correct": true,
+        "pred": "B",
+        "n_tokens": 2
+      },
+      "ENS": {
+        "correct": true,
+        "pred": "B",
+        "n_tokens": 2
+      },
+      "AUC": {
+        "correct": true,
+        "pred": "B",
+        "n_tokens": 2
+      },
+      "AUC_CTX": {
+        "correct": true,
+        "pred": "B",
+        "n_tokens": 2
+      },
+      "ORACLE": {
+        "correct": true,
+        "pred": "B",
+        "n_tokens": 2
+      },
+      "ctx_bids": [
+        0.0096,
+        0.02368,
+        0.02207
+      ]
+    },
+    {
+      "idx": 79,
+      "domain": "general",
+      "gold": "D",
+      "S_math": {
+        "correct": false,
+        "pred": "A",
+        "n_tokens": 160
+      },
+      "S_code": {
+        "correct": false,
+        "pred": "B",
+        "n_tokens": 2
+      },
+      "S_gen": {
+        "correct": true,
+        "pred": "D",
+        "n_tokens": 2
+      },
+      "ENS": {
+        "correct": true,
+        "pred": "D",
+        "n_tokens": 2
+      },
+      "AUC": {
+        "correct": true,
+        "pred": "D",
+        "n_tokens": 2
+      },
+      "AUC_CTX": {
+        "correct": false,
+        "pred": "A",
+        "n_tokens": 160
+      },
+      "ORACLE": {
+        "correct": true,
+        "pred": "D",
+        "n_tokens": 2
+      },
+      "ctx_bids": [
+        0.026,
+        0.02004,
+        0.02287
+      ]
+    }
+  ],
+  "wall_clock_s": 5760.276424407959
+}

@@ -4,11 +4,13 @@
 % Hardware: GB10 (DGX Spark, 121GB unified memory, thermal governor ~91°C defect) + RTX 5090 (32GB) for training.
 % Evaluation: BLiMP (1000-pair subset of minimal pairs) at 11M–121M; lm-evaluation-harness at 1–3B (Qwen3-1.7B base rates).
 
-\section{Experimental Setup and Closure Protocol}
-
 This paper adopts a pre-registered empirical program with adversarial audit, as detailed in Section~\ref{sec:method}.
 Every hypothesis was registered with a quantitative, pass/fail gate in a specification document version-controlled
-before its experiment ran. The closure contract mandates six layers: (i) all experiment arms complete; (ii) no
+before its experiment ran.
+
+\input{sections/figures_protocol.tex}
+
+The closure contract mandates six layers: (i) all experiment arms complete; (ii) no
 verdict based on fewer than three md5-distinct random seeds; (iii) every reported number traced to a results file
 carrying a resolved-config SHA-256 hash and git commit; (iv) a resolved adversarial review that recomputes all
 results from raw data and audits like-for-like fairness; (v) all findings and review verdicts recorded in the

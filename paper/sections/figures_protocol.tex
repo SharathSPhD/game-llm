@@ -1,0 +1,46 @@
+% figures_protocol.tex -- closure-protocol flowchart (TikZ, no external assets).
+% Split out of figures_arch.tex: this figure documents the experimental closure
+% protocol (Section~\ref{sec:setup}), not the model architecture, and its natural
+% width exceeded \textwidth when placed at 1:1 scale, so it is wrapped in \resizebox.
+
+\begin{figure}[t]
+\centering
+\resizebox{\textwidth}{!}{%
+\begin{tikzpicture}[
+  font=\small, node distance=0.55cm,
+  stage/.style={draw, rounded corners=2pt, minimum width=3.1cm, minimum height=0.68cm, align=center, fill=black!4},
+  gate/.style={draw, diamond, aspect=2.1, inner sep=1pt, align=center, fill=blue!8, draw=blue!55, font=\scriptsize},
+  term/.style={draw, rounded corners=7pt, minimum width=2.4cm, minimum height=0.6cm, align=center, fill=black!3},
+  ar/.style={-{Latex[length=2mm]}, gray!75},
+  lbl/.style={font=\scriptsize, text=black!65}
+]
+  \node[term] (h) {hypothesis with\\numeric gate};
+  \node[stage, right=1.1cm of h] (spec) {specification\\(arms, seeds, metric)};
+  \node[stage, right=1.1cm of spec] (run) {execution\\(config hash + commit)};
+  \node[gate, right=1.1cm of run] (rev) {adversarial\\review};
+  \node[stage, below=1.15cm of rev] (amend) {claim rescoped\\or refuted};
+  \node[gate, right=1.15cm of rev] (gate) {gate\\met?};
+  \node[term, above right=0.35cm and 1.0cm of gate] (met) {\textsc{met}};
+  \node[term, right=1.0cm of gate] (part) {\textsc{partial}};
+  \node[term, below right=0.35cm and 1.0cm of gate] (miss) {\textsc{missed}};
+
+  \draw[ar] (h) -- (spec);
+  \draw[ar] (spec) -- (run);
+  \draw[ar] (run) -- (rev);
+  \draw[ar] (rev) -- (gate);
+  \draw[ar] (rev) -- node[lbl, right] {refuted} (amend);
+  \draw[ar] (amend) -| ($(run.south) + (-0.6,-0.75)$) -- ($(run.south) + (-0.6,0)$);
+  \draw[ar] (gate) -- (met);
+  \draw[ar] (gate) -- (part);
+  \draw[ar] (gate) -- (miss);
+  \node[lbl, below=0.1cm of amend, align=center] {a rescoped claim re-enters\\at execution, not at review};
+\end{tikzpicture}%
+}
+\caption{The closure protocol applied to every hypothesis reported here. A
+quantitative gate is fixed before execution; each run records the SHA-256 of its
+resolved configuration and the commit that produced it; an adversarial review
+recomputes every number from raw results and may refute or rescope the claim
+before it is scored. Outcomes are named rather than binary, so a documented miss
+terminates a line of enquiry with the same standing as a pass.}
+\label{fig:protocol}
+\end{figure}

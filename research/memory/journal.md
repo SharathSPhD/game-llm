@@ -459,3 +459,22 @@
 - Ops lesson repeated and heeded: the first auction smoke showed chance-level
   accuracy for EVERY system; inspecting the actual generations showed a
   96-token truncation, not a science result.
+
+## [cycle 24 | 2026-08-28] EXP15 UPTRAINING COMPLETE; EXP16 2/3 SEEDS MET
+- exp15 (H7, distillation + stochastic anytime arm): KineticLM 1.167B (68% of
+  Qwen3-1.7B), 98M FineWeb-Edu tokens, 3.88h on the 5090.
+  Held-out ppl 13877 -> 20.84. Base Qwen3-1.7B on the SAME tokens: 17.486,
+  so the converted model sits at 1.19x base perplexity after a budget
+  100-1000x smaller than published recursive-uptraining recipes.
+  Budget sweep nearly flat (21.22 at depth 6 vs 20.95 at depth 12) — the
+  anytime property (F24/B1) transfers to the 1.7B conversion.
+  Benchmark retention (lm-eval, same invocation as the recorded base rates)
+  running on the 5090; H7 verdict pending that number.
+- exp16 (H9) seed 42: AUC 0.625 vs best single 0.537 (MET).
+  seed 43: AUC 0.637 vs best single 0.575 (MET). Seed 44 in progress.
+  Both seeds also show ENS >= AUC, so the auction's advantage over uniform
+  logit averaging is NOT established; and AUC_CTX (context-aware bids, the
+  F23 follow-up) trails plain per-token bidding on both seeds.
+- Paper brought to the ACD standard and encoded as the academic-paper-style
+  SKILL (~/.claude/skills/), whose check_style.sh caught 8 figures included
+  but never referenced from prose — a defect manual review had missed.

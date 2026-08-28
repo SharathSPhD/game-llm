@@ -7,3 +7,34 @@
   [5/80] {'S_math': 0.6, 'S_code': 0.4, 'S_gen': 0.8, 'ENS': 0.6, 'AUC': 0.6, 'AUC_CTX': 0.6, 'ORACLE': 0.6} 9.6min
   [10/80] {'S_math': 0.6, 'S_code': 0.4, 'S_gen': 0.6, 'ENS': 0.6, 'AUC': 0.6, 'AUC_CTX': 0.6, 'ORACLE': 0.6} 21.4min
   [15/80] {'S_math': 0.667, 'S_code': 0.4, 'S_gen': 0.667, 'ENS': 0.667, 'AUC': 0.667, 'AUC_CTX': 0.667, 'ORACLE': 0.667} 33.0min
+  [20/80] {'S_math': 0.7, 'S_code': 0.4, 'S_gen': 0.7, 'ENS': 0.7, 'AUC': 0.7, 'AUC_CTX': 0.7, 'ORACLE': 0.7} 44.6min
+  [25/80] {'S_math': 0.72, 'S_code': 0.44, 'S_gen': 0.64, 'ENS': 0.72, 'AUC': 0.72, 'AUC_CTX': 0.72, 'ORACLE': 0.72} 54.0min
+  [30/80] {'S_math': 0.767, 'S_code': 0.5, 'S_gen': 0.633, 'ENS': 0.767, 'AUC': 0.767, 'AUC_CTX': 0.767, 'ORACLE': 0.767} 63.9min
+  [35/80] {'S_math': 0.771, 'S_code': 0.571, 'S_gen': 0.629, 'ENS': 0.771, 'AUC': 0.8, 'AUC_CTX': 0.771, 'ORACLE': 0.771} 74.1min
+  [40/80] {'S_math': 0.775, 'S_code': 0.55, 'S_gen': 0.625, 'ENS': 0.775, 'AUC': 0.8, 'AUC_CTX': 0.775, 'ORACLE': 0.775} 85.7min
+  [45/80] {'S_math': 0.711, 'S_code': 0.533, 'S_gen': 0.6, 'ENS': 0.733, 'AUC': 0.756, 'AUC_CTX': 0.756, 'ORACLE': 0.733} 86.9min
+  [50/80] {'S_math': 0.64, 'S_code': 0.56, 'S_gen': 0.62, 'ENS': 0.72, 'AUC': 0.72, 'AUC_CTX': 0.74, 'ORACLE': 0.74} 88.3min
+  [55/80] {'S_math': 0.582, 'S_code': 0.545, 'S_gen': 0.582, 'ENS': 0.673, 'AUC': 0.655, 'AUC_CTX': 0.691, 'ORACLE': 0.691} 90.2min
+  [60/80] {'S_math': 0.55, 'S_code': 0.55, 'S_gen': 0.583, 'ENS': 0.65, 'AUC': 0.633, 'AUC_CTX': 0.683, 'ORACLE': 0.683} 91.5min
+  [65/80] {'S_math': 0.523, 'S_code': 0.538, 'S_gen': 0.585, 'ENS': 0.646, 'AUC': 0.631, 'AUC_CTX': 0.662, 'ORACLE': 0.677} 92.5min
+  [70/80] {'S_math': 0.514, 'S_code': 0.543, 'S_gen': 0.586, 'ENS': 0.657, 'AUC': 0.643, 'AUC_CTX': 0.657, 'ORACLE': 0.671} 93.4min
+  [75/80] {'S_math': 0.493, 'S_code': 0.507, 'S_gen': 0.587, 'ENS': 0.653, 'AUC': 0.653, 'AUC_CTX': 0.627, 'ORACLE': 0.667} 94.6min
+  [80/80] {'S_math': 0.475, 'S_code': 0.5, 'S_gen': 0.575, 'ENS': 0.637, 'AUC': 0.637, 'AUC_CTX': 0.613, 'ORACLE': 0.65} 96.0min
+
+=== exp16 summary (closed-loop, objective accuracy) ===
+  S_math    overall 0.475  math 0.775  general 0.175
+  S_code    overall 0.500  math 0.550  general 0.450
+  S_gen     overall 0.575  math 0.625  general 0.525
+  ENS       overall 0.637  math 0.775  general 0.500
+  AUC       overall 0.637  math 0.800  general 0.475
+  AUC_CTX   overall 0.613  math 0.775  general 0.450
+  ORACLE    overall 0.650  math 0.775  general 0.525
+  best single = S_gen | H9 MET
+2026-08-28T11:37:20+01:00 exp16 seed 43 rc=0
+2026-08-28T11:37:20+01:00 exp16 seed 44 starting
+Loading weights:   0%|          | 0/338 [00:00<?, ?it/s]Loading weights: 100%|██████████| 338/338 [00:00<00:00, 15796.88it/s]
+Loading weights:   0%|          | 0/338 [00:00<?, ?it/s]Loading weights: 100%|██████████| 338/338 [00:00<00:00, 14013.21it/s]
+Loading weights:   0%|          | 0/338 [00:00<?, ?it/s]Loading weights: 100%|██████████| 338/338 [00:00<00:00, 12690.10it/s]
+[models] ['S_math', 'S_code', 'S_gen'] loaded, shared vocab 151665
+[tasks] 80 prompts: 40 math / 40 general
+  [5/80] {'S_math': 0.6, 'S_code': 0.4, 'S_gen': 0.8, 'ENS': 0.6, 'AUC': 0.6, 'AUC_CTX': 0.6, 'ORACLE': 0.6} 9.6min

@@ -10,33 +10,45 @@ Donald~G. Anderson.
 \newblock Iterative procedures for nonlinear integral equations.
 \newblock \emph{Journal of the ACM}, 12\penalty0 (4):\penalty0 547--560, 1965.
 
-\bibitem[Bae et~al.(2025)Bae, Fisch, Harutyunyan, Ji, Kim, and Schuster]{RecursiveTransformers2024}
-Sangmin Bae, Adam Fisch, Hrayr Harutyunyan, Ziwei Ji, Seungyeon Kim, and Tal Schuster.
-\newblock Relaxed recursive transformers: Effective parameter sharing with layer-wise {L}o{RA}.
-\newblock In \emph{International Conference on Learning Representations (ICLR)}, 2025.
+\bibitem[Bae et~al.(2025)Bae, Fisch, Harutyunyan, Ji, Kim, and
+  Schuster]{RecursiveTransformers2024}
+Sangmin Bae, Adam Fisch, Hrayr Harutyunyan, Ziwei Ji, Seungyeon Kim, and Tal
+  Schuster.
+\newblock Relaxed recursive transformers: Effective parameter sharing with
+  layer-wise {L}o{RA}.
+\newblock In \emph{International Conference on Learning Representations
+  (ICLR)}, 2025.
 \newblock arXiv:2410.20672.
 
 \bibitem[Bai et~al.(2019)Bai, Kolter, and Koltun]{Bai2019}
 Shaojie Bai, J.~Zico Kolter, and Vladlen Koltun.
 \newblock Deep equilibrium models.
-\newblock In \emph{Advances in Neural Information Processing Systems 32 (NeurIPS)}, 2019.
+\newblock In \emph{Advances in Neural Information Processing Systems 32
+  (NeurIPS)}, 2019.
 
 \bibitem[Bengio et~al.(2015)Bengio, Vinyals, Jaitly, and Shazeer]{Bengio2015}
 Samy Bengio, Oriol Vinyals, Navdeep Jaitly, and Noam Shazeer.
-\newblock Scheduled sampling for sequence prediction with recurrent neural networks.
-\newblock In \emph{Advances in Neural Information Processing Systems 28 (NeurIPS)}, 2015.
+\newblock Scheduled sampling for sequence prediction with recurrent neural
+  networks.
+\newblock In \emph{Advances in Neural Information Processing Systems 28
+  (NeurIPS)}, 2015.
 
 \bibitem[Broyden(1965)]{Broyden1965}
 Charles~G. Broyden.
 \newblock A class of methods for solving nonlinear simultaneous equations.
-\newblock \emph{Mathematics of Computation}, 19\penalty0 (92):\penalty0 577--593, 1965.
+\newblock \emph{Mathematics of Computation}, 19\penalty0 (92):\penalty0
+  577--593, 1965.
 
-\bibitem[Dehghani et~al.(2019)Dehghani, Gouws, Vinyals, Uszkoreit, and Kaiser]{Dehghani2019}
-Mostafa Dehghani, Stephan Gouws, Oriol Vinyals, Jakob Uszkoreit, and {\L}ukasz Kaiser.
+\bibitem[Dehghani et~al.(2019)Dehghani, Gouws, Vinyals, Uszkoreit, and
+  Kaiser]{Dehghani2019}
+Mostafa Dehghani, Stephan Gouws, Oriol Vinyals, Jakob Uszkoreit, and {\L}ukasz
+  Kaiser.
 \newblock Universal transformers.
-\newblock In \emph{International Conference on Learning Representations (ICLR)}, 2019.
+\newblock In \emph{International Conference on Learning Representations
+  (ICLR)}, 2019.
 
-\bibitem[D{\"u}tting et~al.(2024)D{\"u}tting, Mirrokni, Paes~Leme, Xu, and Zuo]{Duetting2024}
+\bibitem[D{\"u}tting et~al.(2024)D{\"u}tting, Mirrokni, Paes~Leme, Xu, and
+  Zuo]{Duetting2024}
 Paul D{\"u}tting, Vahab Mirrokni, Renato Paes~Leme, Haifeng Xu, and Song Zuo.
 \newblock Mechanism design for large language models.
 \newblock In \emph{Proceedings of the ACM Web Conference (WWW)}, 2024.
@@ -44,93 +56,134 @@ Paul D{\"u}tting, Vahab Mirrokni, Renato Paes~Leme, Haifeng Xu, and Song Zuo.
 \bibitem[Geng et~al.(2021)Geng, Zhang, Bai, Wang, and Lin]{Geng2021}
 Zhengyang Geng, Xin-Yu Zhang, Shaojie Bai, Yisen Wang, and Zhouchen Lin.
 \newblock On training implicit models.
-\newblock In \emph{Advances in Neural Information Processing Systems 34 (NeurIPS)}, 2021.
+\newblock In \emph{Advances in Neural Information Processing Systems 34
+  (NeurIPS)}, 2021.
 
 \bibitem[Graves(2016)]{Graves2016}
 Alex Graves.
 \newblock Adaptive computation time for recurrent neural networks, 2016.
 \newblock arXiv:1603.08983.
 
-\bibitem[Holtzman et~al.(2020)Holtzman, Buys, Du, Forbes, and Choi]{Holtzman2020}
+\bibitem[Holtzman et~al.(2020)Holtzman, Buys, Du, Forbes, and
+  Choi]{Holtzman2020}
 Ari Holtzman, Jan Buys, Li~Du, Maxwell Forbes, and Yejin Choi.
 \newblock The curious case of neural text degeneration.
-\newblock In \emph{International Conference on Learning Representations (ICLR)}, 2020.
+\newblock In \emph{International Conference on Learning Representations
+  (ICLR)}, 2020.
 
-\bibitem[Lan et~al.(2020)Lan, Chen, Goodman, Gimpel, Sharma, and Soricut]{Lan2020}
-Zhenzhong Lan, Mingda Chen, Sebastian Goodman, Kevin Gimpel, Piyush Sharma, and Radu Soricut.
-\newblock {ALBERT}: A lite {BERT} for self-supervised learning of language representations.
-\newblock In \emph{International Conference on Learning Representations (ICLR)}, 2020.
+\bibitem[Lan et~al.(2020)Lan, Chen, Goodman, Gimpel, Sharma, and
+  Soricut]{Lan2020}
+Zhenzhong Lan, Mingda Chen, Sebastian Goodman, Kevin Gimpel, Piyush Sharma, and
+  Radu Soricut.
+\newblock {ALBERT}: A lite {BERT} for self-supervised learning of language
+  representations.
+\newblock In \emph{International Conference on Learning Representations
+  (ICLR)}, 2020.
 
 \bibitem[Lee et~al.(2015)Lee, Xie, Gallagher, Zhang, and Tu]{Lee2015}
 Chen-Yu Lee, Saining Xie, Patrick Gallagher, Zhengyou Zhang, and Zhuowen Tu.
 \newblock Deeply-supervised nets.
-\newblock In \emph{Proceedings of the 18th International Conference on Artificial Intelligence and Statistics (AISTATS)}, 2015.
+\newblock In \emph{Proceedings of the 18th International Conference on
+  Artificial Intelligence and Statistics (AISTATS)}, 2015.
 
 \bibitem[Loshchilov and Hutter(2019)]{Loshchilov2019}
 Ilya Loshchilov and Frank Hutter.
 \newblock Decoupled weight decay regularization.
-\newblock In \emph{International Conference on Learning Representations (ICLR)}, 2019.
+\newblock In \emph{International Conference on Learning Representations
+  (ICLR)}, 2019.
 
 \bibitem[McKelvey and Palfrey(1995)]{McKelvey1995}
 Richard~D. McKelvey and Thomas~R. Palfrey.
 \newblock Quantal response equilibria for normal form games.
-\newblock \emph{Games and Economic Behavior}, 10\penalty0 (1):\penalty0 6--38, 1995.
+\newblock \emph{Games and Economic Behavior}, 10\penalty0 (1):\penalty0 6--38,
+  1995.
 
-\bibitem[Mertikopoulos et~al.(2018)Mertikopoulos, Papadimitriou, and Piliouras]{Mertikopoulos2018}
+\bibitem[Mertikopoulos et~al.(2018)Mertikopoulos, Papadimitriou, and
+  Piliouras]{Mertikopoulos2018}
 Panayotis Mertikopoulos, Christos Papadimitriou, and Georgios Piliouras.
 \newblock Cycles in adversarial regularized learning.
-\newblock In \emph{Proceedings of the 29th Annual ACM-SIAM Symposium on Discrete Algorithms (SODA)}, 2018.
+\newblock In \emph{Proceedings of the 29th Annual ACM-SIAM Symposium on
+  Discrete Algorithms (SODA)}, 2018.
 
 \bibitem[Miyato et~al.(2018)Miyato, Kataoka, Koyama, and Yoshida]{Miyato2018}
 Takeru Miyato, Toshiki Kataoka, Masanori Koyama, and Yuichi Yoshida.
 \newblock Spectral normalization for generative adversarial networks.
-\newblock In \emph{International Conference on Learning Representations (ICLR)}, 2018.
+\newblock In \emph{International Conference on Learning Representations
+  (ICLR)}, 2018.
 
-\bibitem[Perolat et~al.(2021)Perolat, Munos, Lespiau, Omidshafiei, Rowland, Ortega, Burch, Anthony, Balduzzi, De~Vylder, Piliouras, Lanctot, and Tuyls]{Perolat2021}
-Julien Perolat, R{\'e}mi Munos, Jean-Baptiste Lespiau, Shayegan Omidshafiei, Mark Rowland, Pedro Ortega, Neil Burch, Thomas Anthony, David Balduzzi, Bart De~Vylder, Georgios Piliouras, Marc Lanctot, and Karl Tuyls.
-\newblock From {P}oincar{\'e} recurrence to convergence in imperfect information games: Finding equilibrium via regularization.
-\newblock In \emph{Proceedings of the 38th International Conference on Machine Learning (ICML)}, 2021.
+\bibitem[Perolat et~al.(2021)Perolat, Munos, Lespiau, Omidshafiei, Rowland,
+  Ortega, Burch, Anthony, Balduzzi, De~Vylder, Piliouras, Lanctot, and
+  Tuyls]{Perolat2021}
+Julien Perolat, R{\'e}mi Munos, Jean-Baptiste Lespiau, Shayegan Omidshafiei,
+  Mark Rowland, Pedro Ortega, Neil Burch, Thomas Anthony, David Balduzzi, Bart
+  De~Vylder, Georgios Piliouras, Marc Lanctot, and Karl Tuyls.
+\newblock From {P}oincar{\'e} recurrence to convergence in imperfect
+  information games: Finding equilibrium via regularization.
+\newblock In \emph{Proceedings of the 38th International Conference on Machine
+  Learning (ICML)}, 2021.
 
-\bibitem[Radford et~al.(2019)Radford, Wu, Child, Luan, Amodei, and Sutskever]{Radford2019}
-Alec Radford, Jeffrey Wu, Rewon Child, David Luan, Dario Amodei, and Ilya Sutskever.
+\bibitem[Radford et~al.(2019)Radford, Wu, Child, Luan, Amodei, and
+  Sutskever]{Radford2019}
+Alec Radford, Jeffrey Wu, Rewon Child, David Luan, Dario Amodei, and Ilya
+  Sutskever.
 \newblock Language models are unsupervised multitask learners.
 \newblock Technical report, OpenAI, 2019.
 
-\bibitem[Rafailov et~al.(2023)Rafailov, Sharma, Mitchell, Ermon, Manning, and Finn]{Rafailov2023}
-Rafael Rafailov, Archit Sharma, Eric Mitchell, Stefano Ermon, Christopher~D. Manning, and Chelsea Finn.
-\newblock Direct preference optimization: Your language model is secretly a reward model.
-\newblock In \emph{Advances in Neural Information Processing Systems 36 (NeurIPS)}, 2023.
+\bibitem[Rafailov et~al.(2023)Rafailov, Sharma, Mitchell, Ermon, Manning, and
+  Finn]{Rafailov2023}
+Rafael Rafailov, Archit Sharma, Eric Mitchell, Stefano Ermon, Christopher~D.
+  Manning, and Chelsea Finn.
+\newblock Direct preference optimization: Your language model is secretly a
+  reward model.
+\newblock In \emph{Advances in Neural Information Processing Systems 36
+  (NeurIPS)}, 2023.
 
-\bibitem[Sokota et~al.(2023)Sokota, D'Orazio, Kolter, Loizou, Lanctot, Mitliagkas, Brown, and Kroer]{Sokota2023}
-Samuel Sokota, Ryan D'Orazio, J.~Zico Kolter, Nicolas Loizou, Marc Lanctot, Ioannis Mitliagkas, Noam Brown, and Christian Kroer.
-\newblock A unified approach to reinforcement learning, quantal response equilibria, and two-player zero-sum games.
-\newblock In \emph{International Conference on Learning Representations (ICLR)}, 2023.
+\bibitem[Sokota et~al.(2023)Sokota, D'Orazio, Kolter, Loizou, Lanctot,
+  Mitliagkas, Brown, and Kroer]{Sokota2023}
+Samuel Sokota, Ryan D'Orazio, J.~Zico Kolter, Nicolas Loizou, Marc Lanctot,
+  Ioannis Mitliagkas, Noam Brown, and Christian Kroer.
+\newblock A unified approach to reinforcement learning, quantal response
+  equilibria, and two-player zero-sum games.
+\newblock In \emph{International Conference on Learning Representations
+  (ICLR)}, 2023.
 
 \bibitem[Vickrey(1961)]{Vickrey1961}
 William Vickrey.
 \newblock Counterspeculation, auctions, and competitive sealed tenders.
 \newblock \emph{The Journal of Finance}, 16\penalty0 (1):\penalty0 8--37, 1961.
 
-\bibitem[Wang et~al.(2025)Wang, Ma, Chen, Meng, Han, Xiao, Zhang, Huo, Su, and Yang]{Wang2025MPO}
-Mingzhi Wang, Chengdong Ma, Qizhi Chen, Linjian Meng, Yang Han, Jiancong Xiao, Zhaowei Zhang, Jing Huo, Weijie~J. Su, and Yaodong Yang.
-\newblock Magnetic preference optimization: Achieving last-iterate convergence for language model alignment.
-\newblock In \emph{International Conference on Learning Representations (ICLR)}, 2025.
+\bibitem[Wang et~al.(2025)Wang, Ma, Chen, Meng, Han, Xiao, Zhang, Huo, Su, and
+  Yang]{Wang2025MPO}
+Mingzhi Wang, Chengdong Ma, Qizhi Chen, Linjian Meng, Yang Han, Jiancong Xiao,
+  Zhaowei Zhang, Jing Huo, Weijie~J. Su, and Yaodong Yang.
+\newblock Magnetic preference optimization: Achieving last-iterate convergence
+  for language model alignment.
+\newblock In \emph{International Conference on Learning Representations
+  (ICLR)}, 2025.
 \newblock arXiv:2410.16714.
 
-\bibitem[Warstadt et~al.(2020)Warstadt, Parrish, Liu, Mohananey, Peng, Wang, and Bowman]{Warstadt2020}
-Alex Warstadt, Alicia Parrish, Haokun Liu, Anhad Mohananey, Wei Peng, Sheng-Fu Wang, and Samuel~R. Bowman.
+\bibitem[Warstadt et~al.(2020)Warstadt, Parrish, Liu, Mohananey, Peng, Wang,
+  and Bowman]{Warstadt2020}
+Alex Warstadt, Alicia Parrish, Haokun Liu, Anhad Mohananey, Wei Peng, Sheng-Fu
+  Wang, and Samuel~R. Bowman.
 \newblock {BLiMP}: The benchmark of linguistic minimal pairs for {E}nglish.
-\newblock \emph{Transactions of the Association for Computational Linguistics}, 8:\penalty0 377--392, 2020.
+\newblock \emph{Transactions of the Association for Computational Linguistics},
+  8:\penalty0 377--392, 2020.
 
-\bibitem[Warstadt et~al.(2023)Warstadt, Mueller, Choshen, Wilcox, Zhuang, Ciro, Mosquera, Paranjabe, Williams, Linzen, and Cotterell]{Warstadt2023}
-Alex Warstadt, Aaron Mueller, Leshem Choshen, Ethan Wilcox, Chengxu Zhuang, Juan Ciro, Rafael Mosquera, Bhargavi Paranjabe, Adina Williams, Tal Linzen, and Ryan Cotterell.
-\newblock Findings of the {BabyLM} challenge: Sample-efficient pretraining on developmentally plausible corpora.
+\bibitem[Warstadt et~al.(2023)Warstadt, Mueller, Choshen, Wilcox, Zhuang, Ciro,
+  Mosquera, Paranjabe, Williams, Linzen, and Cotterell]{Warstadt2023}
+Alex Warstadt, Aaron Mueller, Leshem Choshen, Ethan Wilcox, Chengxu Zhuang,
+  Juan Ciro, Rafael Mosquera, Bhargavi Paranjabe, Adina Williams, Tal Linzen,
+  and Ryan Cotterell.
+\newblock Findings of the {BabyLM} challenge: Sample-efficient pretraining on
+  developmentally plausible corpora.
 \newblock In \emph{Proceedings of the {BabyLM} Challenge at CoNLL}, 2023.
 
 \bibitem[Winston and Kolter(2020)]{Winston2020}
 Ezra Winston and J.~Zico Kolter.
 \newblock Monotone operator equilibrium networks.
-\newblock In \emph{Advances in Neural Information Processing Systems 33 (NeurIPS)}, 2020.
+\newblock In \emph{Advances in Neural Information Processing Systems 33
+  (NeurIPS)}, 2020.
 
 \bibitem[Wu et~al.(2024)Wu, Sun, Yuan, Ji, Yang, and Gu]{Wu2024}
 Yue Wu, Zhiqing Sun, Huizhuo Yuan, Kaixuan Ji, Yiming Yang, and Quanquan Gu.
