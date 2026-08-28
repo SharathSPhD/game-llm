@@ -1,0 +1,2 @@
+2026-08-28T15:45:59+01:00 === exp23 seed 42 ===
+Loading weights:   0%|          | 0/338 [00:00<?, ?it/s]Loading weights:   0%|          | 1/338 [00:03<22:13,  3.96s/it]Loading weights:   1%|▏         | 5/338 [00:04<03:29,  1.59it/s]Loading weights:   4%|▍         | 14/338 [00:04<01:04,  5.01it/s]Loading weights:   5%|▍         | 16/338 [00:04<00:56,  5.70it/s]Loading weights:   7%|▋         | 22/338 [00:05<00:48,  6.56it/s]Loading weights:  14%|█▎        | 46/338 [00:07<00:29, 10.01it/s]Loading weights:  26%|██▋       | 89/338 [00:07<00:09, 26.70it/s]

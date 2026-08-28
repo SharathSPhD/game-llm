@@ -939,3 +939,48 @@ being correct by chance and carries no signal any rule could key on.
   paragraphs of F29, F30 and F31 above, each of which asserted the twenty-point
   reading.
 - **Status:** VALIDATED · supersedes the headroom claim in F29–F31 · Tarka PENDING
+
+## F33 — The arena was homogeneous, and that is why nothing beat averaging
+
+**Cycle 26 · 2026-08-28 · corrected GSM8K measurement · GB10**
+
+F28 excluded GSM8K because strict match scored zero for all four models, which
+measured the answer convention an instruction-tuned model emits rather than its
+arithmetic. Re-measuring with each model's chat template applied and a 512-token
+generation budget settles what the exclusion was hiding.
+
+- **The correction is large and selective.** Qwen2.5-Math-1.5B-Instruct goes from
+  0.290 to **0.795**, Qwen2.5-1.5B-Instruct from 0.095 to 0.595, and
+  Qwen2.5-Coder-1.5B-Instruct from 0.340 to 0.510, while Qwen3-1.7B is unmoved at
+  0.455 to 0.450. The chat template is decisive for the Qwen2.5-Instruct family
+  and irrelevant for Qwen3, so a single harness configuration was silently
+  penalising three of four players by between 17 and 51 points.
+- **The "weak" player is the council's strongest specialist.** The mathematics
+  variant leads GSM8K by 20 points over the generalist and 35 over Qwen3, while
+  scoring 0.391 on MMLU where it is last. Its competence is real, large and
+  entirely invisible in multiple choice.
+- **The arena that produced F29 and F30 was nearly homogeneous, and GSM8K was the
+  one task excluded from it.** Across the 61 loglikelihood tasks the four players
+  differ mainly in overall strength rather than in what they know, which is why a
+  per-subject oracle bought only 0.96 points there. On a mixed arena of equal
+  parts mathematics and knowledge the same four players give a best single score
+  of 0.611 against a perfect domain router's 0.711 — **ten points of routable
+  headroom, an order of magnitude more than the arena where every aggregation
+  rule was tested.**
+- **Interpretation, and what it does and does not overturn.** F29 and F30 remain
+  correct about what they measured: over those distributions no rule beats
+  averaging, and F32's audit shows little was left to extract. What they cannot
+  support is the general claim that aggregation is worthless for this council.
+  The negative was obtained where the players are close to interchangeable, and
+  the measurement that would have shown otherwise was the one the broken harness
+  forced out of the set. The chain is worth stating plainly because each link was
+  individually correct: a genuine integrity flag removed the task, removing the
+  task homogenised the arena, and a homogeneous arena cannot separate aggregation
+  rules.
+- **Consequence.** Selection has real headroom on heterogeneous work and close to
+  none on homogeneous work, so any claim about the paradigm must state which
+  regime it was measured in. The cross-examination arm uses an equal mix of
+  mathematics and knowledge for exactly this reason, and its comparison against
+  best-single now has a meaningful 10-point ceiling rather than a 1-point one.
+- **Status:** VALIDATED (single seed per model, 200 questions, limit-bounded) ·
+  scopes F29–F31 without overturning them · Tarka PENDING
