@@ -245,3 +245,83 @@ class TestBlockRecursiveSharing:
         loaded = load_kinetic(tmp_path / "k2").eval()
         torch.testing.assert_close(loaded(ids).logits, ref)
         assert count_unique_params(loaded) == count_unique_params(m)
+
+
+class TestDepthLoRARelaxation:
+    """SPEC 0014 arm A3: per-depth LoRA deltas on the shared core.
+
+    Each recursion gets its own low-rank correction so the tied block can act
+    slightly differently at each depth (Relaxed Recursive Transformers). The
+    scale anneals to zero during training, so at the end the adapters vanish
+    and the pure parameter saving is restored.
+    """
+
+    def _model(self):
+        from kinetic_ai.models.kinetic_lm import add_depth_lora
+
+        m = convert_to_kinetic(_tiny_base(), KineticConfig(n_pre=2, n_post=2, n_cores=1))
+        add_depth_lora(m, rank=4)
+        return m
+
+    def test_adds_parameters_but_far_fewer_than_untying(self, base) -> None:
+        from kinetic_ai.models.kinetic_lm import add_depth_lora
+
+        plain = convert_to_kinetic(_tiny_base(), KineticConfig(n_pre=2, n_post=2, n_cores=1))
+        n_plain = count_unique_params(plain)
+        lora = self._model()
+        n_lora = count_unique_params(lora)
+        per_layer = sum(p.numel() for p in base.model.layers[0].parameters())
+        assert n_lora > n_plain
+        assert n_lora - n_plain < 3 * per_layer  # cheaper than untying the 3 extra layers
+
+    def test_base_weights_still_shared(self) -> None:
+        m = self._model()
+        core = m.model.layers[2:6]
+        ptr = core[0].mlp.gate_proj.base.weight.data_ptr()
+        assert all(layer.mlp.gate_proj.base.weight.data_ptr() == ptr for layer in core[1:])
+
+    def test_each_depth_has_its_own_adapter(self) -> None:
+        m = self._model()
+        core = m.model.layers[2:6]
+        ptrs = {layer.mlp.gate_proj.lora_a.data_ptr() for layer in core}
+        assert len(ptrs) == len(core)
+
+    def test_zero_scale_reproduces_the_tied_model(self) -> None:
+        from kinetic_ai.models.kinetic_lm import add_depth_lora, set_lora_scale
+
+        torch.manual_seed(0)
+        plain = convert_to_kinetic(_tiny_base(), KineticConfig(n_pre=2, n_post=2, n_cores=1)).eval()
+        ids = torch.randint(0, 256, (1, 6))
+        ref = plain(ids).logits
+        torch.manual_seed(0)
+        lora = convert_to_kinetic(_tiny_base(), KineticConfig(n_pre=2, n_post=2, n_cores=1))
+        add_depth_lora(lora, rank=4)
+        lora.eval()
+        set_lora_scale(lora, 0.0)
+        torch.testing.assert_close(lora(ids).logits, ref)
+
+    def test_nonzero_scale_changes_outputs(self) -> None:
+        from kinetic_ai.models.kinetic_lm import set_lora_scale
+
+        m = self._model().eval()
+        ids = torch.randint(0, 256, (1, 6))
+        set_lora_scale(m, 0.0)
+        off = m(ids).logits.clone()
+        for layer in m.model.layers[2:6]:
+            torch.nn.init.normal_(layer.mlp.gate_proj.lora_b, std=0.05)
+        set_lora_scale(m, 1.0)
+        assert not torch.allclose(m(ids).logits, off)
+
+    def test_merge_and_remove_restores_plain_module_and_param_count(self) -> None:
+        from kinetic_ai.models.kinetic_lm import merge_and_remove_lora, set_lora_scale
+
+        m = self._model().eval()
+        plain = convert_to_kinetic(_tiny_base(), KineticConfig(n_pre=2, n_post=2, n_cores=1))
+        n_plain = count_unique_params(plain)
+        set_lora_scale(m, 0.0)  # annealed to zero: merging is a no-op on values
+        ids = torch.randint(0, 256, (1, 6))
+        before = m(ids).logits.clone()
+        merge_and_remove_lora(m)
+        torch.testing.assert_close(m(ids).logits, before)
+        assert count_unique_params(m) == n_plain
+        assert isinstance(m.model.layers[2].mlp.gate_proj, torch.nn.Linear)

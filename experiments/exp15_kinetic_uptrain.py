@@ -38,8 +38,11 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from kinetic_ai.models.kinetic_lm import (  # noqa: E402
     KineticConfig,
+    add_depth_lora,
     convert_to_kinetic,
     count_unique_params,
+    merge_and_remove_lora,
+    set_lora_scale,
 )
 
 
@@ -112,6 +115,15 @@ def build_token_batches(cfg: dict, tokenizer) -> torch.Tensor:
     return tokens
 
 
+def depth_weights(depths: list[int], full_depth: int, progress: float, lam0: float, lam1: float) -> dict[int, float]:
+    """SPEC 0014 arm A2 (depth curriculum): weight shallow budgets heavily
+    early, then flatten. w(d,t) = exp(-lambda(t) * d / K), normalized."""
+    lam = lam0 + lam1 * progress
+    raw = {d: math.exp(-lam * d / max(full_depth, 1)) for d in depths}
+    total = sum(raw.values()) or 1.0
+    return {d: w / total for d, w in raw.items()}
+
+
 def kd_loss(student_logits: torch.Tensor, teacher_logits: torch.Tensor, temp: float) -> torch.Tensor:
     """Token-level forward KL from teacher to student."""
     s = F.log_softmax(student_logits / temp, dim=-1)
@@ -176,6 +188,20 @@ def main() -> None:
             p.requires_grad_(False)
     n_base = sum(p.numel() for p in (teacher or student).parameters()) if teacher else None
 
+    arm = cfg.get("arm", "distill")
+    lora_rank = int(cfg.get("lora", {}).get("rank", 0))
+    if arm == "lora_relax":
+        if lora_rank < 1:
+            raise ValueError("arm 'lora_relax' requires lora.rank >= 1")
+        add_depth_lora(student, rank=lora_rank)
+        student.to(device)
+        print(f"[arm] lora_relax: rank {lora_rank} adapters per recursion, "
+              f"annealing to 0 (params now {count_unique_params(student)/1e9:.3f}B)", flush=True)
+    elif arm in ("distill", "depth_curriculum"):
+        print(f"[arm] {arm}", flush=True)
+    else:
+        raise ValueError(f"unknown arm {arm}")
+
     if tr.get("gradient_checkpointing", True):
         student.gradient_checkpointing_enable()
         student.config.use_cache = False
@@ -214,6 +240,10 @@ def main() -> None:
     t0 = time.time()
     student.train()
     for step in range(total_steps):
+        progress = step / max(total_steps - 1, 1)
+        if arm == "lora_relax":
+            # linear rank/scale decay 1 -> 0 so the adapters vanish by the end
+            set_lora_scale(student, max(0.0, 1.0 - progress))
         opt.zero_grad(set_to_none=True)
         step_loss = step_kd = step_ce = step_any = 0.0
         for _ in range(accum):
@@ -232,11 +262,21 @@ def main() -> None:
             # Anytime term (ours): same objective at a reduced budget.
             if tr["anytime_prob"] > 0 and rng.random() < tr["anytime_prob"]:
                 d = rng.choice(anytime_depths)
+                if arm == "depth_curriculum":
+                    w = depth_weights(
+                        sorted({*anytime_depths, full_depth}),
+                        full_depth,
+                        progress,
+                        float(tr.get("curriculum_lam0", 1.0)),
+                        float(tr.get("curriculum_lam1", 0.5)),
+                    )[d] * len(anytime_depths)
+                else:
+                    w = tr.get("anytime_weight", 0.3)
                 student.set_recursion_depth(d)
                 try:
                     a_logits = student(batch).logits
                     loss_any = ce_loss(a_logits, batch)
-                    loss = loss + tr.get("anytime_weight", 0.3) * loss_any
+                    loss = loss + w * loss_any
                     step_any += loss_any.item()
                 finally:
                     student.set_recursion_depth(full_depth)
@@ -272,6 +312,12 @@ def main() -> None:
             student.save_pretrained(out_dir / "checkpoint")
             tokenizer.save_pretrained(out_dir / "checkpoint")
 
+    if arm == "lora_relax":
+        set_lora_scale(student, 0.0)
+        merge_and_remove_lora(student)
+        print(f"[arm] adapters removed; final params "
+              f"{count_unique_params(student)/1e9:.3f}B", flush=True)
+
     ppl_final = eval_ppl(student, heldout, device, 8, bs)
     budget_ppl = {}
     for d in sorted({full_depth, *anytime_depths}):
@@ -288,6 +334,8 @@ def main() -> None:
         "config_hash": compute_config_hash(cfg),
         "git_commit": get_git_commit(),
         "base_model": base_id,
+        "arm": arm,
+        "lora_rank": lora_rank if arm == "lora_relax" else 0,
         "kinetic": cfg["kinetic"],
         "student_params": n_student,
         "base_params": n_base,

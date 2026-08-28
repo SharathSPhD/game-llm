@@ -33,6 +33,7 @@ from typing import Any
 
 import torch
 import torch.nn as nn
+import torch.nn.functional as F
 
 KINETIC_CONFIG_FILE = "kinetic_config.json"
 
@@ -239,6 +240,96 @@ def _clone_tied(core: nn.Module) -> nn.Module:
     clone = copy.deepcopy(core)
     _tie_to(core, clone)
     return clone
+
+
+
+# ── Depth-LoRA relaxation (SPEC 0014 arm A3) ─────────────────────────────────
+
+
+class DepthLoRALinear(nn.Module):
+    """A shared base Linear plus a per-depth low-rank correction.
+
+    ``base`` is the tied projection (its weight object is shared across every
+    recursion); ``lora_a``/``lora_b`` are private to this depth. Output is
+
+        y = base(x) + scale * (x @ A^T) @ B^T
+
+    with ``lora_b`` zero-initialized so the adapter starts as a no-op. During
+    training ``scale`` anneals to zero, after which ``merge_and_remove_lora``
+    collapses the module back to the plain shared Linear — recovering quality
+    during uptraining without permanently spending the parameters.
+    """
+
+    def __init__(self, base: nn.Linear, rank: int) -> None:
+        super().__init__()
+        self.base = base
+        self.rank = rank
+        self.scale = 1.0
+        self.lora_a = nn.Parameter(torch.zeros(rank, base.in_features, dtype=base.weight.dtype))
+        self.lora_b = nn.Parameter(torch.zeros(base.out_features, rank, dtype=base.weight.dtype))
+        nn.init.normal_(self.lora_a, std=1.0 / max(rank, 1))
+
+    @property
+    def in_features(self) -> int:
+        return self.base.in_features
+
+    @property
+    def out_features(self) -> int:
+        return self.base.out_features
+
+    @property
+    def weight(self) -> torch.Tensor:
+        return self.base.weight
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        out = self.base(x)
+        if self.scale:
+            out = out + self.scale * F.linear(F.linear(x, self.lora_a), self.lora_b)
+        return out
+
+
+def _iter_lora_targets(layer: nn.Module) -> list[tuple[nn.Module, str, nn.Linear]]:
+    targets: list[tuple[nn.Module, str, nn.Linear]] = []
+    for parent in layer.modules():
+        for name, child in list(parent.named_children()):
+            if isinstance(child, nn.Linear):
+                targets.append((parent, name, child))
+    return targets
+
+
+def add_depth_lora(model: Any, rank: int = 16) -> Any:
+    """Give every core recursion its own low-rank correction (arm A3)."""
+    cfg = model.kinetic_config
+    layers = model.model.layers
+    core_slice = layers[cfg.n_pre : len(layers) - cfg.n_post] if cfg.n_post else layers[cfg.n_pre :]
+    for layer in core_slice:
+        for parent, name, linear in _iter_lora_targets(layer):
+            setattr(parent, name, DepthLoRALinear(linear, rank))
+    model._lora_rank = rank
+    return model
+
+
+def set_lora_scale(model: Any, scale: float) -> None:
+    """Set the adapter strength (the annealing schedule drives this to 0)."""
+    for module in model.modules():
+        if isinstance(module, DepthLoRALinear):
+            module.scale = float(scale)
+
+
+def merge_and_remove_lora(model: Any) -> Any:
+    """Drop the adapters, restoring pure weight tying.
+
+    Called after the schedule has annealed ``scale`` to zero: the adapters
+    contribute nothing to the output, so removing them returns the model to
+    its original (shared) parameter count with no change in behaviour.
+    """
+    for parent in list(model.modules()):
+        for name, child in list(parent.named_children()):
+            if isinstance(child, DepthLoRALinear):
+                setattr(parent, name, child.base)
+    if hasattr(model, "_lora_rank"):
+        delattr(model, "_lora_rank")
+    return model
 
 
 def convert_to_kinetic(model: nn.Module, config: KineticConfig) -> Any:

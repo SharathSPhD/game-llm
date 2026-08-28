@@ -6,7 +6,7 @@ supervision + teacher distillation from exp15.
 
 ## Question
 
-The weight-tied KineticLM conversion of Qwen3-1.7B destroys ~95% of model quality (ppl 6.01 → 1909).
+The weight-tied KineticLM conversion of Qwen3-1.7B destroys most of the model (ppl 6.01 → 1909, a 318x degradation).
 Published recursive-uptraining recipes recover this loss on 10–100B tokens. **We have 100–300M tokens.**
 
 Can TRIZ-identified mechanisms (depth-curriculum, LoRA relaxation, inverse-exponential supervision weighting)
@@ -33,7 +33,7 @@ within 7–14 wall-clock hours on RTX 5090. A documented miss at <75% retention 
 ### Surgical Configuration (Fixed for All Arms)
 
 - **Base model:** Qwen3-1.7B (28 layers, d=2048)
-- **KineticLM topology:** 8 pre-layers + 1 shared core (iterated 8×) + 8 post-layers
+- **KineticLM topology:** 8 pre-layers + 1 shared core (iterated 12×) + 8 post-layers
 - **Parameter count:** 1.167B (~68% of base), per F25 damage curve
 - **Initialization:** Elementwise mean of middle 12 layers → core block (established in F25 as superior to stepwise)
 - **Tokenizer:** Native Qwen3 (vocabulary unchanged)

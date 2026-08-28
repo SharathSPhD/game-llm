@@ -1,0 +1,38 @@
+seed: 42
+device: cuda
+base_model: Qwen/Qwen3-1.7B
+kinetic:
+  n_pre: 8
+  n_post: 8
+  n_cores: 1
+  init_strategy: average
+  anytime_depths:
+  - 6
+  - 12
+data:
+  dataset: HuggingFaceFW/fineweb-edu
+  name: sample-10BT
+  split: train
+  seq_len: 1024
+  max_tokens: 130000000
+  heldout_batches: 16
+  cache_dir: data/scale_cache
+training:
+  num_steps: 6000
+  batch_size: 4
+  grad_accum: 4
+  seq_len: 1024
+  lr: 2e-4
+  weight_decay: 0.01
+  grad_clip: 1.0
+  warmup_frac: 0.02
+  alpha_kl: 0.7
+  kd_temp: 1.0
+  anytime_prob: 0.25
+  anytime_weight: 0.3
+  gradient_checkpointing: true
+  log_every: 20
+  eval_every: 500
+arm: lora_relax
+lora:
+  rank: 16
