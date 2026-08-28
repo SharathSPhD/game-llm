@@ -3,3 +3,4 @@
 Loading weights:   0%|          | 0/338 [00:00<?, ?it/s]Loading weights: 100%|██████████| 338/338 [00:00<00:00, 12167.21it/s]
 [models] ['S_math', 'S_code', 'S_gen'] loaded, shared vocab 151665
 [tasks] 80 prompts: 40 math / 40 general
+  [5/80] {'S_math': 0.6, 'S_code': 0.4, 'S_gen': 0.8, 'ENS': 0.6, 'AUC': 0.6, 'AUC_CTX': 0.6, 'ORACLE': 0.6} 9.7min

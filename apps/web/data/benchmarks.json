@@ -1,0 +1,68 @@
+{
+  "benchmarks": [
+    {
+      "id": "qwen3-1.7b",
+      "model_name": "Qwen3-1.7B",
+      "size_b": 1.72,
+      "source": "Open-weight baseline",
+      "arc_challenge_acc": 0.4067,
+      "arc_challenge_acc_norm": 0.4433,
+      "hellaswag_acc": 0.43,
+      "hellaswag_acc_norm": 0.5067,
+      "gsm8k_flexible": 0.4567,
+      "harness": "lm-eval v0.4.12",
+      "shots": 0,
+      "sample_limit": 300,
+      "machine": "GB10",
+      "status": "baseline"
+    },
+    {
+      "id": "eqlm-121m-v4",
+      "model_name": "EqLM 121M (v4 anytime)",
+      "size_b": 0.121,
+      "source": "EqLM research platform",
+      "arc_challenge_acc": null,
+      "arc_challenge_acc_norm": null,
+      "hellaswag_acc": null,
+      "hellaswag_acc_norm": null,
+      "gsm8k_flexible": null,
+      "harness": "pending",
+      "shots": 0,
+      "sample_limit": 300,
+      "machine": "pending",
+      "status": "pending"
+    },
+    {
+      "id": "eqlm-scale-converted",
+      "model_name": "EqLM Qwen3 1.167B (converted)",
+      "size_b": 1.167,
+      "source": "EqLM via Qwen3-1.7B conversion",
+      "arc_challenge_acc": null,
+      "arc_challenge_acc_norm": null,
+      "hellaswag_acc": null,
+      "hellaswag_acc_norm": null,
+      "gsm8k_flexible": null,
+      "harness": "pending",
+      "shots": 0,
+      "sample_limit": 300,
+      "machine": "pending",
+      "status": "pending"
+    },
+    {
+      "id": "eqlm-auction-ensemble",
+      "model_name": "EqLM Token-Auction (specialist ensemble)",
+      "size_b": 0.06,
+      "source": "EqLM research platform",
+      "arc_challenge_acc": null,
+      "arc_challenge_acc_norm": null,
+      "hellaswag_acc": null,
+      "hellaswag_acc_norm": null,
+      "gsm8k_flexible": null,
+      "harness": "pending",
+      "shots": 0,
+      "sample_limit": 300,
+      "machine": "pending",
+      "status": "pending"
+    }
+  ]
+}

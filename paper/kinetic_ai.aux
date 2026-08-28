@@ -67,23 +67,26 @@
 \@writefile{toc}{\contentsline {subsection}{\numberline {7.7}Certification, and the Open Problem (F24, arms B2--B4)}{8}{subsection.7.7}\protected@file@percent }
 \newlabel{sec:h6}{{7.7}{8}{Certification, and the Open Problem (F24, arms B2--B4)}{subsection.7.7}{}}
 \citation{Rafailov2023}
+\citation{Wang2025MPO}
 \@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces Main pretraining results at 121M parameters (BabyLM strict-small, batch 32 $\times $ 10k steps, 3 seeds; BLiMP subset of 1000 pairs). Ratio is per-seed EqLM/explicit. The anytime-unrolled regime closes the gap solver-based training had widened.}}{9}{table.caption.10}\protected@file@percent }
 \newlabel{tab:main}{{1}{9}{Main pretraining results at 121M parameters (BabyLM strict-small, batch 32 $\times $ 10k steps, 3 seeds; BLiMP subset of 1000 pairs). Ratio is per-seed EqLM/explicit. The anytime-unrolled regime closes the gap solver-based training had widened}{table.caption.10}{}}
 \@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Left: the width gap belongs to the training regime, not the architecture --- per-seed BLiMP ratio against the explicit baseline at 121M under implicit (F20) vs.\ anytime-unrolled (F24) training. Right: the anytime checkpoint evaluated at Anderson budgets $\{4,8,12\}$ degrades gracefully; dashes mark the explicit baseline's mean.}}{9}{figure.caption.11}\protected@file@percent }
 \newlabel{fig:parity}{{2}{9}{Left: the width gap belongs to the training regime, not the architecture --- per-seed BLiMP ratio against the explicit baseline at 121M under implicit (F20) vs.\ anytime-unrolled (F24) training. Right: the anytime checkpoint evaluated at Anderson budgets $\{4,8,12\}$ degrades gracefully; dashes mark the explicit baseline's mean}{figure.caption.11}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {8}Magnetic Preference Optimization vs.\ DPO}{10}{section.8}\protected@file@percent }
-\newlabel{sec:mpo}{{8}{10}{Magnetic Preference Optimization vs.\ DPO}{section.8}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {8}Parameter-Space Magnetic Anchoring vs.\ DPO}{10}{section.8}\protected@file@percent }
+\newlabel{sec:mpo}{{8}{10}{Parameter-Space Magnetic Anchoring vs.\ DPO}{section.8}{}}
 \@writefile{toc}{\contentsline {paragraph}{Verdict: \textsc  {partial} on the letter, missed in spirit.}{10}{section*.12}\protected@file@percent }
 \@writefile{toc}{\contentsline {paragraph}{Two secondary findings survive audit.}{10}{section*.13}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {9}Auction Decoding: Where Selection Wins and Where It Does Not}{10}{section.9}\protected@file@percent }
-\newlabel{sec:auction}{{9}{10}{Auction Decoding: Where Selection Wins and Where It Does Not}{section.9}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {9.1}Scoring-Time Selection: \textsc  {met} (F22)}{10}{subsection.9.1}\protected@file@percent }
 \citation{Holtzman2020}
 \citation{Bengio2015}
 \citation{Sokota2023}
 \citation{Mertikopoulos2018}
 \citation{Perolat2021}
 \citation{McKelvey1995}
+\@writefile{toc}{\contentsline {section}{\numberline {9}Auction Decoding: Where Selection Wins and Where It Does Not}{11}{section.9}\protected@file@percent }
+\newlabel{sec:auction}{{9}{11}{Auction Decoding: Where Selection Wins and Where It Does Not}{section.9}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {9.1}Scoring-Time Selection: \textsc  {met} (F22)}{11}{subsection.9.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {9.2}Closed-Loop Generation: \textsc  {missed}, and a Metric Lesson (F23)}{11}{subsection.9.2}\protected@file@percent }
+\newlabel{sec:closedloop}{{9.2}{11}{Closed-Loop Generation: \textsc {missed}, and a Metric Lesson (F23)}{subsection.9.2}{}}
 \citation{Bai2019}
 \citation{Anderson1965}
 \citation{Broyden1965}
@@ -93,54 +96,57 @@
 \citation{Lan2020}
 \citation{Lee2015}
 \citation{Graves2016}
-\@writefile{toc}{\contentsline {subsection}{\numberline {9.2}Closed-Loop Generation: \textsc  {missed}, and a Metric Lesson (F23)}{11}{subsection.9.2}\protected@file@percent }
-\newlabel{sec:closedloop}{{9.2}{11}{Closed-Loop Generation: \textsc {missed}, and a Metric Lesson (F23)}{subsection.9.2}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {10}Related Work}{11}{section.10}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{Equilibria in learning dynamics.}{11}{section*.14}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{Implicit depth and weight tying.}{11}{section*.15}\protected@file@percent }
 \citation{Rafailov2023}
 \citation{Wu2024}
+\citation{Wang2025MPO}
 \citation{Duetting2024}
 \citation{Warstadt2020}
 \citation{Warstadt2023}
 \citation{Radford2019}
+\@writefile{toc}{\contentsline {section}{\numberline {10}Related Work}{12}{section.10}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Equilibria in learning dynamics.}{12}{section*.14}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Implicit depth and weight tying.}{12}{section*.15}\protected@file@percent }
 \@writefile{toc}{\contentsline {paragraph}{Preference optimization.}{12}{section*.16}\protected@file@percent }
 \@writefile{toc}{\contentsline {paragraph}{Model aggregation as mechanism design.}{12}{section*.17}\protected@file@percent }
 \@writefile{toc}{\contentsline {paragraph}{Benchmarks.}{12}{section*.18}\protected@file@percent }
 \@writefile{toc}{\contentsline {section}{\numberline {11}Threats to Validity and Limitations}{12}{section.11}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {12}Reproducibility}{12}{section.12}\protected@file@percent }
+\citation{RecursiveTransformers2024}
+\@writefile{toc}{\contentsline {section}{\numberline {12}Reproducibility}{13}{section.12}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {13}Scaling the Program to Open-Weight Models}{13}{section.13}\protected@file@percent }
 \bibstyle{plainnat}
 \bibdata{references}
 \bibcite{Anderson1965}{{1}{1965}{{Anderson}}{{}}}
-\bibcite{Bai2019}{{2}{2019}{{Bai et~al.}}{{Bai, Kolter, and Koltun}}}
-\bibcite{Bengio2015}{{3}{2015}{{Bengio et~al.}}{{Bengio, Vinyals, Jaitly, and Shazeer}}}
-\bibcite{Broyden1965}{{4}{1965}{{Broyden}}{{}}}
-\bibcite{Dehghani2019}{{5}{2019}{{Dehghani et~al.}}{{Dehghani, Gouws, Vinyals, Uszkoreit, and Kaiser}}}
-\bibcite{Duetting2024}{{6}{2024}{{D{\"u}tting et~al.}}{{D{\"u}tting, Mirrokni, Paes~Leme, Xu, and Zuo}}}
-\bibcite{Geng2021}{{7}{2021}{{Geng et~al.}}{{Geng, Zhang, Bai, Wang, and Lin}}}
-\bibcite{Graves2016}{{8}{2016}{{Graves}}{{}}}
-\@writefile{toc}{\contentsline {section}{\numberline {13}Conclusion}{13}{section.13}\protected@file@percent }
-\bibcite{Holtzman2020}{{9}{2020}{{Holtzman et~al.}}{{Holtzman, Buys, Du, Forbes, and Choi}}}
-\bibcite{Lan2020}{{10}{2020}{{Lan et~al.}}{{Lan, Chen, Goodman, Gimpel, Sharma, and Soricut}}}
-\bibcite{Lee2015}{{11}{2015}{{Lee et~al.}}{{Lee, Xie, Gallagher, Zhang, and Tu}}}
-\bibcite{Loshchilov2019}{{12}{2019}{{Loshchilov and Hutter}}{{}}}
-\bibcite{McKelvey1995}{{13}{1995}{{McKelvey and Palfrey}}{{}}}
-\bibcite{Mertikopoulos2018}{{14}{2018}{{Mertikopoulos et~al.}}{{Mertikopoulos, Papadimitriou, and Piliouras}}}
-\bibcite{Miyato2018}{{15}{2018}{{Miyato et~al.}}{{Miyato, Kataoka, Koyama, and Yoshida}}}
-\bibcite{Perolat2021}{{16}{2021}{{Perolat et~al.}}{{Perolat, Munos, Lespiau, Omidshafiei, Rowland, Ortega, Burch, Anthony, Balduzzi, De~Vylder, Piliouras, Lanctot, and Tuyls}}}
-\bibcite{Radford2019}{{17}{2019}{{Radford et~al.}}{{Radford, Wu, Child, Luan, Amodei, and Sutskever}}}
-\bibcite{Rafailov2023}{{18}{2023}{{Rafailov et~al.}}{{Rafailov, Sharma, Mitchell, Ermon, Manning, and Finn}}}
-\bibcite{Sokota2023}{{19}{2023}{{Sokota et~al.}}{{Sokota, D'Orazio, Kolter, Loizou, Lanctot, Mitliagkas, Brown, and Kroer}}}
-\bibcite{Vickrey1961}{{20}{1961}{{Vickrey}}{{}}}
-\bibcite{Warstadt2020}{{21}{2020}{{Warstadt et~al.}}{{Warstadt, Parrish, Liu, Mohananey, Peng, Wang, and Bowman}}}
-\bibcite{Warstadt2023}{{22}{2023}{{Warstadt et~al.}}{{Warstadt, Mueller, Choshen, Wilcox, Zhuang, Ciro, Mosquera, Paranjabe, Williams, Linzen, and Cotterell}}}
-\bibcite{Winston2020}{{23}{2020}{{Winston and Kolter}}{{}}}
-\bibcite{Wu2024}{{24}{2024}{{Wu et~al.}}{{Wu, Sun, Yuan, Ji, Yang, and Gu}}}
-\@writefile{toc}{\contentsline {section}{\numberline {A}Per-Seed Results}{15}{appendix.A}\protected@file@percent }
-\newlabel{app:tables}{{A}{15}{Per-Seed Results}{appendix.A}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces H1/H6 pretraining, all seeds (BLiMP on the 1000-pair subset; conv.\ = solver convergence rate at eval, rel-tol $10^{-3}$, budget 12).}}{15}{table.caption.20}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {3}{\ignorespaces H3 preference optimization (400 held-out pairs from unseen phenomena; KL in nats/token to the frozen base).}}{15}{table.caption.21}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {B}Hyperparameters}{15}{appendix.B}\protected@file@percent }
-\newlabel{app:hparams}{{B}{15}{Hyperparameters}{appendix.B}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {4}{\ignorespaces H4/H5 auction systems. Left: teacher-forced mixed-domain perplexity (F22). Right: closed-loop generation judge NLL/token (F23; judge-relative, see \S  \ref {sec:closedloop}).}}{16}{table.caption.22}\protected@file@percent }
-\gdef \@abspage@last{16}
+\bibcite{RecursiveTransformers2024}{{2}{2025}{{Bae et~al.}}{{Bae, Fisch, Harutyunyan, Ji, Kim, and Schuster}}}
+\bibcite{Bai2019}{{3}{2019}{{Bai et~al.}}{{Bai, Kolter, and Koltun}}}
+\bibcite{Bengio2015}{{4}{2015}{{Bengio et~al.}}{{Bengio, Vinyals, Jaitly, and Shazeer}}}
+\bibcite{Broyden1965}{{5}{1965}{{Broyden}}{{}}}
+\bibcite{Dehghani2019}{{6}{2019}{{Dehghani et~al.}}{{Dehghani, Gouws, Vinyals, Uszkoreit, and Kaiser}}}
+\bibcite{Duetting2024}{{7}{2024}{{D{\"u}tting et~al.}}{{D{\"u}tting, Mirrokni, Paes~Leme, Xu, and Zuo}}}
+\bibcite{Geng2021}{{8}{2021}{{Geng et~al.}}{{Geng, Zhang, Bai, Wang, and Lin}}}
+\bibcite{Graves2016}{{9}{2016}{{Graves}}{{}}}
+\bibcite{Holtzman2020}{{10}{2020}{{Holtzman et~al.}}{{Holtzman, Buys, Du, Forbes, and Choi}}}
+\@writefile{toc}{\contentsline {section}{\numberline {14}Conclusion}{14}{section.14}\protected@file@percent }
+\bibcite{Lan2020}{{11}{2020}{{Lan et~al.}}{{Lan, Chen, Goodman, Gimpel, Sharma, and Soricut}}}
+\bibcite{Lee2015}{{12}{2015}{{Lee et~al.}}{{Lee, Xie, Gallagher, Zhang, and Tu}}}
+\bibcite{Loshchilov2019}{{13}{2019}{{Loshchilov and Hutter}}{{}}}
+\bibcite{McKelvey1995}{{14}{1995}{{McKelvey and Palfrey}}{{}}}
+\bibcite{Mertikopoulos2018}{{15}{2018}{{Mertikopoulos et~al.}}{{Mertikopoulos, Papadimitriou, and Piliouras}}}
+\bibcite{Miyato2018}{{16}{2018}{{Miyato et~al.}}{{Miyato, Kataoka, Koyama, and Yoshida}}}
+\bibcite{Perolat2021}{{17}{2021}{{Perolat et~al.}}{{Perolat, Munos, Lespiau, Omidshafiei, Rowland, Ortega, Burch, Anthony, Balduzzi, De~Vylder, Piliouras, Lanctot, and Tuyls}}}
+\bibcite{Radford2019}{{18}{2019}{{Radford et~al.}}{{Radford, Wu, Child, Luan, Amodei, and Sutskever}}}
+\bibcite{Rafailov2023}{{19}{2023}{{Rafailov et~al.}}{{Rafailov, Sharma, Mitchell, Ermon, Manning, and Finn}}}
+\bibcite{Sokota2023}{{20}{2023}{{Sokota et~al.}}{{Sokota, D'Orazio, Kolter, Loizou, Lanctot, Mitliagkas, Brown, and Kroer}}}
+\bibcite{Vickrey1961}{{21}{1961}{{Vickrey}}{{}}}
+\bibcite{Wang2025MPO}{{22}{2025}{{Wang et~al.}}{{Wang, Ma, Chen, Meng, Han, Xiao, Zhang, Huo, Su, and Yang}}}
+\bibcite{Warstadt2020}{{23}{2020}{{Warstadt et~al.}}{{Warstadt, Parrish, Liu, Mohananey, Peng, Wang, and Bowman}}}
+\bibcite{Warstadt2023}{{24}{2023}{{Warstadt et~al.}}{{Warstadt, Mueller, Choshen, Wilcox, Zhuang, Ciro, Mosquera, Paranjabe, Williams, Linzen, and Cotterell}}}
+\bibcite{Winston2020}{{25}{2020}{{Winston and Kolter}}{{}}}
+\bibcite{Wu2024}{{26}{2024}{{Wu et~al.}}{{Wu, Sun, Yuan, Ji, Yang, and Gu}}}
+\@writefile{toc}{\contentsline {section}{\numberline {A}Per-Seed Results}{16}{appendix.A}\protected@file@percent }
+\newlabel{app:tables}{{A}{16}{Per-Seed Results}{appendix.A}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces H1/H6 pretraining, all seeds (BLiMP on the 1000-pair subset; conv.\ = solver convergence rate at eval, rel-tol $10^{-3}$, budget 12).}}{16}{table.caption.20}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {3}{\ignorespaces H3 preference optimization (400 held-out pairs from unseen phenomena; KL in nats/token to the frozen base).}}{16}{table.caption.21}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {B}Hyperparameters}{16}{appendix.B}\protected@file@percent }
+\newlabel{app:hparams}{{B}{16}{Hyperparameters}{appendix.B}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {4}{\ignorespaces H4/H5 auction systems. Left: teacher-forced mixed-domain perplexity (F22). Right: closed-loop generation judge NLL/token (F23; judge-relative, see \S  \ref {sec:closedloop}).}}{17}{table.caption.22}\protected@file@percent }
+\gdef \@abspage@last{17}

@@ -1,13 +1,13 @@
 # Fdb version 4
-["bibtex kinetic_ai"] 1787857019.93341 "kinetic_ai.aux" "kinetic_ai.bbl" "kinetic_ai" 1787857188.25795 0
-  "./references.bib" 1787853560.00385 7309 3c18359ff61470afb51e9b3df2c6bbfe ""
+["bibtex kinetic_ai"] 1787902007.1933 "kinetic_ai.aux" "kinetic_ai.bbl" "kinetic_ai" 1787902007.74706 0
+  "./references.bib" 1787901775.6296 8171 a24297a2d8788e7c0089d49499d82c37 ""
   "/home/sharaths/.TinyTeX/texmf-dist/bibtex/bst/natbib/plainnat.bst" 1233624470 26816 ffe5423d2019860bad9f54bc402fac15 ""
-  "kinetic_ai.aux" 1787857188.20066 13207 ec6c7673093258903620848e87da6a52 "pdflatex"
+  "kinetic_ai.aux" 1787902007.64153 13657 c6f1caf673077ac749debe24a65b8132 "pdflatex"
   (generated)
   "kinetic_ai.bbl"
   "kinetic_ai.blg"
   (rewritten before read)
-["pdflatex"] 1787857187.82119 "kinetic_ai.tex" "kinetic_ai.pdf" "kinetic_ai" 1787857188.25808 0
+["pdflatex"] 1787902007.21386 "kinetic_ai.tex" "kinetic_ai.pdf" "kinetic_ai" 1787902007.7474 0
   "/home/sharaths/.TinyTeX/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc" 1136849721 2900 1537cc8184ad1792082cd229ecc269f4 ""
   "/home/sharaths/.TinyTeX/texmf-dist/fonts/tfm/jknappen/ec/tcrm1200.tfm" 1136768653 1536 74b7293ec3713bb7fdca8dd1bd1f469c ""
   "/home/sharaths/.TinyTeX/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex7.tfm" 1246382020 1004 54797486969f23fa377b128694d548df ""
@@ -247,10 +247,10 @@
   "/home/sharaths/.TinyTeX/texmf.cnf" 1772302105.1762 637 edd806fb06a89761a6034e1968af9017 ""
   "figures/fig_mmd_convergence.pdf" 1787854393.13531 28688 809771059334309365d904d9059616aa ""
   "figures/fig_parity_budget.pdf" 1787854393.64431 19277 23aa242ef54ccf363c2e7c19df197f51 ""
-  "kinetic_ai.aux" 1787857188.20066 13207 ec6c7673093258903620848e87da6a52 "pdflatex"
-  "kinetic_ai.bbl" 1787857019.9424 7640 d61e427206269f9cb782c0a652da0154 "bibtex kinetic_ai"
-  "kinetic_ai.out" 1787857188.20066 6475 d3cfeb596e027d0ae041db40b8956b11 "pdflatex"
-  "kinetic_ai.tex" 1787857187.7549 41224 bbf75093711e2fed9d78d4382c16369e ""
+  "kinetic_ai.aux" 1787902007.64153 13657 c6f1caf673077ac749debe24a65b8132 "pdflatex"
+  "kinetic_ai.bbl" 1787902007.20453 8498 d11b8993808330d017ec814acfaca76d "bibtex kinetic_ai"
+  "kinetic_ai.out" 1787902007.64253 6750 b08a92d8309daeb5b435ead253220433 "pdflatex"
+  "kinetic_ai.tex" 1787901741.41963 44183 9383cbf3ac8584fb318529ed4b876512 ""
   (generated)
   "kinetic_ai.aux"
   "kinetic_ai.log"

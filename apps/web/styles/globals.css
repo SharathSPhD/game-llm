@@ -608,3 +608,11 @@ input[type="email"], input[type="password"], input[type="text"] {
   font: inherit;
 }
 input:focus { outline: 2px solid var(--accent-mid); outline-offset: 1px; }
+
+/* Provenance line under a hero stat */
+.panel-note {
+  font-size: var(--text-xs);
+  color: var(--text-tertiary);
+  margin-top: 0.25rem;
+  line-height: 1.4;
+}

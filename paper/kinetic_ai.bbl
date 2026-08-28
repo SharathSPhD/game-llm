@@ -1,4 +1,4 @@
-\begin{thebibliography}{24}
+\begin{thebibliography}{26}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
 \expandafter\ifx\csname urlstyle\endcsname\relax
@@ -9,6 +9,12 @@
 Donald~G. Anderson.
 \newblock Iterative procedures for nonlinear integral equations.
 \newblock \emph{Journal of the ACM}, 12\penalty0 (4):\penalty0 547--560, 1965.
+
+\bibitem[Bae et~al.(2025)Bae, Fisch, Harutyunyan, Ji, Kim, and Schuster]{RecursiveTransformers2024}
+Sangmin Bae, Adam Fisch, Hrayr Harutyunyan, Ziwei Ji, Seungyeon Kim, and Tal Schuster.
+\newblock Relaxed recursive transformers: Effective parameter sharing with layer-wise {L}o{RA}.
+\newblock In \emph{International Conference on Learning Representations (ICLR)}, 2025.
+\newblock arXiv:2410.20672.
 
 \bibitem[Bai et~al.(2019)Bai, Kolter, and Koltun]{Bai2019}
 Shaojie Bai, J.~Zico Kolter, and Vladlen Koltun.
@@ -104,6 +110,12 @@ Samuel Sokota, Ryan D'Orazio, J.~Zico Kolter, Nicolas Loizou, Marc Lanctot, Ioan
 William Vickrey.
 \newblock Counterspeculation, auctions, and competitive sealed tenders.
 \newblock \emph{The Journal of Finance}, 16\penalty0 (1):\penalty0 8--37, 1961.
+
+\bibitem[Wang et~al.(2025)Wang, Ma, Chen, Meng, Han, Xiao, Zhang, Huo, Su, and Yang]{Wang2025MPO}
+Mingzhi Wang, Chengdong Ma, Qizhi Chen, Linjian Meng, Yang Han, Jiancong Xiao, Zhaowei Zhang, Jing Huo, Weijie~J. Su, and Yaodong Yang.
+\newblock Magnetic preference optimization: Achieving last-iterate convergence for language model alignment.
+\newblock In \emph{International Conference on Learning Representations (ICLR)}, 2025.
+\newblock arXiv:2410.16714.
 
 \bibitem[Warstadt et~al.(2020)Warstadt, Parrish, Liu, Mohananey, Peng, Wang, and Bowman]{Warstadt2020}
 Alex Warstadt, Alicia Parrish, Haokun Liu, Anhad Mohananey, Wei Peng, Sheng-Fu Wang, and Samuel~R. Bowman.

@@ -9,9 +9,11 @@ export function NavLinks() {
   const links = [
     { href: "/lab", label: "Lab" },
     { href: "/learn", label: "Learn" },
+    { href: "/chat", label: "Chat" },
     { href: "/playground", label: "Playground" },
     { href: "/auction", label: "Auction" },
     { href: "/studio", label: "Studio" },
+    { href: "/leaderboard", label: "Leaderboard" },
     { href: "/models", label: "Models" },
     { href: "/findings", label: "Findings" },
     { href: "/login", label: "Sign in" },

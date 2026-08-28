@@ -33,12 +33,13 @@ export default function Home() {
               <div className="reading">0.991</div>
             </div>
             <div className="hero-stat">
-              <div className="panel-label">Memory Reduction (DEQ)</div>
-              <div className="reading">16.8<span className="unit">×</span></div>
+              <div className="panel-label">DEQ activation memory (F4, N=32)</div>
+              <div className="reading">0.032<span className="unit">MB</span></div>
+              <div className="panel-note">flat in depth, vs 0.539MB for a 32-layer explicit stack</div>
             </div>
             <div className="hero-stat">
               <div className="panel-label">Signed-Off Findings</div>
-              <div className="reading">24</div>
+              <div className="reading">25</div>
             </div>
           </div>
         </div>
@@ -143,10 +144,26 @@ export default function Home() {
             </p>
           </Link>
 
+          <Link href="/chat" className="card" style={{ textDecoration: "none" }}>
+            <h3>Chat Interface</h3>
+            <p>
+              Multi-turn conversation with equilibrium language models. Tune solver budget,
+              temperature, and top-k; watch the model reach equilibrium per token.
+            </p>
+          </Link>
+
+          <Link href="/leaderboard" className="card" style={{ textDecoration: "none" }}>
+            <h3>Benchmark Leaderboard</h3>
+            <p>
+              Compare EqLM models against open-weight baselines on ARC, HellaSwag, and GSM8K.
+              Full provenance: config hash, seeds, and experiment details for every result.
+            </p>
+          </Link>
+
           <Link href="/findings" className="card" style={{ textDecoration: "none" }}>
             <h3>Research Findings</h3>
             <p>
-              Browse all 24 validated findings (F1–F24): convergence, mechanism, scaling,
+              Browse all 25 validated findings (F1–F25): convergence, mechanism, scaling,
               solver accelerations. All Tarka-reviewed with artifact paths and key numbers.
             </p>
           </Link>

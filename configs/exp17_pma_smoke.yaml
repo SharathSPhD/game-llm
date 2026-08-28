@@ -1,0 +1,32 @@
+# H8 (SPEC 0012): PMA vs DPO smoke test — tiny data, quick iteration
+seed: 42
+device: cuda
+base_model: Qwen/Qwen3-1.7B
+
+data:
+  dataset_name: HuggingFaceH4/ultrafeedback_binarized
+  split: train_sft
+  heldout_frac: 0.1
+
+training:
+  num_steps: 10        # Quick smoke test
+  batch_size: 2
+  lr: 1e-5
+  weight_decay: 0.01
+  grad_clip: 1.0
+  warmup_frac: 0.1
+  gradient_checkpointing: true
+  log_every: 2
+
+# Arms: D1 (DPO baseline), D2 (PMA with tau), D3 (SimPO if available)
+arms:
+  D1_dpo:
+    optimizer_type: dpo
+    tau: 0.0
+
+  D2_pma:
+    optimizer_type: pma
+    # tau = 1e-4: scaled for lr=1e-5 and ~10 steps
+    # Total displacement: lr * tau * steps = 1e-5 * 1e-4 * 10 = 1e-8
+    # For scale, adjust as: tau_new = tau_old * (steps_old / steps_new) * (lr_new / lr_old)
+    tau: 1e-4
