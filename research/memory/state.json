@@ -1,6 +1,6 @@
 {
-  "cycle": 23,
-  "phase": "scale program (1-3B) \u2014 H7/H8/H9 open",
+  "cycle": 26,
+  "phase": "Phase 0 closing (ladder measured, F28); Phase 1 agreement sweep running",
   "current_rq": "RQ-3b (H1-prime a/b/c per ADR 0004)",
   "gpu_lock": false,
   "open_questions": [

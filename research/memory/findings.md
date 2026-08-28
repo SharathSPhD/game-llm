@@ -683,3 +683,50 @@ unchanged (they attach to the Anderson eval path, as scoped).
   survive author recomputation and has been replaced with the paired test.
 - **Status:** VALIDATED (3 seeds, Tarka-resolved with rescoping) · verdict MET
   (marginal) · SIGN-OFF PENDING
+
+## F28 — The baseline ladder, and the thinness of subject-level headroom
+
+**Cycle 26 · 2026-08-28 · Phase 0 (SPEC 0016, PLAN O3/O4) · GB10**
+
+Four candidate players evaluated on one harness, one invocation, identical
+limits (`lm_eval --limit 200`, bfloat16, `device_map=cuda:0`): Qwen3-1.7B,
+Qwen2.5-1.5B-Instruct, Qwen2.5-Math-1.5B-Instruct, Qwen2.5-Coder-1.5B-Instruct.
+
+- **The parameter-matched baseline is not the best player.**
+  Qwen2.5-1.5B-Instruct leads on MMLU (0.626 weighted over 57 subjects) ahead of
+  Qwen3-1.7B (0.583), the Coder model (0.520) and the Math model (0.391). The
+  designated baseline for the headline claim is therefore Qwen2.5-1.5B-Instruct,
+  not the nominally comparable Qwen3-1.7B; using the weaker model as the bar
+  would have flattered every later result by four points.
+- **The subjects each player wins are disjoint, but the ceiling is thin.**
+  Subject wins split 42 / 10 / 3 / 2 across base, Qwen3, Math and Coder, and the
+  weaker players win by real margins where they win — the Math model takes
+  abstract algebra (0.420 vs 0.380), college mathematics (0.440 vs 0.400) and
+  elementary mathematics (0.520 vs 0.480); Qwen3 takes conceptual physics
+  (0.670 vs 0.575) and college chemistry (0.430 vs 0.350); the Coder model takes
+  global facts (0.340 vs 0.210). Yet a per-subject oracle — an aggregator
+  granted advance knowledge of which player is best on each subject — reaches
+  only 0.635, **+0.96 points over simply always using the best single player.**
+- **Interpretation, and what it changes.** Subject-granularity routing has
+  almost no room on this council, so MMLU-by-subject is the wrong arena in which
+  to demonstrate the paradigm: an aggregator could route perfectly and still win
+  by under a point. This does not bound token-level aggregation, whose ceiling
+  is the per-example any-correct rate rather than the per-subject maximum, and
+  which F27 already showed can exceed a domain-correct router. It does mean the
+  next measurement must establish the per-example ceiling before any effort goes
+  into building players, and the arena must be one where the players actually
+  disagree per example.
+- **Integrity flag — GSM8K is not measured by this run and is excluded.**
+  Strict-match scores 0.000 for all four models, which is a format artifact
+  rather than a capability measurement: the task's regex expects the `#### `
+  answer convention that instruction-tuned models do not emit. The
+  flexible-extract figures that remain (0.455 / 0.095 / 0.290 / 0.340) are
+  mutually inconsistent with the published capabilities of these checkpoints —
+  Qwen2.5-Math-1.5B-Instruct in particular is reported far higher — which is the
+  signature of the generation-budget truncation already diagnosed in the exp16
+  smoke. No mathematics claim is drawn from this run, and generative tasks are
+  deferred until the harness applies chat templates and a per-domain generation
+  budget. The loglikelihood tasks are unaffected, since they involve no
+  generation.
+- **Status:** VALIDATED (single seed per model; loglikelihood tasks only) ·
+  informs O3 (baseline identity) and O4 (domain selection) · Tarka PENDING
