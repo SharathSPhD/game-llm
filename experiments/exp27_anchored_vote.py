@@ -174,6 +174,11 @@ def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--root", default="results/scale/exp23")
     ap.add_argument("--out", default="results/scale/exp27_anchored_vote.json")
+    ap.add_argument(
+        "--preregistered", action="store_true",
+        help="SPEC 0017 mode: evaluate ONLY uniform weighting at tau = 1.0, "
+             "with no fitting of any kind — the confirmation protocol",
+    )
     args = ap.parse_args()
 
     root = Path(args.root)
@@ -183,6 +188,42 @@ def main() -> int:
         seeds[seed] = load_seed(root / f"candidates_{seed}.json", rp)
 
     report: dict[str, Any] = {"seeds": sorted(seeds), "router": ROUTER}
+
+    if args.preregistered:
+        # SPEC 0017: one cell, chosen before this data existed. Per-seed and
+        # pooled paired statistics against the router; the success criterion is
+        # mean margin > 0 and pooled paired z >= 2.
+        per_seed = {}
+        tw = tl = 0
+        for seed, rows in sorted(seeds.items()):
+            acc = accuracy(rows, "uniform", 1.0)
+            rout = router_accuracy(rows)
+            paired = paired_vs_router(rows, "uniform", 1.0)
+            tw += paired["wins"]; tl += paired["losses"]
+            per_seed[seed] = {
+                "mechanism": round(acc, 4), "router": round(rout, 4),
+                "margin": round(acc - rout, 4), "paired": paired,
+                "per_domain": {
+                    dom: {
+                        "mechanism": round(accuracy(
+                            [r for r in rows if r["domain"] == dom], "uniform", 1.0), 4),
+                        "router": round(router_accuracy(
+                            [r for r in rows if r["domain"] == dom]), 4),
+                    } for dom in ("math", "general")
+                },
+            }
+        margins = [v["margin"] for v in per_seed.values()]
+        z = (tw - tl) / math.sqrt(max(tw + tl, 1))
+        report.update({
+            "protocol": "SPEC 0017 pre-registered: uniform weighting, tau = 1.0",
+            "per_seed": per_seed,
+            "mean_margin": round(sum(margins) / len(margins), 4),
+            "pooled_paired": {"wins": tw, "losses": tl, "z": round(z, 2)},
+            "success": bool(sum(margins) / len(margins) > 0 and z >= 2.0),
+        })
+        Path(args.out).write_text(json.dumps(report, indent=2))
+        print(json.dumps(report, indent=2))
+        return 0
 
     # Sanity: at tau far above any achievable vote mass the mechanism must
     # reproduce the router exactly wherever the router answered at all.
