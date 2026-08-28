@@ -39,8 +39,9 @@ const GET_ALLOWLIST_EXACT = new Set([
   "/api/experiments",
   "/api/runs",
   "/api/models",
+  "/api/auction/traces",
 ]);
-const GET_ALLOWLIST_PREFIX = ["/api/jobs/", "/api/auction/traces"];
+const GET_ALLOWLIST_PREFIX = ["/api/jobs/", "/api/auction/traces/"];
 
 function isAllowed(method: "GET" | "POST", endpoint: string): boolean {
   if (method === "POST") return POST_ALLOWLIST.has(endpoint);

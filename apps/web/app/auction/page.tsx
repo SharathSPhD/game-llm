@@ -1,12 +1,119 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AuctionResponse } from "@/lib/replay-data";
 import { Loader2 } from "lucide-react";
 
 interface Agent {
   bid: number;
   distribution: number[];
+}
+
+
+type DecodeTrace = {
+  position: number;
+  bids: number[];
+  winner: number;
+  payment: number;
+  target_token: number;
+};
+
+function RealTraces() {
+  const [seeds, setSeeds] = useState<number[]>([]);
+  const [seed, setSeed] = useState<number | null>(null);
+  const [traces, setTraces] = useState<DecodeTrace[]>([]);
+  const [summary, setSummary] = useState<Record<string, unknown> | null>(null);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    fetch("/api/proxy/api/auction/traces")
+      .then((r) => (r.ok ? r.json() : Promise.reject(new Error(`HTTP ${r.status}`))))
+      .then((d) => {
+        setSeeds(d.seeds ?? []);
+        if (d.seeds?.length) setSeed(d.seeds[0]);
+      })
+      .catch(() => setError("Sign in to load real decode traces from the research backend."));
+  }, []);
+
+  useEffect(() => {
+    if (seed == null) return;
+    fetch(`/api/proxy/api/auction/traces/${seed}?limit=24`)
+      .then((r) => (r.ok ? r.json() : Promise.reject(new Error(`HTTP ${r.status}`))))
+      .then((d) => {
+        setTraces(d.traces ?? []);
+        setSummary(d.summary ?? null);
+        setError(null);
+      })
+      .catch((e) => setError(`Trace load failed: ${e.message}`));
+  }, [seed]);
+
+  if (error && seeds.length === 0) {
+    return <p style={{ color: "var(--text-secondary)" }}>{error}</p>;
+  }
+
+  const ppl = summary?.perplexity_mixed as Record<string, number> | undefined;
+  return (
+    <div>
+      <p style={{ color: "var(--text-secondary)", marginBottom: "var(--space-3)" }}>
+        Per-token bids, winners, and second-price payments recorded during the
+        F22 evaluation (a sample of the first positions of one stream; win
+        rates over the full stream differ — see the finding). Seed:{" "}
+        {seeds.map((s) => (
+          <button
+            key={s}
+            className="btn"
+            onClick={() => setSeed(s)}
+            style={{
+              marginLeft: "0.4rem",
+              borderColor: s === seed ? "var(--accent-mid)" : undefined,
+            }}
+          >
+            {s}
+          </button>
+        ))}
+      </p>
+      {summary && (
+        <p style={{ color: "var(--text-secondary)", marginBottom: "var(--space-3)" }}>
+          H4 verdict: <strong>{String(summary.h4_score)}</strong>
+          {ppl && (
+            <>
+              {" "}· mixed-domain ppl — auction <strong>{ppl.AUC?.toFixed(1)}</strong>, ensemble{" "}
+              {ppl.ENS?.toFixed(1)}, best single {Math.min(ppl.S_A ?? 1e9, ppl.S_B ?? 1e9).toFixed(1)}
+            </>
+          )}
+        </p>
+      )}
+      {error && <p style={{ color: "var(--error)" }}>{error}</p>}
+      <div style={{ overflowX: "auto" }}>
+        <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "0.85rem" }}>
+          <thead>
+            <tr style={{ textAlign: "left", color: "var(--text-tertiary)" }}>
+              <th style={{ padding: "0.35rem" }}>Pos</th>
+              <th style={{ padding: "0.35rem" }}>Bid A (childes)</th>
+              <th style={{ padding: "0.35rem" }}>Bid B (wiki)</th>
+              <th style={{ padding: "0.35rem" }}>Winner</th>
+              <th style={{ padding: "0.35rem" }}>Second price</th>
+            </tr>
+          </thead>
+          <tbody>
+            {traces.map((t) => (
+              <tr key={t.position} style={{ borderTop: "1px solid var(--border)" }}>
+                <td style={{ padding: "0.35rem" }}>{t.position}</td>
+                <td style={{ padding: "0.35rem", fontWeight: t.winner === 0 ? 700 : 400 }}>
+                  {t.bids[0]?.toFixed(4)}
+                </td>
+                <td style={{ padding: "0.35rem", fontWeight: t.winner === 1 ? 700 : 400 }}>
+                  {t.bids[1]?.toFixed(4)}
+                </td>
+                <td style={{ padding: "0.35rem" }}>{t.winner === 0 ? "S_A" : "S_B"}</td>
+                <td style={{ padding: "0.35rem" }}>{t.payment?.toFixed(4)}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
 }
 
 export default function AuctionPage() {
@@ -322,6 +429,11 @@ export default function AuctionPage() {
           </div>
         )}
       </div>
+
+      <section className="card" style={{ marginTop: "var(--space-6)", padding: "var(--space-5)" }}>
+        <h2 style={{ marginBottom: "var(--space-3)" }}>Real decode traces (F22)</h2>
+        <RealTraces />
+      </section>
     </div>
   );
 }
