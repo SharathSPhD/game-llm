@@ -609,3 +609,40 @@ unchanged (they attach to the Anderson eval path, as scoped).
   scored on benchmark retention rather than loss.
 - **Status:** VALIDATED (single seed, design-screen scale) · verdict PARTIAL ·
   Tarka pending · SIGN-OFF PENDING
+
+## F27 — H9 verdict (3 seeds, real 1.5B specialists): MET. Truthful token-auction selection beats the best single specialist in CLOSED-LOOP generation on objective accuracy, reversing F23 — but it does not beat uniform logit averaging, and context-aware bidding is refuted
+
+- **Protocol (SPEC 0013, exp16):** three Qwen2.5-1.5B-Instruct specialists
+  (Math, Coder, general), verified to share one tokenizer (vocabulary 151665 /
+  151643 identical across all three — a hard requirement for token-level
+  aggregation). 80 prompts per seed (40 GSM8K, 40 MMLU) under one shared chat
+  template, so the only difference between systems is who chooses each token.
+  Fully closed-loop greedy generation; scoring is objective task accuracy
+  (numeric match for GSM8K, letter match for MMLU), which removes the
+  judge-LM style prior that made F23's verdict judge-relative. Seeds 42/43/44
+  on GB10 under the thermal governor. results/scale/exp16/.
+- **Verdict MET, 3/3 seeds.** The second-price auction beats the best single
+  specialist on every seed: 0.625 vs 0.537, 0.637 vs 0.575, 0.738 vs 0.700
+  (margins +0.088 / +0.062 / +0.038; means 0.667 vs 0.604). This is the
+  pre-registered claim that F23 missed at 121M with toy specialists, and it
+  holds once the specialists are genuinely strong and the metric is objective.
+- **The auction does NOT beat uniform logit averaging.** ENS scores 0.637 /
+  0.637 / 0.762 (mean 0.679) against the auction's 0.667; the per-seed
+  differences are -0.012 / 0.000 / -0.025. Aggregation is what wins here, and
+  the mechanism-design machinery buys nothing over simple averaging on this
+  benchmark. Reported as the primary limitation of the result.
+- **Both aggregators match or beat an oracle router** (mean 0.679), which
+  always selects the domain-correct specialist. Per-token aggregation therefore
+  contributes something routing cannot: on math the auction reaches 0.800,
+  above the oracle's 0.775, because it can take a token from the general model
+  when the math model is locally unsure.
+- **Context-aware bidding is refuted.** Bidding on prompt-level confidence
+  rather than per-token confidence — the fix F23 itself proposed — is worse on
+  every seed (-0.100 / -0.025 / -0.100 against per-token bidding). The
+  hypothesis that closed-loop drift is fixed by prompt-level signal is
+  therefore rejected on its first real test.
+- **Domain decomposition:** the auction is strongest exactly where specialists
+  differ most (math 0.800 mean, versus 0.533 on general knowledge where the
+  three models are closer and confidence is a weaker routing signal).
+- **Status:** VALIDATED (3 seeds) · verdict MET · Tarka pending ·
+  SIGN-OFF PENDING
