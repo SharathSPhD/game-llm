@@ -12,11 +12,14 @@ export default function Home() {
           <p className="eyebrow">EqLM: Equilibrium Language Model</p>
           <h1>A language model whose depth, training, and decoding are equilibrium computations.</h1>
           <p className="lede">
-            EqLM solves the token-prediction game at each position, trading the fixed depths of conventional
-            transformers for a fixed-point computation that adapts per token. At 121M parameters and matched
-            compute, it reaches parity with explicit transformer baselines (F24). A council of routed models
-            extends this foundation as a systems result, beating single models by 8 points at 1.26× cost, but
-            only when its members have complementary strengths (F41–F43).
+            EqLM replaces the fixed depth of a conventional transformer with a fixed-point computation whose
+            depth is a stopping criterion rather than an architecture. At 121M parameters it reaches parity
+            with an explicit transformer (F24) — but that parity is measured at matched parameters and matched
+            iteration count, and the tied block is 4.92× more expensive per iteration, so parity costs roughly
+            five times the arithmetic. At genuinely equal compute the ratio is 0.72 (F44). Weight-tying
+            compresses parameters, not compute. A council of routed models is a separate systems result,
+            beating single models by 8 points at 1.26× cost and only when its members have complementary
+            strengths (F41–F43).
           </p>
           <div className="hero-actions">
             <Link href="/leaderboard" className="btn" data-primary="true">
@@ -31,9 +34,9 @@ export default function Home() {
           </div>
           <div className="hero-stats">
             <div className="hero-stat">
-              <div className="panel-label">EqLM Parity (F24)</div>
+              <div className="panel-label">EqLM vs explicit (F24, corrected F44)</div>
               <div className="reading">0.991</div>
-              <div className="panel-note">Ratio vs explicit transformer at matched 121M params</div>
+              <div className="panel-note">Ratio at matched params and iterations — but 4.92× the compute; at equal FLOPs, 0.72</div>
             </div>
             <div className="hero-stat">
               <div className="panel-label">Council vs Baseline (F41)</div>
@@ -57,18 +60,22 @@ export default function Home() {
             <p>
               A language model whose effective depth is not a fixed architecture choice but a solved game:
               at each token, the model computes a fixed point, spending as many iterations as that token&apos;s
-              prediction difficulty requires. At matched parameters (121M) and compute budget, EqLM reaches
-              0.991 parity with explicit transformers (F24)—not yet a win, but proof the mechanism works.
+              prediction difficulty requires. At matched parameters (121M) it reaches 0.991 of an explicit
+              transformer (F24). The audit that followed (F44) found that budget matched parameters and
+              iteration count, not arithmetic: the tied block is 4.92× costlier per iteration because
+              param-matching forces width, and at equal FLOPs the ratio falls to 0.72. The honest reading is
+              that weight-tying buys parameter efficiency and pays for it in compute.
             </p>
           </div>
 
           <div className="card">
             <h3>Adaptive Per-Token Depth</h3>
             <p>
-              The untested property that could carry EqLM past parity is uneven iteration spending: while
-              an explicit stack spends fixed depth D on every token, an equilibrium model can spend 5 on
-              easy tokens and 20 on hard ones, at matched *mean* depth. Whether that flexibility wins is
-              the question driving exp31. The council is a separate mechanism, not the paradigm claim.
+              An explicit stack spends fixed depth on every token; an equilibrium model can spend few
+              iterations on an easy token and many on a hard one. Measured (exp31, F44), uneven spending
+              scores 0.681 against uniform 0.684 at the same mean depth — it works and buys nothing. What it
+              does buy is graceful degradation: 0.93 of baseline at half the depth, 0.72 at a sixth, which
+              makes the model usable at any compute budget rather than better at one.
             </p>
           </div>
 

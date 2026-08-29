@@ -1670,6 +1670,19 @@ def _load_council_comparison() -> dict[str, Any]:
     # The anchored answer vote (F39): the one mechanism to beat the router
     # held-out. Served from its results file, marked preliminary until the
     # pre-registered confirmation of SPEC 0017 reports.
+    # The compute audit that corrected the architecture claim (F44). Served from
+    # its results file so the correction travels with the parity figure rather
+    # than depending on prose nobody reads.
+    audit_file = results_dir / "exp31_compute_audit.json"
+    if audit_file.exists():
+        try:
+            with open(audit_file) as f:
+                comparison["architecture_compute_audit"] = json.load(f)
+        except (json.JSONDecodeError, OSError) as exc:
+            comparison["architecture_compute_audit"] = {
+                "error": f"unreadable: {type(exc).__name__}"
+            }
+
     exp27_file = results_dir / "exp27_anchored_vote.json"
     if exp27_file.exists():
         try:
@@ -1768,7 +1781,10 @@ async def get_council_comparison(
 
     IMPORTANT FRAMING: The council is a systems result, not the paradigm claim.
     The paradigm claim is EqLM (single model, equilibrium depth/training/decoding),
-    for which F24 established parity at matched parameters. The council compares
+    for which F24 established parity at matched parameters and iteration count —
+    though F44's audit found the tied block costs 4.92x per iteration, so that
+    parity is bought with roughly five times the arithmetic and equal-FLOP
+    comparison gives 0.72. The council compares
     four separate Qwen models routed by a lookup table against that baseline.
 
     F41–F43 measured the council's realistic performance: it beats the baseline
@@ -1928,7 +1944,8 @@ async def get_mixed_arena(
     IMPORTANT FRAMING: This is the council's operating domain, not the EqLM
     paradigm claim. The paradigm claim (EqLM single model with equilibrium
     depth/training/decoding) is reported at /api/eqlm/results; F24 established
-    parity at matched params. The council beats the baseline 0.6194 vs 0.5361
+    parity at matched params and iterations, at 4.92x the compute per F44. The
+    council beats the baseline 0.6194 vs 0.5361
     (+8.33pp) on this mixed arena (F41) but costs 1.26× generations and
     requires non-domination (F42–F43).
 

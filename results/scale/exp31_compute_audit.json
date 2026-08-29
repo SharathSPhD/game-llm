@@ -1,0 +1,67 @@
+{
+  "finding": "F44",
+  "corrects": "F24",
+  "claim": "The parity ratio is measured at matched parameters and matched iteration count, not matched compute. The tied block costs 4.92x an explicit layer per token because parameter-matching forces width, so twelve iterations cost 4.92x twelve layers. At equal FLOPs (2.44 iterations) the ratio is 0.72.",
+  "params": {
+    "eqlm_total_M": 120.7,
+    "explicit_total_M": 123.8,
+    "eqlm_embeddings_M": 85.9,
+    "eqlm_block_M": 34.8,
+    "explicit_embeddings_M": 38.7,
+    "explicit_layers_M": 85.1
+  },
+  "compute": {
+    "eqlm_units_per_iteration_M": 34.81,
+    "explicit_units_per_layer_M": 7.08,
+    "ratio_per_step": 4.92,
+    "iterations_at_equal_flops": 2.44
+  },
+  "seeds": {
+    "seed43": {
+      "explicit": 0.675,
+      "eqlm_uniform_12": 0.697,
+      "eqlm_adaptive": 0.682,
+      "adaptive_mean_depth": 11.324,
+      "tolerance_sweep": [
+        {
+          "tolerance": 0.14306130526981908,
+          "blimp": 0.628,
+          "mean_depth": 6.006
+        },
+        {
+          "tolerance": 0.28612261053963817,
+          "blimp": 0.602,
+          "mean_depth": 3.546
+        },
+        {
+          "tolerance": 0.5722452210792763,
+          "blimp": 0.488,
+          "mean_depth": 2.082
+        }
+      ]
+    },
+    "seed44": {
+      "explicit": 0.693,
+      "eqlm_uniform_12": 0.672,
+      "eqlm_adaptive": 0.681,
+      "adaptive_mean_depth": 11.187,
+      "tolerance_sweep": [
+        {
+          "tolerance": 0.15338949607058328,
+          "blimp": 0.644,
+          "mean_depth": 5.632
+        },
+        {
+          "tolerance": 0.30677899214116655,
+          "blimp": 0.595,
+          "mean_depth": 3.322
+        },
+        {
+          "tolerance": 0.6135579842823331,
+          "blimp": 0.503,
+          "mean_depth": 2.015
+        }
+      ]
+    }
+  }
+}
