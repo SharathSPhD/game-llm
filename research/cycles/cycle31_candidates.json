@@ -2,38 +2,22 @@
   "_comment": "Cycle 31. F45 gives 0.968 of the explicit baseline at equal compute with 2.70x fewer parameters. The remaining 3.2% is the expressiveness one static map loses against twelve distinct ones. TRIZ cell 36_26 (Local Quality, Dynamics) proposes depth conditioning: modulate the shared block per iteration so it implements a different map at each depth, at 18K parameters against the 78M untying would cost.",
   "beliefs": {
     "tying_is_parameter_efficient_at_equal_compute": 0.95,
-    "depth_conditioning_closes_the_gap": 0.5,
-    "depth_conditioning_beats_explicit_outright": 0.25,
+    "depth_conditioning_closes_the_gap": 0.02,
+    "depth_conditioning_beats_explicit_outright": 0.01,
     "stability_signals_correctness": 0.95,
     "stability_weighted_council_beats_best_member": 0.05
   },
   "cost_weight": 0.0417,
   "cost_units": "GPU-hours; one day of GPU time trades against one nat",
-  "candidates": [
-    {
-      "name": "exp34_depth_conditioned_block",
-      "cost": 1.5,
-      "diagnosticity": {
-        "depth_conditioning_closes_the_gap": [
-          0.85,
-          0.15
-        ],
-        "depth_conditioning_beats_explicit_outright": [
-          0.7,
-          0.3
-        ]
-      },
-      "payoff": {
-        "depth_conditioning_closes_the_gap": 0.8,
-        "depth_conditioning_beats_explicit_outright": 1.0
-      },
-      "description": "FiLM per-iteration modulation of the tied block; 18K extra params, compute unchanged"
-    }
-  ],
+  "candidates": [],
   "_observation_log": [
     {
       "exp": "exp29",
       "outcome": "precondition MET (Welch t=6.69) but system loses to best member (3W/4L, z=-0.38); full council not run per the gate"
+    },
+    {
+      "exp": "exp34",
+      "outcome": "negative and directionally opposite: ratio 0.9258 vs plain tied 0.9582; modulation breaks the contraction that repetition of ONE map provides"
     }
   ]
 }

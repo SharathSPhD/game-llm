@@ -1600,3 +1600,46 @@ carried no signal.
   purpose was to make exactly this call.
 - **Status:** VALIDATED (60 questions, 5 samples, single seed) · precondition MET
   · system-versus-best-member NOT MET · Tarka PENDING
+
+## F47 — Depth conditioning makes weight tying worse, and the prediction was wrong in direction
+
+**Cycle 31 · 2026-08-29 · exp34, SPEC 0019 · 3 seeds · RTX 5090**
+
+SPEC 0019 predicted, before the run, that per-iteration modulation of the shared
+block would recover one to two of the four points that separate compute-matched
+tying from the explicit baseline, on the reasoning that a scale and shift can
+differentiate each depth's output distribution. Three seeds refute the prediction
+and refute it in the opposite direction to the one anticipated.
+
+- **Conditioning costs quality rather than recovering it.** The depth-conditioned
+  block scores 0.637, 0.621 and 0.640 against the plain tied block's 0.663, 0.650
+  and 0.651 on the same three seeds — worse on every seed, by 0.026, 0.029 and
+  0.011. As a ratio against the explicit baseline the mean falls from 0.9582 to
+  **0.9258**, a change of $-0.0323$ where SPEC 0019 required $+0.0169$ to count
+  as working. The direction is consistent and the effect exceeds the seed spread.
+- **The cost was as advertised and is not the issue.** The conditioned model adds
+  18.4K parameters, 0.04% of the 45.8M total, and no arithmetic. Nothing about
+  the expense explains the loss.
+- **Why the reasoning failed, as far as this measurement shows.** The prediction
+  assumed that letting the map differ across depths could only add expressiveness,
+  since the modulation initialises as the identity and could in principle learn to
+  stay there. What it evidently does instead is break the property the tied model
+  depends on: applying one map repeatedly makes the iteration a contraction toward
+  a fixed point, and a map that changes at every step is no longer iterating
+  toward anything. Twelve modulated applications are twelve different functions
+  composed once each, which is a twelve-layer network with twelve times too few
+  parameters rather than an equilibrium solved twelve times. The tying result was
+  never about reusing weights; it was about reusing the *same map* so that
+  repetition converges.
+- **What this establishes about the architecture.** The four-point gap is not a
+  deficit of depth-specific expressiveness, because supplying that expressiveness
+  made things worse. It is more likely the capacity of one block against twelve,
+  which no modulation scheme addresses. SPEC 0019 stated that indistinguishability
+  would close modulation as a direction; a consistent loss closes it more firmly,
+  and closes with it the family of remedies that differentiate the map in time.
+- **The honest position of the architecture line.** Compute-matched weight tying
+  stands at 0.958 of the explicit baseline with 2.70 times fewer parameters
+  (F45). That is the result, and this attempt to improve it failed. Reporting the
+  failed attempt at the same length as the success is the point of recording it.
+- **Status:** VALIDATED (3 seeds, pre-registered prediction refuted in direction)
+  · verdict NOT MET · closes depth modulation · Tarka PENDING
