@@ -1,0 +1,42 @@
+{
+  "_comment": "Cycle 29. F42 established the condition: routing pays only when no member dominates every domain, and the Falcon council violates it (0W/0L twice). That council is therefore the right test bed for a per-question signal, because routing there is worth exactly nothing and any gain must come from the mechanism. TRIZ cell 28_37 produced stability-under-perturbation as a verifiable bid: a SECOND observation per player rather than a re-reading of the first, which is the one route F30's impossibility argument leaves open.",
+  "beliefs": {
+    "anchored_vote_beats_router": 0.027,
+    "system_beats_baseline_single": 0.97,
+    "complementarity_generalises": 0.08,
+    "stability_signals_correctness": 0.5,
+    "stability_weighted_council_beats_best_member": 0.35
+  },
+  "cost_weight": 0.0417,
+  "cost_units": "GPU-hours; one day of GPU time trades against one nat",
+  "candidates": [
+    {
+      "name": "exp29_stability_probe",
+      "cost": 1.0,
+      "diagnosticity": {"stability_signals_correctness": [0.9, 0.1]},
+      "payoff": {"stability_signals_correctness": 0.7},
+      "description": "Cheap precondition test: resample each player k=5 on one seed of the dominated council and measure whether answer-stability separates correct from incorrect. If stability carries no signal, the mechanism cannot work and nothing further is spent."
+    },
+    {
+      "name": "exp29_full_stability_council",
+      "cost": 4.0,
+      "diagnosticity": {"stability_weighted_council_beats_best_member": [0.85, 0.15]},
+      "payoff": {"stability_weighted_council_beats_best_member": 1.0},
+      "description": "Full stability-weighted council across three seeds on the Falcon council where routing gives zero"
+    },
+    {
+      "name": "second_family_remaining_seed",
+      "cost": 1.2,
+      "diagnosticity": {"complementarity_generalises": [0.85, 0.15]},
+      "payoff": {"complementarity_generalises": 0.6},
+      "description": "Finish exp28's third evaluation seed (already running)"
+    },
+    {
+      "name": "teacher_distillation_run",
+      "cost": 8.0,
+      "diagnosticity": {"stability_weighted_council_beats_best_member": [0.6, 0.4]},
+      "payoff": {"stability_weighted_council_beats_best_member": 0.8},
+      "description": "Build a genuinely complementary member so the routing condition is satisfied by construction"
+    }
+  ]
+}
