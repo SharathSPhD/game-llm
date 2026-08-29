@@ -38,6 +38,8 @@ const POST_ALLOWLIST = new Set([
   "/api/playground/generate",
 ]);
 const GET_ALLOWLIST_EXACT = new Set([
+  "/api/eqlm/generate",
+  "/api/eqlm/results",
   "/api/results",
   "/api/jobs",
   "/api/experiments",

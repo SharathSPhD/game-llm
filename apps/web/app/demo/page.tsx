@@ -19,13 +19,11 @@ export default function DemoPage() {
     setResult(null);
 
     try {
+      // Routed through the server-side proxy, which injects the gateway
+      // credential under the tiered-user gate. A NEXT_PUBLIC_* variable ships
+      // to every visitor's browser, so no secret may ever be referenced here.
       const response = await fetch(
-        `/api/eqlm/generate?prompt=${encodeURIComponent(prompt)}&depth=${depth}&max_new_tokens=48`,
-        {
-          headers: {
-            Authorization: `Bearer ${process.env.NEXT_PUBLIC_GATEWAY_SECRET || ""}`,
-          },
-        }
+        `/api/proxy/api/eqlm/generate?prompt=${encodeURIComponent(prompt)}&depth=${depth}&max_new_tokens=48`
       ).catch(() => null);
 
       if (response?.ok) {
