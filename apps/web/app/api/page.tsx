@@ -51,7 +51,7 @@ curl -H "$KINETIC_AUTH" https://kinetic.kinetic-ai.workers.dev/api/generate`}
               <li><code>prompt</code> (string, required): Input text to generate from.</li>
               <li><code>depth</code> (int, default 12): Solver budget (1–12 iterations). Controls quality/speed tradeoff.</li>
               <li><code>max_new_tokens</code> (int, default 48, max 48): Maximum tokens to generate.</li>
-              <li><code>device</code> (string, default "auto"): "auto" (GPU if available), "cpu" (CPU-only).</li>
+              <li><code>device</code> (string, default &quot;auto&quot;): &quot;auto&quot; (GPU if available), &quot;cpu&quot; (CPU-only).</li>
             </ul>
           </div>
           <strong>Response:</strong>
@@ -227,7 +227,7 @@ curl -H "$KINETIC_AUTH" "${API_BASE}/api/auction/traces/seed42"
         <h2>Rate Limits & Quotas</h2>
         <ul style={{ color: "var(--text-secondary)" }}>
           <li>Generation endpoints: GPU bandwidth limited (see /health for availability).</li>
-          <li>Solver endpoints: CPU-based, no strict limit; large steps (>5000) clamped.</li>
+          <li>Solver endpoints: CPU-based, no strict limit; large steps ({">"}5000) clamped.</li>
           <li>Batch requests: One job at a time (GPU lock in research/memory/state.json).</li>
         </ul>
       </section>
