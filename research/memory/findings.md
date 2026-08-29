@@ -1409,3 +1409,46 @@ establishes what produces it and when it would not.
   mechanism tested in this programme reaches it.
 - **Status:** VALIDATED for the decomposition and the extractor audit; second
   council INTERIM (one of three evaluation seeds) · Tarka PENDING
+
+## F43 — The council advantage does not generalise; it is conditional on non-domination
+
+**Cycle 29 · 2026-08-29 · exp28 · 360 evaluation questions, three seeds · GB10**
+
+A second council was built to be maximally unlike the first: SmolLM2-1.7B,
+deepseek-math-7B, Falcon3-3B and Falcon3-1B — four families, four tokenizers,
+sizes from 1B to 7B. Champions were calibrated on a held-out seed standing in
+for the ladder, and the same systems were compared on three further seeds.
+
+- **The system reduces exactly to its best member.** Falcon3-3B is champion of
+  both domains and is also the best single model at 0.6083; the plain router
+  therefore scores 0.6083 identically, and the fallback router 0.6111 — one win,
+  no losses across 360 questions. The eight-point advantage measured on the Qwen
+  council is absent, and its absence is not noise but arithmetic: routing between
+  identical destinations cannot move an answer.
+- **The precondition F42 identified is confirmed as the governing condition.**
+  Routing pays when different members are best on different domains and pays
+  nothing when one member dominates. This is checkable from the ladder before a
+  council is assembled, which turns the finding into a design rule rather than a
+  disappointment: assemble councils only where the ladder shows no dominant
+  member, and expect a council to be worth its cost in exactly that case.
+- **Complementarity is present and remains unreachable.** The oracle stands at
+  0.7917 against the best member's 0.6083, nineteen points, on a council where
+  no mechanism extracted any of it. Together with the Qwen council's thirteen
+  points this is now measured twice on disjoint model families, which makes the
+  unclaimed headroom the most robust quantity in this programme and the strongest
+  argument that the remaining problem is identification rather than knowledge.
+- **A caution against the one nominally positive number.** The anchored vote
+  scores 0.6194 here, above the fallback router's 0.6111. The margin is eight
+  questions in 360 on a mechanism refuted at pre-registration (F41), measured
+  post hoc on data selected for a different purpose, and it is not claimed. It
+  is recorded so that a later reader encountering it in the results file has the
+  provenance rather than a surprise.
+- **Consequence for the programme.** The claim that survives is narrower and
+  more useful than the one that would have been made without this council: a
+  council of non-dominated members beats the strongest single model by eight
+  points at 1.26 times its cost, and a council containing a dominant member
+  should not be built at all. The autoresearch loop's remaining live hypothesis
+  is whether a second observation per player — stability under perturbation —
+  can reach the nineteen points that reweighting a single observation cannot.
+- **Status:** VALIDATED (3 seeds, 360 questions, champions calibrated held-out) ·
+  complementarity_generalises NOT MET · Tarka PENDING

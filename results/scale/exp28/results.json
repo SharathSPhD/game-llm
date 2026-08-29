@@ -1,0 +1,27 @@
+{
+  "champions": {
+    "math": "tiiuae/Falcon3-3B-Instruct",
+    "general": "tiiuae/Falcon3-3B-Instruct"
+  },
+  "calibration_n": 120,
+  "eval_n": 360,
+  "singles": {
+    "HuggingFaceTB/SmolLM2-1.7B-Instruct": 0.3028,
+    "deepseek-ai/deepseek-math-7b-instruct": 0.4556,
+    "tiiuae/Falcon3-3B-Instruct": 0.6083,
+    "tiiuae/Falcon3-1B-Instruct": 0.3778
+  },
+  "best_single_name": "tiiuae/Falcon3-3B-Instruct",
+  "systems": {
+    "best_single": 0.6083,
+    "plain_router": 0.6083,
+    "fallback_router": 0.6111,
+    "anchored_tau1": 0.6194
+  },
+  "fallback_vs_best_single": {
+    "wins": 1,
+    "losses": 0,
+    "z": 1.0
+  },
+  "oracle_any_player": 0.7917
+}

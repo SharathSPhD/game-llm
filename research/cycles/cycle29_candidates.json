@@ -3,7 +3,7 @@
   "beliefs": {
     "anchored_vote_beats_router": 0.027,
     "system_beats_baseline_single": 0.97,
-    "complementarity_generalises": 0.08,
+    "complementarity_generalises": 0.015,
     "stability_signals_correctness": 0.5,
     "stability_weighted_council_beats_best_member": 0.35
   },
@@ -13,30 +13,52 @@
     {
       "name": "exp29_stability_probe",
       "cost": 1.0,
-      "diagnosticity": {"stability_signals_correctness": [0.9, 0.1]},
-      "payoff": {"stability_signals_correctness": 0.7},
+      "diagnosticity": {
+        "stability_signals_correctness": [
+          0.9,
+          0.1
+        ]
+      },
+      "payoff": {
+        "stability_signals_correctness": 0.7
+      },
       "description": "Cheap precondition test: resample each player k=5 on one seed of the dominated council and measure whether answer-stability separates correct from incorrect. If stability carries no signal, the mechanism cannot work and nothing further is spent."
     },
     {
       "name": "exp29_full_stability_council",
       "cost": 4.0,
-      "diagnosticity": {"stability_weighted_council_beats_best_member": [0.85, 0.15]},
-      "payoff": {"stability_weighted_council_beats_best_member": 1.0},
+      "diagnosticity": {
+        "stability_weighted_council_beats_best_member": [
+          0.85,
+          0.15
+        ]
+      },
+      "payoff": {
+        "stability_weighted_council_beats_best_member": 1.0
+      },
       "description": "Full stability-weighted council across three seeds on the Falcon council where routing gives zero"
-    },
-    {
-      "name": "second_family_remaining_seed",
-      "cost": 1.2,
-      "diagnosticity": {"complementarity_generalises": [0.85, 0.15]},
-      "payoff": {"complementarity_generalises": 0.6},
-      "description": "Finish exp28's third evaluation seed (already running)"
     },
     {
       "name": "teacher_distillation_run",
       "cost": 8.0,
-      "diagnosticity": {"stability_weighted_council_beats_best_member": [0.6, 0.4]},
-      "payoff": {"stability_weighted_council_beats_best_member": 0.8},
+      "diagnosticity": {
+        "stability_weighted_council_beats_best_member": [
+          0.6,
+          0.4
+        ]
+      },
+      "payoff": {
+        "stability_weighted_council_beats_best_member": 0.8
+      },
       "description": "Build a genuinely complementary member so the routing condition is satisfied by construction"
+    }
+  ],
+  "_observation_log": [
+    {
+      "exp": "exp28",
+      "outcome": "negative: system reduces to best member when one dominates (1W/0L over 360)",
+      "prior": 0.08,
+      "posterior": 0.015
     }
   ]
 }

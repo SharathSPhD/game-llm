@@ -30,3 +30,40 @@ seed 52 generated: tiiuae/Falcon3-3B-Instruct
 seed 52 generated: tiiuae/Falcon3-1B-Instruct
 === seed 52 complete ===
 Loading weights:   0%|          | 0/218 [00:00<?, ?it/s]Loading weights:   0%|          | 1/218 [00:01<06:32,  1.81s/it]Loading weights:   4%|▎         | 8/218 [00:01<00:37,  5.58it/s]Loading weights:   6%|▌         | 12/218 [00:03<00:54,  3.78it/s]Loading weights:   7%|▋         | 15/218 [00:03<00:41,  4.86it/s]Loading weights:  15%|█▍        | 32/218 [00:03<00:12, 14.66it/s]Loading weights:  17%|█▋        | 36/218 [00:04<00:11, 15.74it/s]Loading weights:  18%|█▊        | 40/218 [00:06<00:27,  6.47it/s]Loading weights:  27%|██▋       | 58/218 [00:06<00:11, 13.96it/s]Loading weights:  29%|██▉       | 63/218 [00:06<00:11, 14.01it/s]Loading weights:  31%|███       | 67/218 [00:07<00:11, 12.63it/s]Loading weights:  32%|███▏      | 70/218 [00:07<00:11, 12.34it/s]Loading weights:  33%|███▎      | 73/218 [00:18<01:50,  1.31it/s]Loading weights: 100%|██████████| 218/218 [00:18<00:00, 11.71it/s]
+seed 53 generated: HuggingFaceTB/SmolLM2-1.7B-Instruct
+Loading weights:   0%|          | 0/273 [00:00<?, ?it/s]Loading weights:   0%|          | 1/273 [00:00<01:13,  3.69it/s]Loading weights:   3%|▎         | 7/273 [00:00<00:14, 18.76it/s]Loading weights:   4%|▎         | 10/273 [00:02<01:29,  2.94it/s]Loading weights:   8%|▊         | 23/273 [00:05<01:08,  3.66it/s]Loading weights:  20%|█▉        | 54/273 [00:06<00:18, 11.88it/s]Loading weights:  23%|██▎       | 63/273 [00:06<00:14, 14.37it/s]Loading weights:  23%|██▎       | 63/273 [00:16<00:14, 14.37it/s]Loading weights:  28%|██▊       | 76/273 [00:19<01:12,  2.70it/s]Loading weights:  37%|███▋      | 101/273 [00:19<00:34,  4.98it/s]Loading weights:  76%|███████▌  | 207/273 [00:22<00:04, 13.41it/s]Loading weights:  90%|████████▉ | 245/273 [00:23<00:01, 18.04it/s]Loading weights:  94%|█████████▍| 257/273 [00:25<00:01, 13.63it/s]Loading weights: 100%|██████████| 273/273 [00:25<00:00, 10.63it/s]
+seed 53 generated: deepseek-ai/deepseek-math-7b-instruct
+Loading weights:   0%|          | 0/201 [00:00<?, ?it/s]Loading weights:   0%|          | 1/201 [00:09<32:23,  9.72s/it]Loading weights:   3%|▎         | 6/201 [00:10<04:02,  1.25s/it]Loading weights:   6%|▌         | 12/201 [00:10<01:42,  1.84it/s]Loading weights:   7%|▋         | 14/201 [00:11<01:31,  2.04it/s]Loading weights:  10%|▉         | 20/201 [00:11<00:57,  3.17it/s]Loading weights:  11%|█         | 22/201 [00:13<01:09,  2.59it/s]Loading weights:  18%|█▊        | 36/201 [00:13<00:23,  6.96it/s]Loading weights:  19%|█▉        | 39/201 [00:13<00:20,  7.92it/s]Loading weights:  21%|██        | 42/201 [00:15<00:36,  4.35it/s]Loading weights:  22%|██▏       | 45/201 [00:15<00:29,  5.30it/s]Loading weights:  27%|██▋       | 55/201 [00:15<00:15,  9.73it/s]Loading weights:  29%|██▉       | 59/201 [00:31<02:12,  1.07it/s]Loading weights: 100%|██████████| 201/201 [00:31<00:00,  6.47it/s]
+seed 53 generated: tiiuae/Falcon3-3B-Instruct
+Loading weights:   0%|          | 0/165 [00:00<?, ?it/s]Loading weights:   1%|          | 1/165 [00:07<20:16,  7.42s/it]Loading weights:   2%|▏         | 4/165 [00:07<04:02,  1.51s/it]Loading weights:   3%|▎         | 5/165 [00:13<07:17,  2.73s/it]Loading weights:  58%|█████▊    | 96/165 [00:18<00:08,  8.14it/s]Loading weights: 100%|██████████| 165/165 [00:18<00:00,  9.00it/s]
+seed 53 generated: tiiuae/Falcon3-1B-Instruct
+=== seed 53 complete ===
+{
+  "champions": {
+    "math": "tiiuae/Falcon3-3B-Instruct",
+    "general": "tiiuae/Falcon3-3B-Instruct"
+  },
+  "calibration_n": 120,
+  "eval_n": 360,
+  "singles": {
+    "HuggingFaceTB/SmolLM2-1.7B-Instruct": 0.3028,
+    "deepseek-ai/deepseek-math-7b-instruct": 0.4556,
+    "tiiuae/Falcon3-3B-Instruct": 0.6083,
+    "tiiuae/Falcon3-1B-Instruct": 0.3778
+  },
+  "best_single_name": "tiiuae/Falcon3-3B-Instruct",
+  "systems": {
+    "best_single": 0.6083,
+    "plain_router": 0.6083,
+    "fallback_router": 0.6111,
+    "anchored_tau1": 0.6194
+  },
+  "fallback_vs_best_single": {
+    "wins": 1,
+    "losses": 0,
+    "z": 1.0
+  },
+  "oracle_any_player": 0.7917
+}
+2026-08-29T06:53:10+01:00 === exp28 rc=0 ===
+EXP28 SECOND FAMILY COMPLETE

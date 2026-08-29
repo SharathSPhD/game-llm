@@ -1,0 +1,2 @@
+2026-08-29T06:53:19+01:00 === exp29 stability probe start ===
+Loading weights:   0%|          | 0/218 [00:00<?, ?it/s]Loading weights:   0%|          | 1/218 [00:01<06:55,  1.92s/it]Loading weights:   2%|▏         | 5/218 [00:02<01:11,  2.96it/s]Loading weights:   4%|▎         | 8/218 [00:02<00:41,  5.10it/s]Loading weights:   5%|▍         | 10/218 [00:03<00:57,  3.62it/s]Loading weights:   6%|▌         | 12/218 [00:03<00:46,  4.38it/s]Loading weights:  11%|█▏        | 25/218 [00:20<03:23,  1.05s/it]Loading weights: 100%|██████████| 218/218 [00:20<00:00, 10.41it/s]
