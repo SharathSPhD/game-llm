@@ -1519,16 +1519,21 @@ set the tied block to the baseline's own width, so one iteration is exactly one
 layer and compute is equal by construction rather than by calibration.
 
 - **Equal compute, near-equal quality, a third of the parameters.** The tied
-  block at $d = 768$ with twelve iterations scores BLiMP 0.663 and 0.650 against
-  the explicit baseline's 0.682 and 0.675 on the same two seeds, a mean ratio of
-  **0.9676**. It does so with 45.8M parameters against 123.8M — **2.70 times
+  block at $d = 768$ with twelve iterations scores BLiMP 0.663, 0.650 and 0.651
+  against the explicit baseline's 0.682, 0.675 and 0.693 on the same three seeds,
+  a mean ratio of **0.9582** with a standard deviation of 0.0169 (95% interval
+  $[0.939, 0.977]$). The third seed is the weakest at 0.9394 and pulls the mean
+  down from the 0.9676 the first two suggested, which is recorded because the
+  two-seed figure was reported before it and was optimistic. It does so with 45.8M parameters against 123.8M — **2.70 times
   fewer** — and 7.1M block parameters against 85.1M, **twelve times fewer** —
   while executing exactly 84.9M compute units per token in both cases.
 - **The pre-registered prediction is met.** SPEC 0018 stated before the run that
   a ratio above 0.95 would establish weight tying as a strong
   parameter-compression technique at zero compute cost, and below 0.85 would
-  close the line as a quality proposition. The measured 0.968 falls in the first
-  regime.
+  close the line as a quality proposition. The measured mean of 0.958 falls in
+  the first regime, though the confidence interval straddles the threshold, so
+  the honest reading is that the point estimate clears the bar and the evidence
+  does not yet exclude falling just below it.
 - **This corrects the pessimistic reading of F44 without retracting its
   arithmetic.** Both findings are true and they describe different points: made
   wide enough to match parameters, the tied model reaches full parity at 4.92
@@ -1549,6 +1554,5 @@ layer and compute is equal by construction rather than by calibration.
   budgets, and any setting where model size rather than latency is the binding
   constraint. It is not worth making where arithmetic binds, which F44 already
   established from the other direction.
-- **Status:** VALIDATED (2 seeds, pre-registered prediction met, compute equal by
-  construction) · third seed not run; the two agree to within 0.009 in ratio ·
-  Tarka PENDING
+- **Status:** VALIDATED (3 seeds, compute equal by construction, pre-registered
+  prediction met on the point estimate) · Tarka PENDING
