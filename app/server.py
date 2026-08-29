@@ -2191,7 +2191,10 @@ async def eqlm_generate(
             if ckpt_path not in _eqlm_model_cache:
                 try:
                     from kinetic_ai.models.eqlm import load_checkpoint
-                    model = load_checkpoint(ckpt_path, map_location=device_str)
+                    # load_checkpoint takes only a path; placement is a separate
+                    # step, and conflating them was a silent 500 on first use.
+                    model = load_checkpoint(ckpt_path)
+                    model = model.to(device_str)
                     model.eval()
                     _eqlm_model_cache[ckpt_path] = model
                 except Exception as e:
@@ -2206,23 +2209,25 @@ async def eqlm_generate(
             else:
                 model = _eqlm_model_cache[ckpt_path]
 
-        # Tokenize input
+        # The checkpoint was trained on the GPT-2 vocabulary (50257); a
+        # mismatched tokenizer produces ids past the embedding table, so the
+        # tokenizer is pinned to what the model was trained with rather than
+        # guessed from fashion.
         from transformers import AutoTokenizer
-        tokenizer = AutoTokenizer.from_pretrained("Qwen/Qwen2.5-0.5B")
+        tokenizer = AutoTokenizer.from_pretrained("gpt2")
         input_ids = tokenizer.encode(prompt, return_tensors="pt").to(device_str)
 
-        # Generate with the specified depth
-        with torch.no_grad():
-            # For anytime models, set the depth/budget
-            # This is a simplified implementation; real code would use the solver budget knob
-            outputs = model.generate(
-                input_ids,
-                max_new_tokens=max_new_tokens,
-                do_sample=True,
-                temperature=0.7,
-                top_k=40,
-                top_p=0.9,
-            )
+        # The anytime budget dial: depth is the solver's iteration cap, set on
+        # the model's config for this call under the load lock so concurrent
+        # requests cannot race the budget.
+        with torch.no_grad(), _eqlm_model_lock:
+                model.config.deq_max_iter = depth
+                outputs = model.generate(
+                    input_ids,
+                    max_new_tokens=max_new_tokens,
+                    temperature=0.7,
+                    top_k=40,
+                )
 
         # Decode output
         generated_text = tokenizer.decode(outputs[0][input_ids.shape[1]:], skip_special_tokens=True)
