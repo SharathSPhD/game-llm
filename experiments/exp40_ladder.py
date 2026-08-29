@@ -249,10 +249,16 @@ def load_hellaswag(max_examples: int | None = None, seed: int = 42) -> list[dict
 
 def load_piqa(max_examples: int | None = None, seed: int = 42) -> list[dict]:
     """PIQA: physical common sense reasoning."""
-    try:
-        ds = load_dataset("piqa", split="validation")
-    except Exception:
-        ds = load_dataset("ybisk/piqa", split="validation", trust_remote_code=True)
+    # The canonical piqa repo ships a loading script, which datasets >= 3
+    # refuses to execute; the hub's auto-converted parquet branch carries the
+    # same rows and loads everywhere.
+    ds = load_dataset(
+        "parquet",
+        data_files={
+            "validation": "hf://datasets/ybisk/piqa@refs/convert/parquet/"
+            "plain_text/validation/*.parquet"
+        },
+    )["validation"]
     examples = []
     for ex in ds:
         goal = ex["goal"]
@@ -504,14 +510,18 @@ def main():
             print(f"Warning: unknown task {task_name}")
             continue
         print(f"Loading {task_name}...")
-        examples = task_map[task_name](args.max_examples, args.seed)
-        print(f"Evaluating {task_name} ({len(examples)} examples)...")
-
-        if task_name == "lambada_openai":
-            task_results = eval_lambada(adapter, examples)
-        else:
-            task_results = eval_multiple_choice(adapter, examples)
-
+        # One task's loader breaking (a dataset repo changing format, a hub
+        # outage) must cost that task alone, not the whole ladder: the first
+        # rung sweep lost all four models to a single piqa failure.
+        try:
+            examples = task_map[task_name](args.max_examples, args.seed)
+            print(f"Evaluating {task_name} ({len(examples)} examples)...")
+            if task_name == "lambada_openai":
+                task_results = eval_lambada(adapter, examples)
+            else:
+                task_results = eval_multiple_choice(adapter, examples)
+        except Exception as exc:  # noqa: BLE001 - a failed task is a result
+            task_results = {"error": f"{type(exc).__name__}: {exc}"}
         results["tasks"][task_name] = task_results
         print(f"  {task_name}: {task_results}")
 
