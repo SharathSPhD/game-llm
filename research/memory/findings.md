@@ -1556,3 +1556,47 @@ layer and compute is equal by construction rather than by calibration.
   established from the other direction.
 - **Status:** VALIDATED (3 seeds, compute equal by construction, pre-registered
   prediction met on the point estimate) · Tarka PENDING
+
+## F46 — Stability separates right from wrong, and still does not beat the best member
+
+**Cycle 31 · 2026-08-29 · exp29, 60 questions, 5 samples per player · GB10**
+
+Every mechanism refuted in this programme re-read one observation per model, and
+F30's impossibility argument left exactly one route open: a second observation.
+Stability under perturbation is that route — ask each model the same question
+five times under resampling and paraphrase, and see whether it says the same
+thing. The probe was gated so that nothing further would be spent if stability
+carried no signal.
+
+- **The precondition is met, and decisively.** Pooled over the four members,
+  mean stability is 0.679 when the model's modal answer is right and 0.472 when
+  it is wrong, a difference of 0.206 at Welch $t = 6.69$. Every member shows the
+  separation individually: 0.615 against 0.455, 0.684 against 0.517, 0.777
+  against 0.506, and 0.600 against 0.423. This is the first per-question signal
+  in the programme that distinguishes correct from incorrect, and it confirms
+  F32's diagnosis from the other side — correctness is not legible in the score
+  field, and is legible in the agreement between independent samples.
+- **It does not convert into a system that beats the best member.** Weighting
+  each member's vote by its own measured stability scores 0.700 at the best
+  setting against the strongest member's 0.717, losing 3 questions to 4 on
+  disagreements ($z = -0.38$). Sharpening the weighting does not help (0.683 at
+  every larger setting), and removing it entirely gives plain majority voting at
+  0.600, which is worse still.
+- **The arithmetic of why is simple and was checkable in advance.** The best
+  member is wrong on 17 of 60 questions, and some other member is right on only
+  8 of those. The ceiling for any rescue mechanism is therefore 0.717 plus 8/60,
+  and the observed oracle of 0.850 confirms it. Stability would have to identify
+  nearly all 8 while never displacing a correct answer among the other 43, and it
+  identifies about half while displacing a comparable number.
+- **What this establishes and what it costs.** The signal is real, which is worth
+  knowing because eleven prior mechanisms found nothing at all; a second
+  observation succeeds where every re-reading of the first failed. But it is not
+  strong enough to overcome a dominant member, which is the same condition F43
+  identified from a different direction. Five samples per member is five times
+  the compute of asking the best member once, for a result 1.7 points below it.
+- **Consequence.** The full stability-weighted council, which the autoresearch
+  agent had ranked second and gated behind this probe, is not run. The gate
+  worked as intended: four GPU-hours were saved by a one-hour probe whose
+  purpose was to make exactly this call.
+- **Status:** VALIDATED (60 questions, 5 samples, single seed) · precondition MET
+  · system-versus-best-member NOT MET · Tarka PENDING

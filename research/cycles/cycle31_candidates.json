@@ -4,7 +4,8 @@
     "tying_is_parameter_efficient_at_equal_compute": 0.95,
     "depth_conditioning_closes_the_gap": 0.5,
     "depth_conditioning_beats_explicit_outright": 0.25,
-    "stability_signals_correctness": 0.5
+    "stability_signals_correctness": 0.95,
+    "stability_weighted_council_beats_best_member": 0.05
   },
   "cost_weight": 0.0417,
   "cost_units": "GPU-hours; one day of GPU time trades against one nat",
@@ -13,28 +14,26 @@
       "name": "exp34_depth_conditioned_block",
       "cost": 1.5,
       "diagnosticity": {
-        "depth_conditioning_closes_the_gap": [0.85, 0.15],
-        "depth_conditioning_beats_explicit_outright": [0.7, 0.3]
+        "depth_conditioning_closes_the_gap": [
+          0.85,
+          0.15
+        ],
+        "depth_conditioning_beats_explicit_outright": [
+          0.7,
+          0.3
+        ]
       },
       "payoff": {
         "depth_conditioning_closes_the_gap": 0.8,
         "depth_conditioning_beats_explicit_outright": 1.0
       },
       "description": "FiLM per-iteration modulation of the tied block; 18K extra params, compute unchanged"
-    },
+    }
+  ],
+  "_observation_log": [
     {
-      "name": "exp32_third_seed",
-      "cost": 0.7,
-      "diagnosticity": {"tying_is_parameter_efficient_at_equal_compute": [0.8, 0.2]},
-      "payoff": {"tying_is_parameter_efficient_at_equal_compute": 0.3},
-      "description": "Third seed for F45 (already running)"
-    },
-    {
-      "name": "exp29_stability_probe",
-      "cost": 1.0,
-      "diagnosticity": {"stability_signals_correctness": [0.9, 0.1]},
-      "payoff": {"stability_signals_correctness": 0.5},
-      "description": "Council per-question signal probe (already running)"
+      "exp": "exp29",
+      "outcome": "precondition MET (Welch t=6.69) but system loses to best member (3W/4L, z=-0.38); full council not run per the gate"
     }
   ]
 }

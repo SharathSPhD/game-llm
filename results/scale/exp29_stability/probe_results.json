@@ -1,0 +1,44 @@
+{
+  "seed": 60,
+  "k": 5,
+  "n_tasks": 60,
+  "players": [
+    "HuggingFaceTB/SmolLM2-1.7B-Instruct",
+    "deepseek-ai/deepseek-math-7b-instruct",
+    "tiiuae/Falcon3-3B-Instruct",
+    "tiiuae/Falcon3-1B-Instruct"
+  ],
+  "per_player": {
+    "HuggingFaceTB/SmolLM2-1.7B-Instruct": {
+      "n_correct": 27,
+      "n_wrong": 33,
+      "mean_stability_when_right": 0.6148,
+      "mean_stability_when_wrong": 0.4545
+    },
+    "deepseek-ai/deepseek-math-7b-instruct": {
+      "n_correct": 31,
+      "n_wrong": 29,
+      "mean_stability_when_right": 0.6839,
+      "mean_stability_when_wrong": 0.5172
+    },
+    "tiiuae/Falcon3-3B-Instruct": {
+      "n_correct": 43,
+      "n_wrong": 17,
+      "mean_stability_when_right": 0.7767,
+      "mean_stability_when_wrong": 0.5059
+    },
+    "tiiuae/Falcon3-1B-Instruct": {
+      "n_correct": 34,
+      "n_wrong": 26,
+      "mean_stability_when_right": 0.6,
+      "mean_stability_when_wrong": 0.4231
+    }
+  },
+  "pooled_separation": {
+    "mean_when_right": 0.6785,
+    "mean_when_wrong": 0.4724,
+    "difference": 0.2061,
+    "welch_t": 6.69
+  },
+  "precondition_met": true
+}
