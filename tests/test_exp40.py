@@ -174,3 +174,16 @@ def test_winogrande_option_fills_prefix() -> None:
     assert ex["contexts"][0] == "The ball hit the wall"
     assert ex["contexts"][1] == "The ball hit the floor"
     assert ex["options"] == [" hard.", " hard."]
+
+
+def test_bos_prefix_prepends_to_context_only() -> None:
+    import dataclasses
+
+    adapter = dataclasses.replace(make_adapter(), bos_prefix=(2,))
+    # With BOS token 2 prepended, context [2] alone makes 3 the favoured
+    # successor of the last context token 2 — the continuation [3, 4] must
+    # score as a fully favoured chain, proving BOS lands in the context and
+    # never in the continuation.
+    score, n = adapter.score_ids([2], [3, 4])
+    assert n == 2
+    assert abs(score - 2 * log_p_favoured()) < 1e-5

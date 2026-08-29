@@ -1,0 +1,40 @@
+{
+  "model": "EleutherAI/pythia-410m",
+  "model_type": "hf",
+  "tasks": {
+    "arc_easy": {
+      "acc": 0.556,
+      "acc_norm": 0.456,
+      "n": 500
+    },
+    "arc_challenge": {
+      "acc": 0.21,
+      "acc_norm": 0.232,
+      "n": 500
+    },
+    "hellaswag": {
+      "acc": 0.316,
+      "acc_norm": 0.4,
+      "n": 500
+    },
+    "piqa": {
+      "acc": 0.68,
+      "acc_norm": 0.652,
+      "n": 500
+    },
+    "winogrande": {
+      "acc": 0.56,
+      "acc_norm": 0.56,
+      "n": 500
+    },
+    "sciq": {
+      "acc": 0.784,
+      "acc_norm": 0.706,
+      "n": 500
+    },
+    "lambada_openai": {
+      "acc": 0.472,
+      "n": 500
+    }
+  }
+}

@@ -46,6 +46,11 @@ class ModelAdapter:
     tokenize: Callable[[str], list[int]]
     max_len: int
     device: str
+    #: Prepended once to the context ids. Llama-family tokenizers expect a
+    #: BOS at sequence start; `tokenize` itself must never inject specials,
+    #: or every continuation begins with <s> and scores as garbage (TinyLlama
+    #: sat at lambada 0.0 in the first validated sweep for exactly this).
+    bos_prefix: tuple[int, ...] = ()
 
     def score_ids(
         self, context_ids: list[int], continuation_ids: list[int]
@@ -54,6 +59,7 @@ class ModelAdapter:
 
         Returns: (sum_log_p_of_continuation, len_continuation_ids)
         """
+        context_ids = list(self.bos_prefix) + context_ids
         # Concatenate and check truncation. At least one context token must
         # survive truncation, because the first continuation token is scored
         # from the logits at the last context position.
@@ -181,12 +187,22 @@ def load_hf_model(name: str, device: str) -> ModelAdapter:
             out = model(ids, output_hidden_states=False)
         return out.logits
 
+    # Specials must never ride along on continuation encoding; where the
+    # tokenizer injects BOS by default (Llama family), it is restored once at
+    # the front of the context instead.
+    probe = tokenizer.encode("x")
+    injects_bos = (
+        bool(probe)
+        and tokenizer.bos_token_id is not None
+        and probe[0] == tokenizer.bos_token_id
+    )
     return ModelAdapter(
         name=name,
         logits_fn=logits_fn,
-        tokenize=lambda text: tokenizer.encode(text),
+        tokenize=lambda text: tokenizer.encode(text, add_special_tokens=False),
         max_len=max_len,
         device=device,
+        bos_prefix=(tokenizer.bos_token_id,) if injects_bos else (),
     )
 
 
@@ -427,7 +443,7 @@ def eval_lambada(adapter: ModelAdapter, examples: list[dict]) -> dict[str, float
         continuation_ids = adapter.tokenize(continuation)
 
         # Check if model predicts the correct continuation greedily at each position
-        context_ids = adapter.tokenize(context)
+        context_ids = list(adapter.bos_prefix) + adapter.tokenize(context)
         all_ids = context_ids + continuation_ids
 
         if len(all_ids) > adapter.max_len:

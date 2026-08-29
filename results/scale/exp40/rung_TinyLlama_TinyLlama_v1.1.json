@@ -1,0 +1,45 @@
+{
+  "model": "TinyLlama/TinyLlama_v1.1",
+  "model_type": "hf",
+  "tasks": {
+    "arc_easy": {
+      "acc": 0.481,
+      "acc_norm": 0.413,
+      "n": 1000
+    },
+    "arc_challenge": {
+      "acc": 0.246,
+      "acc_norm": 0.3,
+      "n": 1000
+    },
+    "hellaswag": {
+      "acc": 0.406,
+      "acc_norm": 0.581,
+      "n": 1000
+    },
+    "piqa": {
+      "acc": 0.694,
+      "acc_norm": 0.689,
+      "n": 1000
+    },
+    "winogrande": {
+      "acc": 0.484,
+      "acc_norm": 0.484,
+      "n": 1000
+    },
+    "sciq": {
+      "acc": 0.819,
+      "acc_norm": 0.792,
+      "n": 1000
+    },
+    "lambada_openai": {
+      "acc": 0.498,
+      "n": 1000
+    },
+    "mmlu": {
+      "acc": 0.261,
+      "acc_norm": 0.29,
+      "n": 1000
+    }
+  }
+}
