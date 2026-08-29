@@ -1,0 +1,9 @@
+{
+  "stage": "damage_probe",
+  "updated": "2026-08-29T12:00:00Z",
+  "model": "Qwen2.5-1.5B-Instruct",
+  "approach": "Two-fold reuse (middle 20 layers → 10 cores × 2)",
+  "estimated_unique_params": "1.10B / 1.54B (28% reduction)",
+  "fixed_compute": true,
+  "comment": "EqLM at scale: anytime training with adaptive depth. Qwen conversion gates at damage < 5x base ppl or recovery slope positive."
+}

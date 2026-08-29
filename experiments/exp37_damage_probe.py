@@ -69,7 +69,7 @@ def main() -> int:
     tok = AutoTokenizer.from_pretrained(BASE)
     texts = [
         r["text"]
-        for r in load_dataset("wikitext", "wikitext-2-raw-v1", split="test")
+        for r in load_dataset("Salesforce/wikitext", "wikitext-2-raw-v1", split="test")
         if len(r["text"]) > 400
     ][: args.n_texts]
 

@@ -6,15 +6,17 @@ import { usePathname } from "next/navigation";
 export function NavLinks() {
   const pathname = usePathname();
 
-  const links = [
+  // Primary navigation: the 4 key pages
+  const primaryLinks = [
+    { href: "/benchmarks", label: "Benchmarks" },
+    { href: "/api", label: "API" },
+    { href: "/demo", label: "Demo" },
+  ];
+
+  // Secondary tools
+  const toolLinks = [
     { href: "/lab", label: "Lab" },
-    { href: "/learn", label: "Learn" },
     { href: "/chat", label: "Chat" },
-    { href: "/playground", label: "Playground" },
-    { href: "/auction", label: "Auction" },
-    { href: "/studio", label: "Studio" },
-    { href: "/leaderboard", label: "Leaderboard" },
-    { href: "/models", label: "Models" },
     { href: "/findings", label: "Findings" },
     { href: "/login", label: "Sign in" },
   ];
@@ -26,7 +28,17 @@ export function NavLinks() {
 
   return (
     <div className="links">
-      {links.map((link) => (
+      {primaryLinks.map((link) => (
+        <Link
+          key={link.href}
+          href={link.href}
+          data-active={isActive(link.href) ? "true" : "false"}
+        >
+          {link.label}
+        </Link>
+      ))}
+      <div style={{ borderRight: "1px solid var(--border-subtle)" }} />
+      {toolLinks.map((link) => (
         <Link
           key={link.href}
           href={link.href}

@@ -1,0 +1,31 @@
+{
+  "base_model": "Qwen/Qwen2.5-1.5B-Instruct",
+  "n_texts": 40,
+  "configs": {
+    "pair_tying_10x2": {
+      "ppl": 1027.466,
+      "damage_ratio": 64.511,
+      "unique_params_M": 1075.7,
+      "param_fraction": 0.6968,
+      "passes_gate": false
+    },
+    "quad_tying_5x4": {
+      "ppl": 1631.482,
+      "damage_ratio": 102.435,
+      "unique_params_M": 841.7,
+      "param_fraction": 0.5453,
+      "passes_gate": false
+    },
+    "pair_tying_12x2_thin_shell": {
+      "ppl": 4300.118,
+      "damage_ratio": 269.991,
+      "unique_params_M": 982.1,
+      "param_fraction": 0.6362,
+      "passes_gate": false
+    }
+  },
+  "base": {
+    "ppl": 15.927,
+    "params_M": 1543.7
+  }
+}

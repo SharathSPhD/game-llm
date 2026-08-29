@@ -1741,3 +1741,39 @@ being an average over divergent behaviours.
 
 **Status:** VALIDATED (single seed, 31 phenomena, paired per-phenomenon) ·
 consistent with F45 · Tarka PENDING
+
+## F51 — The leap gate fails: conversion at any gentleness starts outside recoverable range
+
+**Cycle 33 · 2026-08-29 · exp37 · SPEC 0020 gate · RTX 5090 · minutes, as designed**
+
+SPEC 0020 proposed converting Qwen2.5-1.5B-Instruct at two-fold reuse on the
+hypothesis that damage grows steeply with reuse ratio and the gentlest surgery
+would start close enough to base for a 3-6B-token budget to finish. The probe
+refutes the hypothesis at every configuration. Pair-tying with a thick explicit
+shell — ten cores applied twice, the gentlest surgery that saves meaningful
+parameters — starts at 64.5 times base perplexity against the pre-registered
+gate of five. Quad-tying starts at 102 times and the thin-shell variant at 270.
+Averaging adjacent layer pairs destroys function almost as thoroughly as
+averaging twelve layers did in F25: the damage is dominated by the act of
+merging pretrained layers at all, not by how many are merged.
+
+F35 already measured what recovery from this regime buys at affordable budgets:
+perplexity heals while reasoning dies. The five-times gate existed to demand a
+starting point where that dissociation does not begin, and no probed surgery
+comes within an order of magnitude of it. Per the decision rule fixed in SPEC
+0020 before the probe ran, the leap is recorded as gated by budget: a Qwen-class
+kinetic model cannot be reached by converting a pretrained model at 10^9-token
+budgets, and F45 shows the working route is training tied from scratch — which
+at this scale requires the 10^11-token pretraining budget this hardware does not
+have. That is a funding boundary, not a refutation of the architecture: the
+from-scratch recipe holds at every scale it has been affordable to test.
+
+The programme accordingly closes its science on the exchange-rate result (F45,
+confirmed at breadth by F50): at equal compute, the kinetic tied architecture
+delivers 95.4-95.8% of a conventional transformer's quality with 2.70 times
+fewer parameters, the saving lives in resident weights (F48), and it is
+representable exactly in safetensors and ONNX but not GGUF (F49).
+
+**Status:** VALIDATED (probe measured, gate applied as pre-registered) · closes
+SPEC 0020 · the leap is future work with a stated budget requirement · Tarka
+PENDING
