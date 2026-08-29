@@ -1803,3 +1803,35 @@ express it.
 
 **Status:** VALIDATED (initializer accounting on an exported graph; export tests
 5/5) · completes F49's boundary · Tarka PENDING
+
+## F53 — The KD pilot fails its gate: distillation does not accelerate the from-scratch tied student
+
+**Cycle 33 · 2026-08-29 · exp38, SPEC 0021 gate · 16.4M tokens per arm · RTX 5090**
+
+The route past the budget deadlock rested on one measurable premise: that a
+teacher's logits transfer knowledge into a from-scratch tied student faster than
+plain cross-entropy, as the Minitron line reports for explicit students. The
+pre-registered gate required a 15% held-out perplexity reduction at equal
+tokens. The measurement: cross-entropy alone reaches 482.96; adding
+temperature-softened logit distillation from Qwen2.5-1.5B-Instruct reaches
+493.39 — a change of **−2.2%**, the wrong direction entirely.
+
+Two honest caveats bound the finding without rescuing it. The pilot ran one
+distillation configuration (weight 1.0, temperature 2.0), and a sweep might
+behave differently; and 16.4M tokens is the extreme early regime, where a
+student that has not yet learned unigram statistics may be unable to use a
+151k-way soft distribution at all — the published successes distill into
+pruned-from-teacher initialisations that start near the teacher, not into
+random weights. Both caveats are directions a future programme could probe;
+neither changes what this gate, fixed before the data existed, requires now.
+
+Per SPEC 0021, the leap closes at F51's verdict. The science of this programme
+is complete: the kinetic architecture's validated claim is the exchange rate —
+95.4–95.8% of a conventional transformer's quality at equal compute with 2.70
+times fewer parameters, the saving living in resident weights, portable through
+safetensors and ONNX — and the route to open-weight scale is recorded as
+requiring a pretraining budget, with conversion (F51) and cheap distillation
+(this finding) both measured and closed as shortcuts.
+
+**Status:** VALIDATED (pre-registered gate applied as written) · closes SPEC
+0021 and the leap · the programme's empirical record ends at F53 · Tarka PENDING

@@ -1,6 +1,6 @@
 {
-  "stage": "kd_pilot",
+  "stage": "closed_budget_gated",
   "spec": "0021",
-  "description": "From-scratch tied 1B distilled from an Apache-licensed teacher; pilot gate (KD must cut held-out ppl >=15% vs plain CE) running on the RTX 5090; hard 30-day stop.",
+  "description": "The Qwen-class kinetic model is recorded as future work requiring a pretraining budget: conversion of pretrained weights fails at any gentleness (F51) and cheap distillation into from-scratch tied weights fails its pre-registered gate (F53, -2.2% vs required +15%). The validated result stands: 96% of a conventional transformer's quality at equal compute with 2.70x fewer parameters.",
   "updated": "2026-08-29"
 }

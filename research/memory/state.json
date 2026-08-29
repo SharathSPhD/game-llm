@@ -1,6 +1,6 @@
 {
   "cycle": 33,
-  "phase": "CLOSURE: science frozen at F51 per SPEC 0020 gate. Remaining: Tarka sweep F44-F51, exp30 fair baselines finishing, app build-out + e2e, HF artifacts",
+  "phase": "CLOSED: empirical record F1-F53 complete. Leap budget-gated (F51 conversion, F53 distillation). Remaining: exp30 tail, e2e, final ship.",
   "current_rq": "RQ-3b (H1-prime a/b/c per ADR 0004)",
   "gpu_lock": false,
   "open_questions": [
