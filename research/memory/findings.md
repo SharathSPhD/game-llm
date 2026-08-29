@@ -1724,3 +1724,20 @@ incompatible in a way no amount of engineering resolves.
   rather than in a footnote.
 - **Status:** VALIDATED (export tests pass, unrolling cost recomputed by the
   author) · GGUF rejected on integrity grounds · Tarka PENDING
+
+## F50 — The equal-compute ratio holds on a threefold-wider benchmark
+
+**Cycle 33 · 2026-08-29 · exp36 full suite · 31 BLiMP phenomena · RTX 5090**
+
+The F45 ratio was measured on a 12-phenomenon subset. The full-suite harness
+evaluates every phenomenon available in the local cache — 31, with the per-file
+perplexity arm returning empty inside the container owing to a cache-path
+difference, recorded rather than hidden — and the ratio is stable: the
+compute-matched tied model scores 0.5731 against the explicit baseline's 0.6005,
+a ratio of **0.9544** against F45's 0.9582, with a per-phenomenon record of 12
+wins, 17 losses and 2 ties. The claim survives tripling the breadth of the
+evaluation, and per-phenomenon the two models are close rather than the ratio
+being an average over divergent behaviours.
+
+**Status:** VALIDATED (single seed, 31 phenomena, paired per-phenomenon) ·
+consistent with F45 · Tarka PENDING

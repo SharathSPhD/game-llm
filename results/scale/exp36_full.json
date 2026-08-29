@@ -1,0 +1,449 @@
+{
+  "timestamp": "None",
+  "checkpoints": {
+    "eqlm": "results/exp32_seed42/checkpoints/C1.pt",
+    "explicit": "results/exp10_seed42/checkpoints/a1.pt"
+  },
+  "models": {
+    "eqlm": {
+      "class": "EqLM",
+      "n_layers": 1,
+      "parameters": 45785857,
+      "weight_memory_bytes": 183143428,
+      "ops_per_token": 84934656
+    },
+    "explicit": {
+      "class": "ExplicitLM",
+      "n_layers": 12,
+      "parameters": 123760908,
+      "weight_memory_bytes": 495043632,
+      "ops_per_token": 84934656
+    }
+  },
+  "parameter_ratio": 0.36995411345883145,
+  "blimp": {
+    "phenomena_evaluated": 31,
+    "eqlm_overall_accuracy": 0.5730645161290324,
+    "explicit_overall_accuracy": 0.6004516129032257,
+    "ratio": 0.9543891694423556,
+    "per_phenomenon": {
+      "adjunct_island": {
+        "eqlm_accuracy": 0.793,
+        "explicit_accuracy": 0.71,
+        "eqlm_count": 1000,
+        "explicit_count": 1000,
+        "comparison": {
+          "wins": 584,
+          "losses": 416,
+          "ties": 0,
+          "z_score": 6.093367339862033,
+          "p_value": 1.1055996118614075e-09
+        }
+      },
+      "anaphor_gender_agreement": {
+        "eqlm_accuracy": 0.532,
+        "explicit_accuracy": 0.616,
+        "eqlm_count": 1000,
+        "explicit_count": 1000,
+        "comparison": {
+          "wins": 359,
+          "losses": 641,
+          "ties": 0,
+          "z_score": -15.12256614330378,
+          "p_value": 0.0
+        }
+      },
+      "anaphor_number_agreement": {
+        "eqlm_accuracy": 0.77,
+        "explicit_accuracy": 0.79,
+        "eqlm_count": 1000,
+        "explicit_count": 1000,
+        "comparison": {
+          "wins": 276,
+          "losses": 724,
+          "ties": 0,
+          "z_score": -17.561041524950923,
+          "p_value": 0.0
+        }
+      },
+      "animate_subject_passive": {
+        "eqlm_accuracy": 0.546,
+        "explicit_accuracy": 0.635,
+        "eqlm_count": 1000,
+        "explicit_count": 1000,
+        "comparison": {
+          "wins": 315,
+          "losses": 685,
+          "ties": 0,
+          "z_score": -13.926444618910228,
+          "p_value": 0.0
+        }
+      },
+      "animate_subject_trans": {
+        "eqlm_accuracy": 0.701,
+        "explicit_accuracy": 0.697,
+        "eqlm_count": 1000,
+        "explicit_count": 1000,
+        "comparison": {
+          "wins": 518,
+          "losses": 482,
+          "ties": 0,
+          "z_score": 2.4011287277069844,
+          "p_value": 0.01634458561938401
+        }
+      },
+      "complex_NP_island": {
+        "eqlm_accuracy": 0.426,
+        "explicit_accuracy": 0.344,
+        "eqlm_count": 1000,
+        "explicit_count": 1000,
+        "comparison": {
+          "wins": 640,
+          "losses": 360,
+          "ties": 0,
+          "z_score": 10.666222002355555,
+          "p_value": 0.0
+        }
+      },
+      "distractor_agreement_relational_noun": {
+        "eqlm_accuracy": 0.371,
+        "explicit_accuracy": 0.277,
+        "eqlm_count": 1000,
+        "explicit_count": 1000,
+        "comparison": {
+          "wins": 556,
+          "losses": 444,
+          "ties": 0,
+          "z_score": 4.246783996002002,
+          "p_value": 2.168608479569123e-05
+        }
+      },
+      "distractor_agreement_relative_clause": {
+        "eqlm_accuracy": 0.329,
+        "explicit_accuracy": 0.298,
+        "eqlm_count": 1000,
+        "explicit_count": 1000,
+        "comparison": {
+          "wins": 529,
+          "losses": 470,
+          "ties": 1,
+          "z_score": 1.794234008190327,
+          "p_value": 0.0727758261543685
+        }
+      },
+      "drop_argument": {
+        "eqlm_accuracy": 0.696,
+        "explicit_accuracy": 0.737,
+        "eqlm_count": 1000,
+        "explicit_count": 1000,
+        "comparison": {
+          "wins": 312,
+          "losses": 688,
+          "ties": 0,
+          "z_score": -14.786951197819075,
+          "p_value": 0.0
+        }
+      },
+      "ellipsis_n_bar_1": {
+        "eqlm_accuracy": 0.21,
+        "explicit_accuracy": 0.284,
+        "eqlm_count": 1000,
+        "explicit_count": 1000,
+        "comparison": {
+          "wins": 463,
+          "losses": 537,
+          "ties": 0,
+          "z_score": -1.7075428861810296,
+          "p_value": 0.08772119370159426
+        }
+      },
+      "ellipsis_n_bar_2": {
+        "eqlm_accuracy": 0.345,
+        "explicit_accuracy": 0.412,
+        "eqlm_count": 1000,
+        "explicit_count": 1000,
+        "comparison": {
+          "wins": 368,
+          "losses": 632,
+          "ties": 0,
+          "z_score": -10.582437290590303,
+          "p_value": 0.0
+        }
+      },
+      "left_branch_island_echo_question": {
+        "eqlm_accuracy": 0.518,
+        "explicit_accuracy": 0.334,
+        "eqlm_count": 1000,
+        "explicit_count": 1000,
+        "comparison": {
+          "wins": 796,
+          "losses": 204,
+          "ties": 0,
+          "z_score": 25.29290967230684,
+          "p_value": 0.0
+        }
+      },
+      "only_npi_scope": {
+        "eqlm_accuracy": 0.625,
+        "explicit_accuracy": 0.711,
+        "eqlm_count": 1000,
+        "explicit_count": 1000,
+        "comparison": {
+          "wins": 347,
+          "losses": 653,
+          "ties": 0,
+          "z_score": -12.961189951272843,
+          "p_value": 0.0
+        }
+      },
+      "passive_1": {
+        "eqlm_accuracy": 0.747,
+        "explicit_accuracy": 0.747,
+        "eqlm_count": 1000,
+        "explicit_count": 1000,
+        "comparison": {
+          "wins": 486,
+          "losses": 512,
+          "ties": 2,
+          "z_score": -0.20303879632307784,
+          "p_value": 0.8391047086300825
+        }
+      },
+      "passive_2": {
+        "eqlm_accuracy": 0.762,
+        "explicit_accuracy": 0.755,
+        "eqlm_count": 1000,
+        "explicit_count": 1000,
+        "comparison": {
+          "wins": 426,
+          "losses": 574,
+          "ties": 0,
+          "z_score": -4.481229675446336,
+          "p_value": 7.421419182529476e-06
+        }
+      },
+      "principle_A_c_command": {
+        "eqlm_accuracy": 0.523,
+        "explicit_accuracy": 0.566,
+        "eqlm_count": 1000,
+        "explicit_count": 1000,
+        "comparison": {
+          "wins": 454,
+          "losses": 546,
+          "ties": 0,
+          "z_score": -3.5524110521799868,
+          "p_value": 0.0003817180484702032
+        }
+      },
+      "principle_A_domain_1": {
+        "eqlm_accuracy": 0.936,
+        "explicit_accuracy": 0.963,
+        "eqlm_count": 1000,
+        "explicit_count": 1000,
+        "comparison": {
+          "wins": 142,
+          "losses": 858,
+          "ties": 0,
+          "z_score": -35.08925110298704,
+          "p_value": 0.0
+        }
+      },
+      "principle_A_domain_2": {
+        "eqlm_accuracy": 0.565,
+        "explicit_accuracy": 0.55,
+        "eqlm_count": 1000,
+        "explicit_count": 1000,
+        "comparison": {
+          "wins": 473,
+          "losses": 527,
+          "ties": 0,
+          "z_score": -1.5203164482339047,
+          "p_value": 0.12843146205904765
+        }
+      },
+      "principle_A_domain_3": {
+        "eqlm_accuracy": 0.438,
+        "explicit_accuracy": 0.438,
+        "eqlm_count": 1000,
+        "explicit_count": 1000,
+        "comparison": {
+          "wins": 500,
+          "losses": 500,
+          "ties": 0,
+          "z_score": 1.0646687053044779,
+          "p_value": 0.28702587659582157
+        }
+      },
+      "principle_A_reconstruction": {
+        "eqlm_accuracy": 0.235,
+        "explicit_accuracy": 0.33,
+        "eqlm_count": 1000,
+        "explicit_count": 1000,
+        "comparison": {
+          "wins": 435,
+          "losses": 565,
+          "ties": 0,
+          "z_score": -5.4668810645260795,
+          "p_value": 4.5802315051801656e-08
+        }
+      },
+      "sentential_negation_npi_scope": {
+        "eqlm_accuracy": 0.448,
+        "explicit_accuracy": 0.787,
+        "eqlm_count": 1000,
+        "explicit_count": 1000,
+        "comparison": {
+          "wins": 181,
+          "losses": 819,
+          "ties": 0,
+          "z_score": -27.442903986157013,
+          "p_value": 0.0
+        }
+      },
+      "tough_vs_raising_1": {
+        "eqlm_accuracy": 0.393,
+        "explicit_accuracy": 0.426,
+        "eqlm_count": 1000,
+        "explicit_count": 1000,
+        "comparison": {
+          "wins": 458,
+          "losses": 542,
+          "ties": 0,
+          "z_score": -3.8535733761339577,
+          "p_value": 0.00011640635631482432
+        }
+      },
+      "tough_vs_raising_2": {
+        "eqlm_accuracy": 0.639,
+        "explicit_accuracy": 0.627,
+        "eqlm_count": 1000,
+        "explicit_count": 1000,
+        "comparison": {
+          "wins": 467,
+          "losses": 533,
+          "ties": 0,
+          "z_score": -1.5870977622851077,
+          "p_value": 0.11249050463576538
+        }
+      },
+      "wh_island": {
+        "eqlm_accuracy": 0.653,
+        "explicit_accuracy": 0.759,
+        "eqlm_count": 1000,
+        "explicit_count": 1000,
+        "comparison": {
+          "wins": 383,
+          "losses": 617,
+          "ties": 0,
+          "z_score": -9.303268829570838,
+          "p_value": 0.0
+        }
+      },
+      "wh_questions_object_gap": {
+        "eqlm_accuracy": 0.66,
+        "explicit_accuracy": 0.685,
+        "eqlm_count": 1000,
+        "explicit_count": 1000,
+        "comparison": {
+          "wins": 420,
+          "losses": 580,
+          "ties": 0,
+          "z_score": -5.823224842739392,
+          "p_value": 5.7722813195937306e-09
+        }
+      },
+      "wh_questions_subject_gap": {
+        "eqlm_accuracy": 0.937,
+        "explicit_accuracy": 0.901,
+        "eqlm_count": 1000,
+        "explicit_count": 1000,
+        "comparison": {
+          "wins": 472,
+          "losses": 528,
+          "ties": 0,
+          "z_score": -1.941470271735693,
+          "p_value": 0.05220126191281982
+        }
+      },
+      "wh_questions_subject_gap_long_distance": {
+        "eqlm_accuracy": 0.943,
+        "explicit_accuracy": 0.978,
+        "eqlm_count": 1000,
+        "explicit_count": 1000,
+        "comparison": {
+          "wins": 177,
+          "losses": 823,
+          "ties": 0,
+          "z_score": -30.075516745522116,
+          "p_value": 0.0
+        }
+      },
+      "wh_vs_that_no_gap": {
+        "eqlm_accuracy": 0.94,
+        "explicit_accuracy": 0.884,
+        "eqlm_count": 1000,
+        "explicit_count": 1000,
+        "comparison": {
+          "wins": 537,
+          "losses": 463,
+          "ties": 0,
+          "z_score": 4.54545708491648,
+          "p_value": 5.481616558000724e-06
+        }
+      },
+      "wh_vs_that_no_gap_long_distance": {
+        "eqlm_accuracy": 0.966,
+        "explicit_accuracy": 0.958,
+        "eqlm_count": 1000,
+        "explicit_count": 1000,
+        "comparison": {
+          "wins": 423,
+          "losses": 577,
+          "ties": 0,
+          "z_score": -6.517105476706262,
+          "p_value": 7.167710869282473e-11
+        }
+      },
+      "wh_vs_that_with_gap": {
+        "eqlm_accuracy": 0.077,
+        "explicit_accuracy": 0.281,
+        "eqlm_count": 1000,
+        "explicit_count": 1000,
+        "comparison": {
+          "wins": 301,
+          "losses": 699,
+          "ties": 0,
+          "z_score": -17.0491048433816,
+          "p_value": 0.0
+        }
+      },
+      "wh_vs_that_with_gap_long_distance": {
+        "eqlm_accuracy": 0.041,
+        "explicit_accuracy": 0.134,
+        "eqlm_count": 1000,
+        "explicit_count": 1000,
+        "comparison": {
+          "wins": 464,
+          "losses": 536,
+          "ties": 0,
+          "z_score": -4.724297134627096,
+          "p_value": 2.3091259002683273e-06
+        }
+      }
+    }
+  },
+  "perplexity": {
+    "eqlm": {
+      "perplexity": null,
+      "loss": null,
+      "num_tokens": 0,
+      "num_files_loaded": 0
+    },
+    "explicit": {
+      "perplexity": null,
+      "loss": null,
+      "num_tokens": 0,
+      "num_files_loaded": 0
+    }
+  }
+}
