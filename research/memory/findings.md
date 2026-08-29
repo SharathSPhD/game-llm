@@ -1361,3 +1361,51 @@ protocol returned a clear answer, and they point in opposite directions.
 - **Status:** VALIDATED (pre-registered, 3 fresh seeds, 360 questions,
   Bonferroni-corrected) · anchoring NOT MET · **system-versus-baseline MET** ·
   Tarka RESOLVED (its correction is what made this comparison fair)
+
+## F42 — What the win is made of, and the condition under which it exists
+
+**Cycle 28 · 2026-08-29 · decomposition of F41 plus the second-family interim · zero GPU**
+
+F41's confirmed margin was reported as one number. Decomposing it on the same
+360 confirmation questions, and auditing it against a stronger extractor,
+establishes what produces it and when it would not.
+
+- **Routing supplies most of it, redundancy little.** Against the baseline
+  single model at 0.5361: adding the council's redundancy alone reaches 0.5500
+  ($+1.39$ points), routing on ladder priors alone reaches 0.6000 ($+6.39$), and
+  the deployed combination reaches 0.6194 ($+8.33$). Isolating routing by giving
+  the baseline the same redundancy leaves the system ahead 33 wins to 8,
+  $z = 3.90$. The result is a routing result with a redundancy top-up, not the
+  reverse.
+- **It is not an artefact of weak answer parsing.** A deliberately more
+  forgiving extractor — accepting a trailing bare letter or number without the
+  boxed convention — cuts champion abstention from 8.6% to 3.3% and raises both
+  systems. The margin holds at $+7.78$ points, 36 wins to 8, $z = 4.22$. The
+  self-audit was run because a gain resting on the extractor failing would be an
+  engineering artefact rather than a result; it does not.
+- **The precondition is measurable in advance, and the second council lacks it.**
+  Routing pays only when different players are best on different domains. On the
+  Qwen council the mathematics specialist leads mathematics at 0.817 while the
+  general model leads knowledge at 0.383, so the router has something to choose.
+  On the second council — SmolLM2-1.7B, deepseek-math-7B, Falcon3-3B and
+  Falcon3-1B, four families and four tokenizers — calibration selects
+  Falcon3-3B as champion of **both** domains, and it is also the best single
+  model. The first evaluation seed accordingly gives routing exactly nothing:
+  system 0.6417 against best single 0.6417, 0 wins and 0 losses. Champion
+  abstention is 1.7% against the Qwen council's 8.6%, so the redundancy term has
+  almost nothing to work on either.
+- **Interpretation.** The eight-point win is real, pre-registered and replicated,
+  but it is contingent on a property of the council rather than universal: a
+  council helps when no single member dominates every domain, and reduces to its
+  best member when one does. That condition is checkable from the ladder before
+  any council is built, which makes this an engineering criterion rather than a
+  caveat. It also explains every earlier negative in this programme from a single
+  cause: mechanisms were being asked to discover per-question which member to
+  trust, when the only signal that ever paid was the per-domain prior measurable
+  in advance.
+- **The unclaimed headroom persists in both councils.** The oracle stands at
+  0.75 on the Qwen confirmation set and 0.79 on the second council's first
+  evaluation seed, some 13 to 15 points above the best single model in each. No
+  mechanism tested in this programme reaches it.
+- **Status:** VALIDATED for the decomposition and the extractor audit; second
+  council INTERIM (one of three evaluation seeds) · Tarka PENDING
