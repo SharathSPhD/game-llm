@@ -995,6 +995,34 @@
       },
       "status": "VALIDATED",
       "verdict": "closes SPEC 0020; opens SPEC 0021"
+    },
+    {
+      "id": "F52",
+      "title": "ONNX carries the weight saving that GGUF destroys",
+      "claim": "Verified by export: twelve unrolled iterations share initializers (1.31M stored vs 1.06M params \u2014 constant-folding overhead, not duplication). The deployment chain is real end to end: safetensors for archival, ONNX for portable serving, onnxruntime-web for in-browser inference.",
+      "evidence": {
+        "exp": "export verification",
+        "stored_M": 1.31,
+        "params_M": 1.06,
+        "path": "kinetic_ai/serve/export/"
+      },
+      "status": "VALIDATED",
+      "verdict": "completes F49's boundary"
+    },
+    {
+      "id": "F53",
+      "title": "The KD pilot fails its gate; the empirical record closes",
+      "claim": "Distillation into the from-scratch tied student measured -2.2% held-out perplexity against a pre-registered +15% requirement at equal tokens (CE 482.96 vs KD 493.39, 16.4M tokens/arm, byte-identical data). Caveats recorded (one configuration; random-init students may be unable to use soft targets in the extreme early regime) without overriding the gate. The leap is budget-gated: conversion (F51) and cheap distillation (F53) both measured and closed.",
+      "evidence": {
+        "exp": "exp38",
+        "ce_ppl": 482.96,
+        "kd_ppl": 493.39,
+        "reduction": -0.022,
+        "gate": 0.15,
+        "path": "results/scale/exp38_kd_pilot.json"
+      },
+      "status": "VALIDATED",
+      "verdict": "closes SPEC 0021; record ends at F53"
     }
   ]
 }

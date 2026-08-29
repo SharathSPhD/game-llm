@@ -759,7 +759,12 @@ change for single-stream serving.
 Portability has an analogous boundary. The saving exists only in formats able to
 express weight sharing: safetensors carries the model exactly at zero overhead
 (round-trip verified to $10^{-5}$), and ONNX can reference one initializer from
-many nodes at a fixed iteration count. The GGUF format underlying the dominant
+many nodes at a fixed iteration count --- verified by export rather than
+asserted: unrolling the tied block to twelve iterations stores 1.31M values for
+a 1.06M-parameter model, the excess being constant folding of small tensors
+rather than duplication, so the parameter saving survives the one consumer
+format able to express it and, through its browser runtime, reaches in-browser
+inference. The GGUF format underlying the dominant
 consumer runtimes provides no tensor aliasing, so representing the model
 requires unrolling the tied block into twelve materialised copies --- a file
 $4.91\times$ larger than the explicit baseline the architecture saves against,
@@ -773,6 +778,15 @@ pairs under averaged initialisation begins at $64.5\times$ base perplexity
 against a pre-registered ceiling of $5\times$; harsher surgeries begin at
 $102\times$ and $270\times$. Merging pretrained layers destroys function almost
 independently of how many are merged, which closes conversion as a route at
-$10^{9}$-token budgets and leaves from-scratch training --- the regime in which
-every result above was obtained --- as the recorded path, with distillation from
-an open teacher under evaluation as the accelerant.
+$10^{9}$-token budgets. The candidate accelerant was then itself gated and the
+gate closed: distilling a frozen teacher's temperature-softened logits into a
+from-scratch tied student, pre-registered to require a fifteen percent held-out
+perplexity reduction against plain cross-entropy at equal tokens, measured
+$-2.2\%$ --- the wrong direction --- on 16.4M tokens per arm with byte-identical
+data order. One configuration was tested, and the extreme early regime may be
+precisely where a randomly initialised student cannot exploit a 151k-way soft
+distribution, unlike the pruned-from-teacher initialisations of published
+successes; both caveats are stated as future directions rather than exercised
+against the gate. The route to open-weight scale is accordingly recorded as
+requiring a pretraining budget, with both affordable shortcuts measured and
+closed.
