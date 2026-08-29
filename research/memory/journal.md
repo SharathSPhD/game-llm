@@ -667,3 +667,20 @@ deliverable, full independence from prabhasa. Spec registered with kill gate
 budget cap (<=24 5090-days, floors 2B/6B), measured-preflight GO rule
 (>=5.5k tok/s). Data: FineWeb-Edu, documented substitution for Nemotron-CC-HQ
 which has no official HF distribution. 5090 verified idle and healthy.
+
+## 2026-08-29 — SPEC 0022 preflight GO (measured, not extrapolated)
+
+The 5090 preflight at final geometry: Arm E (913.0M params, spec-exact)
+20,330 tok/s median; Arm T 15,647 tok/s with the disclosed anytime-head
+overhead; both arms peak 28.6 GiB of 32, both save/resume round trips
+bit-exact. Against the registered GO rule (>=5.5k) the margin is 3-4x, and
+the projections are twin phase 3.3 days, extension 4.5, whole programme ~8
+training days against a 24-day cap — the SDPA path, per-block checkpointing
+and fused AdamW earned their keep. Three defects were caught before they
+could cost anything: the pack builder's stream loop never broke once the
+train target was met (27GB RSS hang on sample-100BT, found live, regression
+test added), a resumed build dropped completed shards from the manifest, and
+a resume landing exactly on the target re-entered the unbounded loop. The
+public ladder rungs (Pythia-410M/1B, SmolLM2-360M, TinyLlama-1.1B) are being
+measured on the GB10 through the same exp40 harness the milestones will use.
+Phase 1 launches when the full 10.5B pack lands.

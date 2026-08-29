@@ -185,17 +185,38 @@ def main() -> int:
     for _ in range(docs_consumed):
         next(stream)
 
-    # Manifest accumulator
+    # Manifest accumulator. On resume, shards already on disk are re-hashed so
+    # the final manifest covers every shard, not only the ones this process
+    # wrote; sizes come from the files themselves.
     shards_info: list[dict[str, Any]] = []
+    for i in range(shards_done):
+        existing = out_dir / f"shard_{i:05d}.bin"
+        if not existing.exists():
+            raise SystemExit(
+                f"progress.json says {shards_done} shards done but {existing} "
+                "is missing; delete the pack directory and rebuild"
+            )
+        shards_info.append(
+            {
+                "file": existing.name,
+                "sha256": compute_file_sha256(existing),
+                "tokens": existing.stat().st_size // 2,
+            }
+        )
 
     # Main tokenization loop
     print("Beginning tokenization and packing...", flush=True)
     t_start = time.time()
     current_shard_idx = shards_done
     buf: list[int] = carry_tokens.copy()
-    train_complete = False
+    # A resumed run may already hold every training token; the stream loop
+    # must then be skipped outright, or it would tokenize unboundedly with no
+    # shard writes ever setting the flag.
+    train_complete = tokens_written >= args.train_tokens
 
     for doc_idx, doc in enumerate(stream):
+        if train_complete:
+            break
         if doc_idx % (args.batch_docs * 100) == 0 and doc_idx > 0 and not train_complete:
             elapsed = time.time() - t_start
             tokens_per_sec = tokens_written / max(elapsed, 1e-6)
@@ -258,6 +279,13 @@ def main() -> int:
                 if tokens_written >= args.train_tokens:
                     train_complete = True
                     break
+
+        # The stream is effectively unbounded (sample-100BT holds ~20x any
+        # target here), so the outer loop must stop the moment training
+        # tokens are complete; without this the loop tokenizes the whole
+        # dataset into `buf` unwritten — an unbounded-memory hang.
+        if train_complete:
+            break
 
     # Handle remaining training tokens from buffer
     if tokens_written < args.train_tokens and buf:

@@ -454,3 +454,33 @@ class TestPackIntegration:
         assert "pack_hash" in manifest
         assert isinstance(manifest["pack_hash"], str)
         assert len(manifest["pack_hash"]) == 64  # SHA256 hex
+
+
+def test_builder_stops_streaming_once_targets_met(tmp_path):
+    """Regression: with a stream far larger than the targets, the builder must
+    stop consuming as soon as train+holdout tokens are written, rather than
+    tokenizing the remainder into an unbounded in-memory buffer (the hang the
+    first preflight build hit at 27GB RSS on sample-100BT)."""
+    import json as _json
+    import subprocess
+    import sys as _sys
+
+    texts = tmp_path / "texts.txt"
+    with texts.open("w") as fh:
+        for i in range(50_000):
+            fh.write(f"document {i} carries a handful of words for the pack\n")
+    out = tmp_path / "pack"
+    rc = subprocess.run(
+        [_sys.executable, "scripts/prepare_1b_pack.py",
+         "--out-dir", str(out), "--local-texts-file", str(texts),
+         "--train-tokens", "5000", "--holdout-tokens", "1000",
+         "--shard-tokens", "2500", "--batch-docs", "64"],
+        capture_output=True, text=True, timeout=120,
+    )
+    assert rc.returncode == 0, rc.stderr[-2000:]
+    manifest = _json.loads((out / "manifest.json").read_text())
+    assert manifest["total_train_tokens"] == 5000
+    progress = _json.loads((out / "progress.json").read_text())
+    # ~11 tokens per doc: 6000 tokens needs ~600 docs; consuming even a tenth
+    # of the 50k-line stream would mean the stop condition is broken again.
+    assert progress["docs_consumed"] < 5_000, progress["docs_consumed"]
