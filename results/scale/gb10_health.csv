@@ -715,3 +715,5 @@ ts,gpu_temp_c,max_zone_c,power_w,util_pct,mem_used_mb,governor,note
 0
 2026-08-29T04:12:06+01:00,59,62,13.96,1,1,0
 0
+2026-08-29T04:15:06+01:00,61,71,14.64,0,1,0
+0

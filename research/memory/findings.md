@@ -1355,9 +1355,9 @@ protocol returned a clear answer, and they point in opposite directions.
   proof that the limit contains the baseline, which is why the system cannot lose
   to the model it routes on; it did not contribute an operating point strictly
   inside the interval. Claiming more than that would misdescribe the measurement.
-- **Cost.** 1.25 expected generations per request (worst case four), since the
-  fallback generates further candidates only on the 16.1% of champion extraction
-  failures.
+- **Cost.** 1.258 expected generations per request on the confirmation set (1.25 on the
+  development set), since the fallback generates further candidates only on the
+  champion extraction failures.
 - **Status:** VALIDATED (pre-registered, 3 fresh seeds, 360 questions,
   Bonferroni-corrected) · anchoring NOT MET · **system-versus-baseline MET** ·
   Tarka RESOLVED (its correction is what made this comparison fair)
