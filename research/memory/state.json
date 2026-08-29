@@ -1,6 +1,6 @@
 {
   "cycle": 33,
-  "phase": "CLOSED: empirical record F1-F53 complete. Leap budget-gated (F51 conversion, F53 distillation). Remaining: exp30 tail, e2e, final ship.",
+  "phase": "SHIPPED v1: record F1-F54 complete, paper/app/HF released. Awaiting operator sign-off.",
   "current_rq": "RQ-3b (H1-prime a/b/c per ADR 0004)",
   "gpu_lock": false,
   "open_questions": [

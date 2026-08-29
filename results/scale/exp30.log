@@ -9,3 +9,56 @@ self-consistency: 360/360 questions
 Loading weights:   0%|          | 0/339 [00:00<?, ?it/s]Loading weights:   0%|          | 1/339 [00:26<2:28:53, 26.43s/it]Loading weights:   1%|▏         | 5/339 [00:27<22:48,  4.10s/it]  Loading weights:   2%|▏         | 6/339 [00:28<18:36,  3.35s/it]Loading weights:   5%|▍         | 16/339 [00:28<04:31,  1.19it/s]Loading weights:   5%|▌         | 17/339 [00:29<04:30,  1.19it/s]Loading weights:   5%|▌         | 18/339 [00:42<12:03,  2.25s/it]Loading weights:  23%|██▎       | 78/339 [00:45<01:04,  4.03it/s]Loading weights:  28%|██▊       | 94/339 [00:45<00:45,  5.33it/s]Loading weights:  29%|██▊       | 97/339 [00:45<00:43,  5.57it/s]Loading weights:  29%|██▉       | 100/339 [00:46<00:45,  5.21it/s]Loading weights:  30%|███       | 102/339 [00:48<00:59,  4.01it/s]Loading weights:  31%|███▏      | 106/339 [00:49<00:49,  4.70it/s]Loading weights:  31%|███▏      | 106/339 [01:06<00:49,  4.70it/s]Loading weights:  32%|███▏      | 108/339 [01:24<08:23,  2.18s/it]Loading weights:  84%|████████▍ | 286/339 [01:24<00:07,  6.92it/s]Loading weights:  94%|█████████▍| 320/339 [01:34<00:03,  5.77it/s]Loading weights: 100%|██████████| 339/339 [01:34<00:00,  3.58it/s]
 capacity-matched: 60/360
 capacity-matched: 120/360
+capacity-matched: 180/360
+capacity-matched: 240/360
+capacity-matched: 300/360
+capacity-matched: 360/360
+{
+  "n": 360,
+  "accuracy": {
+    "baseline_single_greedy": 0.5361,
+    "council_system": 0.6194,
+    "self_consistency_k2": 0.5556,
+    "self_consistency_k3": 0.6028,
+    "self_consistency_k5": 0.6361,
+    "capacity_matched_7b_greedy": 0.8139
+  },
+  "generations_per_request": {
+    "baseline_single_greedy": 1.0,
+    "council_system": 1.258,
+    "self_consistency_k2": 2.0,
+    "self_consistency_k3": 3.0,
+    "self_consistency_k5": 5.0,
+    "capacity_matched_7b_greedy": 1.0
+  },
+  "council_vs": {
+    "baseline_single_greedy": {
+      "wins": 38,
+      "losses": 8,
+      "z": 4.42
+    },
+    "self_consistency_k2": {
+      "wins": 66,
+      "losses": 43,
+      "z": 2.2
+    },
+    "self_consistency_k3": {
+      "wins": 49,
+      "losses": 43,
+      "z": 0.63
+    },
+    "self_consistency_k5": {
+      "wins": 41,
+      "losses": 47,
+      "z": -0.64
+    },
+    "capacity_matched_7b_greedy": {
+      "wins": 14,
+      "losses": 84,
+      "z": -7.07
+    }
+  },
+  "note": "Same questions, prompts, extraction and scoring as the confirmation run. Self-consistency arms reuse one set of five samples, so k=2 and k=3 are prefixes of k=5 rather than independent draws."
+}
+2026-08-29T16:14:38+01:00 === exp30 rc=0 ===
+EXP30 FAIR BASELINES COMPLETE

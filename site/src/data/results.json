@@ -1023,6 +1023,21 @@
       },
       "status": "VALIDATED",
       "verdict": "closes SPEC 0021; record ends at F53"
+    },
+    {
+      "id": "F54",
+      "title": "The council survives matched compute and loses matched capacity",
+      "claim": "On the confirmation questions: self-consistency at 2 samples (1.6x the council's cost) loses by 6.4 points (z=2.2); at 3-5 samples it only draws level, so matching the council by sampling costs ~3x its compute. But a single 7B of comparable resident memory scores 0.8139 vs the council's 0.6194 (84W/14L, z=-7.07). Routing+fallback is the best measured use of a 1.5B-class generation budget, and not the best use of 6.34B resident parameters.",
+      "evidence": {
+        "exp": "exp30",
+        "council": 0.6194,
+        "sc_k2": 0.5556,
+        "sc_k5": 0.6361,
+        "capacity_7b": 0.8139,
+        "path": "results/scale/exp30_fair_baselines.json"
+      },
+      "status": "VALIDATED",
+      "verdict": "completes the audit; record ends at F54"
     }
   ]
 }

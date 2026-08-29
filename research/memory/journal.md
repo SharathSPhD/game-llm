@@ -634,3 +634,18 @@ review caught a client-side bearer token the app agent had introduced (fixed to
 the server-side proxy within the cycle), and mid-training Hub streaming stalled
 inside the container, replaced by a materialised token cache that also made the
 two pilot arms byte-identical in data order.
+
+## Closure — 2026-08-29
+
+The empirical record ends at F54: fifty-four findings, every number reproduced
+from its results file under adversarial review, eleven pre-registered gates of
+which four closed programmes their author hoped would pass. The validated core:
+at equal compute the kinetic tied architecture delivers ~96% of a conventional
+transformer's quality with 2.70x fewer parameters; the saving lives in resident
+weights and survives in safetensors and ONNX; one checkpoint serves every
+budget. The systems side result: routing with fallback beats its best member by
+8.3 points pre-registered, is the best measured use of its generation budget,
+and is not the best use of its resident memory. The path to open-weight scale is
+budget-gated with both affordable shortcuts measured and closed. Shipped: paper
+52pp, app four pages with live anytime dial verified over authenticated HTTP,
+three HF model repos and one measurements dataset, all of it pushed.

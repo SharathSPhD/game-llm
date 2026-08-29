@@ -631,6 +631,18 @@ Whether the condition holds is visible in the baseline ladder before any council
 exists, which makes this a design criterion rather than a limitation discovered
 after the fact.
 
+Two further baselines complete the audit this comparison owes. Against matched
+compute, self-consistency on the single best model at two samples --- already
+1.6 times the deployed system's 1.258 expected generations --- trails it by 6.4
+points (66 wins to 43, $z = 2.2$), and only draws level at three to five samples,
+so matching the system by sampling costs roughly triple its compute. Against
+matched capacity the verdict reverses: a single 7B model of residency comparable
+to the council's 6.34B scores $0.8139$ against the system's $0.6194$, 84 wins to
+14 on disagreements. The systems result is accordingly stated in full: routing
+with fallback is the best measured use of a 1.5B-class generation budget where
+only 1.5B-class models are available, and a single larger model is the better
+use of the same resident memory by nineteen points.
+
 What both councils share is the quantity neither system reaches. The oracle over
 members stands $13$ points above the best single model on the first council and
 $19$ points above it on the second. Complementarity is therefore present, large,

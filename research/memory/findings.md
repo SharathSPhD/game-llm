@@ -1835,3 +1835,34 @@ requiring a pretraining budget, with conversion (F51) and cheap distillation
 
 **Status:** VALIDATED (pre-registered gate applied as written) · closes SPEC
 0021 and the leap · the programme's empirical record ends at F53 · Tarka PENDING
+
+## F54 — The council survives matched compute and loses matched capacity
+
+**Cycle 33 · 2026-08-29 · exp30 · 360 confirmation questions · GB10**
+
+The confirmed council result (F41) was measured against its best single member,
+and F42 flagged the two comparisons still owed: a compute-matched baseline and a
+capacity-matched one. Both ran on the same 360 pre-registered questions with
+identical prompts, extraction and scoring.
+
+Against matched compute the council holds. Self-consistency on the single best
+model at two samples — 1.6 times the council's 1.258 expected generations —
+scores 0.5556 against the council's 0.6194, a deficit of 6.4 points with the
+council ahead 66 wins to 43 ($z = 2.2$). At three samples (2.4 times the
+council's cost) self-consistency reaches 0.6028 and the two are
+indistinguishable ($z = 0.63$); at five samples (4 times the cost) it reaches
+0.6361, again indistinguishable ($z = -0.64$). The council is therefore the most
+accurate use of its own generation budget, and matching it by sampling requires
+roughly triple the compute.
+
+Against matched capacity it loses decisively. The council holds 6.34B parameters
+resident; a single Qwen2.5-7B-Instruct of comparable residency scores **0.8139**
+— nineteen points above the council, 84 wins to 14 on disagreements
+($z = -7.07$), at one generation per request. The honest statement of the
+systems result is therefore complete: routing with fallback is the best measured
+use of a 1.5B-class generation budget when only 1.5B-class models are available,
+and it is not the best use of 6.34B resident parameters, which is a single
+larger model by a wide margin.
+
+**Status:** VALIDATED (single arena, 360 questions, paired) · completes the
+council side-result's audit · the empirical record ends at F54

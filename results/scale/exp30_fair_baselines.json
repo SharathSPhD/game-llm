@@ -1,0 +1,47 @@
+{
+  "n": 360,
+  "accuracy": {
+    "baseline_single_greedy": 0.5361,
+    "council_system": 0.6194,
+    "self_consistency_k2": 0.5556,
+    "self_consistency_k3": 0.6028,
+    "self_consistency_k5": 0.6361,
+    "capacity_matched_7b_greedy": 0.8139
+  },
+  "generations_per_request": {
+    "baseline_single_greedy": 1.0,
+    "council_system": 1.258,
+    "self_consistency_k2": 2.0,
+    "self_consistency_k3": 3.0,
+    "self_consistency_k5": 5.0,
+    "capacity_matched_7b_greedy": 1.0
+  },
+  "council_vs": {
+    "baseline_single_greedy": {
+      "wins": 38,
+      "losses": 8,
+      "z": 4.42
+    },
+    "self_consistency_k2": {
+      "wins": 66,
+      "losses": 43,
+      "z": 2.2
+    },
+    "self_consistency_k3": {
+      "wins": 49,
+      "losses": 43,
+      "z": 0.63
+    },
+    "self_consistency_k5": {
+      "wins": 41,
+      "losses": 47,
+      "z": -0.64
+    },
+    "capacity_matched_7b_greedy": {
+      "wins": 14,
+      "losses": 84,
+      "z": -7.07
+    }
+  },
+  "note": "Same questions, prompts, extraction and scoring as the confirmation run. Self-consistency arms reuse one set of five samples, so k=2 and k=3 are prefixes of k=5 rather than independent draws."
+}
