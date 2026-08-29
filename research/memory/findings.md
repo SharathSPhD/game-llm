@@ -1681,3 +1681,46 @@ is the reason to measure at all.
   already in hand.
 - **Status:** VALIDATED (direct allocation measurement, both models, same card,
   same dtype) · qualifies the low-memory claim to weights only · Tarka PENDING
+
+## F49 — GGUF cannot represent this architecture without destroying what makes it worth shipping
+
+**Cycle 32 · 2026-08-29 · export feasibility, verified by author recount**
+
+Distribution through llama.cpp-based tooling was investigated because it is the
+route to consumer devices, which is where a parameter-efficient model should
+matter most. The finding is that the format and the architecture are
+incompatible in a way no amount of engineering resolves.
+
+- **The mechanism of the incompatibility.** A GGUF graph is a fixed sequence of
+  layers, each with its own tensors. A weight-tied fixed-point model is one block
+  applied repeatedly under a convergence criterion. Representing the second in
+  the first requires unrolling the block into twelve layers, and llama.cpp
+  provides no tensor aliasing, so the twelve layers each carry their own copy of
+  the weights.
+- **The cost, which is the whole point inverted.** The tied block holds 34.8M
+  parameters. Unrolled twelvefold for GGUF it holds 417.6M — **4.91 times larger
+  than the 85.1M of explicit layers it was supposed to save against.** A format
+  conversion undertaken to reach small devices produces a file five times bigger
+  than the conventional model, and additionally discards the convergence
+  criterion, so the exported artefact is neither smaller nor the same model.
+- **The honest export is safetensors, and it is exact.** Weight tying is
+  preserved, overhead is zero against the checkpoint, and round-trip fidelity is
+  verified to 1e-5 by tests that pass. ONNX at a fixed iteration count is
+  possible with modest overhead and loses adaptivity, which is a defensible
+  trade for a fixed-budget deployment and is documented as such.
+- **Platform eligibility, reported rather than assumed.** OpenRouter's catalogue
+  is instruction-tuned models at 7B and above; a 121M pretrained research model
+  does not qualify and no review path exists for one. LM Studio and Ollama accept
+  arbitrary GGUF and impose no size floor, so submission is technically possible
+  — but only via the GGUF whose cost is stated above, which means the only route
+  onto those platforms is the one that misrepresents the model. Hugging Face
+  imposes no such constraint and carries the architecture honestly, which is why
+  it is where the artefacts are published.
+- **The wider lesson for the deployment claim.** F48 already narrowed the
+  low-memory story from activations to weights. This narrows it again: the weight
+  saving is real in a framework that can express weight tying, and evaporates in
+  one that cannot. A parameter-efficiency result is only as portable as the
+  formats that can represent it, and that constraint belongs beside the number
+  rather than in a footnote.
+- **Status:** VALIDATED (export tests pass, unrolling cost recomputed by the
+  author) · GGUF rejected on integrity grounds · Tarka PENDING
