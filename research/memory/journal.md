@@ -608,3 +608,29 @@ ahead of everything costly, and the observation moved
 P(anchored_vote_beats_router) from 0.5 to 0.8. One skill-script limitation
 surfaced — it cannot express that the confirmation run is conditional on the
 offline result — noted for a future revision rather than patched mid-cycle.
+
+## Cycles 32–33 — closure, the failed gate, and the honest way through it
+
+The science froze the way the specs said it would. The deployment story was
+measured before being claimed and split in two: the weight saving is real and
+large (F48) while the activation story is neutral-to-worse at batch one; the
+distribution story split the same way, safetensors exact, GGUF structurally
+dishonest at 4.91x the baseline size (F49). The full-suite harness confirmed the
+exchange rate at tripled breadth (F50), and the Tarka closure sweep reproduced
+every number in F44–F51 from its results file with zero defects.
+
+SPEC 0020's leap-by-conversion died at its own gate in under an hour: the
+gentlest possible surgery starts at 64.5x base perplexity against the
+pre-registered 5x (F51). The operator's redirection — break the pretraining
+budget deadlock rather than accept it — produced SPEC 0021 through the
+intermediary principle: the teacher is the compressed corpus, and distilling
+into FROM-SCRATCH tied weights is the recipe that works (F45) receiving the
+signal conversion could not survive. The pilot gate (15% held-out ppl reduction
+at equal tokens) is running; the month and its twins are pre-registered behind
+it, with budget-bracketed anchors and a hard 30-day stop while v1 ships.
+
+Two operational catches this cycle worth their scars: the automated commit
+review caught a client-side bearer token the app agent had introduced (fixed to
+the server-side proxy within the cycle), and mid-training Hub streaming stalled
+inside the container, replaced by a materialised token cache that also made the
+two pilot arms byte-identical in data order.
