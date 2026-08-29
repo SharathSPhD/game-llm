@@ -1505,3 +1505,50 @@ the budget matched was parameters and iteration count, not compute.
 - **Status:** VALIDATED (2 seeds, third running; FLOP arithmetic from checkpoint
   configs) · CORRECTS F24's headline framing · Tarka RESOLVED with one of its
   five findings (the parameter claim) refuted by direct measurement
+
+## F45 — At equal compute, weight tying costs 3% of quality and saves 63% of parameters
+
+**Cycle 30 · 2026-08-29 · exp32, SPEC 0018 · 2 seeds · RTX 5090**
+
+F44 measured the exchange rate between parameters and arithmetic at one point on
+the curve — a tied block widened to $d = 1704$ so that its parameter count would
+match a twelve-layer explicit model — and found parity purchased with 4.92 times
+the arithmetic. That is the wrong operating point for a practitioner whose
+constraint is compute, and SPEC 0018 registered the right one before running it:
+set the tied block to the baseline's own width, so one iteration is exactly one
+layer and compute is equal by construction rather than by calibration.
+
+- **Equal compute, near-equal quality, a third of the parameters.** The tied
+  block at $d = 768$ with twelve iterations scores BLiMP 0.663 and 0.650 against
+  the explicit baseline's 0.682 and 0.675 on the same two seeds, a mean ratio of
+  **0.9676**. It does so with 45.8M parameters against 123.8M — **2.70 times
+  fewer** — and 7.1M block parameters against 85.1M, **twelve times fewer** —
+  while executing exactly 84.9M compute units per token in both cases.
+- **The pre-registered prediction is met.** SPEC 0018 stated before the run that
+  a ratio above 0.95 would establish weight tying as a strong
+  parameter-compression technique at zero compute cost, and below 0.85 would
+  close the line as a quality proposition. The measured 0.968 falls in the first
+  regime.
+- **This corrects the pessimistic reading of F44 without retracting its
+  arithmetic.** Both findings are true and they describe different points: made
+  wide enough to match parameters, the tied model reaches full parity at 4.92
+  times the compute; held at the baseline's width, it reaches 96.8% of the
+  quality at equal compute and 37% of the parameters. The earlier design was
+  answering "how much compute buys parity" when the useful question was "how many
+  parameters does equal compute buy", and only the second has an answer a
+  practitioner can act on.
+- **What is claimed, and what is not.** This is not a quality win; the tied model
+  is three points short on BLiMP and that gap is consistent across both seeds. It
+  is a Pareto improvement in the parameter dimension at fixed compute, which is
+  what an equilibrium formulation should be expected to buy, since storing depth
+  as iteration trades memory for arithmetic and here the arithmetic is held
+  fixed. The honest statement of the architecture's contribution is the exchange
+  rate: roughly three percent of quality for roughly two thirds of the
+  parameters, at no compute cost.
+- **Where it is worth making.** Memory-limited deployment, fixed parameter
+  budgets, and any setting where model size rather than latency is the binding
+  constraint. It is not worth making where arithmetic binds, which F44 already
+  established from the other direction.
+- **Status:** VALIDATED (2 seeds, pre-registered prediction met, compute equal by
+  construction) · third seed not run; the two agree to within 0.009 in ratio ·
+  Tarka PENDING
