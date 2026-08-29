@@ -835,6 +835,37 @@
       },
       "status": "VALIDATED",
       "verdict": "supersedes F39; SPEC 0017 amended pre-scoring"
+    },
+    {
+      "id": "F41",
+      "title": "Pre-registered confirmation: anchoring refuted, the system beats the baseline",
+      "claim": "On 360 questions drawn after the protocol was frozen: the anchored vote FAILS its amended criterion (mean margin -0.0028 vs the fallback router, 1W/2L, z=-0.58 against a required 2.807; the council overrode an answering champion once in 360 questions). The deployed system \u2014 route on ladder priors, fall back to a council majority vote when the champion's answer will not parse \u2014 BEATS the ladder-designated baseline single model 0.6194 to 0.5361, +8.33 points, 38W/8L, z=4.42, every seed positive, replicating the development +8.06. Serving cost 1.25 expected generations per request. The winning system is the tau->infinity limit of the anchored vote: the kinetic construction supplied the form and the guarantee that the limit contains the baseline, not an operating point strictly inside.",
+      "evidence": {
+        "exp": "SPEC 0017 confirmation",
+        "seeds": [
+          45,
+          46,
+          47
+        ],
+        "n": 360,
+        "system": 0.6194,
+        "baseline_single": 0.5361,
+        "margin": 0.0833,
+        "paired": "38W/8L z=4.42",
+        "anchored_vs_fallback": {
+          "mean_margin": -0.0028,
+          "paired": "1W/2L z=-0.58"
+        },
+        "per_seed_margin": [
+          0.075,
+          0.0917,
+          0.0416
+        ],
+        "expected_generations": 1.25,
+        "path": "results/scale/exp27_confirmation.json"
+      },
+      "status": "VALIDATED",
+      "verdict": "anchoring NOT MET; system-vs-baseline MET (pre-registered, Bonferroni-corrected)"
     }
   ]
 }

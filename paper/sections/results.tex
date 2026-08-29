@@ -531,3 +531,58 @@ router, threshold raised to the Bonferroni-corrected $z \geq 2.807$ for the
 roughly fifteen mechanisms examined on the development arena, and every margin
 reported with its abstention-versus-override decomposition --- and the
 confirmation on three unseen seeds tests whether the decomposition replicates.
+
+The confirmation returns a clear answer on both halves, and they point in
+opposite directions. The anchored vote fails its amended criterion: mean margin
+against the fallback router $-0.0028$, pooled 1 win to 2 losses ($z = -0.58$)
+against a required $z \geq 2.807$, with per-seed margins of $-0.0083$, $0.0000$
+and $0.0000$ --- on two of three seeds the mechanism and the fair bar select
+identically on every question, and across all 360 the council overrides an
+answering champion exactly once. The magnetic anchor is therefore refuted at the
+answer level by the same mechanism that refuted it at the token level: no
+per-question signal identifies when a council should overrule a competent
+incumbent.
+
+The system claim confirms. Against the single model the ladder designated in
+advance, the deployed configuration --- route on per-domain priors, fall back to
+a majority vote of the council when the champion's answer cannot be parsed ---
+scores $0.6194$ against $0.5361$, a margin of $8.33$ points, paired 38 wins to 8
+losses at $z = 4.42$, clearing the Bonferroni-corrected threshold. Every seed is
+positive ($+0.0750$, $+0.0917$, $+0.0416$), and the development arena gave
+$+8.06$ points, so the effect replicates at its measured size rather than
+shrinking in the manner usual for a margin selected on its own data. Serving
+costs $1.25$ expected generations per request, since further candidates are
+produced only on the $16.1\%$ of champion extraction failures.
+
+Table~\ref{tab:confirmation} states the result and its provenance together.
+What the equilibrium construction contributed is specific: the deployed system
+is the $\tau \to \infty$ limit of the anchored vote, so the construction
+supplied the form --- an incumbent policy with a council held at a threshold ---
+and the guarantee that the limit contains the baseline, which is why the system
+cannot lose to the model it routes on. It did not supply an operating point
+strictly inside the interval, and the measurements above are what establish
+that; claiming otherwise would misdescribe them.
+
+\begin{table}[t]
+\centering
+\caption{Pre-registered confirmation (SPEC 0017 with Amendment 1) on 360
+questions drawn after the protocol was frozen, three seeds of 120. The
+mechanism column is the anchored vote at the pre-registered uniform weighting
+and $\tau = 1$; the fallback router is the fair bar established by adversarial
+review; the baseline is the single model the ladder designated in advance.
+Paired statistics count only questions where the two systems disagree.}
+\label{tab:confirmation}
+\begin{tabular}{lcccc}
+\toprule
+Seed & Baseline single & Deployed system & Anchored vote & System margin \\
+\midrule
+45 & 0.5333 & 0.6083 & 0.6000 & $+0.0750$ \\
+46 & 0.5000 & 0.5917 & 0.5917 & $+0.0917$ \\
+47 & 0.6167 & 0.6583 & 0.6583 & $+0.0416$ \\
+\midrule
+Pooled & 0.5361 & \textbf{0.6194} & 0.6167 & $\mathbf{+0.0833}$ \\
+\multicolumn{5}{l}{\footnotesize Paired, system vs.\ baseline: 38 wins, 8 losses, $z = 4.42$ (threshold $2.807$).} \\
+\multicolumn{5}{l}{\footnotesize Paired, anchored vote vs.\ fallback router: 1 win, 2 losses, $z = -0.58$ --- criterion not met.} \\
+\bottomrule
+\end{tabular}
+\end{table}
