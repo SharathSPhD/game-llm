@@ -904,6 +904,97 @@
       },
       "status": "VALIDATED",
       "verdict": "complementarity_generalises NOT MET; yields a design rule"
+    },
+    {
+      "id": "F44",
+      "title": "The parity claim was never compute-matched",
+      "claim": "F24's parity held parameters and iterations equal, but param-matching forces width: the tied block at d=1704 costs 4.92x an explicit layer at d=768, so parity was bought with ~5x the arithmetic. At equal FLOPs (2.44 iterations) the ratio is 0.72. Weight tying compresses parameters, not compute.",
+      "evidence": {
+        "exp": "exp31 audit",
+        "ratio_per_step": 4.92,
+        "equal_flop_iterations": 2.44,
+        "equal_flop_ratio": 0.72,
+        "path": "results/scale/exp31_compute_audit.json"
+      },
+      "status": "VALIDATED",
+      "verdict": "corrects F24's framing"
+    },
+    {
+      "id": "F45",
+      "title": "At equal compute: 96% quality, 2.70x fewer parameters",
+      "claim": "Tied block at the baseline's own width (one iteration = one layer, compute equal by construction): BLiMP ratio 0.9582 +/- 0.0169 over three seeds with 45.8M vs 123.8M params (12x fewer block params). Pre-registered 0.95 bar met on the point estimate; the interval straddles it and that is stated.",
+      "evidence": {
+        "exp": "exp32",
+        "ratio": 0.9582,
+        "sd": 0.0169,
+        "params_ratio": 0.37,
+        "path": "results/scale/exp32/"
+      },
+      "status": "VALIDATED",
+      "verdict": "the architecture's exchange rate"
+    },
+    {
+      "id": "F47",
+      "title": "Depth conditioning makes tying worse",
+      "claim": "Per-iteration FiLM modulation was predicted to recover 1-2 of the 4 points; it lost 3.2 on average, worse on every seed. Modulating the map each step destroys the contraction that repeating ONE map provides. Closes time-varying-map remedies.",
+      "evidence": {
+        "exp": "exp34",
+        "dcond_ratio": 0.9258,
+        "plain_ratio": 0.9582,
+        "path": "results/scale/exp34/"
+      },
+      "status": "VALIDATED",
+      "verdict": "refuted opposite to prediction"
+    },
+    {
+      "id": "F48",
+      "title": "The memory saving is in weights, not activations",
+      "claim": "Measured: weights 183.2MB vs 495.7MB (0.370, 312.5MB saved) but activation peak identical above batch 1 and 2.3-2.7x WORSE at batch 1 (Anderson iterate history). The deployment claim is model footprint, not throughput.",
+      "evidence": {
+        "exp": "exp35",
+        "weight_ratio": 0.3695,
+        "batch1_regression": 2.318,
+        "path": "results/scale/exp35_memory.json"
+      },
+      "status": "VALIDATED",
+      "verdict": "qualifies the low-memory claim"
+    },
+    {
+      "id": "F49",
+      "title": "GGUF cannot represent the architecture honestly",
+      "claim": "llama.cpp has no tensor aliasing: unrolling the tied block twelvefold yields a file 4.91x LARGER than the explicit baseline and discards the convergence criterion. Safetensors is exact (tests pass); ONNX at fixed depth is a defensible trade. OpenRouter ineligible (7B+ instruct); LM Studio/Ollama only via the misrepresenting export.",
+      "evidence": {
+        "exp": "export feasibility",
+        "unrolled_vs_baseline": 4.91,
+        "path": "kinetic_ai/serve/export/README.md"
+      },
+      "status": "VALIDATED",
+      "verdict": "HF is the honest channel"
+    },
+    {
+      "id": "F50",
+      "title": "The exchange rate holds at 31 BLiMP phenomena",
+      "claim": "0.9544 on the tripled benchmark breadth (vs F45's 0.9582 on 12 phenomena), 12W/17L/2T per phenomenon.",
+      "evidence": {
+        "exp": "exp36",
+        "ratio": 0.9544,
+        "path": "results/scale/exp36_full.json"
+      },
+      "status": "VALIDATED",
+      "verdict": "consistent with F45"
+    },
+    {
+      "id": "F51",
+      "title": "The conversion leap gate fails as pre-registered",
+      "claim": "Gentlest surgery (pair-tying, thick shell) starts at 64.5x base perplexity against the 5x gate; quad 102x, thin-shell 270x. Merging pretrained layers destroys function regardless of count. The Qwen-class kinetic model is budget-gated future work via from-scratch training (SPEC 0021 KD pilot running), not conversion.",
+      "evidence": {
+        "exp": "exp37",
+        "pair_tying_damage": 64.5,
+        "gate": 5.0,
+        "path": "results/scale/exp37_damage_probe.json"
+      },
+      "status": "VALIDATED",
+      "verdict": "closes SPEC 0020; opens SPEC 0021"
     }
   ]
 }

@@ -1,9 +1,6 @@
 {
-  "stage": "damage_probe",
-  "updated": "2026-08-29T12:00:00Z",
-  "model": "Qwen2.5-1.5B-Instruct",
-  "approach": "Two-fold reuse (middle 20 layers → 10 cores × 2)",
-  "estimated_unique_params": "1.10B / 1.54B (28% reduction)",
-  "fixed_compute": true,
-  "comment": "EqLM at scale: anytime training with adaptive depth. Qwen conversion gates at damage < 5x base ppl or recovery slope positive."
+  "stage": "kd_pilot",
+  "spec": "0021",
+  "description": "From-scratch tied 1B distilled from an Apache-licensed teacher; pilot gate (KD must cut held-out ppl >=15% vs plain CE) running on the RTX 5090; hard 30-day stop.",
+  "updated": "2026-08-29"
 }
