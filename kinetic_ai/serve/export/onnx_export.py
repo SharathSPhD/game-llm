@@ -87,6 +87,26 @@ def export_to_onnx(
             )
             return logits
 
+    # Spectral-norm parametrizations recompute u/v inside the traced graph with
+    # ops (vdot, mv) that have no ONNX lowering, and removing them from a
+    # deepcopy proved fragile. Instead a fresh model is built without the
+    # parametrization and every parameter is copied across as its EFFECTIVE
+    # value — for a parametrized weight the attribute access itself computes the
+    # normalised tensor, so the export carries exactly the weights the original
+    # model uses at inference.
+    import dataclasses
+
+    if getattr(cfg, "spectral_norm", False):
+        plain_cfg = dataclasses.replace(cfg, spectral_norm=False)
+        plain = type(model)(config=plain_cfg)
+        with torch.no_grad():
+            for tgt_name, tgt_param in plain.named_parameters():
+                mod_path, _, attr = tgt_name.rpartition(".")
+                src_mod = model.get_submodule(mod_path) if mod_path else model
+                tgt_param.copy_(getattr(src_mod, attr))
+        model = plain.eval()
+        cfg = plain_cfg
+
     unrolled_model = UnrolledEqLM(model, num_iters)
     unrolled_model.eval()
 
@@ -99,14 +119,19 @@ def export_to_onnx(
         with torch.no_grad():
             traced = torch.jit.trace(unrolled_model, dummy_input)
 
+        # The TorchScript exporter (dynamo=False) is required here: the
+        # dynamo/torch.export path cannot trace the solver's data-dependent
+        # control flow, while a fixed-iteration trace is exactly what this
+        # export intends — the iteration count is baked in by design.
         torch.onnx.export(
             traced,
-            dummy_input,
+            (dummy_input,),
             str(output_path),
             input_names=["input_ids"],
             output_names=["logits"],
             opset_version=opset_version,
             do_constant_folding=True,
+            dynamo=False,
             verbose=False,
         )
     except Exception as e:

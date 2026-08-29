@@ -1777,3 +1777,29 @@ representable exactly in safetensors and ONNX but not GGUF (F49).
 **Status:** VALIDATED (probe measured, gate applied as pre-registered) · closes
 SPEC 0020 · the leap is future work with a stated budget requirement · Tarka
 PENDING
+
+## F52 — ONNX carries the weight saving that GGUF destroys, verified
+
+**Cycle 33 · 2026-08-29 · export verification, small-model probe · CPU**
+
+F49 established the portability boundary by argument for GGUF and by
+plausibility for ONNX; this closes the second half by measurement. Exporting a
+tied model unrolled to twelve iterations produces a graph whose twelve block
+applications reference the same initializers: 1.31M stored values against the
+model's 1.06M parameters — a fifth more from constant folding of small tensors,
+not the twelvefold duplication GGUF requires. Two export defects were fixed on
+the way and are recorded because each silently blocked the path: the dynamo
+exporter cannot trace the solver (the TorchScript path with a fixed iteration
+count is the correct one, since fixed depth is what the export means), and
+spectral-norm parametrizations lower to ops with no ONNX equivalent, resolved by
+rebuilding the model without the parametrization and copying every parameter's
+effective value, so the export carries exactly the inference-time weights.
+
+The deployment chain for the browser demo is therefore real end to end:
+safetensors for exact archival, ONNX with shared initializers for portable
+serving, onnxruntime-web for in-browser inference — the one consumer path on
+which the architecture's parameter saving survives (F48) in a format that can
+express it.
+
+**Status:** VALIDATED (initializer accounting on an exported graph; export tests
+5/5) · completes F49's boundary · Tarka PENDING
