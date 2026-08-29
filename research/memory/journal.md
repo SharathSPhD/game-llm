@@ -649,3 +649,21 @@ and is not the best use of its resident memory. The path to open-weight scale is
 budget-gated with both affordable shortcuts measured and closed. Shipped: paper
 52pp, app four pages with live anytime dial verified over authenticated HTTP,
 three HF model repos and one measurements dataset, all of it pushed.
+
+## 2026-08-29 — Cycle 34 opens: SPEC 0022, the twin at 1B
+
+The operator challenged the budget-gated closure with the prabhasa-samskrutam
+precedent: 1.13B parameters pretrained on 5.25B tokens in ~71 hours on the
+RTX 5090. The challenge holds — the audit's barrier was tokens toward
+Qwen-equivalence, never parameter count — and it reopens the one experiment
+the closure left on the table: the F45 exchange rate at deployment scale.
+TRIZ (segmentation, parameter change, mediated coupling) reconciled the EFE
+ranking's tension between the utility-optimal single arm (G=-0.46) and the
+rigorous twin (G=-0.19 at 5B): unequal arm lengths. Twin locked-step to 2.5B
+tokens closes the architecture claim; the tied arm alone extends to 10B for
+utility. Operator locked scope: GPT-2 50k vocab, SFT+HF+app+harness
+deliverable, full independence from prabhasa. Spec registered with kill gate
+(ppl ratio <=1.20 at 1B tokens), success bar (>=0.95 ladder ratio at 2.5B),
+budget cap (<=24 5090-days, floors 2B/6B), measured-preflight GO rule
+(>=5.5k tok/s). Data: FineWeb-Edu, documented substitution for Nemotron-CC-HQ
+which has no official HF distribution. 5090 verified idle and healthy.

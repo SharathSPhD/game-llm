@@ -105,6 +105,12 @@ class EqLMConfig:
     aux_residual: bool = False
     lambda_aux: float = 0.1
     decode_mode: str = "solver"
+    # Fused scaled-dot-product attention kernel for the same causal attention
+    # the explicit path computes: identical mathematics, O(T) working memory
+    # instead of a materialised [B, H, T, T] score matrix. Default False so
+    # every existing checkpoint and recorded result is byte-for-byte
+    # unaffected; the 1B twin (SPEC 0022) enables it for both arms equally.
+    sdpa: bool = False
 
 
 # ============================================================================
@@ -244,19 +250,29 @@ class EqLMBlock(nn.Module):
         v = v.reshape(batch_size, seq_len, self.n_heads, self.head_dim).transpose(1, 2)
         # Now: [B, n_heads, T, head_dim]
 
-        # Compute causal attention scores
-        scores = torch.matmul(q, k.transpose(-2, -1)) / (self.head_dim**0.5)
+        if self.config.sdpa:
+            # Fused kernel computing exactly softmax(qk^T/sqrt(d) + causal)v
+            # without materialising the score matrix; dropout on the attention
+            # weights matches the explicit path's placement.
+            attn_out = F.scaled_dot_product_attention(
+                q, k, v,
+                dropout_p=self.config.dropout if self.training else 0.0,
+                is_causal=True,
+            )
+        else:
+            # Compute causal attention scores
+            scores = torch.matmul(q, k.transpose(-2, -1)) / (self.head_dim**0.5)
 
-        # Apply causal mask (lower triangular)
-        causal_mask = torch.tril(torch.ones(seq_len, seq_len, device=z.device)) == 1
-        scores = scores.masked_fill(~causal_mask, float("-inf"))
+            # Apply causal mask (lower triangular)
+            causal_mask = torch.tril(torch.ones(seq_len, seq_len, device=z.device)) == 1
+            scores = scores.masked_fill(~causal_mask, float("-inf"))
 
-        # Softmax and dropout
-        attn_weights = F.softmax(scores, dim=-1)
-        attn_weights = self.dropout(attn_weights)
+            # Softmax and dropout
+            attn_weights = F.softmax(scores, dim=-1)
+            attn_weights = self.dropout(attn_weights)
 
-        # Apply attention to values
-        attn_out = torch.matmul(attn_weights, v)  # [B, n_heads, T, head_dim]
+            # Apply attention to values
+            attn_out = torch.matmul(attn_weights, v)  # [B, n_heads, T, head_dim]
 
         # Reshape back
         attn_out = attn_out.transpose(1, 2).contiguous()

@@ -1,0 +1,82 @@
+{
+  "_description": "Cycle 34 (SPEC 0022 design): which 1B-scale action to run on the RTX 5090. Beliefs seeded from F24/F45/F50 (exchange rate holds at 46-121M), F31 (contractivity degrades with width), F53 (KD refuted), and the prabhasa 1.13B precedent (5.25B tokens in ~71h at 20.9k tok/s). EqLM twin throughput estimate ~7-8k tok/s per arm at 1B compute-matched geometry (denser per-token than prabhasa's Mamba hybrid): 5B tokens/arm ~7-8 days, both arms ~15 GPU-days sequential.",
+  "beliefs": {
+    "H_A_exchange_rate_scales_to_1B": 0.5,
+    "H_B_anytime_dial_survives_scale": 0.6,
+    "H_C_usable_assistant_after_sft": 0.45,
+    "H_D_tied_core_transfers_to_prabhasa": 0.4
+  },
+  "cost_weight": 0.12,
+  "cost_units": "5090 GPU-days; 0.12 means ~8 GPU-days trades against one nat, so the ~15-day decisive run stays reachable only if genuinely more informative than week-scale options",
+  "candidates": [
+    {
+      "name": "twin_5B_ladder",
+      "cost": 15.0,
+      "diagnosticity": {
+        "H_A_exchange_rate_scales_to_1B": [0.9, 0.1],
+        "H_B_anytime_dial_survives_scale": [0.85, 0.15],
+        "H_C_usable_assistant_after_sft": [0.7, 0.25]
+      },
+      "payoff": {
+        "H_A_exchange_rate_scales_to_1B": 1.0,
+        "H_B_anytime_dial_survives_scale": 0.7,
+        "H_C_usable_assistant_after_sft": 0.8
+      },
+      "description": "Both arms (tied EqLM + explicit twin, compute-matched, identical data) to 5B tokens; milestone evals at 1B/2.5B/5B; pre-registered kill gate at 1B tokens; SFT the tied arm afterwards"
+    },
+    {
+      "name": "twin_2p5B_week",
+      "cost": 8.0,
+      "diagnosticity": {
+        "H_A_exchange_rate_scales_to_1B": [0.8, 0.15],
+        "H_B_anytime_dial_survives_scale": [0.8, 0.2],
+        "H_C_usable_assistant_after_sft": [0.45, 0.35]
+      },
+      "payoff": {
+        "H_A_exchange_rate_scales_to_1B": 0.8,
+        "H_B_anytime_dial_survives_scale": 0.6,
+        "H_C_usable_assistant_after_sft": 0.4
+      },
+      "description": "Both arms to 2.5B tokens, milestones at 0.5B/1B/2.5B; weaker usability evidence (2.5B tokens rarely yields a usable assistant)"
+    },
+    {
+      "name": "tied_only_10B_vs_public",
+      "cost": 8.0,
+      "diagnosticity": {
+        "H_A_exchange_rate_scales_to_1B": [0.45, 0.35],
+        "H_B_anytime_dial_survives_scale": [0.85, 0.15],
+        "H_C_usable_assistant_after_sft": [0.75, 0.25]
+      },
+      "payoff": {
+        "H_A_exchange_rate_scales_to_1B": 0.5,
+        "H_B_anytime_dial_survives_scale": 0.7,
+        "H_C_usable_assistant_after_sft": 0.9
+      },
+      "description": "Single tied arm to 10B tokens vs public checkpoints (Pythia/SmolLM); breaks like-for-like so H_A evidence is weak; best usability per GPU-day"
+    },
+    {
+      "name": "hybrid_probe_prabhasa_core",
+      "cost": 2.0,
+      "diagnosticity": {
+        "H_D_tied_core_transfers_to_prabhasa": [0.8, 0.2],
+        "H_A_exchange_rate_scales_to_1B": [0.6, 0.4]
+      },
+      "payoff": {
+        "H_D_tied_core_transfers_to_prabhasa": 0.6,
+        "H_A_exchange_rate_scales_to_1B": 0.2
+      },
+      "description": "Tie the core of a prabhasa-style 353M hybrid and measure the exchange rate there; directly informs prabhasa transfer, little else"
+    },
+    {
+      "name": "offline_reanalysis_only",
+      "cost": 0.0,
+      "diagnosticity": {
+        "H_B_anytime_dial_survives_scale": [0.55, 0.45]
+      },
+      "payoff": {
+        "H_B_anytime_dial_survives_scale": 0.2
+      },
+      "description": "Null action: quantization/iteration sweeps on existing 121M checkpoints; carries almost no evidence about 1B scale"
+    }
+  ]
+}
