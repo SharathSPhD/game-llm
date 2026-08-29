@@ -1,0 +1,40 @@
+{
+  "eqlm_checkpoint": "results/exp13_seed44/checkpoints/B1.pt",
+  "uniform_depth": 12,
+  "arms": {
+    "explicit_fixed": {
+      "blimp": 0.693,
+      "mean_depth": 12.0
+    },
+    "eqlm_uniform": {
+      "blimp": 0.672,
+      "mean_depth": 12.0
+    },
+    "eqlm_adaptive_matched": {
+      "blimp": 0.681,
+      "mean_depth": 11.187,
+      "tolerance": 0.07669474803529164
+    }
+  },
+  "calibration": {
+    "tolerance": 0.07669474803529164,
+    "probe_mean_iterations": 11.957
+  },
+  "tolerance_sweep": [
+    {
+      "tolerance": 0.15338949607058328,
+      "blimp": 0.644,
+      "mean_depth": 5.632
+    },
+    {
+      "tolerance": 0.30677899214116655,
+      "blimp": 0.595,
+      "mean_depth": 3.322
+    },
+    {
+      "tolerance": 0.6135579842823331,
+      "blimp": 0.503,
+      "mean_depth": 2.015
+    }
+  ]
+}

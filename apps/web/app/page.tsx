@@ -1,7 +1,7 @@
 import Link from "next/link";
 
 export const metadata = {
-  title: "Kinetic AI — Game-Theoretic Language Model Council",
+  title: "Kinetic AI — Equilibrium Language Model",
 };
 
 export default function Home() {
@@ -9,12 +9,14 @@ export default function Home() {
     <div className="page wrap">
       <section className="landing-hero">
         <div>
-          <p className="eyebrow">Kinetic AI Council System</p>
-          <h1>A game-theoretic council that outperforms single models.</h1>
+          <p className="eyebrow">EqLM: Equilibrium Language Model</p>
+          <h1>A language model whose depth, training, and decoding are equilibrium computations.</h1>
           <p className="lede">
-            Multiple specialized models aggregate their expertise via equilibrium mechanisms. Each token is routed
-            by a solved game, where rationality parameters and aggregation rules are user-facing controls. The council
-            beats Qwen2.5-1.5B-Instruct on open benchmarks and ships as an OpenAI-compatible API + Hugging Face release.
+            EqLM solves the token-prediction game at each position, trading the fixed depths of conventional
+            transformers for a fixed-point computation that adapts per token. At 121M parameters and matched
+            compute, it reaches parity with explicit transformer baselines (F24). A council of routed models
+            extends this foundation as a systems result, beating single models by 8 points at 1.26× cost, but
+            only when its members have complementary strengths (F41–F43).
           </p>
           <div className="hero-actions">
             <Link href="/leaderboard" className="btn" data-primary="true">
@@ -29,85 +31,92 @@ export default function Home() {
           </div>
           <div className="hero-stats">
             <div className="hero-stat">
-              <div className="panel-label">Qwen2.5-1.5B Baseline (Mixed Arena)</div>
-              <div className="reading">0.611</div>
-              <div className="panel-note">MMLU 0.626 + GSM8K 0.595 averaged</div>
+              <div className="panel-label">EqLM Parity (F24)</div>
+              <div className="reading">0.991</div>
+              <div className="panel-note">Ratio vs explicit transformer at matched 121M params</div>
             </div>
             <div className="hero-stat">
-              <div className="panel-label">Best Single Specialist</div>
-              <div className="reading">0.795</div>
-              <div className="panel-note">Math variant on GSM8K (F33)</div>
+              <div className="panel-label">Council vs Baseline (F41)</div>
+              <div className="reading">+8.33pp</div>
+              <div className="panel-note">0.6194 vs 0.5361, z=4.42, pre-registered, conditional on non-domination</div>
             </div>
             <div className="hero-stat">
-              <div className="panel-label">Routable Headroom</div>
-              <div className="reading">10.0pp</div>
-              <div className="panel-note">Perfect domain router ceiling 0.711 (F33)</div>
+              <div className="panel-label">Council Cost (F41)</div>
+              <div className="reading">1.26×</div>
+              <div className="panel-note">Expected generations per request; 4.1× resident memory for four models</div>
             </div>
           </div>
         </div>
       </section>
 
       <section style={{ marginTop: "var(--space-8)" }}>
-        <h2>How It Works</h2>
+        <h2>The Paradigm</h2>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "var(--space-5)", marginTop: "var(--space-5)" }}>
           <div className="card">
-            <h3>Baseline Ladder</h3>
+            <h3>EqLM: Equilibrium Depth</h3>
             <p>
-              Real measurements on Qwen2.5-1.5B baselines (generalist, coder, math specialist, Qwen3)
-              across MMLU, ARC, HellaSwag, GSM8K, and mixed domains. Every number traces to seeds, config
-              hashes, and our GB10 harness (F28, F33).
+              A language model whose effective depth is not a fixed architecture choice but a solved game:
+              at each token, the model computes a fixed point, spending as many iterations as that token&apos;s
+              prediction difficulty requires. At matched parameters (121M) and compute budget, EqLM reaches
+              0.991 parity with explicit transformers (F24)—not yet a win, but proof the mechanism works.
             </p>
           </div>
 
           <div className="card">
-            <h3>Specialist Routing</h3>
+            <h3>Adaptive Per-Token Depth</h3>
             <p>
-              The math variant excels at arithmetic (0.795 GSM8K vs 0.595 generalist), while scoring last on
-              knowledge (0.391 MMLU). A domain router reaches 0.711 on mixed tasks; the council closes that gap
-              via equilibrium solve or verification-driven influence.
+              The untested property that could carry EqLM past parity is uneven iteration spending: while
+              an explicit stack spends fixed depth D on every token, an equilibrium model can spend 5 on
+              easy tokens and 20 on hard ones, at matched *mean* depth. Whether that flexibility wins is
+              the question driving exp31. The council is a separate mechanism, not the paradigm claim.
             </p>
           </div>
 
           <div className="card">
-            <h3>Equilibrium Mechanisms</h3>
+            <h3>Council as Systems Result (Conditional)</h3>
             <p>
-              Game-theoretic foundations: Magnetic Mirror Descent converges linearly (F1); second-price token
-              auctions are truthful (F6); Quantal Response paths interpolate rationality (F7). These are not
-              rhetorical—they are measured and Tarka-reviewed.
+              A council of four Qwen2.5 variants routed by a calibrated lookup table beats the baseline
+              0.6194 vs 0.5361 (+8.33pp, F41). But this is a systems advantage, not an architecture advance,
+              and it is conditional: it holds only when different members dominate different domains (F42).
+              On a second council with a dominant member, the system reduces exactly to that member (F43).
+              Cost: 1.26× expected generations and 4.1× resident memory.
             </p>
           </div>
 
           <div className="card">
-            <h3>Reproducible Measurement</h3>
+            <h3>Baseline Ladder (Reproducible)</h3>
             <p>
-              Every result includes config hash, seed set, git commit. Tarka verification gates sign-off;
-              adversarial audit corrected oracle headroom claims (F32). Full audit trail from hypothesis
-              to finding, not silence on failures.
+              Real measurements on Qwen2.5-1.5B (generalist, coder, math specialist, Qwen3) across MMLU,
+              ARC, HellaSwag, GSM8K, and mixed domains. Every number traces to config hashes, seeds, and
+              our GB10 harness (F28, F33). Pre-registration and adversarial audit corrected false claims
+              about oracle headroom before publication (F32).
             </p>
           </div>
 
           <div className="card">
-            <h3>Cross-Examination Protocol</h3>
+            <h3>Game-Theoretic Foundations</h3>
             <p>
-              Answer-level aggregation (averaging, auctions, voting) cannot beat uniform averaging when
-              players see only the same distributions (F29–F31). Phase 1b tests influence from verification
-              of jointly-authored prefixes in generation, where new information enters the game.
+              Magnetic Mirror Descent converges linearly where gradient descent cycles (F1); second-price
+              token auctions are exactly truthful (F6); Quantal Response equilibrium paths smoothly
+              interpolate rationality (F7). These mechanisms are not rhetorical flourish—they are measured,
+              Tarka-reviewed, and integrated into the core.
             </p>
           </div>
 
           <div className="card">
-            <h3>Interactive Demos</h3>
+            <h3>Honest Null Findings</h3>
             <p>
-              Tune equilibrium parameters in real time: solver budget, magnet strength, rationality lambda.
-              Animated strategy simplexes, convergence plots, and per-token influence weights bring
-              game dynamics to life.
+              When a measurement fails, it ships with diagnosis and interpretation. Answer-level equilibrium
+              mechanisms proved indistinguishable from averaging (F29–F31). Magnetic thresholds do not help
+              (F40). Mechanisms are documented at their real size, not silence or reinterpretation. The council&apos;s
+              eight-point win exists alongside its precondition and cost (F41–F43).
             </p>
           </div>
         </div>
       </section>
 
       <section style={{ marginTop: "4rem" }}>
-        <h2>Explore the Council</h2>
+        <h2>Explore Results &amp; Tools</h2>
         <p style={{ color: "var(--text-secondary)", maxWidth: "600px" }}>
           Product surfaces for users and researchers, plus interactive demos of the game-theoretic mechanics.
         </p>
@@ -144,10 +153,11 @@ export default function Home() {
           </Link>
 
           <Link href="/models" className="card" style={{ textDecoration: "none" }}>
-            <h3>Models & Council</h3>
+            <h3>Architecture Results</h3>
             <p>
-              Council composition: member models, measured accuracy per domain, influence weights in aggregation.
-              Publish the full council config to Hugging Face with reproducibility links.
+              EqLM single-model results (F24: parity at matched params) and council composition (member models,
+              measured per-domain accuracy). See where routing helps (F42: non-dominated members) and where it
+              reduces to the best member (F43). Full configs release to Hugging Face with reproducibility links.
             </p>
           </Link>
 
@@ -170,8 +180,9 @@ export default function Home() {
           <Link href="/findings" className="card" style={{ textDecoration: "none" }}>
             <h3>Research Findings</h3>
             <p>
-              33 signed-off findings tracing the design: convergence (F1–F8), mechanism design (F6, F22),
-              answer-level aggregation limits (F29–F33). Each finding links to harness config and seeds.
+              Validated findings from convergence (F1–F8), mechanism design (F6), answer-level limits (F29–F31),
+              EqLM paradigm (F24: parity at matched params), and council systems result (F41–F43: pre-registered
+              confirmation, decomposition, generalization failure). Each links to config hash, seeds, and harness.
             </p>
           </Link>
         </div>

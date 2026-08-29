@@ -1452,3 +1452,56 @@ for the ladder, and the same systems were compared on three further seeds.
   can reach the nineteen points that reweighting a single observation cannot.
 - **Status:** VALIDATED (3 seeds, 360 questions, champions calibrated held-out) ·
   complementarity_generalises NOT MET · Tarka PENDING
+
+## F44 — The parity claim was never compute-matched; weight-tying trades parameters for compute
+
+**Cycle 30 · 2026-08-29 · exp31 seeds 43/44 on the 5090, plus a compute audit · CORRECTS F24**
+
+F24 reported that the anytime-trained tied block reaches a ratio of 0.991 against
+a param-matched explicit twelve-layer transformer "at matched budget", and that
+figure has anchored the architecture line ever since. An adversarial review of
+the adaptive-depth experiment, and an author audit prompted by it, establish that
+the budget matched was parameters and iteration count, not compute.
+
+- **The two models are genuinely parameter-matched, and inversely composed.**
+  Direct measurement from the checkpoints gives 120.7M against 123.8M. But the
+  tied model spends 85.9M of that on embeddings and 34.8M on its single block,
+  while the explicit model spends 38.7M on embeddings and 85.1M across twelve
+  layers. Matching parameters with one tied block forces width — $d = 1704$
+  against $768$ — and the embedding table grows with it. (An adversarial review
+  reported 206.4M against 162.5M from a stale results file; the checkpoint
+  measurement above supersedes it.)
+- **Width costs quadratic compute, so twelve iterations is not twelve layers.**
+  Per token per block, $4d^2 + 2 d\,d_{ff}$ gives 34.81M units for the tied block
+  against 7.08M for an explicit layer, a factor of **4.92**. Twelve iterations of
+  the tied block therefore cost 4.92 times twelve explicit layers. The tied model
+  reaches parity while spending nearly five times the arithmetic.
+- **At genuinely matched compute it loses heavily.** Equal FLOPs are reached at
+  **2.44 iterations**, and the tolerance sweep brackets that point: at a mean
+  depth of 2.08 the ratio against the explicit baseline is 0.72 and 0.73 on the
+  two seeds. At 3.5 iterations — still 1.43 times the explicit compute — the
+  ratio is 0.89 and 0.86. Parity requires roughly five times the compute, and
+  compute parity costs roughly a quarter of the quality.
+- **Adaptive depth does not rescue it.** Allocating depth per token by residual,
+  calibrated to a mean of 12, scores 0.681 against uniform-depth 0.684 and
+  explicit 0.684 — ratios 0.9965 and 1.0011. Uneven spending is neither better
+  nor worse than uniform at the same mean; the mechanism works, and buys nothing.
+  What it does buy is graceful degradation: quality falls smoothly to 0.93 of
+  baseline at half the depth and 0.72 at a sixth, which is a usable
+  anytime property rather than an advantage.
+- **The architectural reading, which is the point.** Weight-tying is a
+  parameter-compression technique, not a compute-compression one. Removing
+  eleven of twelve layers saves parameters; keeping capacity then demands width;
+  and width is quadratic in the operation that dominates inference. A tied model
+  is therefore attractive exactly where parameters are the binding constraint —
+  memory-limited deployment, or a fixed parameter budget — and unattractive where
+  arithmetic is. Every earlier result in this line is consistent with that and
+  none of them stated it.
+- **What this obliges.** The paper's parity claim must be restated as parity at
+  matched parameters and matched iteration count, with the compute ratio given
+  alongside; reporting it as "matched budget" without that qualifier overstates
+  it. The correction is the author's, prompted by a review that found the
+  discrepancy independently.
+- **Status:** VALIDATED (2 seeds, third running; FLOP arithmetic from checkpoint
+  configs) · CORRECTS F24's headline framing · Tarka RESOLVED with one of its
+  five findings (the parameter claim) refuted by direct measurement

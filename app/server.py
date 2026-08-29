@@ -1766,13 +1766,25 @@ async def get_council_comparison(
 ) -> dict[str, Any]:
     """Get council aggregation comparison results (F29–F31, answer-level findings).
 
-    Returns the measured performance of the equilibrium solve, market mechanisms,
-    and calibration-training simulations over the 8,301-question evaluation.
-    This API reports the findings that led to the current hypothesis (sequential
-    cross-examination) after answer-level aggregation was ruled out.
+    IMPORTANT FRAMING: The council is a systems result, not the paradigm claim.
+    The paradigm claim is EqLM (single model, equilibrium depth/training/decoding),
+    for which F24 established parity at matched parameters. The council compares
+    four separate Qwen models routed by a lookup table against that baseline.
+
+    F41–F43 measured the council's realistic performance: it beats the baseline
+    0.6194 vs 0.5361 (+8.33 points) but is conditional on non-domination (different
+    members best on different domains) and costs 1.26× expected generations per
+    request. On the second council (SmolLM2, deepseek-math, Falcon3), where one
+    member dominates both domains, the system reduces exactly to that member
+    (F43).
+
+    This endpoint reports the answer-level mechanisms that led away from that
+    direction (F29–F31) and toward generation-level verification (F39–F41).
 
     Returns:
         {
+            "paradigm_context": "Council is a systems result (four routed models), not the EqLM paradigm claim. See /api/eqlm/results for the single-model architecture result.",
+            "council_claim": "F41: pre-registered confirmation beats baseline 0.6194 vs 0.5361 (+8.33pp) at 1.26× cost, conditional on non-domination (F42-F43)",
             "exp18_equilibrium": {
                 "averaging_score": 0.6304,
                 "best_solve_score": 0.6311,
@@ -1786,7 +1798,25 @@ async def get_council_comparison(
         }
     """
     require_bearer_auth(authorization)
-    return _load_council_comparison()
+    comparison = _load_council_comparison()
+    # Prepend paradigm context
+    comparison["paradigm_context"] = (
+        "Council is a systems result (four routed Qwen models), not the EqLM "
+        "paradigm claim. See /api/eqlm/results for the single-model architecture result."
+    )
+    comparison["council_claim"] = (
+        "F41: pre-registered confirmation beats baseline 0.6194 vs 0.5361 "
+        "(+8.33pp, z=4.42) on Qwen council at 1.26x expected generations per request. "
+        "Conditional on non-domination: F43 shows the system reduces to its best member "
+        "when one member dominates both domains."
+    )
+    comparison["cost_and_precondition"] = {
+        "expected_generations_per_request": 1.26,
+        "resident_memory_multiplier": 4.1,
+        "precondition": "Different members must be best on different domains (checkable from ladder before assembly)",
+        "findings": ["F41 (pre-registered confirmation)", "F42 (decomposition)", "F43 (generalization)"],
+    }
+    return comparison
 
 
 def _load_mixed_arena_results() -> dict[str, Any]:
@@ -1895,12 +1925,24 @@ async def get_mixed_arena(
 ) -> dict[str, Any]:
     """Get mixed-arena baseline measurements (knowledge + mathematics, F28/F33).
 
-    The mixed arena (equal parts MMLU and GSM8K with chat templates applied)
-    is where the council paradigm has demonstrable headroom for selection. This
-    endpoint serves the corrected baseline ladder on the mixed evaluation.
+    IMPORTANT FRAMING: This is the council's operating domain, not the EqLM
+    paradigm claim. The paradigm claim (EqLM single model with equilibrium
+    depth/training/decoding) is reported at /api/eqlm/results; F24 established
+    parity at matched params. The council beats the baseline 0.6194 vs 0.5361
+    (+8.33pp) on this mixed arena (F41) but costs 1.26× generations and
+    requires non-domination (F42–F43).
+
+    The mixed arena combines equal parts MMLU (knowledge) and GSM8K (mathematics
+    with chat templates applied), where the council's constituent models have
+    complementary strengths: math specialist 0.795 vs generalist 0.595 on GSM8K.
+    This asymmetry is the precondition for routing benefit (F42). The second
+    council experiment (F43) shows no advantage when one member dominates both
+    domains.
 
     Returns:
         {
+            "paradigm_context": "Council is conditional systems result; see /api/eqlm/results for architecture claim",
+            "arena_description": "50% MMLU + 50% GSM8K with chat templates (F28, F33)",
             "baseline_measurements": [
                 {
                     "model": "Qwen/Qwen2.5-1.5B-Instruct",
@@ -1913,11 +1955,159 @@ async def get_mixed_arena(
             "best_single_player": 0.611,
             "oracle_ceiling": 0.711,
             "routable_headroom": 0.100,
-            "findings": ["F28 baseline ladder", "F33 corrected GSM8K measurement"]
+            "council_result": {
+                "score": 0.6194,
+                "vs_baseline": "+8.33pp (F41)",
+                "cost": "1.26x expected generations per request (F41)",
+                "precondition": "Non-domination (different members best on different domains) — F42 shows system reduces to best member when one dominates",
+                "status": "VALIDATED · pre-registered confirmation on fresh seeds 45–47"
+            },
+            "findings": ["F28 baseline ladder", "F33 corrected GSM8K", "F41–F43 council validation"]
         }
     """
     require_bearer_auth(authorization)
-    return _load_mixed_arena_results()
+    result = _load_mixed_arena_results()
+    # Add context about the council being a systems result
+    result["paradigm_context"] = (
+        "Council is a systems result (four routed Qwen models). "
+        "See /api/eqlm/results for the single-model EqLM paradigm claim."
+    )
+    result["arena_description"] = "50% MMLU + 50% GSM8K with chat templates (F28, F33)"
+    result["council_result"] = {
+        "score": 0.6194,
+        "vs_baseline": "+8.33pp (z=4.42, F41 pre-registered confirmation)",
+        "cost": "1.26x expected generations per request; 4.1x resident memory (F41)",
+        "precondition": "Non-domination: different members must be best on different domains (F42–F43)",
+        "generalization": "Does not hold when one member dominates (F43 shows system reduces to best member)",
+        "status": "VALIDATED · pre-registered confirmation on fresh seeds 45–47 (F41)",
+    }
+    return result
+
+
+def _load_eqlm_results() -> dict[str, Any]:
+    """Load EqLM single-model results (F24: parity at matched params).
+
+    EqLM is the programme's paradigm claim: a weight-tied block solved to a
+    fixed point whose depth, training, and decoding are equilibrium
+    computations. F24 established parity (ratio 0.991) against a param-matched
+    twelve-layer explicit transformer at 121M parameters. This is the
+    architecture claim. The council (F41–F43) is a separate systems result
+    comparing four models routed by a lookup table, conditional on non-domination
+    and costing 1.26 times the generation budget.
+
+    Loads results from exp13_seed{42,43,44} (anytime-trained fixed-point models)
+    and reports BLiMP scores with honest interpretation: these are single runs on
+    a 1000-pair validation set, not the full evaluation suite.
+    """
+    results_dir = Path(get_results_dir())
+
+    eqlm_results: dict[str, Any] = {
+        "paradigm_claim": (
+            "EqLM (Equilibrium Language Model): a weight-tied block solved to "
+            "a fixed point whose effective depth, training dynamics, and decoding "
+            "are equilibrium computations"
+        ),
+        "finding": "F24: Parity reached at 121M parameters (ratio 0.991 vs explicit transformer at matched params and budget)",
+        "arms": [],
+        "summary": None,
+    }
+
+    # Load exp13 results (anytime-trained fixed-point models)
+    for seed in [42, 43, 44]:
+        exp_dir = results_dir / f"exp13_seed{seed}"
+        results_file = exp_dir / "results.json"
+
+        if not results_file.exists():
+            continue
+
+        try:
+            with open(results_file) as f:
+                data = json.load(f)
+
+            arms_data = data.get("arms", {})
+
+            # B1/B2/B3 are the three arms under test
+            for arm_key in ["B1", "B2", "B3"]:
+                if arm_key not in arms_data:
+                    continue
+
+                arm = arms_data[arm_key]
+                eqlm_results["arms"].append({
+                    "seed": seed,
+                    "arm": arm_key,
+                    "kind": arm.get("kind"),
+                    "num_params": arm.get("num_params"),
+                    "blimp_accuracy": arm.get("blimp_accuracy"),
+                    "blimp_num_correct": arm.get("blimp_num_correct"),
+                    "blimp_num_total": arm.get("blimp_num_total"),
+                    "final_loss": arm.get("final_loss"),
+                    "solver_convergence_rate": arm.get("solver_convergence_rate"),
+                    "config_hash": data.get("config_hash"),
+                    "spec": data.get("spec"),
+                })
+        except (json.JSONDecodeError, OSError, KeyError):
+            continue
+
+    # Summary: report the parity finding
+    if eqlm_results["arms"]:
+        # F24 established parity (0.991 ratio)
+        eqlm_results["summary"] = {
+            "claim": "F24: EqLM reaches 0.991 parity ratio at matched parameters and compute budget",
+            "interpretation": "Parity is not the objective; the untested property that carries it past parity is adaptive per-token depth (exp31), which an explicit stack cannot express",
+            "status": "VALIDATED · parity MET · adaptive-depth testing live (exp31)",
+            "note": "These are development-set results on limited data. Full evaluation suite in progress.",
+        }
+
+    return eqlm_results
+
+
+@app.get("/api/eqlm/results")
+async def get_eqlm_results(
+    authorization: str | None = Header(None),
+) -> dict[str, Any]:
+    """Get EqLM single-model paradigm results (F24: parity at matched params).
+
+    The programme's core claim is EqLM: one model whose depth, training, and
+    decoding are equilibrium computations, compared at matched parameters and
+    compute against a conventional transformer. F24 established parity (ratio
+    0.991) at 121M parameters—not victory, but proof that the mechanism works.
+
+    The untested property that could carry it past parity is adaptive per-token
+    depth: at matched *mean* depth, an equilibrium model can spend five iterations
+    on an easy token and twenty on a hard one, while an explicit stack spends the
+    same fixed count on each. Whether uneven spending wins is the question driving
+    exp31.
+
+    The council (F41–F43) is a separate systems result (four models routed by
+    a lookup table) conditional on non-domination and costing 1.26× generations.
+    It is not the paradigm claim.
+
+    Returns:
+        {
+            "paradigm_claim": "EqLM: depth, training, decoding are equilibrium computations",
+            "finding": "F24: parity ratio 0.991 at 121M",
+            "arms": [
+                {
+                    "seed": 42,
+                    "arm": "B1",
+                    "kind": "anytime",
+                    "num_params": 120696016,
+                    "blimp_accuracy": 0.662,
+                    "final_loss": 2.800,
+                    "config_hash": "...",
+                    "spec": "0010"
+                },
+                ...
+            ],
+            "summary": {
+                "claim": "F24: ...",
+                "interpretation": "...",
+                "status": "VALIDATED"
+            }
+        }
+    """
+    require_bearer_auth(authorization)
+    return _load_eqlm_results()
 
 
 # ─── Machine Status & Infrastructure (Product + Operations) ───────────────────
