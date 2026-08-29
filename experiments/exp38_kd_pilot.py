@@ -124,12 +124,20 @@ def train_arm(
 
         if kd:
             with torch.no_grad():
-                t_logits = teacher(ids).logits[:, :-1]
+                # Qwen pads its output head beyond the tokenizer (151936 vs
+                # 151665); the padded ids are never produced by real text, so
+                # slicing to the student's vocabulary and renormalising under
+                # log_softmax loses nothing the data can express.
+                t_logits = teacher(ids).logits[:, :-1, : outs[-1][1].shape[-1]]
             s_logits = outs[-1][1][:, :-1]
             # KL between temperature-softened distributions, scaled by T^2 in
             # the standard way so gradients keep their magnitude as T varies.
-            t_lp = F.log_softmax(t_logits / kd_temp, dim=-1)
-            s_lp = F.log_softmax(s_logits / kd_temp, dim=-1)
+            # Flattened to (tokens, vocab) so batchmean yields per-token KL,
+            # the same scale as cross-entropy; on [B, T, V] batchmean divides by
+            # batch alone and the KD term dwarfs CE by the sequence length.
+            v = s_logits.shape[-1]
+            t_lp = F.log_softmax(t_logits / kd_temp, dim=-1).reshape(-1, v)
+            s_lp = F.log_softmax(s_logits / kd_temp, dim=-1).reshape(-1, v)
             kl = F.kl_div(s_lp, t_lp, log_target=True, reduction="batchmean")
             loss = loss + kd_weight * (kd_temp**2) * kl
 
