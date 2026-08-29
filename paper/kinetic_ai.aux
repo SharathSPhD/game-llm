@@ -10,12 +10,12 @@
 \@writefile{toc}{\contentsline {section}{\numberline {2}Background and Related Work}{4}{section.2}\protected@file@percent }
 \newlabel{sec:background}{{2}{4}{Background and Related Work}{section.2}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {2.1}Quantal Response Equilibrium and Softmax as Bounded Rationality}{4}{subsection.2.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {2.2}Mirror Descent, Optimization Geometry, and Regularized Learning}{4}{subsection.2.2}\protected@file@percent }
 \citation{Sokota2023}
 \citation{Mertikopoulos2018}
 \citation{Perolat2021}
 \citation{Loshchilov2019}
 \citation{Bai2019}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.2}Mirror Descent, Optimization Geometry, and Regularized Learning}{5}{subsection.2.2}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {2.3}Magnetic Mirror Descent and Convergence in Two-Player Games}{5}{subsection.2.3}\protected@file@percent }
 \newlabel{eq:mmd}{{1}{5}{Magnetic Mirror Descent and Convergence in Two-Player Games}{equation.1}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {2.4}Deep Equilibrium Models: Implicit Depth and Fixed-Point Computation}{5}{subsection.2.4}\protected@file@percent }
@@ -30,9 +30,9 @@
 \citation{Lee2015}
 \citation{RecursiveTransformers2024}
 \citation{Rafailov2023}
-\citation{Wang2025MPO}
 \@writefile{toc}{\contentsline {subsection}{\numberline {2.5}Weight Tying, Recursive Uptraining, and Deep Supervision}{6}{subsection.2.5}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {2.6}Preference Optimization: Mechanisms and the Critical Distinction Between Policy and Parameter Space}{6}{subsection.2.6}\protected@file@percent }
+\citation{Wang2025MPO}
 \citation{Wu2024}
 \citation{Duetting2024}
 \citation{Vickrey1961}
@@ -42,7 +42,7 @@
 \citation{Warstadt2023}
 \citation{Radford2019}
 \@writefile{toc}{\contentsline {subsection}{\numberline {2.7}Mechanism Design and Truthful Aggregation of Multiple Models}{7}{subsection.2.7}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {2.8}Language Model Benchmarks and Sample-Efficient Evaluation}{7}{subsection.2.8}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.8}Language Model Benchmarks and Sample-Efficient Evaluation}{8}{subsection.2.8}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {2.9}Equilibrium, Depth, and Certification: A Comparative Landscape}{8}{subsection.2.9}\protected@file@percent }
 \@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces Equilibrium-theoretic and depth-implicit architectures: parameter sharing, fixed-point semantics, convergence guarantees, and certification status. No single architecture achieves certified convergence while preserving linguistic quality at the BabyLM scale in the present work.}}{8}{table.caption.1}\protected@file@percent }
 \providecommand*\caption@xref[2]{\@setref\relax\@undefined{#1}}
@@ -57,10 +57,10 @@
 \newlabel{eq:postln_map}{{3}{10}{Fixed-Point Maps: Two Forms and a Critical Discovery}{equation.3}{}}
 \@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces Three training regimes for EqLM{}: objective, computational cost, and convergence certification. All use the same Anderson solver at evaluation time (history 5, 12 iterations, relative tol $10^{-3}$).}}{11}{table.caption.8}\protected@file@percent }
 \newlabel{tab:regimes}{{2}{11}{Three training regimes for \EqLM {}: objective, computational cost, and convergence certification. All use the same Anderson solver at evaluation time (history 5, 12 iterations, relative tol $10^{-3}$)}{table.caption.8}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {4}Experimental Setup and Closure Protocol}{14}{section.4}\protected@file@percent }
-\newlabel{sec:setup}{{4}{14}{Experimental Setup and Closure Protocol}{section.4}{}}
 \@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces The closure protocol applied to every hypothesis reported here. A quantitative gate is fixed before execution; each run records the SHA-256 of its resolved configuration and the commit that produced it; an adversarial review recomputes every number from raw results and may refute or rescope the claim before it is scored. Outcomes are named rather than binary, so a documented miss terminates a line of enquiry with the same standing as a pass.}}{15}{figure.caption.13}\protected@file@percent }
 \newlabel{fig:protocol}{{3}{15}{The closure protocol applied to every hypothesis reported here. A quantitative gate is fixed before execution; each run records the SHA-256 of its resolved configuration and the commit that produced it; an adversarial review recomputes every number from raw results and may refute or rescope the claim before it is scored. Outcomes are named rather than binary, so a documented miss terminates a line of enquiry with the same standing as a pass}{figure.caption.13}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {4}Experimental Setup and Closure Protocol}{15}{section.4}\protected@file@percent }
+\newlabel{sec:setup}{{4}{15}{Experimental Setup and Closure Protocol}{section.4}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {4.1}Hypotheses and Verdicts}{15}{subsection.4.1}\protected@file@percent }
 \@writefile{lot}{\contentsline {table}{\numberline {3}{\ignorespaces Pre-registered hypotheses with quantitative gates, verdicts, and finding references. Gates were locked before any experiment ran; verdicts are named outcomes (MET/PARTIAL/MISSED) assigned by adversarial review. H7–H10 target 1–3B-parameter models and are in progress.}}{16}{table.caption.14}\protected@file@percent }
 \newlabel{tab:hypotheses}{{3}{16}{Pre-registered hypotheses with quantitative gates, verdicts, and finding references. Gates were locked before any experiment ran; verdicts are named outcomes (MET/PARTIAL/MISSED) assigned by adversarial review. H7–H10 target 1–3B-parameter models and are in progress}{table.caption.14}{}}
@@ -143,18 +143,22 @@
 \newlabel{sec:results:condition}{{5.12}{34}{What the Advantage Is Made Of, and When It Exists}{subsection.5.12}{}}
 \@writefile{lot}{\contentsline {table}{\numberline {8}{\ignorespaces Pre-registered confirmation (SPEC 0017 with Amendment 1) on 360 questions drawn after the protocol was frozen, three seeds of 120. The mechanism column is the anchored vote at the pre-registered uniform weighting and $\tau = 1$; the fallback router is the fair bar established by adversarial review; the baseline is the single model the ladder designated in advance. Paired statistics count only questions where the two systems disagree.}}{35}{table.caption.30}\protected@file@percent }
 \newlabel{tab:confirmation}{{8}{35}{Pre-registered confirmation (SPEC 0017 with Amendment 1) on 360 questions drawn after the protocol was frozen, three seeds of 120. The mechanism column is the anchored vote at the pre-registered uniform weighting and $\tau = 1$; the fallback router is the fair bar established by adversarial review; the baseline is the single model the ladder designated in advance. Paired statistics count only questions where the two systems disagree}{table.caption.30}{}}
-\citation{Wang2025MPO}
 \@writefile{lot}{\contentsline {table}{\numberline {9}{\ignorespaces The same systems on two councils, 360 evaluation questions each. Council A is the parameter-matched Qwen set with per-domain champions that differ; council B spans four families and four tokenizers and has a single member that is champion of both domains. Paired statistics count only questions where the two systems disagree.}}{36}{table.caption.31}\protected@file@percent }
 \newlabel{tab:condition}{{9}{36}{The same systems on two councils, 360 evaluation questions each. Council A is the parameter-matched Qwen set with per-domain champions that differ; council B spans four families and four tokenizers and has a single member that is champion of both domains. Paired statistics count only questions where the two systems disagree}{table.caption.31}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {6}Discussion}{36}{section.6}\protected@file@percent }
-\newlabel{sec:discussion}{{6}{36}{Discussion}{section.6}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.13}The Exchange Rate Between Parameters and Arithmetic}{36}{subsection.5.13}\protected@file@percent }
+\newlabel{sec:results:compute}{{5.13}{36}{The Exchange Rate Between Parameters and Arithmetic}{subsection.5.13}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {10}{\ignorespaces Compute accounting for the parity comparison, per token. Block cost is $4d^2 + 2 d\,d_{ff}$. The tied model is parameter-matched and inversely composed, spending most of its budget on embeddings because a single block at matched parameters must be wide. Quality figures are BLiMP, two seeds, from the checkpoints released with this work.}}{37}{table.caption.32}\protected@file@percent }
+\newlabel{tab:compute}{{10}{37}{Compute accounting for the parity comparison, per token. Block cost is $4d^2 + 2 d\,d_{ff}$. The tied model is parameter-matched and inversely composed, spending most of its budget on embeddings because a single block at matched parameters must be wide. Quality figures are BLiMP, two seeds, from the checkpoints released with this work}{table.caption.32}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {6}Discussion}{37}{section.6}\protected@file@percent }
+\newlabel{sec:discussion}{{6}{37}{Discussion}{section.6}{}}
+\citation{Wang2025MPO}
 \citation{Bengio2015}
 \citation{Holtzman2020}
 \citation{Warstadt2023}
-\@writefile{toc}{\contentsline {section}{\numberline {7}Limitations}{38}{section.7}\protected@file@percent }
-\newlabel{sec:limitations}{{7}{38}{Limitations}{section.7}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {8}Conclusions and Future Work}{40}{section.8}\protected@file@percent }
-\newlabel{sec:conclusion}{{8}{40}{Conclusions and Future Work}{section.8}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {7}Limitations}{39}{section.7}\protected@file@percent }
+\newlabel{sec:limitations}{{7}{39}{Limitations}{section.7}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {8}Conclusions and Future Work}{42}{section.8}\protected@file@percent }
+\newlabel{sec:conclusion}{{8}{42}{Conclusions and Future Work}{section.8}{}}
 \bibstyle{plainnat}
 \bibdata{references}
 \bibcite{Anderson1965}{{1}{1965}{{Anderson}}{{}}}
@@ -183,36 +187,36 @@
 \bibcite{Warstadt2023}{{24}{2023}{{Warstadt et~al.}}{{Warstadt, Mueller, Choshen, Wilcox, Zhuang, Ciro, Mosquera, Paranjabe, Williams, Linzen, and Cotterell}}}
 \bibcite{Winston2020}{{25}{2020}{{Winston and Kolter}}{{}}}
 \bibcite{Wu2024}{{26}{2024}{{Wu et~al.}}{{Wu, Sun, Yuan, Ji, Yang, and Gu}}}
-\@writefile{toc}{\contentsline {section}{\numberline {A}Per-Seed Results}{44}{appendix.A}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {A.1}121M Pretraining: Main Verdict and Anytime Training}{44}{subsection.A.1}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {10}{\ignorespaces Main 121M pretraining results (10k steps on BabyLM strict-small, batch 32, 1000-pair BLiMP subset). A1 explicit 12-layer baseline; A3 EqLM trained by implicit differentiation (F20); B1 anytime-unrolled EqLM (F24). Conv.\ indicates solver convergence rate; mean iters is the average count per forward pass.}}{44}{table.caption.34}\protected@file@percent }
-\newlabel{tab:pretraining_main}{{10}{44}{Main 121M pretraining results (10k steps on BabyLM strict-small, batch 32, 1000-pair BLiMP subset). A1 explicit 12-layer baseline; A3 EqLM trained by implicit differentiation (F20); B1 anytime-unrolled EqLM (F24). Conv.\ indicates solver convergence rate; mean iters is the average count per forward pass}{table.caption.34}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {A.2}Anytime Inference Budget Sweep}{44}{subsection.A.2}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {11}{\ignorespaces Anytime inference budget sweep: B1 checkpoints evaluated at Anderson solver iterations $\{4, 8, 12\}$ (F24). One anytime-trained model serves three compute budgets; dashes indicate explicit baseline's mean 0.683.}}{45}{table.caption.35}\protected@file@percent }
-\newlabel{tab:budget_sweep}{{11}{45}{Anytime inference budget sweep: B1 checkpoints evaluated at Anderson solver iterations $\{4, 8, 12\}$ (F24). One anytime-trained model serves three compute budgets; dashes indicate explicit baseline's mean 0.683}{table.caption.35}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {A.3}Single-Seed Certification and Ablation Arms}{45}{subsection.A.3}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {12}{\ignorespaces Certification arms (seed 42 only, F24): B2 trains a finite-difference trajectory-local Lipschitz penalty; B3 uses a bottleneck-core topology (256-dimensional); B4 combines anytime supervision with raw trajectory penalty (pre-registered prediction refuted).}}{45}{table.caption.36}\protected@file@percent }
-\newlabel{tab:certification}{{12}{45}{Certification arms (seed 42 only, F24): B2 trains a finite-difference trajectory-local Lipschitz penalty; B3 uses a bottleneck-core topology (256-dimensional); B4 combines anytime supervision with raw trajectory penalty (pre-registered prediction refuted)}{table.caption.36}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {A.4}Preference Optimization Held-Out Accuracy and KL Drift}{46}{subsection.A.4}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {13}{\ignorespaces H3 preference optimization on explicit bases (F21): held-out accuracy (400-pair unseen-phenomena test set) and KL divergence to frozen base in nats per token. Arms P1 (DPO, $\tau =0$), P2a ($\tau =1 \times 10^{-3}$), P2b ($\tau =1 \times 10^{-2}$).}}{46}{table.caption.37}\protected@file@percent }
-\newlabel{tab:preference_explicit}{{13}{46}{H3 preference optimization on explicit bases (F21): held-out accuracy (400-pair unseen-phenomena test set) and KL divergence to frozen base in nats per token. Arms P1 (DPO, $\tau =0$), P2a ($\tau =1 \times 10^{-3}$), P2b ($\tau =1 \times 10^{-2}$)}{table.caption.37}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {A.5}Auction Scoring-Time Selection: Mixed-Domain Perplexity}{46}{subsection.A.5}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {14}{\ignorespaces H4 auction scoring-time selection (F22): teacher-forced mixed-domain perplexity (lower is better). Auction selects the highest-confidence specialist at each token; ensemble averages logits uniformly; best/worst single specialists in isolation. Means and per-seed values shown.}}{46}{table.caption.38}\protected@file@percent }
-\newlabel{tab:auction_scoring}{{14}{46}{H4 auction scoring-time selection (F22): teacher-forced mixed-domain perplexity (lower is better). Auction selects the highest-confidence specialist at each token; ensemble averages logits uniformly; best/worst single specialists in isolation. Means and per-seed values shown}{table.caption.38}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {A.6}Auction Closed-Loop Generation: Judge NLL}{47}{subsection.A.6}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {15}{\ignorespaces H5 closed-loop generation (F23): judge NLL/token (lower is better) on generated text. Each system generates its own context, removing the scoring-time anchor that re-centers specialist selection at every position. H5 is pre-registered as \textsc  {missed}.}}{47}{table.caption.39}\protected@file@percent }
-\newlabel{tab:auction_closedloop}{{15}{47}{H5 closed-loop generation (F23): judge NLL/token (lower is better) on generated text. Each system generates its own context, removing the scoring-time anchor that re-centers specialist selection at every position. H5 is pre-registered as \textsc {missed}}{table.caption.39}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {A.7}Damage Curve: Layer-Tying Topology Search on Qwen3-1.7B}{47}{subsection.A.7}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {16}{\ignorespaces F25 damage curve: perplexity under layer-tying topology variants, no uptraining. All configurations show severe damage pre-uptraining. Average initialization (elementwise mean of layer weights) preserves function 10--100$\times $ better than stepwise. Explicit outer layers are the primary driver of recovery; additional cores show diminishing returns.}}{48}{table.caption.40}\protected@file@percent }
-\newlabel{tab:damage_curve}{{16}{48}{F25 damage curve: perplexity under layer-tying topology variants, no uptraining. All configurations show severe damage pre-uptraining. Average initialization (elementwise mean of layer weights) preserves function 10--100$\times $ better than stepwise. Explicit outer layers are the primary driver of recovery; additional cores show diminishing returns}{table.caption.40}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {B}Hyperparameters}{48}{appendix.B}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {B.1}121M Pretraining: Data and Optimizer}{48}{subsection.B.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {B.2}EqLM Architecture Details}{48}{subsection.B.2}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {17}{\ignorespaces EqLM architecture parameters for the 121M experiments. The block is solved by Anderson acceleration with 12-iteration budget and relative-tolerance gate at $10^{-3}$. All iterates at training time supervise cross-entropy loss (anytime arm B1).}}{49}{table.caption.41}\protected@file@percent }
-\newlabel{tab:eqlm_arch}{{17}{49}{EqLM architecture parameters for the 121M experiments. The block is solved by Anderson acceleration with 12-iteration budget and relative-tolerance gate at $10^{-3}$. All iterates at training time supervise cross-entropy loss (anytime arm B1)}{table.caption.41}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {B.3}Anytime Training}{49}{subsection.B.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {B.4}Solver-Aware Auxiliary Loss}{49}{subsection.B.4}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {B.5}Preference Optimization}{49}{subsection.B.5}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {B.6}Specialist Models and Auction Setup}{49}{subsection.B.6}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {B.7}Qwen3 Conversion (F25)}{50}{subsection.B.7}\protected@file@percent }
-\gdef \@abspage@last{50}
+\@writefile{toc}{\contentsline {section}{\numberline {A}Per-Seed Results}{45}{appendix.A}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {A.1}121M Pretraining: Main Verdict and Anytime Training}{45}{subsection.A.1}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {11}{\ignorespaces Main 121M pretraining results (10k steps on BabyLM strict-small, batch 32, 1000-pair BLiMP subset). A1 explicit 12-layer baseline; A3 EqLM trained by implicit differentiation (F20); B1 anytime-unrolled EqLM (F24). Conv.\ indicates solver convergence rate; mean iters is the average count per forward pass.}}{45}{table.caption.35}\protected@file@percent }
+\newlabel{tab:pretraining_main}{{11}{45}{Main 121M pretraining results (10k steps on BabyLM strict-small, batch 32, 1000-pair BLiMP subset). A1 explicit 12-layer baseline; A3 EqLM trained by implicit differentiation (F20); B1 anytime-unrolled EqLM (F24). Conv.\ indicates solver convergence rate; mean iters is the average count per forward pass}{table.caption.35}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {A.2}Anytime Inference Budget Sweep}{46}{subsection.A.2}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {12}{\ignorespaces Anytime inference budget sweep: B1 checkpoints evaluated at Anderson solver iterations $\{4, 8, 12\}$ (F24). One anytime-trained model serves three compute budgets; dashes indicate explicit baseline's mean 0.683.}}{46}{table.caption.36}\protected@file@percent }
+\newlabel{tab:budget_sweep}{{12}{46}{Anytime inference budget sweep: B1 checkpoints evaluated at Anderson solver iterations $\{4, 8, 12\}$ (F24). One anytime-trained model serves three compute budgets; dashes indicate explicit baseline's mean 0.683}{table.caption.36}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {A.3}Single-Seed Certification and Ablation Arms}{46}{subsection.A.3}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {13}{\ignorespaces Certification arms (seed 42 only, F24): B2 trains a finite-difference trajectory-local Lipschitz penalty; B3 uses a bottleneck-core topology (256-dimensional); B4 combines anytime supervision with raw trajectory penalty (pre-registered prediction refuted).}}{47}{table.caption.37}\protected@file@percent }
+\newlabel{tab:certification}{{13}{47}{Certification arms (seed 42 only, F24): B2 trains a finite-difference trajectory-local Lipschitz penalty; B3 uses a bottleneck-core topology (256-dimensional); B4 combines anytime supervision with raw trajectory penalty (pre-registered prediction refuted)}{table.caption.37}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {A.4}Preference Optimization Held-Out Accuracy and KL Drift}{47}{subsection.A.4}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {14}{\ignorespaces H3 preference optimization on explicit bases (F21): held-out accuracy (400-pair unseen-phenomena test set) and KL divergence to frozen base in nats per token. Arms P1 (DPO, $\tau =0$), P2a ($\tau =1 \times 10^{-3}$), P2b ($\tau =1 \times 10^{-2}$).}}{47}{table.caption.38}\protected@file@percent }
+\newlabel{tab:preference_explicit}{{14}{47}{H3 preference optimization on explicit bases (F21): held-out accuracy (400-pair unseen-phenomena test set) and KL divergence to frozen base in nats per token. Arms P1 (DPO, $\tau =0$), P2a ($\tau =1 \times 10^{-3}$), P2b ($\tau =1 \times 10^{-2}$)}{table.caption.38}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {A.5}Auction Scoring-Time Selection: Mixed-Domain Perplexity}{47}{subsection.A.5}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {15}{\ignorespaces H4 auction scoring-time selection (F22): teacher-forced mixed-domain perplexity (lower is better). Auction selects the highest-confidence specialist at each token; ensemble averages logits uniformly; best/worst single specialists in isolation. Means and per-seed values shown.}}{48}{table.caption.39}\protected@file@percent }
+\newlabel{tab:auction_scoring}{{15}{48}{H4 auction scoring-time selection (F22): teacher-forced mixed-domain perplexity (lower is better). Auction selects the highest-confidence specialist at each token; ensemble averages logits uniformly; best/worst single specialists in isolation. Means and per-seed values shown}{table.caption.39}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {A.6}Auction Closed-Loop Generation: Judge NLL}{48}{subsection.A.6}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {16}{\ignorespaces H5 closed-loop generation (F23): judge NLL/token (lower is better) on generated text. Each system generates its own context, removing the scoring-time anchor that re-centers specialist selection at every position. H5 is pre-registered as \textsc  {missed}.}}{48}{table.caption.40}\protected@file@percent }
+\newlabel{tab:auction_closedloop}{{16}{48}{H5 closed-loop generation (F23): judge NLL/token (lower is better) on generated text. Each system generates its own context, removing the scoring-time anchor that re-centers specialist selection at every position. H5 is pre-registered as \textsc {missed}}{table.caption.40}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {A.7}Damage Curve: Layer-Tying Topology Search on Qwen3-1.7B}{49}{subsection.A.7}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {17}{\ignorespaces F25 damage curve: perplexity under layer-tying topology variants, no uptraining. All configurations show severe damage pre-uptraining. Average initialization (elementwise mean of layer weights) preserves function 10--100$\times $ better than stepwise. Explicit outer layers are the primary driver of recovery; additional cores show diminishing returns.}}{49}{table.caption.41}\protected@file@percent }
+\newlabel{tab:damage_curve}{{17}{49}{F25 damage curve: perplexity under layer-tying topology variants, no uptraining. All configurations show severe damage pre-uptraining. Average initialization (elementwise mean of layer weights) preserves function 10--100$\times $ better than stepwise. Explicit outer layers are the primary driver of recovery; additional cores show diminishing returns}{table.caption.41}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {B}Hyperparameters}{49}{appendix.B}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {B.1}121M Pretraining: Data and Optimizer}{49}{subsection.B.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {B.2}EqLM Architecture Details}{50}{subsection.B.2}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {18}{\ignorespaces EqLM architecture parameters for the 121M experiments. The block is solved by Anderson acceleration with 12-iteration budget and relative-tolerance gate at $10^{-3}$. All iterates at training time supervise cross-entropy loss (anytime arm B1).}}{50}{table.caption.42}\protected@file@percent }
+\newlabel{tab:eqlm_arch}{{18}{50}{EqLM architecture parameters for the 121M experiments. The block is solved by Anderson acceleration with 12-iteration budget and relative-tolerance gate at $10^{-3}$. All iterates at training time supervise cross-entropy loss (anytime arm B1)}{table.caption.42}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {B.3}Anytime Training}{50}{subsection.B.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {B.4}Solver-Aware Auxiliary Loss}{50}{subsection.B.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {B.5}Preference Optimization}{51}{subsection.B.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {B.6}Specialist Models and Auction Setup}{51}{subsection.B.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {B.7}Qwen3 Conversion (F25)}{51}{subsection.B.7}\protected@file@percent }
+\gdef \@abspage@last{51}

@@ -664,3 +664,73 @@ Headroom above best member  & $+0.139$ & $+0.183$ \\
 \multicolumn{3}{l}{\footnotesize Distinct per-domain champions: council A yes, council B no.} \\
 \end{tabular}
 \end{table}
+
+\subsection{The Exchange Rate Between Parameters and Arithmetic}
+\label{sec:results:compute}
+
+The parity reported above holds parameters and iteration count equal. An
+adversarial review of a follow-on experiment observed that these are not the
+same as holding compute equal, and the audit it prompted changes what the
+architecture recommends.
+
+Matching 121M parameters with a single tied block rather than twelve distinct
+ones forces the block to be wide, and the two models end up inversely composed.
+The tied model spends 85.9M parameters on embeddings and 34.8M on its block; the
+explicit model spends 38.7M and 85.1M. Since a transformer block costs
+$4d^2 + 2 d\, d_{ff}$ per token and the tied block runs at $d = 1704$ against the
+explicit layer's $d = 768$, one iteration costs 34.81M units against 7.08M, a
+factor of $4.92$. Twelve iterations therefore cost $4.92$ times twelve layers,
+and the parity recorded in Table~\ref{tab:compute} is purchased with nearly five times the
+arithmetic.
+
+Equal arithmetic is reached at $2.44$ iterations. The tolerance sweep brackets
+that point directly: at a mean depth of $2.08$ the ratio against the explicit
+baseline is $0.72$ and $0.73$ on two seeds, and at $3.50$ iterations --- still
+$1.43$ times the explicit compute --- it is $0.89$ and $0.86$. Quality falls
+smoothly rather than collapsing, which makes the model usable across a range of
+serving budgets from one checkpoint, but the direction is unambiguous: parity
+requires roughly five times the compute, and compute parity costs roughly a
+quarter of the quality.
+
+Allocating depth unevenly does not change this. Iterating each position until its
+relative residual falls below a tolerance, with the tolerance calibrated so the
+mean depth matches twelve, scores $0.681$ against uniform-depth $0.684$ and
+explicit $0.684$. The mechanism operates as designed --- per-token depth varies
+from seven to twenty iterations --- and buys nothing at matched mean depth. What
+it supplies is the anytime property rather than an advantage.
+
+The conclusion is a statement about what weight tying is for. Removing eleven of
+twelve layers compresses parameters; preserving capacity then demands width; and
+width is quadratic in the operation that dominates inference. The technique is
+therefore valuable exactly where parameters are the binding constraint, such as
+memory-limited deployment or a fixed parameter budget, and unattractive where
+arithmetic binds. Every earlier result in this line is consistent with that
+reading and none of them stated it, which is why the exchange rate rather than
+the parity figure is the contribution.
+
+\begin{table}[t]
+\centering
+\caption{Compute accounting for the parity comparison, per token. Block cost is
+$4d^2 + 2 d\,d_{ff}$. The tied model is parameter-matched and inversely composed,
+spending most of its budget on embeddings because a single block at matched
+parameters must be wide. Quality figures are BLiMP, two seeds, from the
+checkpoints released with this work.}
+\label{tab:compute}
+\begin{tabular}{lccc}
+\toprule
+ & Explicit ($d=768$) & Tied ($d=1704$) & Ratio \\
+\midrule
+Parameters, total          & 123.8M & 120.7M & 0.98 \\
+\quad embeddings and head  & 38.7M  & 85.9M  & 2.22 \\
+\quad blocks               & 85.1M  & 34.8M  & 0.41 \\
+Cost per block, per token  & 7.08M  & 34.81M & 4.92 \\
+\midrule
+Depth for parity           & 12 layers & 12 iterations & --- \\
+Compute at that depth      & 84.9M  & 417.8M & 4.92 \\
+BLiMP                      & 0.684  & 0.684  & 1.00 \\
+\midrule
+Depth at equal compute     & 12 layers & 2.44 iterations & --- \\
+BLiMP at equal compute     & 0.684  & $\approx 0.50$ & 0.72 \\
+\bottomrule
+\end{tabular}
+\end{table}
