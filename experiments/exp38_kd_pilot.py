@@ -163,6 +163,11 @@ def main() -> int:
     ap.add_argument("--kd-temp", type=float, default=2.0)
     ap.add_argument("--device", default="cuda:0")
     ap.add_argument("--out", default="results/exp38_kd_pilot.json")
+    ap.add_argument(
+        "--ce-ppl", type=float, default=None,
+        help="reuse a completed CE arm's held-out perplexity instead of "
+             "re-training it; the KD arm still trains in full",
+    )
     args = ap.parse_args()
 
     from transformers import AutoModelForCausalLM, AutoTokenizer
@@ -190,11 +195,17 @@ def main() -> int:
         "gate": "KD must reduce held-out ppl by >= 15% vs CE (SPEC 0021)",
     }
 
-    _, ce_ppl = train_arm(False, args.steps, args.seq_len, args.batch, device,
-                          42, heldout, teacher, tok, args.kd_weight,
-                          args.kd_temp, log)
-    report["ce_ppl"] = round(ce_ppl, 3)
-    print(f"CE arm held-out ppl: {ce_ppl:.2f}", flush=True)
+    if args.ce_ppl is not None:
+        ce_ppl = args.ce_ppl
+        report["ce_ppl"] = ce_ppl
+        report["ce_ppl_source"] = "reused from completed run"
+        print(f"CE arm held-out ppl (reused): {ce_ppl:.2f}", flush=True)
+    else:
+        _, ce_ppl = train_arm(False, args.steps, args.seq_len, args.batch,
+                              device, 42, heldout, teacher, tok,
+                              args.kd_weight, args.kd_temp, log)
+        report["ce_ppl"] = round(ce_ppl, 3)
+        print(f"CE arm held-out ppl: {ce_ppl:.2f}", flush=True)
 
     _, kd_ppl = train_arm(True, args.steps, args.seq_len, args.batch, device,
                           42, heldout, teacher, tok, args.kd_weight,
