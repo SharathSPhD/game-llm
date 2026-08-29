@@ -586,3 +586,81 @@ Pooled & 0.5361 & \textbf{0.6194} & 0.6167 & $\mathbf{+0.0833}$ \\
 \bottomrule
 \end{tabular}
 \end{table}
+
+\subsection{What the Advantage Is Made Of, and When It Exists}
+\label{sec:results:condition}
+
+A confirmed margin reported as a single number invites the reader to assume it
+is a property of the method. Decomposing it on the confirmation questions, and
+then rebuilding the council from different materials, establishes that it is
+instead a property of the council, and gives the condition in a form that can be
+checked before one is assembled.
+
+Against the baseline single model at $0.5361$, giving the council's redundancy
+alone --- falling back to a majority vote when the baseline's own answer cannot
+be parsed --- reaches $0.5500$, a gain of $1.39$ points. Routing on ladder priors
+alone reaches $0.6000$, a gain of $6.39$. The deployed combination reaches
+$0.6194$. Isolating routing by granting the baseline the same redundancy leaves
+the system ahead 33 wins to 8 ($z = 3.90$), so the result is a routing result
+with a redundancy contribution rather than the reverse.
+
+The margin is not an artefact of answer extraction. A deliberately more
+forgiving extractor, accepting a trailing bare letter or numeral without the
+boxed convention, reduces champion abstention from $8.6\%$ to $3.3\%$ and raises
+both systems; the margin holds at $+7.78$ points, 36 wins to 8, $z = 4.22$. The
+audit was run because a gain resting on the extractor failing would be an
+engineering artefact rather than a finding.
+
+The condition under which routing pays is that different members are best on
+different domains, and a second council was built to violate it. Four families
+and four tokenizers spanning 1B to 7B parameters --- SmolLM2-1.7B,
+deepseek-math-7B, Falcon3-3B and Falcon3-1B --- were calibrated on a held-out
+seed and evaluated on 360 further questions. Falcon3-3B is champion of both
+domains and is also the best single member at $0.6083$, so the plain router
+scores identically and the fallback router reaches $0.6111$: one win and no
+losses across the evaluation set. The eight-point advantage is absent, and its
+absence is arithmetic rather than noise, since routing between identical
+destinations cannot move an answer.
+
+Table~\ref{tab:condition} sets the two councils side by side. The claim the
+evidence supports is accordingly narrower and more useful than a claim about
+councils in general: a council of non-dominated members beats the strongest
+single model by eight points at $1.26$ times its serving cost, and a council
+containing a dominant member reduces to that member and should not be built.
+Whether the condition holds is visible in the baseline ladder before any council
+exists, which makes this a design criterion rather than a limitation discovered
+after the fact.
+
+What both councils share is the quantity neither system reaches. The oracle over
+members stands $13$ points above the best single model on the first council and
+$19$ points above it on the second. Complementarity is therefore present, large,
+and measured on disjoint model families; every mechanism examined in this work
+re-reads a single observation per member and none of them extracts it. That
+juxtaposition --- abundant complementary knowledge alongside a complete failure
+to identify who holds it --- is the most robust result reported here, and it
+locates the remaining difficulty in identification rather than in knowledge.
+
+\begin{table}[t]
+\centering
+\caption{The same systems on two councils, 360 evaluation questions each.
+Council A is the parameter-matched Qwen set with per-domain champions that
+differ; council B spans four families and four tokenizers and has a single
+member that is champion of both domains. Paired statistics count only questions
+where the two systems disagree.}
+\label{tab:condition}
+\begin{tabular}{lcc}
+\toprule
+ & Council A (non-dominated) & Council B (dominated) \\
+\midrule
+Best single member          & 0.5361 & 0.6083 \\
+Plain router                & 0.6000 & 0.6083 \\
+Deployed system             & \textbf{0.6194} & 0.6111 \\
+Margin over best member     & $\mathbf{+0.0833}$ & $+0.0028$ \\
+Paired result               & 38W / 8L, $z = 4.42$ & 1W / 0L \\
+\midrule
+Oracle over members         & 0.7500 & 0.7917 \\
+Headroom above best member  & $+0.139$ & $+0.183$ \\
+\bottomrule
+\multicolumn{3}{l}{\footnotesize Distinct per-domain champions: council A yes, council B no.} \\
+\end{tabular}
+\end{table}

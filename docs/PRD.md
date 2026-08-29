@@ -92,6 +92,16 @@ Beyond benchmarks, the API serves real requests at acceptable latency, the
 released artifacts let a third party reproduce the headline numbers, and the
 application makes the system's behaviour legible rather than opaque.
 
+## When a council is worth building
+
+The measured advantage is conditional and the condition is checkable in advance.
+A council of members with distinct per-domain strengths beats the strongest
+single member by roughly eight points at 1.26 times its serving cost; a council
+whose ladder shows one member best on every domain reduces to that member
+exactly, and should not be assembled. Any deployment therefore begins with the
+baseline ladder rather than with the aggregation rule, and the ladder decides
+whether there is anything to aggregate.
+
 ## Non-goals
 
 Matching frontier-scale models. Training a competitive base model from scratch,

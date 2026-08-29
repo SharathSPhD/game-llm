@@ -866,6 +866,44 @@
       },
       "status": "VALIDATED",
       "verdict": "anchoring NOT MET; system-vs-baseline MET (pre-registered, Bonferroni-corrected)"
+    },
+    {
+      "id": "F42",
+      "title": "What the win is made of, and the condition under which it exists",
+      "claim": "Decomposed on the confirmation set: routing on ladder priors gives +6.39 of the +8.33, redundancy +1.39, with routing isolated at 33W/8L z=3.90. A deliberately more forgiving extractor cuts champion abstention 8.6%->3.3% and the margin holds at +7.78 (z=4.22), so the gain is not an artefact of weak answer parsing. Routing pays only when different members are best on different domains \u2014 a condition visible in the ladder before any council is built.",
+      "evidence": {
+        "exp": "decomposition of F41",
+        "baseline": 0.5361,
+        "redundancy_only": 0.55,
+        "routing_only": 0.6,
+        "full_system": 0.6194,
+        "routing_isolated": "33W/8L z=3.90",
+        "robust_extractor_margin": 0.0778,
+        "path": "research/memory/findings.md#F42"
+      },
+      "status": "VALIDATED",
+      "verdict": "routing result with a redundancy top-up"
+    },
+    {
+      "id": "F43",
+      "title": "The council advantage does not generalise; it is conditional on non-domination",
+      "claim": "A second council of four families and four tokenizers (SmolLM2-1.7B, deepseek-math-7B, Falcon3-3B, Falcon3-1B): Falcon3-3B champions BOTH domains and is also the best single model, so the system reduces to it exactly \u2014 1W/0L over 360 questions. The advantage is a property of the council, not the method. Design rule: build a council only where the ladder shows no dominant member. Complementarity is present in both councils (13 and 19 points of oracle headroom on disjoint families) and unreachable in both.",
+      "evidence": {
+        "exp": "exp28",
+        "eval_n": 360,
+        "best_single": 0.6083,
+        "plain_router": 0.6083,
+        "fallback_router": 0.6111,
+        "oracle": 0.7917,
+        "paired": "1W/0L",
+        "champions": {
+          "math": "Falcon3-3B-Instruct",
+          "general": "Falcon3-3B-Instruct"
+        },
+        "path": "results/scale/exp28/results.json"
+      },
+      "status": "VALIDATED",
+      "verdict": "complementarity_generalises NOT MET; yields a design rule"
     }
   ]
 }
