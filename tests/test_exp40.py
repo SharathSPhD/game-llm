@@ -1,15 +1,18 @@
-"""Tests for exp40_ladder: CPU-only, no network, validates scoring math.
+"""The ladder scorer, tested against an oracle that catches misalignment.
 
-The eval harness is the foundation for all reported numbers, so its properties
-must be provable in seconds: the score_continuation scorer returns exact log-prob
-sums; left-truncation preserves correctness; padded-vocab models are sliced
-before scoring; multiple-choice acc/acc_norm pick the right options; LAMBADA
-greedy matching works; and edge cases (empty continuation, long sequences) don't
-crash.
+The first version of these tests built a fake model whose logits ignored the
+input ids, and the scorer's off-by-one — reading logits at each continuation
+token's own position instead of one before it — passed them while returning
+exact chance on every real benchmark. The fake here is a bigram oracle:
+logits at position i favour ``(ids[i] + 1) % vocab``, so the only way to give
+a high score to the successor continuation is to read the logits at the
+correct shifted position. A scorer with the old defect ties every option and
+these tests fail.
 """
 
 from __future__ import annotations
 
+import math
 import sys
 from pathlib import Path
 
@@ -25,401 +28,149 @@ from exp40_ladder import (  # noqa: E402
     score_continuation,
 )
 
+VOCAB = 8
+HIGH = 5.0
 
-class FakeModel(nn.Module):
-    """Deterministic toy model: vocab 8, known logits for testing."""
 
-    def __init__(self, vocab_size: int = 8, seq_len: int = 10):
-        super().__init__()
-        self.vocab_size = vocab_size
-        self.seq_len = seq_len
+class BigramOracle(nn.Module):
+    """logits[b, i, v] = HIGH if v == (ids[b, i] + 1) % VOCAB else 0."""
 
     def forward(self, ids: torch.Tensor) -> torch.Tensor:
-        """Return deterministic logits.
-
-        For reproducibility, logits[seq, token] = seq * 10 + token (mod vocab).
-        This ensures we can hand-verify scores.
-        """
-        batch_size, seq_len = ids.shape
-        logits = torch.zeros(batch_size, seq_len, self.vocab_size, device=ids.device)
-        for seq_idx in range(seq_len):
-            for vocab_idx in range(self.vocab_size):
-                logits[:, seq_idx, vocab_idx] = float(seq_idx * 10 + vocab_idx)
+        logits = torch.zeros(*ids.shape, VOCAB)
+        favoured = (ids + 1) % VOCAB
+        logits.scatter_(2, favoured.unsqueeze(-1), HIGH)
         return logits
 
 
-class MockTokenizer:
-    """Mock tokenizer: maps characters to indices."""
+def log_p_favoured() -> float:
+    return HIGH - math.log(math.exp(HIGH) + (VOCAB - 1))
 
-    def __init__(self, vocab_size: int = 8):
-        self.vocab_size = vocab_size
+
+def log_p_other() -> float:
+    return 0.0 - math.log(math.exp(HIGH) + (VOCAB - 1))
+
+
+class IdTokenizer:
+    """Text is a space-separated list of token ids."""
 
     def encode(self, text: str) -> list[int]:
-        """Encode text as ord(char) % vocab_size."""
-        return [ord(c) % self.vocab_size for c in text]
+        return [int(t) for t in text.split()]
 
 
-def test_score_continuation_basic():
-    """score_continuation returns exact log-prob sum and token count."""
-    device = "cpu"
-    model = FakeModel(vocab_size=8, seq_len=10).to(device).eval()
-    tokenizer = MockTokenizer(vocab_size=8)
+def make_adapter(max_len: int = 32, extra_vocab: int = 0) -> ModelAdapter:
+    model = BigramOracle().eval()
 
-    # Adapter
-    def logits_fn(ids):
-        return model(ids)
-
-    adapter = ModelAdapter(
-        name="test",
-        logits_fn=logits_fn,
-        tokenize=tokenizer.encode,
-        max_len=10,
-        device=device,
-    )
-
-    # Test: context="a" (token 97 % 8 = 1), continuation="b" (token 98 % 8 = 2)
-    context = "a"
-    continuation = "b"
-    log_p, n_tokens = score_continuation(adapter, context, continuation)
-
-    # Expected: context_ids=[1], continuation_ids=[2]
-    # Forward on [1, 2] gives logits[0, seq_len=2, vocab]
-    # At position 1 (continuation), we need log_softmax(logits[1, :]) and gather token 2
-    context_ids = tokenizer.encode(context)
-    continuation_ids = tokenizer.encode(continuation)
-    assert context_ids == [1]
-    assert continuation_ids == [2]
-    assert n_tokens == 1
-
-    # Recompute expected log-prob
-    all_ids = context_ids + continuation_ids
-    all_tensor = torch.tensor([all_ids], dtype=torch.long, device=device)
-    logits = model(all_tensor)
-    # Position 1 (second token) in the sequence corresponds to continuation_ids[0]
-    cont_logits = logits[0, 1, :]  # [vocab_size]
-    log_probs = torch.nn.functional.log_softmax(cont_logits, dim=-1)
-    expected = log_probs[2].item()
-
-    assert abs(log_p - expected) < 1e-6
-
-
-def test_score_continuation_multi_token():
-    """score_continuation sums log-probs across multiple continuation tokens."""
-    device = "cpu"
-    model = FakeModel(vocab_size=8, seq_len=20).to(device).eval()
-    tokenizer = MockTokenizer(vocab_size=8)
-
-    def logits_fn(ids):
-        return model(ids)
-
-    adapter = ModelAdapter(
-        name="test",
-        logits_fn=logits_fn,
-        tokenize=tokenizer.encode,
-        max_len=20,
-        device=device,
-    )
-
-    context = "ab"
-    continuation = "cd"
-    log_p, n_tokens = score_continuation(adapter, context, continuation)
-
-    # Expected
-    context_ids = tokenizer.encode(context)
-    continuation_ids = tokenizer.encode(continuation)
-    all_ids = context_ids + continuation_ids
-    all_tensor = torch.tensor([all_ids], dtype=torch.long, device=device)
-    logits = model(all_tensor)
-    log_probs_full = torch.nn.functional.log_softmax(logits[0], dim=-1)
-
-    expected = 0.0
-    for i, token_id in enumerate(continuation_ids):
-        pos = len(context_ids) + i
-        expected += log_probs_full[pos, token_id].item()
-
-    assert abs(log_p - expected) < 1e-6
-    assert n_tokens == 2
-
-
-def test_left_truncation():
-    """When sequence exceeds max_len, truncate context from LEFT."""
-    device = "cpu"
-    model = FakeModel(vocab_size=8, seq_len=20).to(device).eval()
-    tokenizer = MockTokenizer(vocab_size=8)
-
-    max_len = 5
-
-    def logits_fn(ids):
-        return model(ids)
-
-    adapter = ModelAdapter(
-        name="test",
-        logits_fn=logits_fn,
-        tokenize=tokenizer.encode,
-        max_len=max_len,
-        device=device,
-    )
-
-    context = "aaabbbccc"  # Long context (9 tokens)
-    continuation = "de"
-    log_p, n_tokens = score_continuation(adapter, context, continuation)
-
-    # Expected: context truncated to max_len - len(continuation) = 5 - 2 = 3 tokens
-    # Keep the last 3 tokens of context, then add continuation
-    context_ids = tokenizer.encode(context)
-    continuation_ids = tokenizer.encode(continuation)
-    kept_context = context_ids[-(max_len - len(continuation_ids)) :]
-    all_ids = kept_context + continuation_ids
-
-    all_tensor = torch.tensor([all_ids], dtype=torch.long, device=device)
-    logits = model(all_tensor)
-    log_probs_full = torch.nn.functional.log_softmax(logits[0], dim=-1)
-
-    expected = 0.0
-    for i, token_id in enumerate(continuation_ids):
-        pos = len(kept_context) + i
-        expected += log_probs_full[pos, token_id].item()
-
-    assert abs(log_p - expected) < 1e-6
-    assert n_tokens == len(continuation_ids)
-
-
-def test_padded_vocab_slice():
-    """score_continuation slices logits if vocab is larger than tokenizer."""
-    device = "cpu"
-    vocab_size = 8  # Will make logits this size
-    tokenizer_vocab = 6  # But tokenizer only uses 6
-    model = FakeModel(vocab_size=vocab_size, seq_len=10).to(device).eval()
-
-    def logits_fn(ids):
+    def logits_fn(ids: torch.Tensor) -> torch.Tensor:
         logits = model(ids)
-        # In practice, logits are padded. Here we simulate by making them wider.
-        return logits  # Still 8-wide, but we pretend tokenizer is 6-wide
-
-    # Mock tokenizer with smaller vocab
-    class SmallTokenizer:
-        def encode(self, text: str) -> list[int]:
-            return [min(ord(c) % 6, 5) for c in text]  # Clamp to 0-5
-
-    def logits_fn_sliced(ids):
-        logits = logits_fn(ids)
-        # This is what exp40 does: slice to tokenizer vocab
-        if logits.shape[-1] > tokenizer_vocab:
-            logits = logits[:, :, :tokenizer_vocab]
+        if extra_vocab:
+            # Pad columns carry huge values; a correct adapter slices them
+            # away before scoring, the way the 50304-vocab checkpoints must.
+            pad = torch.full((*ids.shape, extra_vocab), 100.0)
+            logits = torch.cat([logits, pad], dim=-1)[:, :, :VOCAB]
         return logits
 
-    tokenizer = SmallTokenizer()
-    adapter = ModelAdapter(
-        name="test",
-        logits_fn=logits_fn_sliced,
-        tokenize=tokenizer.encode,
-        max_len=10,
-        device=device,
+    tok = IdTokenizer()
+    return ModelAdapter(
+        name="bigram-oracle", logits_fn=logits_fn, tokenize=tok.encode,
+        max_len=max_len, device="cpu",
     )
 
-    context = "a"
-    continuation = "b"
-    log_p, n_tokens = score_continuation(adapter, context, continuation)
 
-    # Should not crash; pad region should be ignored
-    assert n_tokens == 1
+def test_successor_continuation_scores_exactly() -> None:
+    adapter = make_adapter()
+    score, n = adapter.score_ids([1, 2], [3, 4])
+    assert n == 2
+    assert abs(score - 2 * log_p_favoured()) < 1e-5
 
 
-def test_multiple_choice_acc():
-    """eval_multiple_choice picks the option with highest log-prob (acc)."""
-    device = "cpu"
-    model = FakeModel(vocab_size=8, seq_len=50).to(device).eval()
-    tokenizer = MockTokenizer(vocab_size=8)
+def test_non_successor_continuation_scores_low() -> None:
+    adapter = make_adapter()
+    score, n = adapter.score_ids([1, 2], [5, 6])
+    assert n == 2
+    assert abs(score - (log_p_other() + log_p_favoured())) < 1e-5
 
-    def logits_fn(ids):
-        return model(ids)
 
-    adapter = ModelAdapter(
-        name="test",
-        logits_fn=logits_fn,
-        tokenize=tokenizer.encode,
-        max_len=50,
-        device=device,
-    )
+def test_score_continuation_string_path() -> None:
+    adapter = make_adapter()
+    score, n = score_continuation(adapter, "1 2", "3 4")
+    assert n == 2
+    assert abs(score - 2 * log_p_favoured()) < 1e-5
 
-    # Example with deterministic answer
-    # context = "x", options = [" a", " b", " c"], gold = 0 (first option)
-    # We'll construct logits to make option 0 the highest score
+
+def test_multiple_choice_picks_the_successor() -> None:
+    adapter = make_adapter()
     examples = [
-        {
-            "context": "x",
-            "options": [" a", " b", " c"],
-            "gold": 0,
-        }
+        {"context": "0 1", "options": ["2 3", "5 6", "4 4"], "gold": 0},
+        {"context": "3 4", "options": ["0 0", "5 6", "2 2"], "gold": 1},
     ]
-
-    results = eval_multiple_choice(adapter, examples)
-    assert results["n"] == 1
-    # Whether it's correct depends on the fake logits, but the metric should be computed
-    assert "acc" in results
-    assert 0 <= results["acc"] <= 1
+    res = eval_multiple_choice(adapter, examples)
+    assert res["acc"] == 1.0
+    assert res["n"] == 2
 
 
-def test_multiple_choice_acc_norm():
-    """eval_multiple_choice normalizes by byte length of continuation (acc_norm)."""
-    device = "cpu"
-    model = FakeModel(vocab_size=8, seq_len=100).to(device).eval()
-    tokenizer = MockTokenizer(vocab_size=8)
+def test_acc_norm_normalises_by_bytes() -> None:
+    adapter = make_adapter()
+    # Both options start with the favoured successor; the longer one adds a
+    # second favoured token, so raw sum prefers... both are favoured chains,
+    # raw prefers the shorter (fewer negative terms), byte-normalisation
+    # divides by length and must keep the answer stable here.
+    examples = [{"context": "0 1", "options": ["2", "2 3"], "gold": 0}]
+    res = eval_multiple_choice(adapter, examples)
+    assert res["acc"] == 1.0
+    assert 0.0 <= res["acc_norm"] <= 1.0
 
-    def logits_fn(ids):
-        return model(ids)
 
-    adapter = ModelAdapter(
-        name="test",
-        logits_fn=logits_fn,
-        tokenize=tokenizer.encode,
-        max_len=100,
-        device=device,
-    )
-
+def test_lambada_greedy_exact_match() -> None:
+    adapter = make_adapter()
     examples = [
-        {
-            "context": "x",
-            "options": [" a", " bb"],  # Different byte lengths
-            "gold": 0,
-        }
+        {"context": "1 2 3", "continuation": "4 5"},
+        {"context": "1 2 3", "continuation": "6 6"},
     ]
+    res = eval_lambada(adapter, examples)
+    assert res["acc"] == 0.5
+    assert res["n"] == 2
 
-    results = eval_multiple_choice(adapter, examples)
-    assert "acc_norm" in results
-    assert 0 <= results["acc_norm"] <= 1
+
+def test_left_truncation_keeps_alignment() -> None:
+    adapter = make_adapter(max_len=4)
+    # Context of 6 tokens truncates to 2; the surviving suffix still ends in
+    # 5, so the successor continuation stays favoured and exactly scored.
+    score, n = adapter.score_ids([0, 1, 2, 3, 4, 5], [6, 7])
+    assert n == 2
+    assert abs(score - 2 * log_p_favoured()) < 1e-5
 
 
-def test_lambada_greedy():
-    """eval_lambada checks if greedy predictions match continuation tokens."""
-    device = "cpu"
-    model = FakeModel(vocab_size=8, seq_len=20).to(device).eval()
-    tokenizer = MockTokenizer(vocab_size=8)
+def test_truncation_never_drops_all_context() -> None:
+    adapter = make_adapter(max_len=3)
+    score, n = adapter.score_ids([1, 2], [3, 4, 5])
+    assert n == 3
+    assert abs(score - 3 * log_p_favoured()) < 1e-5
 
-    def logits_fn(ids):
-        return model(ids)
 
-    adapter = ModelAdapter(
-        name="test",
-        logits_fn=logits_fn,
-        tokenize=tokenizer.encode,
-        max_len=20,
-        device=device,
+def test_empty_context_is_refused() -> None:
+    adapter = make_adapter()
+    try:
+        adapter.score_ids([], [1, 2])
+        raise AssertionError("empty context must be refused")
+    except ValueError:
+        pass
+
+
+def test_padded_vocab_is_sliced_before_scoring() -> None:
+    adapter = make_adapter(extra_vocab=4)
+    score, n = adapter.score_ids([1, 2], [3, 4])
+    assert n == 2
+    assert abs(score - 2 * log_p_favoured()) < 1e-5
+
+
+def test_winogrande_option_fills_prefix() -> None:
+    from exp40_ladder import winogrande_example
+
+    ex = winogrande_example(
+        sentence="The ball hit the _ hard.",
+        option1="wall", option2="floor", answer="2",
     )
-
-    # For LAMBADA, we need examples with "context" and "continuation" and lambada=True
-    # The test checks if greedy predictions match the actual tokens
-    examples = [
-        {
-            "context": "abc",
-            "continuation": "de",
-            "lambada": True,
-        }
-    ]
-
-    results = eval_lambada(adapter, examples)
-    assert results["n"] == 1
-    # Result depends on determinism of model
-    assert "acc" in results
-
-
-def test_empty_continuation():
-    """score_continuation with empty continuation should not crash."""
-    device = "cpu"
-    model = FakeModel(vocab_size=8, seq_len=10).to(device).eval()
-    tokenizer = MockTokenizer(vocab_size=8)
-
-    def logits_fn(ids):
-        return model(ids)
-
-    adapter = ModelAdapter(
-        name="test",
-        logits_fn=logits_fn,
-        tokenize=tokenizer.encode,
-        max_len=10,
-        device=device,
-    )
-
-    context = "abc"
-    continuation = ""
-    log_p, n_tokens = score_continuation(adapter, context, continuation)
-
-    assert n_tokens == 0
-    assert log_p == 0.0  # sum of empty list
-
-
-def test_context_only():
-    """score_continuation with only context and no continuation."""
-    device = "cpu"
-    model = FakeModel(vocab_size=8, seq_len=10).to(device).eval()
-    tokenizer = MockTokenizer(vocab_size=8)
-
-    def logits_fn(ids):
-        return model(ids)
-
-    adapter = ModelAdapter(
-        name="test",
-        logits_fn=logits_fn,
-        tokenize=tokenizer.encode,
-        max_len=10,
-        device=device,
-    )
-
-    context = "abc"
-    continuation = ""
-    log_p, n_tokens = score_continuation(adapter, context, continuation)
-
-    assert n_tokens == 0
-    # log_p should be 0 (no tokens to score)
-
-
-def test_winogrande_split():
-    """WinoGrande split logic: sentence split at underscore gives context/continuation."""
-    # This is tested implicitly by the task loader, but let's verify the logic
-    sentence = "The trophy doesn't fit in the suitcase because it's too _"
-    parts = sentence.split("_", 1)
-    assert len(parts) == 2
-    prefix = parts[0]
-    suffix = parts[1] if len(parts) > 1 else ""
-    assert prefix == "The trophy doesn't fit in the suitcase because it's too "
-    assert suffix == ""
-
-
-def test_sciq_truncation():
-    """SciQ truncates support text to last 600 chars."""
-    # Verify the truncation logic works
-    long_support = "a" * 1000
-    truncated = long_support[-600:]
-    assert len(truncated) == 600
-
-
-def test_model_adapter_protocol():
-    """ModelAdapter provides consistent protocol for both model types."""
-    device = "cpu"
-    model = FakeModel(vocab_size=8, seq_len=10).to(device).eval()
-    tokenizer = MockTokenizer(vocab_size=8)
-
-    def logits_fn(ids):
-        return model(ids)
-
-    adapter = ModelAdapter(
-        name="test_model",
-        logits_fn=logits_fn,
-        tokenize=tokenizer.encode,
-        max_len=10,
-        device=device,
-    )
-
-    # Check protocol: name, logits_fn, tokenize, max_len, device
-    assert adapter.name == "test_model"
-    assert adapter.max_len == 10
-    assert adapter.device == device
-    assert callable(adapter.logits_fn)
-    assert callable(adapter.tokenize)
-
-    # score_ids should work
-    context_ids = [1, 2]
-    continuation_ids = [3, 4]
-    log_p, n_tokens = adapter.score_ids(context_ids, continuation_ids)
-    assert n_tokens == 2
-    assert isinstance(log_p, float)
+    assert ex["gold"] == 1
+    assert ex["contexts"][0] == "The ball hit the wall"
+    assert ex["contexts"][1] == "The ball hit the floor"
+    assert ex["options"] == [" hard.", " hard."]

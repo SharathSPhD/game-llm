@@ -54,23 +54,31 @@ class ModelAdapter:
 
         Returns: (sum_log_p_of_continuation, len_continuation_ids)
         """
-        # Concatenate and check truncation
+        # Concatenate and check truncation. At least one context token must
+        # survive truncation, because the first continuation token is scored
+        # from the logits at the last context position.
         all_ids = context_ids + continuation_ids
         if len(all_ids) > self.max_len:
-            # Truncate from the LEFT (context only)
-            keep = self.max_len - len(continuation_ids)
-            context_ids = context_ids[-keep:] if keep > 0 else []
+            keep = max(1, self.max_len - len(continuation_ids))
+            context_ids = context_ids[-keep:]
             all_ids = context_ids + continuation_ids
+        if not context_ids:
+            raise ValueError("score_ids requires a non-empty context")
 
         # One forward pass on full sequence
         all_tensor = torch.tensor([all_ids], dtype=torch.long, device=self.device)
         with torch.no_grad():
             logits = self.logits_fn(all_tensor)  # [1, seq_len, vocab_size]
 
-        # Slice the continuation positions from the logits
+        # A causal LM's logits at position i are the distribution over the
+        # token at position i+1, so continuation token k (absolute position
+        # n_context+k) is scored from logits[n_context+k-1]. Reading logits at
+        # the token's own position instead scores nothing meaningful — the
+        # first rung sweep returned exact chance on every task this way.
         n_context = len(context_ids)
-        continuation_start = n_context
-        continuation_logits = logits[0, continuation_start : continuation_start + len(continuation_ids), :]
+        continuation_logits = logits[
+            0, n_context - 1 : n_context - 1 + len(continuation_ids), :
+        ]
 
         # Log-softmax and gather
         log_probs = torch.nn.functional.log_softmax(continuation_logits, dim=-1)
@@ -271,36 +279,33 @@ def load_piqa(max_examples: int | None = None, seed: int = 42) -> list[dict]:
     return sample_examples(examples, max_examples, seed)
 
 
+def winogrande_example(
+    sentence: str, option1: str, option2: str, answer: str
+) -> dict | None:
+    """Partial-evaluation form: each option fills the blank to make its own
+    context, and the sentence's shared suffix is the scored continuation. The
+    first version scored one identical (context, suffix) pair twice, which
+    reduced every model to the gold marginal (0.493 across the whole sweep)."""
+    if "_" not in sentence:
+        return None
+    prefix, suffix = sentence.split("_", 1)
+    return {
+        "contexts": [prefix + option1, prefix + option2],
+        "options": [suffix, suffix],
+        "gold": 0 if answer == "1" else 1,
+    }
+
+
 def load_winogrande(max_examples: int | None = None, seed: int = 42) -> list[dict]:
     """WinoGrande: coreference resolution via loglikelihood of filled pronoun context."""
     ds = load_dataset("allenai/winogrande", "winogrande_xl", split="validation")
     examples = []
     for ex in ds:
-        sentence = ex["sentence"]
-        option1 = ex["option1"]
-        answer = ex["answer"]  # "1" or "2"
-
-        # Split at underscore: context = prefix with blank, continuation = suffix
-        if "_" not in sentence:
-            continue
-        parts = sentence.split("_", 1)
-        prefix = parts[0]
-        suffix = parts[1] if len(parts) > 1 else ""
-
-        # Two options: fill the blank with option1 or option2
-        context_opt1 = prefix + option1
-
-        gold = 0 if answer == "1" else 1
-
-        examples.append(
-            {
-                "context": context_opt1,
-                "continuation": suffix,
-                "options": [suffix, suffix],  # Both complete the same suffix
-                "gold": gold,
-                "winogrande": True,  # Flag for special handling
-            }
+        made = winogrande_example(
+            ex["sentence"], ex["option1"], ex["option2"], ex["answer"]
         )
+        if made is not None:
+            examples.append(made)
 
     return sample_examples(examples, max_examples, seed)
 
@@ -356,7 +361,7 @@ def load_mmlu(max_examples: int | None = None, seed: int = 42) -> list[dict]:
     examples = []
     for ex in ds:
         question = ex["question"]
-        choices = [ex[f"choice{i}"] for i in range(4)]
+        choices = ex["choices"]
         answer = ex["answer"]  # 0-3 index
         context = f"Question: {question}\nAnswer:"
         options = [f" {c}" for c in choices]
@@ -383,13 +388,17 @@ def eval_multiple_choice(adapter: ModelAdapter, examples: list[dict]) -> dict[st
     acc = 0
     acc_norm = 0
     for ex in examples:
-        context = ex["context"]
         options = ex["options"]
         gold = ex["gold"]
+        # Most tasks share one context across options; winogrande's partial-
+        # evaluation convention inverts that — each option fills the blank to
+        # form its own context and the shared suffix is what gets scored — so
+        # an example may carry per-option contexts instead.
+        contexts = ex.get("contexts") or [ex["context"]] * len(options)
 
         scores = []
-        for option in options:
-            log_p, _ = score_continuation(adapter, context, option)
+        for ctx, option in zip(contexts, options, strict=True):
+            log_p, _ = score_continuation(adapter, ctx, option)
             scores.append(log_p)
 
         # Raw accuracy: argmax of log sums
@@ -422,16 +431,20 @@ def eval_lambada(adapter: ModelAdapter, examples: list[dict]) -> dict[str, float
         all_ids = context_ids + continuation_ids
 
         if len(all_ids) > adapter.max_len:
-            keep = adapter.max_len - len(continuation_ids)
-            context_ids = context_ids[-keep:] if keep > 0 else []
+            keep = max(1, adapter.max_len - len(continuation_ids))
+            context_ids = context_ids[-keep:]
             all_ids = context_ids + continuation_ids
 
         all_tensor = torch.tensor([all_ids], dtype=torch.long, device=adapter.device)
         with torch.no_grad():
             logits = adapter.logits_fn(all_tensor)
 
+        # Same shift as score_ids: the prediction for continuation token k
+        # lives at logits position n_context + k - 1.
         n_context = len(context_ids)
-        continuation_logits = logits[0, n_context : n_context + len(continuation_ids), :]
+        continuation_logits = logits[
+            0, n_context - 1 : n_context - 1 + len(continuation_ids), :
+        ]
         greedy_preds = torch.argmax(continuation_logits, dim=-1).cpu().tolist()
 
         if greedy_preds == continuation_ids:
