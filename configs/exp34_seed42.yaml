@@ -1,0 +1,60 @@
+# exp32 (SPEC 0018): compute-matched weight-tying.
+#
+# F44 established that the parity result was matched in parameters and iteration
+# count while the tied block cost 4.92x an explicit layer, so parity was bought
+# with roughly five times the arithmetic. This asks the question that finding
+# opens and the earlier design could not: at IDENTICAL compute, what does weight
+# tying cost in quality, and what does it save in parameters?
+#
+# The tied block is set to d_model 768, exactly the explicit baseline's width, so
+# one iteration costs one explicit layer and twelve iterations cost twelve layers.
+# Compute is then equal by construction rather than by calibration. The tied model
+# holds 7.1M layer parameters against the baseline's 85.1M — a twelvefold
+# reduction — so if quality survives, weight tying is a large parameter win at no
+# compute cost, which is a sharper and more useful claim than the parity it
+# replaces.
+seed: 42
+data:
+  # The identical token cache exp10/exp13 trained on, so data, order and batch
+  # composition are the same and only the architecture differs.
+  token_cache_file: data/cache/tokstream_e2284a399b14d54ff8c1e192.pt
+  batch_size: 32
+training:
+  # Identical to exp13's B1 arm so the only difference from the 4.92x-compute
+  # model is the width that makes compute equal.
+  num_steps: 10000
+  lr: 3e-4
+  weight_decay: 0.01
+  grad_clip: 1.0
+  log_every: 200
+eval:
+  telemetry_batches: 25
+  blimp:
+    num_phenomena: 5
+    pairs_per_phenomenon: 200
+control:
+  note: "depth-conditioned tied block, identical to exp32 C1 apart from per-iteration modulation; see SPEC 0019"
+baseline:
+  note: "exp10 seed42 A1 explicit d=768 x 12 layers: blimp 0.682, 123.8M params, 84.9M compute units/token"
+  blimp_accuracy: 0.682
+  explicit_a1_blimp: 0.682
+save_checkpoints: true
+arms:
+  D1:
+    kind: anytime_dcond
+    supervise_at: [4, 8, 12]
+    supervise_weights: [0.15, 0.3, 1.0]
+    model_config:
+      vocab_size: 50257
+      d_model: 768        # identical to the explicit baseline: 1 iteration == 1 layer
+      n_heads: 12
+      d_ff: 3072
+      max_seq_len: 128
+      deq_max_iter: 12
+      deq_tol: 1.0e-3
+      solver: anderson
+      jfb: false
+      dropout: 0.1
+      spectral_norm: true
+      residual_damping: 0.2
+      map_form: postln
