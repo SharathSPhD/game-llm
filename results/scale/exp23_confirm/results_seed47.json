@@ -1,0 +1,60 @@
+{
+  "n_tasks": 120,
+  "length_bias": {
+    "cross_exam": {
+      "mean_length_of_winner": 1192.7,
+      "mean_length_of_field": 1237.9
+    },
+    "leave_one_out": {
+      "mean_length_of_winner": 1189.8,
+      "mean_length_of_field": 1237.9
+    },
+    "self_preference": {
+      "mean_length_of_winner": 1266.0,
+      "mean_length_of_field": 1237.9
+    },
+    "equilibrium": {
+      "mean_length_of_winner": 1192.7,
+      "mean_length_of_field": 1237.9
+    }
+  },
+  "seed": 47,
+  "players": [
+    "Qwen/Qwen2.5-1.5B-Instruct",
+    "Qwen/Qwen3-1.7B",
+    "Qwen/Qwen2.5-Math-1.5B-Instruct",
+    "Qwen/Qwen2.5-Coder-1.5B-Instruct"
+  ],
+  "accuracy": {
+    "cross_exam": 0.5917,
+    "equilibrium": 0.5917,
+    "leave_one_out": 0.5917,
+    "majority": 0.65,
+    "oracle": 0.8417,
+    "self_preference": 0.5583,
+    "single::Qwen/Qwen2.5-1.5B-Instruct": 0.575,
+    "single::Qwen/Qwen2.5-Coder-1.5B-Instruct": 0.5167,
+    "single::Qwen/Qwen2.5-Math-1.5B-Instruct": 0.6167,
+    "single::Qwen/Qwen3-1.7B": 0.3083
+  },
+  "per_domain": {
+    "math": {
+      "cross_exam": 0.85,
+      "leave_one_out": 0.85,
+      "self_preference": 0.8333,
+      "equilibrium": 0.85,
+      "majority": 0.8167,
+      "oracle": 0.9167,
+      "n": 60
+    },
+    "general": {
+      "cross_exam": 0.3333,
+      "leave_one_out": 0.3333,
+      "self_preference": 0.2833,
+      "equilibrium": 0.3333,
+      "majority": 0.4833,
+      "oracle": 0.7667,
+      "n": 60
+    }
+  }
+}

@@ -1,0 +1,104 @@
+{
+  "seeds": [
+    "seed45",
+    "seed46",
+    "seed47"
+  ],
+  "router": {
+    "math": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+    "general": "Qwen/Qwen2.5-1.5B-Instruct"
+  },
+  "protocol": "SPEC 0017 pre-registered uniform/tau=1.0; Amendment 1 primary comparison is the router with majority fallback, threshold z >= 2.807",
+  "per_seed": {
+    "seed45": {
+      "mechanism": 0.6,
+      "router": 0.5833,
+      "fallback_router": 0.6083,
+      "margin_vs_plain": 0.0167,
+      "margin_vs_fallback": -0.0083,
+      "decomposition": {
+        "loss_vs_plain_router": 1,
+        "win_abstain": 3
+      },
+      "paired_vs_plain": {
+        "wins": 3,
+        "losses": 1,
+        "z": 1.0
+      },
+      "per_domain": {
+        "math": {
+          "mechanism": 0.8167,
+          "router": 0.8167
+        },
+        "general": {
+          "mechanism": 0.3833,
+          "router": 0.35
+        }
+      }
+    },
+    "seed46": {
+      "mechanism": 0.5917,
+      "router": 0.5667,
+      "fallback_router": 0.5917,
+      "margin_vs_plain": 0.025,
+      "margin_vs_fallback": 0.0,
+      "decomposition": {
+        "win_abstain": 3
+      },
+      "paired_vs_plain": {
+        "wins": 3,
+        "losses": 0,
+        "z": 1.7320508075688774
+      },
+      "per_domain": {
+        "math": {
+          "mechanism": 0.8,
+          "router": 0.7833
+        },
+        "general": {
+          "mechanism": 0.3833,
+          "router": 0.35
+        }
+      }
+    },
+    "seed47": {
+      "mechanism": 0.6583,
+      "router": 0.65,
+      "fallback_router": 0.6583,
+      "margin_vs_plain": 0.0083,
+      "margin_vs_fallback": 0.0,
+      "decomposition": {
+        "loss_vs_plain_router": 1,
+        "win_abstain": 1,
+        "win_override": 1
+      },
+      "paired_vs_plain": {
+        "wins": 2,
+        "losses": 1,
+        "z": 0.5773502691896258
+      },
+      "per_domain": {
+        "math": {
+          "mechanism": 0.85,
+          "router": 0.85
+        },
+        "general": {
+          "mechanism": 0.4667,
+          "router": 0.45
+        }
+      }
+    }
+  },
+  "mean_margin_vs_fallback": -0.0028,
+  "pooled_vs_plain_router": {
+    "wins": 8,
+    "losses": 2,
+    "z": 1.9
+  },
+  "pooled_vs_fallback": {
+    "wins": 1,
+    "losses": 2,
+    "z": -0.58
+  },
+  "success": false
+}

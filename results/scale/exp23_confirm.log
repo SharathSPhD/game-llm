@@ -2,3 +2,234 @@
 Loading weights:   0%|          | 0/338 [00:00<?, ?it/s]Loading weights:   0%|          | 1/338 [00:02<16:39,  2.97s/it]Loading weights:   1%|▏         | 5/338 [00:03<02:37,  2.12it/s]Loading weights:   2%|▏         | 7/338 [00:04<03:29,  1.58it/s]Loading weights:  17%|█▋        | 58/338 [00:14<01:02,  4.50it/s]Loading weights:  83%|████████▎ | 279/338 [00:16<00:02, 24.74it/s]Loading weights:  84%|████████▍ | 284/338 [00:17<00:02, 21.63it/s]Loading weights: 100%|██████████| 338/338 [00:17<00:00, 18.81it/s]
 generated: Qwen/Qwen2.5-1.5B-Instruct
 Loading weights:   0%|          | 0/311 [00:00<?, ?it/s]Loading weights:   0%|          | 1/311 [00:03<18:45,  3.63s/it]Loading weights:   1%|          | 2/311 [00:07<19:21,  3.76s/it]Loading weights:   1%|▏         | 4/311 [00:07<07:24,  1.45s/it]Loading weights:   2%|▏         | 5/311 [00:13<14:31,  2.85s/it]Loading weights:   2%|▏         | 6/311 [00:13<10:15,  2.02s/it]Loading weights:  36%|███▌      | 111/311 [00:19<00:18, 10.63it/s]Loading weights:  36%|███▌      | 112/311 [00:19<00:18, 10.54it/s]Loading weights:  68%|██████▊   | 211/311 [00:19<00:03, 29.47it/s]Loading weights:  77%|███████▋  | 241/311 [00:21<00:02, 26.35it/s]Loading weights:  84%|████████▍ | 262/311 [00:22<00:01, 24.91it/s]Loading weights:  89%|████████▉ | 277/311 [00:22<00:01, 24.95it/s]Loading weights:  93%|█████████▎| 289/311 [00:23<00:01, 21.12it/s]Loading weights:  97%|█████████▋| 301/311 [00:24<00:00, 23.43it/s]Loading weights:  99%|█████████▉| 309/311 [00:24<00:00, 22.64it/s]Loading weights: 100%|██████████| 311/311 [00:24<00:00, 12.72it/s]
+generated: Qwen/Qwen3-1.7B
+Loading weights:   0%|          | 0/338 [00:00<?, ?it/s]Loading weights:   0%|          | 1/338 [00:03<20:00,  3.56s/it]Loading weights:   1%|▏         | 5/338 [00:09<10:19,  1.86s/it]Loading weights:  43%|████▎     | 147/338 [00:10<00:08, 22.97it/s]Loading weights:  53%|█████▎    | 179/338 [00:12<00:08, 18.17it/s]Loading weights:  64%|██████▍   | 218/338 [00:13<00:05, 23.26it/s]Loading weights:  69%|██████▉   | 233/338 [00:13<00:04, 25.14it/s]Loading weights:  72%|███████▏  | 245/338 [00:18<00:08, 11.31it/s]Loading weights: 100%|██████████| 338/338 [00:18<00:00, 18.24it/s]
+generated: Qwen/Qwen2.5-Math-1.5B-Instruct
+Loading weights:   0%|          | 0/338 [00:00<?, ?it/s]Loading weights:   0%|          | 1/338 [00:03<17:25,  3.10s/it]Loading weights:   1%|          | 2/338 [00:03<08:08,  1.45s/it]Loading weights:   1%|▏         | 5/338 [00:03<02:30,  2.21it/s]Loading weights:   2%|▏         | 6/338 [00:06<05:24,  1.02it/s]Loading weights:  19%|█▉        | 64/338 [00:06<00:12, 21.31it/s]Loading weights:  23%|██▎       | 78/338 [00:17<00:58,  4.43it/s]Loading weights: 100%|██████████| 338/338 [00:17<00:00, 19.83it/s]
+generated: Qwen/Qwen2.5-Coder-1.5B-Instruct
+Loading weights:   0%|          | 0/338 [00:00<?, ?it/s]Loading weights:   0%|          | 1/338 [00:03<17:16,  3.07s/it]Loading weights:   1%|          | 3/338 [00:03<04:44,  1.18it/s]Loading weights:   1%|▏         | 5/338 [00:03<02:30,  2.21it/s]Loading weights:   2%|▏         | 7/338 [00:03<02:02,  2.71it/s]Loading weights:   7%|▋         | 24/338 [00:08<01:23,  3.74it/s]Loading weights:  33%|███▎      | 113/338 [00:08<00:08, 26.10it/s]Loading weights:  39%|███▉      | 133/338 [00:13<00:18, 11.26it/s]Loading weights:  75%|███████▍  | 252/338 [00:16<00:04, 21.47it/s]Loading weights:  96%|█████████▌| 324/338 [00:16<00:00, 31.16it/s]Loading weights: 100%|█████████▉| 337/338 [00:17<00:00, 33.01it/s]Loading weights: 100%|██████████| 338/338 [00:17<00:00, 19.80it/s]
+scored by: Qwen/Qwen2.5-1.5B-Instruct
+Loading weights:   0%|          | 0/311 [00:00<?, ?it/s]Loading weights:   0%|          | 1/311 [00:07<37:58,  7.35s/it]Loading weights:   2%|▏         | 5/311 [00:07<05:43,  1.12s/it]Loading weights:   2%|▏         | 7/311 [00:08<04:55,  1.03it/s]Loading weights:  12%|█▏        | 38/311 [00:09<00:30,  8.91it/s]Loading weights:  14%|█▍        | 43/311 [00:12<00:55,  4.81it/s]Loading weights:  36%|███▋      | 113/311 [00:14<00:13, 14.55it/s]Loading weights:  38%|███▊      | 117/311 [00:17<00:20,  9.63it/s]Loading weights:  65%|██████▌   | 203/311 [00:17<00:04, 26.50it/s]Loading weights:  73%|███████▎  | 226/311 [00:18<00:03, 24.58it/s]Loading weights:  78%|███████▊  | 243/311 [00:19<00:02, 25.16it/s]Loading weights:  82%|████████▏ | 256/311 [00:19<00:02, 25.14it/s]Loading weights:  86%|████████▌ | 266/311 [00:20<00:01, 22.87it/s]Loading weights:  88%|████████▊ | 273/311 [00:20<00:01, 23.15it/s]Loading weights:  90%|████████▉ | 279/311 [00:20<00:01, 23.46it/s]Loading weights:  91%|█████████▏| 284/311 [00:21<00:01, 16.58it/s]Loading weights:  94%|█████████▍| 293/311 [00:21<00:00, 19.20it/s]Loading weights:  97%|█████████▋| 302/311 [00:22<00:00, 23.64it/s]Loading weights:  99%|█████████▊| 307/311 [00:22<00:00, 22.92it/s]Loading weights: 100%|██████████| 311/311 [00:22<00:00, 13.93it/s]
+scored by: Qwen/Qwen3-1.7B
+Loading weights:   0%|          | 0/338 [00:00<?, ?it/s]Loading weights:   0%|          | 1/338 [00:04<23:42,  4.22s/it]Loading weights:   3%|▎         | 10/338 [00:13<06:54,  1.26s/it]Loading weights:  43%|████▎     | 147/338 [00:16<00:15, 12.00it/s]Loading weights: 100%|██████████| 338/338 [00:16<00:00, 19.95it/s]
+scored by: Qwen/Qwen2.5-Math-1.5B-Instruct
+Loading weights:   0%|          | 0/338 [00:00<?, ?it/s]Loading weights:   0%|          | 1/338 [00:16<1:34:59, 16.91s/it]Loading weights: 100%|██████████| 338/338 [00:16<00:00, 19.95it/s]
+scored by: Qwen/Qwen2.5-Coder-1.5B-Instruct
+{
+  "n_tasks": 120,
+  "length_bias": {
+    "cross_exam": {
+      "mean_length_of_winner": 1194.6,
+      "mean_length_of_field": 1243.3
+    },
+    "leave_one_out": {
+      "mean_length_of_winner": 1188.7,
+      "mean_length_of_field": 1243.3
+    },
+    "self_preference": {
+      "mean_length_of_winner": 1262.7,
+      "mean_length_of_field": 1243.3
+    },
+    "equilibrium": {
+      "mean_length_of_winner": 1190.5,
+      "mean_length_of_field": 1243.3
+    }
+  },
+  "seed": 45,
+  "players": [
+    "Qwen/Qwen2.5-1.5B-Instruct",
+    "Qwen/Qwen3-1.7B",
+    "Qwen/Qwen2.5-Math-1.5B-Instruct",
+    "Qwen/Qwen2.5-Coder-1.5B-Instruct"
+  ],
+  "accuracy": {
+    "cross_exam": 0.475,
+    "equilibrium": 0.4833,
+    "leave_one_out": 0.4667,
+    "majority": 0.5833,
+    "oracle": 0.7333,
+    "self_preference": 0.4333,
+    "single::Qwen/Qwen2.5-1.5B-Instruct": 0.5333,
+    "single::Qwen/Qwen2.5-Coder-1.5B-Instruct": 0.4333,
+    "single::Qwen/Qwen2.5-Math-1.5B-Instruct": 0.525,
+    "single::Qwen/Qwen3-1.7B": 0.2167
+  },
+  "per_domain": {
+    "math": {
+      "cross_exam": 0.7667,
+      "leave_one_out": 0.75,
+      "self_preference": 0.75,
+      "equilibrium": 0.7667,
+      "majority": 0.7833,
+      "oracle": 0.8833,
+      "n": 60
+    },
+    "general": {
+      "cross_exam": 0.1833,
+      "leave_one_out": 0.1833,
+      "self_preference": 0.1167,
+      "equilibrium": 0.2,
+      "majority": 0.3833,
+      "oracle": 0.5833,
+      "n": 60
+    }
+  }
+}
+2026-08-28T23:12:34+01:00 === seed 45 rc=0 ===
+2026-08-28T23:12:34+01:00 === exp23 confirm seed 46 ===
+Loading weights:   0%|          | 0/338 [00:00<?, ?it/s]Loading weights:   0%|          | 1/338 [00:02<16:11,  2.88s/it]Loading weights:   1%|▏         | 5/338 [00:03<02:33,  2.18it/s]Loading weights:   3%|▎         | 11/338 [00:03<01:06,  4.92it/s]Loading weights:   5%|▌         | 17/338 [00:03<00:37,  8.49it/s]Loading weights:   7%|▋         | 22/338 [00:06<01:29,  3.54it/s]Loading weights:  29%|██▉       | 98/338 [00:06<00:09, 26.14it/s]Loading weights:  33%|███▎      | 111/338 [00:07<00:07, 28.68it/s]Loading weights:  36%|███▌      | 120/338 [00:08<00:12, 17.87it/s]Loading weights:  37%|███▋      | 124/338 [00:09<00:13, 16.04it/s]Loading weights:  51%|█████     | 171/338 [00:11<00:08, 20.30it/s]Loading weights:  51%|█████▏    | 174/338 [00:11<00:08, 20.28it/s]Loading weights:  63%|██████▎   | 214/338 [00:13<00:06, 19.70it/s]Loading weights:  80%|████████  | 272/338 [00:16<00:03, 20.25it/s]Loading weights:  90%|█████████ | 305/338 [00:16<00:01, 27.32it/s]Loading weights: 100%|██████████| 338/338 [00:16<00:00, 20.59it/s]
+generated: Qwen/Qwen2.5-1.5B-Instruct
+Loading weights:   0%|          | 0/311 [00:00<?, ?it/s]Loading weights:   0%|          | 1/311 [00:16<1:26:31, 16.75s/it]Loading weights:  59%|█████▉    | 183/311 [00:18<00:09, 13.61it/s]Loading weights:  69%|██████▉   | 215/311 [00:18<00:05, 16.47it/s]Loading weights:  73%|███████▎  | 226/311 [00:19<00:04, 17.05it/s]Loading weights:  75%|███████▍  | 233/311 [00:19<00:04, 16.65it/s]Loading weights:  79%|███████▉  | 246/311 [00:19<00:03, 18.78it/s]Loading weights:  81%|████████  | 251/311 [00:20<00:03, 17.09it/s]Loading weights:  83%|████████▎ | 258/311 [00:20<00:02, 17.83it/s]Loading weights:  85%|████████▍ | 264/311 [00:21<00:02, 16.43it/s]Loading weights:  88%|████████▊ | 275/311 [00:21<00:01, 20.14it/s]Loading weights:  90%|█████████ | 280/311 [00:21<00:01, 21.62it/s]Loading weights:  91%|█████████▏| 284/311 [00:22<00:01, 14.56it/s]Loading weights:  96%|█████████▋| 300/311 [00:22<00:00, 24.07it/s]Loading weights:  98%|█████████▊| 305/311 [00:23<00:00, 21.27it/s]Loading weights: 100%|██████████| 311/311 [00:23<00:00, 13.50it/s]
+generated: Qwen/Qwen3-1.7B
+Loading weights:   0%|          | 0/338 [00:00<?, ?it/s]Loading weights:   0%|          | 1/338 [00:18<1:42:00, 18.16s/it]Loading weights:  82%|████████▏ | 277/338 [00:20<00:03, 18.25it/s]Loading weights:  86%|████████▌ | 289/338 [00:20<00:02, 19.13it/s]Loading weights: 100%|██████████| 338/338 [00:20<00:00, 16.29it/s]
+generated: Qwen/Qwen2.5-Math-1.5B-Instruct
+Loading weights:   0%|          | 0/338 [00:00<?, ?it/s]Loading weights:   0%|          | 1/338 [00:02<15:02,  2.68s/it]Loading weights:   1%|          | 2/338 [00:02<06:42,  1.20s/it]Loading weights:   1%|▏         | 5/338 [00:02<02:04,  2.68it/s]Loading weights:   2%|▏         | 7/338 [00:04<02:45,  2.00it/s]Loading weights:  14%|█▍        | 49/338 [00:07<00:33,  8.51it/s]Loading weights:  28%|██▊       | 94/338 [00:11<00:23, 10.38it/s]Loading weights:  64%|██████▎   | 215/338 [00:12<00:04, 26.89it/s]Loading weights:  65%|██████▍   | 219/338 [00:13<00:04, 24.95it/s]Loading weights:  79%|███████▉  | 267/338 [00:13<00:01, 36.72it/s]Loading weights:  82%|████████▏ | 278/338 [00:14<00:02, 27.94it/s]Loading weights:  86%|████████▌ | 291/338 [00:15<00:01, 30.64it/s]Loading weights:  90%|████████▉ | 303/338 [00:15<00:01, 32.97it/s]Loading weights:  92%|█████████▏| 310/338 [00:15<00:00, 29.91it/s]Loading weights:  93%|█████████▎| 316/338 [00:16<00:01, 19.40it/s]Loading weights:  97%|█████████▋| 329/338 [00:16<00:00, 24.51it/s]Loading weights: 100%|██████████| 338/338 [00:16<00:00, 20.03it/s]
+generated: Qwen/Qwen2.5-Coder-1.5B-Instruct
+Loading weights:   0%|          | 0/338 [00:00<?, ?it/s]Loading weights:   0%|          | 1/338 [00:05<33:28,  5.96s/it]Loading weights:  19%|█▉        | 65/338 [00:06<00:18, 14.97it/s]Loading weights:  27%|██▋       | 91/338 [00:09<00:21, 11.38it/s]Loading weights:  40%|███▉      | 134/338 [00:09<00:10, 20.28it/s]Loading weights:  45%|████▍     | 152/338 [00:10<00:09, 19.41it/s]Loading weights:  49%|████▊     | 164/338 [00:11<00:09, 19.10it/s]Loading weights:  51%|█████     | 173/338 [00:13<00:13, 11.96it/s]Loading weights:  63%|██████▎   | 214/338 [00:14<00:06, 20.66it/s]Loading weights:  69%|██████▊   | 232/338 [00:16<00:07, 14.75it/s]Loading weights:  83%|████████▎ | 279/338 [00:16<00:02, 26.01it/s]Loading weights:  85%|████████▌ | 288/338 [00:17<00:02, 24.61it/s]Loading weights:  87%|████████▋ | 295/338 [00:17<00:01, 21.82it/s]Loading weights:  90%|████████▉ | 303/338 [00:18<00:01, 23.20it/s]Loading weights:  91%|█████████ | 308/338 [00:18<00:01, 21.99it/s]Loading weights:  92%|█████████▏| 312/338 [00:19<00:01, 13.63it/s]Loading weights: 100%|██████████| 338/338 [00:19<00:00, 17.35it/s]
+scored by: Qwen/Qwen2.5-1.5B-Instruct
+Loading weights:   0%|          | 0/311 [00:00<?, ?it/s]Loading weights:   0%|          | 1/311 [00:04<22:32,  4.36s/it]Loading weights:   1%|          | 2/311 [00:08<22:01,  4.28s/it]Loading weights:   2%|▏         | 5/311 [00:08<06:25,  1.26s/it]Loading weights:   2%|▏         | 6/311 [00:11<07:59,  1.57s/it]Loading weights:   2%|▏         | 7/311 [00:15<11:08,  2.20s/it]Loading weights:  32%|███▏      | 101/311 [00:17<00:17, 11.77it/s]Loading weights:  47%|████▋     | 146/311 [00:20<00:12, 13.18it/s]Loading weights:  65%|██████▍   | 202/311 [00:20<00:04, 21.84it/s]Loading weights:  68%|██████▊   | 213/311 [00:21<00:04, 20.54it/s]Loading weights:  71%|███████   | 221/311 [00:21<00:04, 19.95it/s]Loading weights:  74%|███████▍  | 231/311 [00:22<00:04, 19.57it/s]Loading weights:  76%|███████▌  | 236/311 [00:22<00:03, 19.20it/s]Loading weights:  79%|███████▉  | 247/311 [00:22<00:02, 23.19it/s]Loading weights:  81%|████████  | 252/311 [00:24<00:04, 12.64it/s]Loading weights:  88%|████████▊ | 275/311 [00:25<00:01, 18.48it/s]Loading weights:  92%|█████████▏| 285/311 [00:25<00:01, 22.24it/s]Loading weights:  93%|█████████▎| 290/311 [00:25<00:00, 22.33it/s]Loading weights:  95%|█████████▍| 295/311 [00:25<00:00, 21.26it/s]Loading weights:  97%|█████████▋| 301/311 [00:26<00:00, 21.81it/s]Loading weights:  98%|█████████▊| 305/311 [00:26<00:00, 18.92it/s]Loading weights: 100%|██████████| 311/311 [00:26<00:00, 11.80it/s]
+scored by: Qwen/Qwen3-1.7B
+Loading weights:   0%|          | 0/338 [00:00<?, ?it/s]Loading weights:   0%|          | 1/338 [00:02<16:10,  2.88s/it]Loading weights:   1%|          | 2/338 [00:03<07:40,  1.37s/it]Loading weights:   1%|▏         | 5/338 [00:03<02:20,  2.37it/s]Loading weights:   2%|▏         | 7/338 [00:03<01:58,  2.79it/s]Loading weights:   7%|▋         | 23/338 [00:04<00:27, 11.28it/s]Loading weights:  10%|█         | 34/338 [00:04<00:19, 15.86it/s]Loading weights:  14%|█▍        | 48/338 [00:10<01:04,  4.53it/s]Loading weights:  51%|█████     | 171/338 [00:10<00:05, 29.05it/s]Loading weights:  59%|█████▊    | 198/338 [00:15<00:08, 15.82it/s]Loading weights:  87%|████████▋ | 293/338 [00:15<00:01, 31.77it/s]Loading weights:  97%|█████████▋| 327/338 [00:16<00:00, 29.05it/s]Loading weights: 100%|██████████| 338/338 [00:16<00:00, 19.91it/s]
+scored by: Qwen/Qwen2.5-Math-1.5B-Instruct
+Loading weights:   0%|          | 0/338 [00:00<?, ?it/s]Loading weights:   0%|          | 1/338 [00:02<16:49,  3.00s/it]Loading weights:   1%|          | 3/338 [00:04<06:46,  1.21s/it]Loading weights:   2%|▏         | 6/338 [00:04<02:45,  2.01it/s]Loading weights:  12%|█▏        | 39/338 [00:04<00:15, 19.03it/s]Loading weights:  14%|█▎        | 46/338 [00:06<00:28, 10.30it/s]Loading weights:  23%|██▎       | 77/338 [00:06<00:11, 22.33it/s]Loading weights:  25%|██▌       | 86/338 [00:07<00:12, 20.16it/s]Loading weights:  28%|██▊       | 96/338 [00:08<00:15, 16.09it/s]Loading weights:  30%|██▉       | 101/338 [00:11<00:35,  6.77it/s]Loading weights:  54%|█████▍    | 183/338 [00:11<00:05, 28.35it/s]Loading weights:  60%|██████    | 203/338 [00:12<00:05, 23.96it/s]Loading weights:  64%|██████▍   | 217/338 [00:13<00:05, 21.66it/s]Loading weights:  67%|██████▋   | 228/338 [00:17<00:09, 11.07it/s]Loading weights:  72%|███████▏  | 244/338 [00:17<00:06, 14.19it/s]Loading weights:  90%|█████████ | 305/338 [00:17<00:01, 31.59it/s]Loading weights:  94%|█████████▍| 319/338 [00:18<00:00, 28.82it/s]Loading weights:  98%|█████████▊| 330/338 [00:19<00:00, 26.44it/s]Loading weights: 100%|██████████| 338/338 [00:19<00:00, 17.70it/s]
+scored by: Qwen/Qwen2.5-Coder-1.5B-Instruct
+{
+  "n_tasks": 120,
+  "length_bias": {
+    "cross_exam": {
+      "mean_length_of_winner": 1179.8,
+      "mean_length_of_field": 1231.8
+    },
+    "leave_one_out": {
+      "mean_length_of_winner": 1172.0,
+      "mean_length_of_field": 1231.8
+    },
+    "self_preference": {
+      "mean_length_of_winner": 1220.8,
+      "mean_length_of_field": 1231.8
+    },
+    "equilibrium": {
+      "mean_length_of_winner": 1179.7,
+      "mean_length_of_field": 1231.8
+    }
+  },
+  "seed": 46,
+  "players": [
+    "Qwen/Qwen2.5-1.5B-Instruct",
+    "Qwen/Qwen3-1.7B",
+    "Qwen/Qwen2.5-Math-1.5B-Instruct",
+    "Qwen/Qwen2.5-Coder-1.5B-Instruct"
+  ],
+  "accuracy": {
+    "cross_exam": 0.525,
+    "equilibrium": 0.5167,
+    "leave_one_out": 0.525,
+    "majority": 0.525,
+    "oracle": 0.6917,
+    "self_preference": 0.475,
+    "single::Qwen/Qwen2.5-1.5B-Instruct": 0.5,
+    "single::Qwen/Qwen2.5-Coder-1.5B-Instruct": 0.4417,
+    "single::Qwen/Qwen2.5-Math-1.5B-Instruct": 0.475,
+    "single::Qwen/Qwen3-1.7B": 0.1917
+  },
+  "per_domain": {
+    "math": {
+      "cross_exam": 0.8167,
+      "leave_one_out": 0.8167,
+      "self_preference": 0.8167,
+      "equilibrium": 0.8167,
+      "majority": 0.7333,
+      "oracle": 0.8833,
+      "n": 60
+    },
+    "general": {
+      "cross_exam": 0.2333,
+      "leave_one_out": 0.2333,
+      "self_preference": 0.1333,
+      "equilibrium": 0.2167,
+      "majority": 0.3167,
+      "oracle": 0.5,
+      "n": 60
+    }
+  }
+}
+2026-08-29T00:23:40+01:00 === seed 46 rc=0 ===
+2026-08-29T00:23:40+01:00 === exp23 confirm seed 47 ===
+Loading weights:   0%|          | 0/338 [00:00<?, ?it/s]Loading weights:   0%|          | 1/338 [00:02<16:17,  2.90s/it]Loading weights:   1%|▏         | 5/338 [00:03<02:34,  2.16it/s]Loading weights:   2%|▏         | 7/338 [00:06<05:36,  1.02s/it]Loading weights:  32%|███▏      | 107/338 [00:07<00:10, 22.36it/s]Loading weights:  39%|███▉      | 131/338 [00:09<00:11, 17.75it/s]Loading weights:  51%|█████     | 172/338 [00:10<00:06, 26.99it/s]Loading weights:  54%|█████▎    | 181/338 [00:12<00:08, 17.54it/s]Loading weights:  65%|██████▍   | 219/338 [00:12<00:04, 27.07it/s]Loading weights:  68%|██████▊   | 229/338 [00:15<00:07, 15.02it/s]Loading weights:  86%|████████▌ | 291/338 [00:15<00:01, 30.50it/s]Loading weights:  91%|█████████ | 307/338 [00:17<00:01, 18.93it/s]Loading weights: 100%|██████████| 338/338 [00:17<00:00, 19.01it/s]
+generated: Qwen/Qwen2.5-1.5B-Instruct
+Loading weights:   0%|          | 0/311 [00:00<?, ?it/s]Loading weights:   0%|          | 1/311 [00:10<54:53, 10.62s/it]Loading weights:  21%|██        | 64/311 [00:10<00:29,  8.42it/s]Loading weights:  37%|███▋      | 114/311 [00:17<00:24,  7.91it/s]Loading weights:  65%|██████▌   | 203/311 [00:17<00:05, 18.26it/s]Loading weights:  79%|███████▉  | 247/311 [00:19<00:03, 19.13it/s]Loading weights:  88%|████████▊ | 275/311 [00:20<00:01, 19.39it/s]Loading weights:  95%|█████████▍| 294/311 [00:22<00:00, 18.80it/s]Loading weights:  99%|█████████▊| 307/311 [00:22<00:00, 19.49it/s]Loading weights: 100%|██████████| 311/311 [00:22<00:00, 13.72it/s]
+generated: Qwen/Qwen3-1.7B
+Loading weights:   0%|          | 0/338 [00:00<?, ?it/s]Loading weights:   0%|          | 1/338 [00:03<17:52,  3.18s/it]Loading weights:   1%|▏         | 5/338 [00:03<02:47,  1.99it/s]Loading weights:   3%|▎         | 10/338 [00:04<02:07,  2.56it/s]Loading weights:  14%|█▍        | 47/338 [00:05<00:21, 13.26it/s]Loading weights:  15%|█▌        | 52/338 [00:08<00:38,  7.41it/s]Loading weights:  21%|██        | 70/338 [00:16<01:15,  3.57it/s]Loading weights: 100%|██████████| 338/338 [00:16<00:00, 19.93it/s]
+generated: Qwen/Qwen2.5-Math-1.5B-Instruct
+Loading weights:   0%|          | 0/338 [00:00<?, ?it/s]Loading weights:   0%|          | 1/338 [00:03<19:07,  3.40s/it]Loading weights:   1%|          | 2/338 [00:03<08:22,  1.50s/it]Loading weights:   1%|▏         | 5/338 [00:03<02:35,  2.13it/s]Loading weights:   3%|▎         | 9/338 [00:05<02:24,  2.27it/s]Loading weights:  14%|█▍        | 48/338 [00:14<01:13,  3.96it/s]Loading weights:  64%|██████▍   | 218/338 [00:14<00:04, 25.12it/s]Loading weights:  72%|███████▏  | 242/338 [00:15<00:03, 24.96it/s]Loading weights:  77%|███████▋  | 259/338 [00:19<00:05, 15.18it/s]Loading weights:  93%|█████████▎| 313/338 [00:19<00:01, 23.17it/s]Loading weights:  97%|█████████▋| 329/338 [00:20<00:00, 22.12it/s]Loading weights: 100%|██████████| 338/338 [00:20<00:00, 16.17it/s]
+generated: Qwen/Qwen2.5-Coder-1.5B-Instruct
+Loading weights:   0%|          | 0/338 [00:00<?, ?it/s]Loading weights:   0%|          | 1/338 [00:03<19:04,  3.40s/it]Loading weights:   1%|          | 2/338 [00:03<08:27,  1.51s/it]Loading weights:   1%|▏         | 5/338 [00:03<02:37,  2.12it/s]Loading weights:   2%|▏         | 8/338 [00:06<03:31,  1.56it/s]Loading weights:  21%|██▏       | 72/338 [00:10<00:28,  9.28it/s]Loading weights:  48%|████▊     | 161/338 [00:11<00:06, 25.63it/s]Loading weights:  53%|█████▎    | 178/338 [00:11<00:06, 25.20it/s]Loading weights:  56%|█████▌    | 190/338 [00:12<00:06, 24.09it/s]Loading weights:  59%|█████▉    | 199/338 [00:14<00:09, 14.28it/s]Loading weights:  75%|███████▍  | 252/338 [00:18<00:06, 13.82it/s]Loading weights:  97%|█████████▋| 327/338 [00:19<00:00, 26.60it/s]Loading weights: 100%|██████████| 338/338 [00:19<00:00, 17.24it/s]
+scored by: Qwen/Qwen2.5-1.5B-Instruct
+Loading weights:   0%|          | 0/311 [00:00<?, ?it/s]Loading weights:   0%|          | 1/311 [00:09<46:40,  9.03s/it]Loading weights:   2%|▏         | 6/311 [00:09<05:47,  1.14s/it]Loading weights:  13%|█▎        | 39/311 [00:09<00:34,  7.93it/s]Loading weights:  17%|█▋        | 53/311 [00:18<01:22,  3.11it/s]Loading weights:  76%|███████▌  | 236/311 [00:18<00:03, 23.20it/s]Loading weights:  95%|█████████▍| 295/311 [00:22<00:00, 21.65it/s]Loading weights: 100%|██████████| 311/311 [00:22<00:00, 13.87it/s]
+scored by: Qwen/Qwen3-1.7B
+Loading weights:   0%|          | 0/338 [00:00<?, ?it/s]Loading weights:   0%|          | 1/338 [00:03<21:46,  3.88s/it]Loading weights:   8%|▊         | 27/338 [00:04<00:37,  8.37it/s]Loading weights:  10%|█         | 34/338 [00:10<01:35,  3.17it/s]Loading weights:  51%|█████     | 173/338 [00:10<00:06, 26.99it/s]Loading weights:  63%|██████▎   | 212/338 [00:16<00:08, 15.02it/s]Loading weights:  97%|█████████▋| 329/338 [00:16<00:00, 31.21it/s]Loading weights: 100%|██████████| 338/338 [00:16<00:00, 20.62it/s]
+scored by: Qwen/Qwen2.5-Math-1.5B-Instruct
+Loading weights:   0%|          | 0/338 [00:00<?, ?it/s]Loading weights:   0%|          | 1/338 [00:03<17:21,  3.09s/it]Loading weights:   1%|          | 2/338 [00:03<07:33,  1.35s/it]Loading weights:   1%|▏         | 5/338 [00:03<02:19,  2.38it/s]Loading weights:   3%|▎         | 9/338 [00:08<05:17,  1.03it/s]Loading weights:  43%|████▎     | 146/338 [00:09<00:07, 25.77it/s]Loading weights:  45%|████▌     | 153/338 [00:10<00:07, 25.03it/s]Loading weights:  50%|█████     | 170/338 [00:11<00:08, 19.86it/s]Loading weights:  51%|█████▏    | 174/338 [00:12<00:09, 17.59it/s]Loading weights:  63%|██████▎   | 214/338 [00:13<00:06, 20.30it/s]Loading weights:  64%|██████▍   | 217/338 [00:17<00:12,  9.97it/s]Loading weights: 100%|██████████| 338/338 [00:17<00:00, 19.46it/s]
+scored by: Qwen/Qwen2.5-Coder-1.5B-Instruct
+{
+  "n_tasks": 120,
+  "length_bias": {
+    "cross_exam": {
+      "mean_length_of_winner": 1192.7,
+      "mean_length_of_field": 1237.9
+    },
+    "leave_one_out": {
+      "mean_length_of_winner": 1189.8,
+      "mean_length_of_field": 1237.9
+    },
+    "self_preference": {
+      "mean_length_of_winner": 1266.0,
+      "mean_length_of_field": 1237.9
+    },
+    "equilibrium": {
+      "mean_length_of_winner": 1192.7,
+      "mean_length_of_field": 1237.9
+    }
+  },
+  "seed": 47,
+  "players": [
+    "Qwen/Qwen2.5-1.5B-Instruct",
+    "Qwen/Qwen3-1.7B",
+    "Qwen/Qwen2.5-Math-1.5B-Instruct",
+    "Qwen/Qwen2.5-Coder-1.5B-Instruct"
+  ],
+  "accuracy": {
+    "cross_exam": 0.5917,
+    "equilibrium": 0.5917,
+    "leave_one_out": 0.5917,
+    "majority": 0.65,
+    "oracle": 0.8417,
+    "self_preference": 0.5583,
+    "single::Qwen/Qwen2.5-1.5B-Instruct": 0.575,
+    "single::Qwen/Qwen2.5-Coder-1.5B-Instruct": 0.5167,
+    "single::Qwen/Qwen2.5-Math-1.5B-Instruct": 0.6167,
+    "single::Qwen/Qwen3-1.7B": 0.3083
+  },
+  "per_domain": {
+    "math": {
+      "cross_exam": 0.85,
+      "leave_one_out": 0.85,
+      "self_preference": 0.8333,
+      "equilibrium": 0.85,
+      "majority": 0.8167,
+      "oracle": 0.9167,
+      "n": 60
+    },
+    "general": {
+      "cross_exam": 0.3333,
+      "leave_one_out": 0.3333,
+      "self_preference": 0.2833,
+      "equilibrium": 0.3333,
+      "majority": 0.4833,
+      "oracle": 0.7667,
+      "n": 60
+    }
+  }
+}
+2026-08-29T01:36:33+01:00 === seed 47 rc=0 ===
+EXP23 CONFIRMATION COMPLETE

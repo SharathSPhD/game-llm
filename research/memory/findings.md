@@ -1318,3 +1318,46 @@ net-negative override the review reported from fold-fitted cells.
   whether the decomposition replicates.
 - **Status:** VALIDATED (author-verified recount and sweep) · supersedes F39's
   claim · Tarka RESOLVED with one reviewer figure corrected
+
+## F41 — Pre-registered confirmation: anchoring refuted, the system beats the baseline
+
+**Cycle 28 · 2026-08-29 · SPEC 0017 with Amendment 1 · seeds 45-47, 360 fresh questions · GB10**
+
+The confirmation ran on questions drawn after the protocol was frozen and scored
+by the amended scorer without further choices. Both halves of the amended
+protocol returned a clear answer, and they point in opposite directions.
+
+- **The anchored vote fails its criterion, as amended.** Mean margin against the
+  fallback router $-0.0028$; pooled paired 1 win to 2 losses, $z = -0.58$,
+  against a required $z \geq 2.807$. Per seed the margins are $-0.0083$,
+  $0.0000$ and $0.0000$: on two of three seeds the mechanism and the fair bar
+  select identically on every question. Across 360 fresh questions the council
+  overrode an answering champion exactly once. F39's offline margin was
+  extraction redundancy, F40 diagnosed it correctly, and the confirmation
+  settles it on data nothing was fitted to. The magnetic anchor at the token
+  level (F29) and at the answer level (here) is refuted by the same mechanism:
+  no per-question signal identifies when a council should overrule a competent
+  incumbent.
+- **The system beats the baseline model, confirmed and replicated.** Against the
+  single model the ladder designated in advance, the deployed system — route on
+  per-domain priors, fall back to a majority vote of the council when the
+  champion's answer cannot be parsed — scores **0.6194 against 0.5361**, a margin
+  of **+8.33 points**, paired **38 wins to 8 losses, $z = 4.42$**, clearing the
+  Bonferroni-corrected threshold of 2.807 that Amendment 1 imposed. Every seed is
+  positive: $+0.0750$, $+0.0917$, $+0.0416$. The development arena gave
+  $+8.06$ points, so the effect replicates at its measured size rather than
+  shrinking, which is the usual fate of a margin selected on its own data.
+- **What the kinetic core contributed, stated exactly.** The winning system is
+  the $\tau \to \infty$ limit of the magnetically anchored vote: the construction
+  supplied the form — an incumbent policy with a council held at a threshold —
+  and the confirmation says the useful setting of that threshold is the one that
+  never overrides. Magnetic mirror descent contributed the anchor's shape and the
+  proof that the limit contains the baseline, which is why the system cannot lose
+  to the model it routes on; it did not contribute an operating point strictly
+  inside the interval. Claiming more than that would misdescribe the measurement.
+- **Cost.** 1.25 expected generations per request (worst case four), since the
+  fallback generates further candidates only on the 16.1% of champion extraction
+  failures.
+- **Status:** VALIDATED (pre-registered, 3 fresh seeds, 360 questions,
+  Bonferroni-corrected) · anchoring NOT MET · **system-versus-baseline MET** ·
+  Tarka RESOLVED (its correction is what made this comparison fair)

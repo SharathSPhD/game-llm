@@ -5,7 +5,8 @@
     "better_players_raise_the_ceiling": 0.042,
     "solve_is_affordable_at_serving": 0.944,
     "complementarity_generalises": 0.182,
-    "anchored_vote_beats_router": 0.2
+    "anchored_vote_beats_router": 0.027,
+    "system_beats_baseline_single": 0.97
   },
   "cost_weight": 0.0417,
   "cost_units": "GPU-hours; one day of GPU time trades against one nat",
@@ -81,6 +82,12 @@
       "outcome": "negative x2 (offline positive retracted; grid ties fair bar)",
       "prior": 0.8,
       "posterior": 0.2
+    },
+    {
+      "exp": "SPEC0017_confirmation",
+      "outcome": "anchoring negative (z=-0.58); system-vs-baseline positive (+8.33pts, z=4.42)",
+      "prior": 0.2,
+      "posterior": 0.027
     }
   ]
 }
