@@ -1,2 +1,5 @@
 2026-08-29T10:02:32+01:00 === exp30 fair baselines start ===
 Loading weights:   0%|          | 0/338 [00:00<?, ?it/s]Loading weights:   0%|          | 1/338 [00:03<19:14,  3.42s/it]Loading weights:   2%|▏         | 6/338 [00:10<09:16,  1.68s/it]Loading weights:  54%|█████▍    | 183/338 [00:11<00:06, 22.66it/s]Loading weights:  56%|█████▌    | 190/338 [00:12<00:06, 23.33it/s]Loading weights:  64%|██████▍   | 216/338 [00:12<00:04, 27.01it/s]Loading weights:  68%|██████▊   | 231/338 [00:12<00:03, 27.75it/s]Loading weights:  71%|███████   | 239/338 [00:16<00:08, 11.83it/s]Loading weights: 100%|██████████| 338/338 [00:16<00:00, 19.97it/s]
+self-consistency: 60/360 questions
+self-consistency: 120/360 questions
+self-consistency: 180/360 questions

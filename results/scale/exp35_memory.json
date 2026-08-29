@@ -1,0 +1,57 @@
+{
+  "device": "cuda:0",
+  "budget_mb": 512,
+  "models": {
+    "eqlm_tied": {
+      "checkpoint": "results/exp32_seed42/checkpoints/C1.pt",
+      "class": "EqLM",
+      "d_model": 768,
+      "parameters": 45785857,
+      "weight_bytes": 183201800,
+      "forward_peak_bytes": {
+        "b1_s64": 70519808,
+        "b4_s64": 107219456,
+        "b16_s64": 420561408,
+        "b1_s128": 122032128,
+        "b4_s128": 211624960,
+        "b16_s128": 841122816
+      },
+      "probe_seq": 128,
+      "largest_batch_at_budget": {
+        "seq128": 10
+      }
+    },
+    "explicit": {
+      "checkpoint": "results/exp10_seed42/checkpoints/a1.pt",
+      "class": "ExplicitLM",
+      "d_model": 768,
+      "parameters": 123760908,
+      "weight_bytes": 495744096,
+      "forward_peak_bytes": {
+        "b1_s64": 26322944,
+        "b4_s64": 106629632,
+        "b16_s64": 418202112,
+        "b1_s128": 52644864,
+        "b4_s128": 210445312,
+        "b16_s128": 836404224
+      },
+      "probe_seq": 128,
+      "largest_batch_at_budget": {
+        "seq128": 10
+      }
+    }
+  },
+  "comparison": {
+    "weight_memory_ratio": 0.3695,
+    "weight_memory_saved_mb": 312.5,
+    "forward_peak_ratio": {
+      "b16_s128": 1.0056,
+      "b4_s64": 1.0055,
+      "b16_s64": 1.0056,
+      "b4_s128": 1.0056,
+      "b1_s64": 2.679,
+      "b1_s128": 2.318
+    },
+    "batch_ratio_at_budget": 1.0
+  }
+}

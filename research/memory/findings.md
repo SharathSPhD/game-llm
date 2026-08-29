@@ -1643,3 +1643,41 @@ and refute it in the opposite direction to the one anticipated.
   failed attempt at the same length as the success is the point of recording it.
 - **Status:** VALIDATED (3 seeds, pre-registered prediction refuted in direction)
   · verdict NOT MET · closes depth modulation · Tarka PENDING
+
+## F48 — The memory saving is in weights, not activations, and the deployment claim must say so
+
+**Cycle 32 · 2026-08-29 · exp35 · RTX 5090 · measured, not asserted**
+
+The natural pitch for a fixed-point model on a small device is that it saves
+memory twice: one block of weights instead of twelve, and an iterate overwritten
+in place instead of activations accumulating with depth. The first is true and
+large. The second is not true as implemented, and measuring it before claiming it
+is the reason to measure at all.
+
+- **Weights: a genuine and large saving.** The compute-matched tied model holds
+  183.2 MB against the explicit baseline's 495.7 MB in bfloat16 — a ratio of
+  **0.370**, saving **312.5 MB**. On a device where the model must be resident,
+  this is the difference between fitting and not fitting, and it is the direct
+  consequence of holding one block's parameters rather than twelve.
+- **Activations: no saving at realistic batch sizes.** Peak allocation during a
+  forward pass is essentially identical once the batch is above one — ratios of
+  1.006 at batch 4 and batch 16 across both sequence lengths tested. At batch 1
+  the tied model is actually **2.3 to 2.7 times worse** (122.0 MB against 52.6 MB
+  at sequence 128), because the Anderson-accelerated solver retains a history of
+  past iterates in order to accelerate, and that history is a memory cost the
+  explicit stack does not pay.
+- **The consequence for deployment, stated plainly.** Within a 512 MB activation
+  budget both models reach the same largest batch of 10, so the tied model buys
+  nothing in throughput at a fixed activation budget. What it buys is 312.5 MB of
+  permanently reclaimed weight memory, which on a small device is the scarcer
+  resource. The honest claim is therefore about model footprint, not about
+  running larger batches, and any material saying otherwise would be
+  contradicted by this measurement.
+- **An avenue the measurement itself suggests.** The batch-1 regression is an
+  artefact of solver history rather than of the architecture: plain Picard
+  iteration overwrites its iterate and would carry no such history. If the
+  single-stream case matters for a device deployment, the solver is the thing to
+  change, and the quality cost of doing so is measurable with the checkpoints
+  already in hand.
+- **Status:** VALIDATED (direct allocation measurement, both models, same card,
+  same dtype) · qualifies the low-memory claim to weights only · Tarka PENDING
