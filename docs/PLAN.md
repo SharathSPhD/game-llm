@@ -5,11 +5,33 @@ objectives in force, what phase the build is in, what each machine is doing, and
 which decisions are still open. It is expected to change as measurements come
 in — a plan that survives contact unchanged was not specific enough.
 
+## Course correction, 2026-08-29
+
+The council line drifted from the programme's subject and is demoted to a side
+result. Kinetic AI's claim is and always was a **single-model** claim: one model
+whose depth, training and decoding are equilibrium computations, matched in
+parameters and compute against a conventional model of the same size. A council
+of four separate off-the-shelf models routed by a lookup table satisfies none of
+that, and comparing four models against one is not an architecture comparison at
+all — it is a systems comparison, and its eight-point margin is reported as such.
+What the council work legitimately contributed is method: the ladder, the fair
+bars, the pre-registration discipline and the adversarial review that caught two
+inflated claims before they were published.
+
+The thrust returns to EqLM. F24 established parity — the anytime-trained tied
+block reaches a ratio of 0.991 against a param-matched twelve-layer explicit
+transformer, one seed exceeding it. Parity is not the objective. The untested
+property that could carry it past parity is the one an explicit stack cannot
+express: a fixed-point model's depth is a stopping criterion rather than an
+architecture, so it can spend five iterations on an easy token and twenty on a
+hard one. At matched *mean* depth the equilibrium model spends the same compute
+unevenly, and whether uneven spending wins is exp31's question.
+
 ## Objectives in force
 
 | # | Objective | Standing |
 |---|---|---|
-| O1 | A new paradigm, not incremental mimicry | Confidence-driven influence refuted (F29/F30); verification-driven cross-examination ties the router (F36). **The live construction is the anchored answer vote (F39): the router as the magnetic reference policy of a QRE over answer classes — the kinetic magnet aimed at the incumbent. All held-out folds beat the router; pre-registered confirmation (SPEC 0017) running** |
+| O1 | A new paradigm, not incremental mimicry: a SINGLE model whose depth, training and decoding are equilibrium computations | Parity reached at 121M (F24, ratio 0.991 at matched params and budget). **Live: adaptive per-token depth (exp31) — the property an explicit stack cannot express, tested at matched mean compute.** All council mechanisms refuted or reduced to their degenerate limits (F29/F36/F41) |
 | O2 | Retain the kinetic core — MMD, QRE, implicit depth, truthful auctions | Every component of O1 is one of these strands; F21's correction is what placed the magnet in policy space |
 | O3 | Beat the baseline ladder | **MET against the baseline single model, pre-registered (F41): 0.6194 vs 0.5361, +8.33 points, z=4.42 on 360 fresh questions, every seed positive, 1.25 expected generations per request.** Not met against a fallback router, which the same system equals by construction — the honest claim is the first, stated with the second |
 | O4 | Domain teachers chosen from measured eval gaps, not a preset list | Reopened by F32/F33: the answer-level headroom was ~3 points once the oracle is gated on identifiable confidence, not 20, so better players are back in contention — and F33 shows the council already holds one genuine specialist whose strength only appears on generative work |
