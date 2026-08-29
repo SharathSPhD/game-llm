@@ -739,3 +739,40 @@ BLiMP (3 seeds)            & 0.683  & 0.655  & 0.958 \\
 \bottomrule
 \end{tabular}
 \end{table}
+
+\subsection{Deployment Measurements: Where the Saving Lives and What Can Carry It}
+\label{sec:results:deployment}
+
+A parameter saving matters only where it survives contact with deployment, and
+three measurements locate its boundaries. Resident weight memory is the genuine
+saving: the compute-matched tied model holds 183.2\,MB against the explicit
+baseline's 495.7\,MB in bfloat16, a ratio of $0.370$. Activation memory is not:
+peak allocation during a forward pass is identical above batch one (ratios of
+$1.006$ at batches 4 and 16), and at batch one the tied model is $2.3$ to
+$2.7\times$ \emph{worse}, because the Anderson-accelerated solver retains a
+history of iterates that an explicit stack never materialises. Within a fixed
+512\,MB activation budget both models reach the same largest batch, so the
+deployment claim is model footprint rather than throughput, and the batch-one
+regression names the solver rather than the architecture as the component to
+change for single-stream serving.
+
+Portability has an analogous boundary. The saving exists only in formats able to
+express weight sharing: safetensors carries the model exactly at zero overhead
+(round-trip verified to $10^{-5}$), and ONNX can reference one initializer from
+many nodes at a fixed iteration count. The GGUF format underlying the dominant
+consumer runtimes provides no tensor aliasing, so representing the model
+requires unrolling the tied block into twelve materialised copies --- a file
+$4.91\times$ larger than the explicit baseline the architecture saves against,
+with the convergence criterion discarded. A conversion undertaken to reach small
+devices would produce an artefact neither smaller nor the same model, and it is
+therefore not published.
+
+Finally, the route from this scale to an open-weight-class model was gated and
+the gate closed. Converting a pretrained 1.5B model by tying even adjacent layer
+pairs under averaged initialisation begins at $64.5\times$ base perplexity
+against a pre-registered ceiling of $5\times$; harsher surgeries begin at
+$102\times$ and $270\times$. Merging pretrained layers destroys function almost
+independently of how many are merged, which closes conversion as a route at
+$10^{9}$-token budgets and leaves from-scratch training --- the regime in which
+every result above was obtained --- as the recorded path, with distillation from
+an open teacher under evaluation as the accelerant.
