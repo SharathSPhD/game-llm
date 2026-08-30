@@ -1,0 +1,40 @@
+{
+  "model": "ckpt_1000000000",
+  "model_type": "checkpoint",
+  "tasks": {
+    "arc_easy": {
+      "acc": 0.273,
+      "acc_norm": 0.281,
+      "n": 1000
+    },
+    "arc_challenge": {
+      "acc": 0.193,
+      "acc_norm": 0.233,
+      "n": 1000
+    },
+    "hellaswag": {
+      "acc": 0.25,
+      "acc_norm": 0.27,
+      "n": 1000
+    },
+    "piqa": {
+      "acc": 0.53,
+      "acc_norm": 0.491,
+      "n": 1000
+    },
+    "winogrande": {
+      "acc": 0.521,
+      "acc_norm": 0.521,
+      "n": 1000
+    },
+    "sciq": {
+      "acc": 0.217,
+      "acc_norm": 0.217,
+      "n": 1000
+    },
+    "lambada_openai": {
+      "acc": 0.0,
+      "n": 1000
+    }
+  }
+}
