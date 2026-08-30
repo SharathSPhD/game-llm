@@ -107,6 +107,13 @@ kinetic-tied cost lands around **$1.5M–$2.7M** across the same GPU spread.
 
 ## 4. The "via teacher" path
 
+> **Superseded by `docs/prune-distill-plus-sanskrit-estimate.md`.** The analysis below models
+> distillation as a from-scratch student trained alongside a teacher (F53's regime), which has
+> no proven compute discount. NVIDIA's published **prune-and-distill** technique (Minitron) is a
+> different regime — start from an already-trained larger model's weights, not random init — and
+> prices out under the $20-30K target using NVIDIA's own disclosed token counts. See that
+> document for the numbers; this section is kept for the from-scratch-student case specifically.
+
 F53 already tested this and found it made things worse, at the token regime tried (16.4M
 tokens, an extreme early-stage regime). Two honest caveats the project itself flagged, neither
 yet retested:
