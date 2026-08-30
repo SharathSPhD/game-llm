@@ -684,3 +684,21 @@ a resume landing exactly on the target re-entered the unbounded loop. The
 public ladder rungs (Pythia-410M/1B, SmolLM2-360M, TinyLlama-1.1B) are being
 measured on the GB10 through the same exp40 harness the milestones will use.
 Phase 1 launches when the full 10.5B pack lands.
+
+## 2026-08-30 — Phase 1 launched: the twin is training
+
+The 10.5B-token FineWeb-Edu pack finished at 3.3h (21 shards, sha256
+manifest, pack hash 973c14c07147) and Phase 1 went up on the 5090 as one
+detached job: Arm E (913M explicit) to 2.5B tokens, then Arm T (158M
+resident, tied) on the byte-identical stream. Full geometry confirmed in the
+first log line — 1.05M tokens per step, gradient checkpointing, SDPA — GPU at
+100%, 532W. A persistent watcher relays milestones, loss spikes, aborts and
+stage exits. Before launch the rung sweep audited the eval harness the hard
+way: every public model scored exact chance, which unmasked a scoring
+off-by-one (logits at a token's own position), a degenerate winogrande
+protocol (one pair scored twice — 0.493 everywhere, the gold marginal), an
+mmlu field-name error, and BOS injection poisoning Llama-family
+continuations. All four fixed, tests rewritten around a bigram oracle that a
+misaligned scorer cannot pass, and the harness now reproduces published
+numbers for all four rungs. The milestone numbers the twins produce will be
+the first from this harness that were never wrong in public.
