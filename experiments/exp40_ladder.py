@@ -87,7 +87,7 @@ class ModelAdapter:
         ]
 
         # Log-softmax and gather
-        log_probs = torch.nn.functional.log_softmax(continuation_logits, dim=-1)
+        log_probs = torch.nn.functional.log_softmax(continuation_logits.float(), dim=-1)
         scores = []
         for i, token_id in enumerate(continuation_ids):
             scores.append(log_probs[i, token_id].item())
@@ -117,7 +117,10 @@ def load_our_checkpoint(
 
     model = ExplicitLM(config=cfg, n_layers=n_layers) if kind == "ExplicitLM" else EqLM(config=cfg)
     model.load_state_dict(state)
-    model = model.to(device).eval()
+    # bf16 for scoring, matching how the public rungs are loaded: on the
+    # bandwidth-bound GB10 the fp32 path made a single milestone eval an
+    # eight-hour job. Scoring math stays fp32 through log_softmax.
+    model = model.to(device=device, dtype=torch.bfloat16).eval()
 
     # Tokenizer: GPT-2
     tokenizer = AutoTokenizer.from_pretrained("gpt2")
