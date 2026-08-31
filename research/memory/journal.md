@@ -718,3 +718,27 @@ learned positions, WSD, ReLU); both arms share every one of those choices,
 so the comparison is untouched — stated for the paper's honesty, not as a
 caveat to the ratio. Arm T began at 12:24 on the byte-identical stream,
 157.6M resident parameters against Arm E's 913.0M.
+
+## 2026-08-31 — Redirection absorbed: SPEC 0023 registered, GB10 loaded, spine re-threaded
+
+The operator's architecture analysis exposed the one axis F1-F54 never
+varied: every tying ratio is embedding-diluted, (16B+E)/(B+E), and at byte
+vocabulary the same arithmetic gives the iteration count itself. SPEC 0023
+registers that cell — d=1536, depth 16, vocab 256, arms 453M vs 29M,
+predicted ratio 15.8x, gates in SPEC 0022's form — queued on the 5090 behind
+the extension per operator decision (extension first, then C1). The byte
+pack builds by decoding the existing GPT-2 shards (BPE is byte-reversible;
+content identical by construction). The reverse-flow ordering objectives are
+being digested from prabhasa's own record, nulls first, before any design
+work; and Phase 3 instruct tuning is now an MPO-versus-SFT comparison, which
+returns the MMD anchor to the shipped path and gives RQ-4 its answer at real
+scale.
+
+The halting idea (analysis §5) took its cheap test on the idle GB10 today
+and gave a two-sided answer worth having: solver effort correlates with
+next-token expectancy on both existing checkpoints (Spearman 0.27 +/- 0.02
+at 121M, 0.19 +/- 0.02 at 46M, both CIs excluding zero), but the
+sentence-final contrast points the required direction only at 121M (-0.77
+iterations) and reverses at 46M (+1.12). The semantic signal exists; the
+closure-halts-early pattern is regime-dependent. Recorded as an exploratory
+observation feeding RQ-3b, not a finding.
