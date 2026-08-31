@@ -702,3 +702,19 @@ continuations. All four fixed, tests rewritten around a bigram oracle that a
 misaligned scorer cannot pass, and the harness now reproduces published
 numbers for all four rungs. The milestone numbers the twins produce will be
 the first from this harness that were never wrong in public.
+
+## 2026-08-31 — Arm E complete at 2.5B tokens
+
+34.66 hours at an unwavering 20.15k tok/s: held-out perplexity 1271 -> 503
+-> 260 across the milestones, loss curve smooth throughout, no spikes, no
+interventions. The ladder at 2.5B remains near chance (arc_easy 0.294, piqa
+0.516) while perplexity halves per doubling — the expected ordering at this
+budget, and the reason the registered success criterion carries a perplexity
+branch: at chance level a ladder ratio is trivially ~1 and carries no
+information, so the twin verdict at 2.5B rests on the ppl ratio (<=1.10)
+with the ladder reported alongside. Absolute quality trails a Pythia-recipe
+model at matched tokens (rotary, cosine decay, GeLU versus this stack's
+learned positions, WSD, ReLU); both arms share every one of those choices,
+so the comparison is untouched — stated for the paper's honesty, not as a
+caveat to the ratio. Arm T began at 12:24 on the byte-identical stream,
+157.6M resident parameters against Arm E's 913.0M.
