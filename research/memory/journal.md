@@ -742,3 +742,16 @@ sentence-final contrast points the required direction only at 121M (-0.77
 iterations) and reverses at 46M (+1.12). The semantic signal exists; the
 closure-halts-early pattern is regime-dependent. Recorded as an exploratory
 observation feeding RQ-3b, not a finding.
+
+## 2026-08-31 — Arm T at 0.5B tokens: the gate's first shadow
+
+Held-out perplexity 1961.6 against Arm E's 1271.4 at identical tokens — a
+ratio of 1.543 where the 1B kill gate demands 1.20. The gate is registered
+at 1B and applies there, not here; what this milestone establishes is the
+size of the close required: the tied arm must descend roughly a quarter of
+a nat faster over its second half-billion tokens than the explicit arm did
+over the same stretch. The F24 regime's history is that tied models lag
+early and close late, but that history is from 46-121M on BabyLM; whether
+it repeats at 1B on web data is precisely what the gate exists to decide.
+Recorded now so that whatever the verdict, no one can say the trajectory
+was hidden.
