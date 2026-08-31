@@ -1,0 +1,56 @@
+{
+  "_description": "Cycle 35: what the GB10's idle windows buy while the 5090 runs SPEC 0022 Phase 1/extension and then SPEC 0023. The big allocations are operator-fixed (extension -> C1 on the 5090; MPO-vs-SFT in Phase 3); this cycle ranks the discretionary GB10 work. Beliefs seeded from exp41 (halting correlation replicates, direction mixed across scale), the prabhasa H-ORD digest (finishing-pass objectives work, from-scratch collapses), and RQ-4 open since cycle 14.",
+  "beliefs": {
+    "H_E_mpo_beats_sft_at_1b": 0.5,
+    "H_F_ordering_pilot_transfers_to_english": 0.35,
+    "H_G_halting_dial_usable_at_1b": 0.45
+  },
+  "cost_weight": 0.25,
+  "cost_units": "GB10 GPU-days equivalent; 0.25/day because GB10 windows are cheap but finite and milestone evals preempt",
+  "candidates": [
+    {
+      "name": "mpo_sft_pipeline_pilot_121m",
+      "cost": 1.0,
+      "diagnosticity": {
+        "H_E_mpo_beats_sft_at_1b": [0.7, 0.35]
+      },
+      "payoff": {
+        "H_E_mpo_beats_sft_at_1b": 0.9
+      },
+      "description": "Build the SFT + MPO training pipeline with tests and pilot both arms on the existing 121M anytime checkpoint (SmolTalk-class data): de-risks Phase 3 machinery before the 1B model exists and gives a first MPO-vs-SFT reading"
+    },
+    {
+      "name": "english_permutation_generator",
+      "cost": 0.3,
+      "diagnosticity": {
+        "H_F_ordering_pilot_transfers_to_english": [0.6, 0.35]
+      },
+      "payoff": {
+        "H_F_ordering_pilot_transfers_to_english": 0.4
+      },
+      "description": "CPU-heavy: dependency-parse-based licit-alternation generator + P0/P3 battery over FineWeb holdout sentences; measures the English ordering tax on existing checkpoints before any training is proposed"
+    },
+    {
+      "name": "halting_probe_on_milestones",
+      "cost": 0.2,
+      "diagnosticity": {
+        "H_G_halting_dial_usable_at_1b": [0.75, 0.3]
+      },
+      "payoff": {
+        "H_G_halting_dial_usable_at_1b": 0.5
+      },
+      "description": "Re-run exp41 on Arm T milestone checkpoints as they land: does the 121M-direction (final positions settle early) reappear at 1B scale, which is where the anytime dial ships"
+    },
+    {
+      "name": "offline_nothing",
+      "cost": 0.0,
+      "diagnosticity": {
+        "H_G_halting_dial_usable_at_1b": [0.5, 0.45]
+      },
+      "payoff": {
+        "H_G_halting_dial_usable_at_1b": 0.05
+      },
+      "description": "Null action: GB10 serves the app and waits for milestone evals only"
+    }
+  ]
+}
