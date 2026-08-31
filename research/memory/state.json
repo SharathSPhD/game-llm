@@ -1,8 +1,8 @@
 {
   "cycle": 34,
-  "phase": "SPEC 0022 Phase 1 RUNNING: twin on 5090 (Arm E then Arm T, 2.5B tokens each, pack 973c14c07147). Milestone evals on GB10 as checkpoints land.",
+  "phase": "SPEC 0022 Phase 1 (Arm T training) + redirection absorbed: SPEC 0023 (byte cell) registered and queued after extension; byte pack building on GB10; MPO-vs-SFT locked for Phase 3; ordering thread being digested from prabhasa record.",
   "current_rq": "RQ-7: does the compute-matched exchange rate (F45/F50) persist at 1B params on general web data?",
-  "gpu_lock": true,
+  "gpu_lock": false,
   "open_questions": [
     "RQ-7 (SPEC 0022): exchange rate at 1B; kill gate ppl ratio <=1.20 at 1B tokens; success >=0.95 ladder ratio at 2.5B",
     "RQ-3b (H1-prime): warm-start decoding / per-token early exit / think-harder dial (ADR 0004)",
@@ -18,7 +18,7 @@
   "known_defects": [
     "GB10 cooling defect (hardware): 12C die-vs-platform sensor gap at ~60W, BMC power-throttle to ~60W despite no kernel throttle flag, hard trip ~91C. Confirmed via live telemetry + NVIDIA forum cross-reference (RMA channel: FieldDiag PowerStress MODS-020000600139). FieldDiag itself blocked here: mods.ko builds/signs but insmod rejected under Secure Boot ('Key was rejected by service'); box is SSH-only so the UEFI disable-Secure-Boot/re-enable round trip needs physical/console access not currently available. Operator directive (2026-08-26): GB10 excluded from ALL GPU workload until RMA/repair; GB10 stays available for serving/evals/CPU-bound work only."
   ],
-  "next_action": "On MILESTONE notifications: fetch checkpoint, run exp40+exp36 on GB10, record. At 1B tokens both arms: apply kill gate (ppl ratio <=1.20). After Arm T 2.5B: success criterion, then extend-phase decision.",
+  "next_action": "Arm T milestones -> kill gate at 1B (ppl<=604.2). Then extension launch (decay 8-10B). Byte pack completes -> C1 queued. Ordering digest -> design doc + EFE cycle 35. MPO/SFT pipeline pilot at 121M on GB10 next idle window.",
   "gpu_lock_holder": "5090: exp39 Phase 1 twin (detached job kinetic-twin) | GB10: milestone evals only",
   "adrs": []
 }
