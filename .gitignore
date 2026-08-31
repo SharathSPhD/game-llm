@@ -54,3 +54,4 @@ data/cache/
 results/**/checkpoints/
 *.pt
 .claude/
+data/pack_*/

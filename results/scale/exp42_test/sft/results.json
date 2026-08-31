@@ -1,0 +1,11 @@
+{
+  "arm": "sft",
+  "steps": 50,
+  "final_loss": 13.208372116088867,
+  "ppl": 229.61297584232094,
+  "samples": {
+    "Hello, my name is": "Hello, my name is................................",
+    "The weather today is": "The weather today is is is is is is is is is is is is is is is is is is is is is is is is is is is is.....",
+    "I love to": "I love to................................"
+  }
+}

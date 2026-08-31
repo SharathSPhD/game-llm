@@ -1,0 +1,11 @@
+{
+  "arm": "mpo",
+  "steps": 50,
+  "final_loss": 4.51725959777832,
+  "pref_acc": 0.49,
+  "samples": {
+    "Hello, my name is": "Hello, my name is................................",
+    "The weather today is": "The weather today is is is is is is is is is is is is is is is is is is is is is is is is is is.......",
+    "I love to": "I love to................................"
+  }
+}

@@ -57,6 +57,18 @@ class PackReader:
         manifest_text = manifest_path.read_text()
         self.manifest = cast(dict, json.loads(manifest_text))
 
+        # Determine dtype from manifest (default uint16 for backward compatibility)
+        dtype_str = self.manifest.get("dtype", "uint16")
+        if dtype_str == "uint8":
+            dtype = np.uint8
+            bytes_per_token = 1
+        elif dtype_str == "uint16":
+            dtype = np.uint16
+            bytes_per_token = 2
+        else:
+            print(f"ERROR: unknown dtype '{dtype_str}'", file=sys.stderr)
+            raise SystemExit(1)
+
         # Load and verify all training shards
         self._shards: list[np.memmap] = []
         self._shard_offsets: list[int] = []
@@ -73,7 +85,7 @@ class PackReader:
 
             file_size = shard_path.stat().st_size
             expected_tokens = shard_info["tokens"]
-            expected_size = expected_tokens * 2  # uint16 = 2 bytes
+            expected_size = expected_tokens * bytes_per_token
 
             if file_size != expected_size:
                 print(
@@ -84,7 +96,7 @@ class PackReader:
                 raise SystemExit(1)
 
             # Memory-map in read-only mode
-            data = np.memmap(shard_path, dtype=np.uint16, mode="r")
+            data = np.memmap(shard_path, dtype=dtype, mode="r")
             self._shards.append(data)
             self._shard_offsets.append(offset)
             offset += len(data)
@@ -103,7 +115,7 @@ class PackReader:
 
         file_size = holdout_path.stat().st_size
         expected_tokens = holdout_info["tokens"]
-        expected_size = expected_tokens * 2
+        expected_size = expected_tokens * bytes_per_token
 
         if file_size != expected_size:
             print(
@@ -115,9 +127,9 @@ class PackReader:
 
         # Handle empty holdout files (can happen in smoke tests)
         if file_size == 0:
-            self._holdout = np.array([], dtype=np.uint16)
+            self._holdout = np.array([], dtype=dtype)
         else:
-            self._holdout = np.memmap(holdout_path, dtype=np.uint16, mode="r")
+            self._holdout = np.memmap(holdout_path, dtype=dtype, mode="r")
 
     @property
     def total_train_tokens(self) -> int:
