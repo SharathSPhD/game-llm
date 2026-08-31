@@ -1,0 +1,14 @@
+{
+  "checkpoint": "results/scale/exp39_milestones/tied/ckpt_500000000.pt",
+  "n_sentences": 400,
+  "n_positions": 10127,
+  "calibrated_tol": 0.00437144481261109,
+  "mean_iters": 8.724,
+  "spearman_pooled_iters_vs_entropy": 0.3659,
+  "spearman_per_sentence_mean": 0.2728,
+  "spearman_per_sentence_ci95": 0.0265,
+  "sentence_final_mean_iters": 7.595,
+  "non_final_mean_iters": 8.77,
+  "final_minus_nonfinal": -1.175,
+  "note": "positive rho means the solver works longer where expectancy is open; a negative final-minus-nonfinal gap means sentence-final positions settle early, the direction the halting idea requires"
+}
