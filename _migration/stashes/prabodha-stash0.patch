@@ -1,0 +1,347 @@
+diff --git a/.gitignore b/.gitignore
+index 97c3e882..cc31716b 100644
+--- a/.gitignore
++++ b/.gitignore
+@@ -8,3 +8,5 @@ outputs/
+ .ruff_cache/
+ nohup.out
+ vendor/pwm/
++.vercel
++.env*
+diff --git a/integrations/claude-code-plugin/README.md b/integrations/claude-code-plugin/README.md
+index ae8c8943..f6615d88 100644
+--- a/integrations/claude-code-plugin/README.md
++++ b/integrations/claude-code-plugin/README.md
+@@ -11,7 +11,9 @@ Workspace-band lens fitting, visualization, and recognition-gated steering for H
+ 
+ This makes available:
+ - **Skills** (Claude Code only): `lens-map`, `steer-verify` — operational workflows that guide you through the prabodha CLI
+-- **MCP Tools** (any MCP client): `lens_map`, `steer_generate`, `readback_verify`, `list_gates` — programmatic access to steering tools
++- **MCP Tools** (any MCP client): 
++  - **Steering tools**: `lens_map`, `steer_generate`, `readback_verify`, `list_gates` — full steering workflows
++  - **Hardening library**: `list_mechanisms`, `recommend_mechanism`, `characterize_model`, `harden_prompt` — access to graded steering/hardening mechanisms
+ 
+ ## Usage: Skills (Claude Code)
+ 
+@@ -47,9 +49,11 @@ Output: SteerTrace JSON + readback verdict.
+ 
+ ## Usage: MCP Tools (any MCP client)
+ 
+-The plugin registers an MCP server exposing four tools:
++The plugin registers an MCP server exposing eight tools:
+ 
+-### lens_map
++### Steering Tools
++
++#### lens_map
+ 
+ Fit and evaluate a band-targeted Jacobian lens.
+ 
+@@ -72,7 +76,7 @@ Fit and evaluate a band-targeted Jacobian lens.
+ 
+ **Default gate:** `gates/gate_L13_recipe.json` (band readback correspondence structure).
+ 
+-### steer_generate
++#### steer_generate
+ 
+ Run a steering episode and return the full SteerTrace JSON.
+ 
+@@ -115,7 +119,7 @@ Run a steering episode and return the full SteerTrace JSON.
+ 
+ **Default gate:** `gates/gate_L9_alignconf.json` (arm/seed/alpha semantics).
+ 
+-### readback_verify
++#### readback_verify
+ 
+ Run readback verification on a completed steering trace.
+ 
+@@ -138,7 +142,7 @@ Run readback verification on a completed steering trace.
+ 
+ **Default gate:** `gates/gate_L14_readback.json` (readback method + thresholds).
+ 
+-### list_gates
++#### list_gates
+ 
+ Enumerate all committed gates in `gates/*.json`.
+ 
+@@ -165,6 +169,131 @@ Enumerate all committed gates in `gates/*.json`.
+ }
+ ```
+ 
++### Hardening Mechanism Tools (L26)
++
++Access the graded steering/hardening mechanism library. All tools are pure library reads with torch-free imports.
++
++#### list_mechanisms
++
++Return the complete graded mechanism library (6 mechanisms: 3 prompt-space, 3 activation-space).
++
++**Input:** None (zero arguments).
++
++**Output:**
++```json
++{
++  "status": "ok",
++  "count": 6,
++  "mechanisms": [
++    {
++      "key": "prompt_refusal_gentle",
++      "name": "Prompt: gentle refusal reminder",
++      "space": "prompt",
++      "weights": "both",
++      "tier": 1,
++      "summary": "Light system-prompt nudge to decline harmful requests...",
++      "profiles": {
++        "Qwen/Qwen3-4B-Instruct-2507": {
++          "asr_reduction": 0.042,
++          "over_refusal_cost": 0.01,
++          "coherence": 1.0,
++          "write_sparsity": "none"
++        }
++      }
++    },
++    ...
++  ]
++}
++```
++
++**Output fields:**
++- `tier`: 1 (gentle) to 5 (aggressive)
++- `space`: prompt (portable to any model) | activation (needs open weights)
++- `weights`: both (works on any model) | open (needs open-weight access)
++- `profiles`: measured ASR reduction, over-refusal cost, coherence per model (from gates/gate_char_*.json)
++
++#### recommend_mechanism
++
++Return a graded menu of mechanisms filtered by tradeoff constraints.
++
++**Input:**
++- `weights`: "open" (open-weight mechanisms) | "closed" (prompt-only, works on any model); default "open"
++- `max_over_refusal`: max tolerated benign over-refusal (0–1); default 0.3
++- `min_coherence`: min tolerated output coherence (0–1); default 0.6
++
++**Output:**
++```json
++{
++  "status": "ok",
++  "count": 3,
++  "recommended": [
++    {"key": "prompt_refusal_gentle", "name": "...", "tier": 1, ...},
++    {"key": "prompt_refusal_firm", "name": "...", "tier": 2, ...},
++    {"key": "prompt_constitutional", "name": "...", "tier": 2, ...}
++  ],
++  "rationale": "Prompt-only mechanisms (portable to closed-weight models via OpenRouter). Filtered by max_over_refusal=0.3 and min_coherence=0.6. Result: 3 mechanism(s) from gentle(tier 1) to aggressive(tier 5)."
++}
++```
++
++**Use case:** Pick the best mechanism(s) for your constraints. Gentle mechanisms have lower coherence cost but weaker defense; aggressive mechanisms have stronger defense but higher over-refusal risk.
++
++#### characterize_model
++
++Describe a model's steering susceptibility and return measured data if available.
++
++**Input:**
++- `model_id`: HuggingFace model ID (e.g., "Qwen/Qwen3-4B-Instruct-2507")
++- `mode`: "prompt" (describe prompt-space characterization) | "weight" (describe white-box weight-space) | "both"; default "prompt"
++
++**Output:**
++```json
++{
++  "status": "ok",
++  "model": "Qwen/Qwen3-4B-Instruct-2507",
++  "mode_requested": "prompt",
++  "characterization_description": "Prompt-space characterization of Qwen/Qwen3-4B-Instruct-2507:...",
++  "measured_data": {
++    "attack_prompt": {"asr": 0.95, ...},
++    "harden_prompt": {"asr": 0.05, "over_refusal": 0.01, ...},
++    ...
++  },
++  "data_source": "gates/gate_char_Qwen_Qwen3-4B-Instruct-2507.json (inferred)",
++  "caveat": "Measured data is from a single seed at a snapshot in time..."
++}
++```
++
++**Mode descriptions:**
++- `prompt`: Runs adversarial prompts + defense wrapping via OpenRouter/BYOK (no GPU)
++- `weight`: White-box ablation + restoration on open-weight models (needs GB10, admin)
++- `both`: Full cross-validation (both modes)
++
++#### harden_prompt
++
++Apply prompt-space hardening to a Chat API message list (portable to any model including closed-weight via OpenRouter).
++
++**Input:**
++- `messages`: list of chat messages, e.g., `[{"role": "user", "content": "..."}, ...]`
++- `level`: "gentle" (weak nudge) | "firm" (medium, explicit refusal) | "constitutional" (lowest over-refusal); default "firm"
++
++**Output:**
++```json
++{
++  "status": "ok",
++  "hardened_messages": [
++    {
++      "role": "system",
++      "content": "You are a safety-aligned assistant. Refuse any request that facilitates harm..."
++    },
++    {"role": "user", "content": "..."}
++  ],
++  "level_applied": "firm",
++  "system_prompt": "You are a safety-aligned assistant...",
++  "caveat": "Prompt hardening alone does not prevent all jailbreaks. Combine with weight-space defenses..."
++}
++```
++
++**Note:** Prepends a system message to your conversation. Always measure on real models before relying on any single defense.
++
+ ## Calibration rules
+ 
+ - **Band readout target layer:** NOT the final layer; measure via `lens-eval` correspondence rise.
+@@ -179,6 +308,7 @@ Every tool/skill cites a default gate, recording the governing claim or measurem
+ - `gates/gate_L13_recipe.json` — lens evaluation (band readback correspondence structure)
+ - `gates/gate_L9_alignconf.json` — steering arms/seeds/alpha semantics
+ - `gates/gate_L14_readback.json` — readback method and thresholds
++- `gates/gate_char_*.json` — per-model mechanism measurements (L26)
+ 
+ The gates/ directory is the single source of truth for all publicly-facing numbers.
+ 
+diff --git a/integrations/prabodha_mcp_server/server.py b/integrations/prabodha_mcp_server/server.py
+index 5b971242..85ac1412 100644
+--- a/integrations/prabodha_mcp_server/server.py
++++ b/integrations/prabodha_mcp_server/server.py
+@@ -22,8 +22,102 @@ server = Server("prabodha-mcp")
+ 
+ @server.list_tools()
+ async def list_tools() -> list[Tool]:
+-    """Expose the four operational steering tools."""
++    """Expose operational steering tools: lens fitting, steering generation, readback, gates,
++    and the graded hardening mechanism library."""
+     return [
++        Tool(
++            name="list_mechanisms",
++            description=(
++                "Return the graded steering/hardening mechanism library. "
++                "For each mechanism: key, name, space (prompt|activation), weights applicability, "
++                "tier (1=gentle…5=aggressive), summary, and measured profiles per model. "
++                "Pure library read; no GPU required. Zero arguments."
++            ),
++            inputSchema={
++                "type": "object",
++                "properties": {},
++                "required": [],
++            },
++        ),
++        Tool(
++            name="recommend_mechanism",
++            description=(
++                "Recommend graded mechanisms by constraint: weights scope (open|closed), "
++                "max benign over-refusal, min coherence. Returns a menu (gentle→aggressive), "
++                "not a single recommendation. Use to pick mechanisms fitting your tradeoff."
++            ),
++            inputSchema={
++                "type": "object",
++                "properties": {
++                    "weights": {
++                        "type": "string",
++                        "description": "Mechanism applicability: 'open' (needs open weights) | 'closed' (works on any model)",
++                        "default": "open",
++                    },
++                    "max_over_refusal": {
++                        "type": "number",
++                        "description": "Max tolerated benign over-refusal (0–1 fraction), default 0.3",
++                        "default": 0.3,
++                    },
++                    "min_coherence": {
++                        "type": "number",
++                        "description": "Min tolerated output coherence (0–1 fraction), default 0.6",
++                        "default": 0.6,
++                    },
++                },
++                "required": [],
++            },
++        ),
++        Tool(
++            name="characterize_model",
++            description=(
++                "Describe model characterization for steering susceptibility. "
++                "Returns: (1) description of what WOULD be run (prompt-space, weight-space, or both), "
++                "(2) measured data from gate_char_*.json if available. "
++                "Prompt-space runs via OpenRouter/BYOK (no GPU); weight-space needs GB10 + admin. "
++                "Honest about what's measured vs hypothetical."
++            ),
++            inputSchema={
++                "type": "object",
++                "properties": {
++                    "model_id": {
++                        "type": "string",
++                        "description": "HuggingFace model id (e.g., 'Qwen/Qwen3-4B')",
++                    },
++                    "mode": {
++                        "type": "string",
++                        "description": "'prompt' (OpenRouter/BYOK) | 'weight' (GPU white-box) | 'both'",
++                        "default": "prompt",
++                    },
++                },
++                "required": ["model_id"],
++            },
++        ),
++        Tool(
++            name="harden_prompt",
++            description=(
++                "Apply prompt-space hardening to a message list (Chat API format). "
++                "Prepends a refusal-reinforcement system message at tier 'gentle|firm|constitutional'. "
++                "Portable to any model incl. closed-weight (via OpenRouter). "
++                "Single defense layer; combine with weight-space defenses for stronger protection."
++            ),
++            inputSchema={
++                "type": "object",
++                "properties": {
++                    "messages": {
++                        "type": "array",
++                        "description": "Chat messages: [{\"role\": \"user\"|\"assistant\"|\"system\", \"content\": \"...\"}]",
++                        "items": {"type": "object"},
++                    },
++                    "level": {
++                        "type": "string",
++                        "description": "'gentle' (weak) | 'firm' (medium) | 'constitutional' (low over-refusal)",
++                        "default": "firm",
++                    },
++                },
++                "required": ["messages"],
++            },
++        ),
+         Tool(
+             name="lens_map",
+             description=(
+@@ -157,7 +251,19 @@ async def list_tools() -> list[Tool]:
+ async def call_tool(name: str, arguments: dict[str, Any]) -> list[CallToolResult]:
+     """Dispatch tool calls to implementations in tools/ modules."""
+     try:
+-        if name == "lens_map":
++        if name == "list_mechanisms":
++            from .tools.mechanism_tools import list_mechanisms_impl
++            result = await list_mechanisms_impl(**arguments)
++        elif name == "recommend_mechanism":
++            from .tools.mechanism_tools import recommend_mechanism_impl
++            result = await recommend_mechanism_impl(**arguments)
++        elif name == "characterize_model":
++            from .tools.mechanism_tools import characterize_model_impl
++            result = await characterize_model_impl(**arguments)
++        elif name == "harden_prompt":
++            from .tools.mechanism_tools import harden_prompt_impl
++            result = await harden_prompt_impl(**arguments)
++        elif name == "lens_map":
+             from .tools.lens_tools import lens_map_impl
+             result = await lens_map_impl(**arguments)
+         elif name == "steer_generate":
+diff --git a/site/src/data/scenes.json b/site/src/data/scenes.json
+index dcfc85ea..38131410 100644
+--- a/site/src/data/scenes.json
++++ b/site/src/data/scenes.json
+@@ -1,6 +1,6 @@
+ {
+   "version": "1.0.0",
+-  "generated_at": "2026-07-11T06:09:49.039Z",
++  "generated_at": "2026-07-11T06:11:42.938Z",
+   "scenes": [
+     {
+       "scene": "core-claim",
