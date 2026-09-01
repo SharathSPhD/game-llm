@@ -21,7 +21,9 @@
 set -uo pipefail
 
 PID="${1:?pid of the running 'python train.py' (Arm T stage 2)}"
-REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
+# REPO_DIR: the checkout whose .venv, experiments/ and kinetic_ai/ the watcher
+# uses (must have .venv); defaults to the checkout this script lives in.
+REPO="${REPO_DIR:-$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)}"
 JOB="${JOB_DIR:-/home/ss/fusion-project/kinetic-twin}"
 COMPOSE_DIR="${RTX5090_COMPOSE_DIR:-/home/ss/rtx5090setup/docker}"
 CONTAINER_JOB=/fusion-project/kinetic-twin
