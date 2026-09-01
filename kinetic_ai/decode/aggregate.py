@@ -69,18 +69,22 @@ def borda_rule(ell: torch.Tensor) -> torch.Tensor:
     return ranks.sum(dim=1).argmax(dim=-1)
 
 
-def game_rule(
+def game_distribution(
     ell: torch.Tensor,
     beta: float = 0.25,
     tau: float = 0.0,
     eta: float = 0.5,
     max_iter: int = 32,
 ) -> torch.Tensor:
-    """The influence game of ADR 0008, solved over options.
+    """The equilibrium consensus of the influence game of ADR 0008, over options.
 
-    At ``beta = 0`` the weights stay uniform and this is exactly ``mean_rule``,
-    which is the sense in which the game generalises averaging rather than
-    competing with it.
+    At ``beta = 0`` the weights stay uniform and the fixed point is the softmax
+    of the mean log-probability, which is the sense in which the game
+    generalises averaging rather than competing with it. The solve reaches that
+    point only to fp32 rounding, so on an exact tie between options the
+    rounding residue decides the argmax — and it decides it differently on
+    aarch64 and x86_64. Anything that must be platform-stable compares this
+    distribution, not the index :func:`game_rule` selects from it.
     """
     y = solve_equilibrium(
         ell,
@@ -88,7 +92,18 @@ def game_rule(
         reference=torch.softmax(ell.mean(dim=1), dim=-1),
     )
     assert isinstance(y, torch.Tensor)
-    return y.argmax(dim=-1)
+    return y
+
+
+def game_rule(
+    ell: torch.Tensor,
+    beta: float = 0.25,
+    tau: float = 0.0,
+    eta: float = 0.5,
+    max_iter: int = 32,
+) -> torch.Tensor:
+    """The influence game of ADR 0008: the option the equilibrium consensus favours."""
+    return game_distribution(ell, beta=beta, tau=tau, eta=eta, max_iter=max_iter).argmax(dim=-1)
 
 
 RULES = {

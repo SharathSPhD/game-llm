@@ -19,6 +19,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from kinetic_ai.decode.aggregate import (
     RULES,
     aggregate,
+    game_distribution,
     oracle_any_correct,
     recover_label_offset,
 )
@@ -83,9 +84,20 @@ class TestEachRuleDoesWhatItClaims:
 
     def test_influence_game_at_zero_rationality_is_the_mean(self) -> None:
         """The degenerate case that makes the game a generalisation rather than
-        an alternative: with no influence rationality it must reproduce averaging."""
-        ell = _ell([[[2.0, 1.0, 0.0], [0.0, 2.0, 1.0], [1.0, 0.0, 2.0]]])
-        assert int(aggregate(ell, "game", beta=0.0)[0]) == int(aggregate(ell, "mean")[0])
+        an alternative: with no influence rationality it must reproduce averaging.
+
+        The council below is an exact three-way tie, so it probes the property
+        where it is sharpest: the equilibrium must be uniform. It is asserted on
+        the distribution because the fp32 solve lands within ~3e-8 of uniform and
+        the residue's sign is architecture-dependent (argmax gave 0 on the GB10's
+        aarch64 and 1 on the 5090's x86_64). The selected index is then checked
+        on a council with a clear leader, where no rounding can move it."""
+        tied = _ell([[[2.0, 1.0, 0.0], [0.0, 2.0, 1.0], [1.0, 0.0, 2.0]]])
+        expected = torch.softmax(tied.mean(dim=1), dim=-1)
+        assert torch.allclose(game_distribution(tied, beta=0.0), expected, atol=1e-6)
+
+        led = _ell([[[2.0, 1.0, 0.0], [0.5, 2.0, 1.0], [1.0, 0.0, 2.0]]])
+        assert int(aggregate(led, "game", beta=0.0)[0]) == int(aggregate(led, "mean")[0])
 
 
 class TestOracle:
