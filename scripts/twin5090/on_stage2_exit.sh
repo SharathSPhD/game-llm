@@ -41,7 +41,9 @@ case "$cmd" in
 esac
 log "GUARD pid=$PID cmd='$cmd' repo=$(git -C "$REPO" rev-parse --short HEAD) job=$JOB"
 
-while kill -0 "$PID" 2>/dev/null; do sleep 60; done
+# Liveness via ps, not kill -0: the trainer runs as root inside the container
+# and kill -0 from user ss fails with EPERM, which read as "exited".
+while ps -p "$PID" > /dev/null 2>&1; do sleep 60; done
 log "trainer pid $PID exited"
 sleep 20  # let the container flush train.log
 
