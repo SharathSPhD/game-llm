@@ -142,3 +142,22 @@ def test_preflight_reports_and_roundtrips(tmp_path: Path) -> None:
     rep = json.loads((out / "preflight.json").read_text())
     assert rep["resume_roundtrip_exact"] is True
     assert rep["median_tok_s"] > 0
+
+
+def test_intervention_flags(tmp_path: Path) -> None:
+    """SPEC 0024: block-lr scaling trains the block group at a scaled rate,
+    final-only supervision trains without the anytime triple, and the scale
+    is refused for the explicit arm, which has no tied block."""
+    pack = tmp_path / "pack"
+    make_pack(pack)
+    out = tmp_path / "i1"
+    rc = run_trainer(pack, out, "tied", target=256,
+                     extra=["--block-lr-scale", "0.25"])
+    assert rc == 0
+    out2 = tmp_path / "i2"
+    rc = run_trainer(pack, out2, "tied", target=256,
+                     extra=["--supervise-final-only"])
+    assert rc == 0
+    with pytest.raises(SystemExit, match="tied arm"):
+        run_trainer(pack, tmp_path / "bad", "explicit", target=256,
+                    extra=["--block-lr-scale", "0.25"])

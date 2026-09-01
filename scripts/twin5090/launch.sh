@@ -13,7 +13,7 @@
 # rather than reimplementing ssh/docker keeps the wrong-machine guard.
 set -euo pipefail
 
-MODE="${1:?usage: launch.sh preflight|phase1|extend|sync-pack <pack_dir>}"
+MODE="${1:?usage: launch.sh preflight|phase1|extend|interventions|sync-pack <pack_dir>}"
 PACK_DIR="${2:?give the local pack directory}"
 REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 SKILL=/home/sharaths/.claude/skills/rtx5090-connect/scripts
@@ -48,6 +48,17 @@ elif mode == "extend":
         ["--arm", "tied", "--target-tokens", "10000000000",
          "--decay-start-tokens", "8000000000",
          "--decay-end-tokens", "10000000000"] + common,
+    ]
+elif mode == "interventions":
+    stages = [
+        ["--arm", "tied", "--target-tokens", "500000000",
+         "--block-lr-scale", "0.25",
+         "--out-dir", "results/scale/exp39/i1_blocklr",
+         "--milestones", "500000000"] + common,
+        ["--arm", "tied", "--target-tokens", "500000000",
+         "--supervise-final-only",
+         "--out-dir", "results/scale/exp39/i2_finalonly",
+         "--milestones", "500000000"] + common,
     ]
 elif mode == "sync-pack":
     stages = []

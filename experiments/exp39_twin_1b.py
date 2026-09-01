@@ -116,11 +116,12 @@ def arm_loss(
     if arm == "explicit":
         return next_token_ce(explicit_logits(model, ids, use_ckpt), ids)
     outs = tied_outputs(model, ids, depths, use_ckpt)
+    weights = SUP_WEIGHTS if len(depths) == len(SUP_WEIGHTS) else [1.0] * len(depths)
     parts = [
         w * next_token_ce(lg, ids)
-        for w, (_, lg) in zip(SUP_WEIGHTS, outs, strict=True)
+        for w, (_, lg) in zip(weights, outs, strict=True)
     ]
-    return torch.stack(parts).sum() / sum(SUP_WEIGHTS)
+    return torch.stack(parts).sum() / sum(weights)
 
 
 def lr_at(
@@ -155,18 +156,33 @@ def build_model(arm: str, args: argparse.Namespace, device: str) -> Any:
 
 
 def build_optimizer(model: Any, args: argparse.Namespace) -> torch.optim.AdamW:
-    decay, no_decay = [], []
+    """Decay on matrices only; optionally a scaled learning rate for the tied
+    block (SPEC 0024 I1: the block accumulates one gradient contribution per
+    iteration, so its effective step under a shared rate grows with depth).
+    Each group carries an ``lr_scale`` the schedule multiplies in every step.
+    """
+    scale = getattr(args, "block_lr_scale", 1.0)
+    block_params: set[int] = set()
+    if scale != 1.0:
+        if not hasattr(model, "block"):
+            raise SystemExit("--block-lr-scale applies only to the tied arm")
+        block_params = {id(p) for p in model.block.parameters()}
+    groups: dict[tuple[bool, bool], list[torch.nn.Parameter]] = {}
     for p in model.parameters():
         if not p.requires_grad:
             continue
-        (decay if p.ndim >= 2 else no_decay).append(p)
+        groups.setdefault((p.ndim >= 2, id(p) in block_params), []).append(p)
     fused = "cuda" in args.device and torch.cuda.is_available()
+    param_groups = [
+        {
+            "params": ps,
+            "weight_decay": args.weight_decay if is_decay else 0.0,
+            "lr_scale": scale if in_block else 1.0,
+        }
+        for (is_decay, in_block), ps in groups.items()
+    ]
     return torch.optim.AdamW(
-        [
-            {"params": decay, "weight_decay": args.weight_decay},
-            {"params": no_decay, "weight_decay": 0.0},
-        ],
-        lr=args.lr, betas=(0.9, 0.95), eps=1e-8, fused=fused,
+        param_groups, lr=args.lr, betas=(0.9, 0.95), eps=1e-8, fused=fused,
     )
 
 
@@ -275,6 +291,12 @@ def main() -> int:
     ap.add_argument("--seed", type=int, default=42)
     ap.add_argument("--no-grad-checkpoint", action="store_true")
     ap.add_argument("--no-sdpa", dest="sdpa", action="store_false")
+    ap.add_argument("--block-lr-scale", type=float, default=1.0,
+                    help="SPEC 0024 I1: learning-rate multiplier for the "
+                         "tied block's parameter group")
+    ap.add_argument("--supervise-final-only", action="store_true",
+                    help="SPEC 0024 I2: supervise only the final depth "
+                         "instead of the anytime triple")
     ap.add_argument("--preflight", type=int, default=0,
                     help="run N optimizer steps, measure median tok/s, test "
                          "save/resume, write a report, and exit")
@@ -295,7 +317,7 @@ def main() -> int:
     device = args.device
     use_cuda = "cuda" in device and torch.cuda.is_available()
     use_ckpt = not args.no_grad_checkpoint
-    depths = supervise_depths(args.depth)
+    depths = [args.depth] if args.supervise_final_only else supervise_depths(args.depth)
 
     out_dir = Path(args.out_dir or f"results/scale/exp39/{args.arm}")
     out_dir.mkdir(parents=True, exist_ok=True)
@@ -365,7 +387,7 @@ def main() -> int:
         lr = lr_at(tokens_seen, args.lr, args.lr_min, args.warmup_tokens,
                    args.decay_start_tokens, args.decay_end_tokens)
         for g in opt.param_groups:
-            g["lr"] = lr
+            g["lr"] = lr * g.get("lr_scale", 1.0)
 
         opt.zero_grad(set_to_none=True)
         step_loss = 0.0
