@@ -99,3 +99,21 @@ HF). Re-pull what you need:
 - `/home/ss/projects/MIGRATION.md` — the forward-trip record (context)
 - `/home/ss/gb10-rma-backup/dotclaude/` — untouched byte copy of the original
   GB10 `~/.claude` (fallback if anything above is questioned)
+
+## Work-traces (conversation history as readable Markdown)
+
+312 substantial session transcripts were exported to Markdown + index and kept
+PRIVATE (never pushed — 3/4 source repos are public). Location:
+- 5090: `/home/ss/gb10-work-traces/<project>/` (game-llm, MIabstraction,
+  prabhasa-samskrutam, vakya-vallari) + `export_traces.py` to regenerate.
+- Restore to new GB10: `rsync -a /home/ss/gb10-work-traces/ NEWGB10:~/gb10-work-traces/`
+- `session-traces/` is gitignored in those repos so re-exports never commit.
+- Raw `.jsonl` transcripts also live in `~/.claude/projects/` (CLI-resumable).
+
+## SECURITY — before the RMA GB10 ships (added)
+
+- [ ] **Rotate the GitHub PAT** (`ghp_ertf…`) found in a prabhasa transcript —
+      revoke at github.com/settings/tokens (user actioned 2026-09-01).
+- [ ] Wipe `~/.claude.json` RunPod API key (`rpa_…`) + rotate.
+- [ ] The work-traces contain secrets — keep them PRIVATE (never push to the
+      public repos game-llm / MIabstraction / vakya-vallari).
