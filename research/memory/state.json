@@ -1,6 +1,6 @@
 {
   "cycle": 34,
-  "phase": "SPEC 0022 Phase 1 RUNNING: twin on 5090 (Arm E then Arm T, 2.5B tokens each, pack 973c14c07147). Milestone evals on GB10 as checkpoints land.",
+  "phase": "SPEC 0022 kill gate FAILED at 1B (tied 785.4 vs bar 604.2, ratio 1.560 widening). Extension halted per registration. Operator: Phase 1 completes to 2.5B; then SPEC 0024 interventions (I1 block-lr/4, I2 final-only supervision, 0.5B each); then SPEC 0023 C1; utility decided after diagnostics.",
   "current_rq": "RQ-7: does the compute-matched exchange rate (F45/F50) persist at 1B params on general web data?",
   "gpu_lock": true,
   "open_questions": [
@@ -18,7 +18,7 @@
   "known_defects": [
     "GB10 cooling defect (hardware): 12C die-vs-platform sensor gap at ~60W, BMC power-throttle to ~60W despite no kernel throttle flag, hard trip ~91C. Confirmed via live telemetry + NVIDIA forum cross-reference (RMA channel: FieldDiag PowerStress MODS-020000600139). FieldDiag itself blocked here: mods.ko builds/signs but insmod rejected under Secure Boot ('Key was rejected by service'); box is SSH-only so the UEFI disable-Secure-Boot/re-enable round trip needs physical/console access not currently available. Operator directive (2026-08-26): GB10 excluded from ALL GPU workload until RMA/repair; GB10 stays available for serving/evals/CPU-bound work only."
   ],
-  "next_action": "On MILESTONE notifications: fetch checkpoint, run exp40+exp36 on GB10, record. At 1B tokens both arms: apply kill gate (ppl ratio <=1.20). After Arm T 2.5B: success criterion, then extend-phase decision.",
+  "next_action": "On stage-2 exit (~2.5B, ~24h): launch.sh interventions data/pack_1b. On I1/I2 0.5B milestones: read against rescue bar 1589 / no-rescue 1780. Rescued arm -> 1B gate re-run (604.2). Then C1 (byte pack ready). Utility path decision follows.",
   "gpu_lock_holder": "5090: exp39 Phase 1 twin (detached job kinetic-twin) | GB10: milestone evals only",
   "adrs": []
 }
