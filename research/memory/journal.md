@@ -776,3 +776,26 @@ supervision weights, tuned at depth 12 and 46-121M, may misallocate at
 depth 16. The byte cell (SPEC 0023, pack ready) bears directly on the
 second diagnosis. Operator consulted on Phase 1 completion, diagnostic
 sequencing, and the utility path.
+
+## 2026-09-02 — Takeover on the 5090: the GB10 goes dark
+
+The GB10 is powered off for RMA return tonight; from here the programme
+runs on the 5090 alone and this record is written on it. Arm T stands at
+2.02B of 2.5B tokens (81%), train loss 6.07, 15.56k tok/s, ~8.5h from the
+stage-2 exit. Read from the two arms' own training logs at matched tokens
+(100M-token window means), the tied-minus-explicit train-loss gap is 0.443
+nats at 1B, 0.269 at 1.5B and 0.256 at 1.9B — narrowing, which leans
+toward slow convergence over a hard ceiling, but the held-out 2.5B
+milestone is what the ledger records, not this interpolation. With the
+GB10 went the monitor that would have launched SPEC 0024 on the stage-2
+exit; its replacement (`scripts/twin5090/on_stage2_exit.sh`) runs here,
+guards the trainer by PID, refuses to launch on anything but a clean exit
+with the 2.5B MILESTONE line, runs the tied 2.5B ladder between stages,
+and only then stages the intervention flags into the job directory —
+whose code copy predates SPEC 0024 — and launches I1 then I2. Its first
+arming false-started (a permission error against the root-owned
+container process read as an exit); the guard did what it was for and
+launched nothing. Serving is offline with the GB10; the front end is
+replay-only. A cross-platform note for the reproducibility layer: the
+zero-rationality aggregation test passed on aarch64 and failed on x86_64
+because it argmaxed an exact fp32 tie; it now asserts the distribution.
