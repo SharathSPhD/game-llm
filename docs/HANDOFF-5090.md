@@ -9,12 +9,22 @@ standing directives in CLAUDE.md bind unchanged — commits as
 `SharathSPhD <qbz506@york.ac.uk>` with no Co-Authored-By, pre-registration
 before runs, never two training jobs at once, measured beats extrapolated.
 
-## Where everything is on this machine
+## Environment: use the migration, do not rebuild it
 
-The clone of https://github.com/SharathSPhD/game-llm.git is the source of
-truth; everything below is pushed through commit `HEAD` of main. Clone it
-fresh to the 5090 (e.g. `~/fusion-project/game-llm`) — do not work inside
-the job directory. The job directory `~/fusion-project/kinetic-twin/` holds:
+The dedicated migration session already moved everything (its commits and
+docs live under `_migration/`): the project tree is at
+`/home/ss/projects/game-llm`, the GB10's Claude sessions — including the
+session that ran this programme — resume via
+`CLAUDE_CONFIG_DIR=/home/ss/.claude-gb10` + `claude --resume`, and user
+skills (efe-autoresearch, rtx5090-connect, academic-paper-style) are
+exported in `_migration/user_skills/`. Follow `_migration/MIGRATION.md`
+for login and paths; nothing environmental needs re-doing. This document
+carries only what that one does not: the live research-programme state and
+queue. The git remote remains the source of truth for the record.
+
+## Where the run artifacts are
+
+The job directory `~/fusion-project/kinetic-twin/` holds:
 `pack_1b/` (10.5B-token GPT-2 pack, hash 973c14c07147), `pack_byte/`
 (SPEC 0023's 5.0B-byte pack, hash 08ad3d88bab4, synced today),
 `gb10_artifacts/ckpt/` (the 121M anytime, 46M compute-matched, and explicit
