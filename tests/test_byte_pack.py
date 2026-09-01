@@ -38,7 +38,7 @@ class TestBytePackBuilder:
         result = subprocess.run(
             [
                 sys.executable,
-                str(Path("/home/sharaths/projects/game-llm") / "scripts" / "prepare_1b_pack.py"),
+                str(Path(__file__).resolve().parent.parent / "scripts" / "prepare_1b_pack.py"),
                 "--out-dir",
                 str(pack_dir),
                 "--train-tokens",
@@ -50,7 +50,7 @@ class TestBytePackBuilder:
                 "--local-texts-file",
                 str(texts_file),
             ],
-            cwd="/home/sharaths/projects/game-llm",
+            cwd=str(Path(__file__).resolve().parent.parent),
             capture_output=True,
             text=True,
         )
@@ -64,7 +64,7 @@ class TestBytePackBuilder:
         result = subprocess.run(
             [
                 sys.executable,
-                str(Path("/home/sharaths/projects/game-llm") / "scripts" / "prepare_byte_pack.py"),
+                str(Path(__file__).resolve().parent.parent / "scripts" / "prepare_byte_pack.py"),
                 "--input-pack",
                 str(gpt2_pack),
                 "--out-dir",
@@ -76,7 +76,7 @@ class TestBytePackBuilder:
                 "--shard-bytes",
                 "30000",
             ],
-            cwd="/home/sharaths/projects/game-llm",
+            cwd=str(Path(__file__).resolve().parent.parent),
             capture_output=True,
             text=True,
         )
@@ -95,7 +95,7 @@ class TestBytePackBuilder:
         result = subprocess.run(
             [
                 sys.executable,
-                str(Path("/home/sharaths/projects/game-llm") / "scripts" / "prepare_byte_pack.py"),
+                str(Path(__file__).resolve().parent.parent / "scripts" / "prepare_byte_pack.py"),
                 "--input-pack",
                 str(gpt2_pack),
                 "--out-dir",
@@ -107,7 +107,7 @@ class TestBytePackBuilder:
                 "--shard-bytes",
                 "30000",
             ],
-            cwd="/home/sharaths/projects/game-llm",
+            cwd=str(Path(__file__).resolve().parent.parent),
             capture_output=True,
             text=True,
         )
@@ -136,7 +136,7 @@ class TestBytePackBuilder:
         result = subprocess.run(
             [
                 sys.executable,
-                str(Path("/home/sharaths/projects/game-llm") / "scripts" / "prepare_byte_pack.py"),
+                str(Path(__file__).resolve().parent.parent / "scripts" / "prepare_byte_pack.py"),
                 "--input-pack",
                 str(gpt2_pack),
                 "--out-dir",
@@ -148,7 +148,7 @@ class TestBytePackBuilder:
                 "--shard-bytes",
                 "20000",
             ],
-            cwd="/home/sharaths/projects/game-llm",
+            cwd=str(Path(__file__).resolve().parent.parent),
             capture_output=True,
             text=True,
         )
@@ -181,7 +181,7 @@ class TestBytePackBuilder:
         result = subprocess.run(
             [
                 sys.executable,
-                str(Path("/home/sharaths/projects/game-llm") / "scripts" / "prepare_byte_pack.py"),
+                str(Path(__file__).resolve().parent.parent / "scripts" / "prepare_byte_pack.py"),
                 "--input-pack",
                 str(gpt2_pack),
                 "--out-dir",
@@ -193,7 +193,7 @@ class TestBytePackBuilder:
                 "--shard-bytes",
                 "20000",
             ],
-            cwd="/home/sharaths/projects/game-llm",
+            cwd=str(Path(__file__).resolve().parent.parent),
             capture_output=True,
             text=True,
         )
@@ -217,7 +217,7 @@ class TestBytePackBuilder:
         result = subprocess.run(
             [
                 sys.executable,
-                str(Path("/home/sharaths/projects/game-llm") / "scripts" / "prepare_byte_pack.py"),
+                str(Path(__file__).resolve().parent.parent / "scripts" / "prepare_byte_pack.py"),
                 "--input-pack",
                 str(gpt2_pack),
                 "--out-dir",
@@ -229,7 +229,7 @@ class TestBytePackBuilder:
                 "--shard-bytes",
                 "30000",
             ],
-            cwd="/home/sharaths/projects/game-llm",
+            cwd=str(Path(__file__).resolve().parent.parent),
             capture_output=True,
             text=True,
         )
@@ -270,7 +270,7 @@ class TestBytePackReader:
         result = subprocess.run(
             [
                 sys.executable,
-                str(Path("/home/sharaths/projects/game-llm") / "scripts" / "prepare_1b_pack.py"),
+                str(Path(__file__).resolve().parent.parent / "scripts" / "prepare_1b_pack.py"),
                 "--out-dir",
                 str(gpt2_pack),
                 "--train-tokens",
@@ -282,7 +282,7 @@ class TestBytePackReader:
                 "--local-texts-file",
                 str(texts_file),
             ],
-            cwd="/home/sharaths/projects/game-llm",
+            cwd=str(Path(__file__).resolve().parent.parent),
             capture_output=True,
             text=True,
         )
@@ -293,7 +293,7 @@ class TestBytePackReader:
         result = subprocess.run(
             [
                 sys.executable,
-                str(Path("/home/sharaths/projects/game-llm") / "scripts" / "prepare_byte_pack.py"),
+                str(Path(__file__).resolve().parent.parent / "scripts" / "prepare_byte_pack.py"),
                 "--input-pack",
                 str(gpt2_pack),
                 "--out-dir",
@@ -305,7 +305,7 @@ class TestBytePackReader:
                 "--shard-bytes",
                 "30000",
             ],
-            cwd="/home/sharaths/projects/game-llm",
+            cwd=str(Path(__file__).resolve().parent.parent),
             capture_output=True,
             text=True,
         )
@@ -349,7 +349,7 @@ class TestBytePackReader:
         result = subprocess.run(
             [
                 sys.executable,
-                str(Path("/home/sharaths/projects/game-llm") / "scripts" / "prepare_1b_pack.py"),
+                str(Path(__file__).resolve().parent.parent / "scripts" / "prepare_1b_pack.py"),
                 "--out-dir",
                 str(pack_dir),
                 "--train-tokens",
@@ -361,7 +361,7 @@ class TestBytePackReader:
                 "--local-texts-file",
                 str(texts_file),
             ],
-            cwd="/home/sharaths/projects/game-llm",
+            cwd=str(Path(__file__).resolve().parent.parent),
             capture_output=True,
             text=True,
         )
@@ -422,7 +422,7 @@ class TestBytePackIntegration:
         result = subprocess.run(
             [
                 sys.executable,
-                str(Path("/home/sharaths/projects/game-llm") / "scripts" / "prepare_1b_pack.py"),
+                str(Path(__file__).resolve().parent.parent / "scripts" / "prepare_1b_pack.py"),
                 "--out-dir",
                 str(gpt2_pack),
                 "--train-tokens",
@@ -434,7 +434,7 @@ class TestBytePackIntegration:
                 "--local-texts-file",
                 str(texts_file),
             ],
-            cwd="/home/sharaths/projects/game-llm",
+            cwd=str(Path(__file__).resolve().parent.parent),
             capture_output=True,
             text=True,
         )
@@ -448,7 +448,7 @@ class TestBytePackIntegration:
         result = subprocess.run(
             [
                 sys.executable,
-                str(Path("/home/sharaths/projects/game-llm") / "scripts" / "prepare_byte_pack.py"),
+                str(Path(__file__).resolve().parent.parent / "scripts" / "prepare_byte_pack.py"),
                 "--input-pack",
                 str(gpt2_pack),
                 "--out-dir",
@@ -460,7 +460,7 @@ class TestBytePackIntegration:
                 "--shard-bytes",
                 "30000",
             ],
-            cwd="/home/sharaths/projects/game-llm",
+            cwd=str(Path(__file__).resolve().parent.parent),
             capture_output=True,
             text=True,
         )

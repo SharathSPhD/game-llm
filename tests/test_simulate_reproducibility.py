@@ -5,6 +5,7 @@ reproducibility across multiple runs, which is essential for the research
 harness requirement of ≥3 md5-distinct seeds.
 """
 
+from pathlib import Path
 import re
 import subprocess
 import sys
@@ -21,7 +22,7 @@ class TestSimulateSeeding:
                 [sys.executable, "simulate.py", "--seed", "42"],
                 capture_output=True,
                 text=True,
-                cwd="/home/sharaths/projects/game-llm",
+                cwd=str(Path(__file__).resolve().parent.parent),
             )
             assert result.returncode == 0, f"simulate.py failed: {result.stderr}"
             # Extract "P(token 3):" values from Phase 2 output
@@ -42,7 +43,7 @@ class TestSimulateSeeding:
                 [sys.executable, "simulate.py", "--seed", str(seed)],
                 capture_output=True,
                 text=True,
-                cwd="/home/sharaths/projects/game-llm",
+                cwd=str(Path(__file__).resolve().parent.parent),
             )
             assert result.returncode == 0, f"simulate.py failed: {result.stderr}"
             # Extract "Bid value:" from Phase 3 output
@@ -61,7 +62,7 @@ class TestSimulateSeeding:
             [sys.executable, "simulate.py", "--seed", "42"],
             capture_output=True,
             text=True,
-            cwd="/home/sharaths/projects/game-llm",
+            cwd=str(Path(__file__).resolve().parent.parent),
         )
         assert result.returncode == 0, f"simulate.py failed with --seed: {result.stderr}"
         assert "Simulation complete" in result.stdout
@@ -72,7 +73,7 @@ class TestSimulateSeeding:
             [sys.executable, "simulate.py"],
             capture_output=True,
             text=True,
-            cwd="/home/sharaths/projects/game-llm",
+            cwd=str(Path(__file__).resolve().parent.parent),
             timeout=30,
         )
         assert result.returncode == 0, f"simulate.py failed without --seed: {result.stderr}"
@@ -86,7 +87,7 @@ class TestSimulateSeeding:
                 [sys.executable, "simulate.py", "--seed", str(seed)],
                 capture_output=True,
                 text=True,
-                cwd="/home/sharaths/projects/game-llm",
+                cwd=str(Path(__file__).resolve().parent.parent),
             )
             assert result.returncode == 0, f"simulate.py failed: {result.stderr}"
             # Extract final NashConv from Phase 1

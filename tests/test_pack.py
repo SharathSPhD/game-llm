@@ -39,7 +39,7 @@ class TestPackBuilder:
                 "--co",
                 "-q",
             ],
-            cwd="/home/sharaths/projects/game-llm",
+            cwd=str(Path(__file__).resolve().parent.parent),
             capture_output=True,
         )
         # Just verify we can import the module first
@@ -47,7 +47,7 @@ class TestPackBuilder:
             [
                 sys.executable,
                 str(
-                    Path("/home/sharaths/projects/game-llm")
+                    Path(__file__).resolve().parent.parent
                     / "scripts"
                     / "prepare_1b_pack.py"
                 ),
@@ -62,7 +62,7 @@ class TestPackBuilder:
                 "--local-texts-file",
                 str(texts_file),
             ],
-            cwd="/home/sharaths/projects/game-llm",
+            cwd=str(Path(__file__).resolve().parent.parent),
             capture_output=True,
             text=True,
         )
@@ -102,7 +102,7 @@ class TestPackBuilder:
             [
                 sys.executable,
                 str(
-                    Path("/home/sharaths/projects/game-llm")
+                    Path(__file__).resolve().parent.parent
                     / "scripts"
                     / "prepare_1b_pack.py"
                 ),
@@ -117,7 +117,7 @@ class TestPackBuilder:
                 "--local-texts-file",
                 str(texts_file),
             ],
-            cwd="/home/sharaths/projects/game-llm",
+            cwd=str(Path(__file__).resolve().parent.parent),
             capture_output=True,
             text=True,
         )
@@ -159,7 +159,7 @@ class TestPackBuilder:
             [
                 sys.executable,
                 str(
-                    Path("/home/sharaths/projects/game-llm")
+                    Path(__file__).resolve().parent.parent
                     / "scripts"
                     / "prepare_1b_pack.py"
                 ),
@@ -174,7 +174,7 @@ class TestPackBuilder:
                 "--local-texts-file",
                 str(texts_file),
             ],
-            cwd="/home/sharaths/projects/game-llm",
+            cwd=str(Path(__file__).resolve().parent.parent),
             capture_output=True,
             text=True,
         )
@@ -222,7 +222,7 @@ class TestPackReader:
             [
                 sys.executable,
                 str(
-                    Path("/home/sharaths/projects/game-llm")
+                    Path(__file__).resolve().parent.parent
                     / "scripts"
                     / "prepare_1b_pack.py"
                 ),
@@ -237,7 +237,7 @@ class TestPackReader:
                 "--local-texts-file",
                 str(texts_file),
             ],
-            cwd="/home/sharaths/projects/game-llm",
+            cwd=str(Path(__file__).resolve().parent.parent),
             capture_output=True,
             text=True,
         )
@@ -384,7 +384,7 @@ class TestPackIntegration:
             [
                 sys.executable,
                 str(
-                    Path("/home/sharaths/projects/game-llm")
+                    Path(__file__).resolve().parent.parent
                     / "scripts"
                     / "prepare_1b_pack.py"
                 ),
@@ -399,7 +399,7 @@ class TestPackIntegration:
                 "--local-texts-file",
                 str(texts_file),
             ],
-            cwd="/home/sharaths/projects/game-llm",
+            cwd=str(Path(__file__).resolve().parent.parent),
             capture_output=True,
             text=True,
         )
@@ -427,7 +427,7 @@ class TestPackIntegration:
             [
                 sys.executable,
                 str(
-                    Path("/home/sharaths/projects/game-llm")
+                    Path(__file__).resolve().parent.parent
                     / "scripts"
                     / "prepare_1b_pack.py"
                 ),
@@ -442,7 +442,7 @@ class TestPackIntegration:
                 "--local-texts-file",
                 str(texts_file),
             ],
-            cwd="/home/sharaths/projects/game-llm",
+            cwd=str(Path(__file__).resolve().parent.parent),
             capture_output=True,
             text=True,
         )
