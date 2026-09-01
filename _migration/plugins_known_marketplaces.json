@@ -1,0 +1,67 @@
+{
+  "claude-plugins-official": {
+    "source": {
+      "source": "github",
+      "repo": "anthropics/claude-plugins-official"
+    },
+    "installLocation": "/home/sharaths/.claude/plugins/marketplaces/claude-plugins-official",
+    "lastUpdated": "2026-07-17T19:04:09.502Z"
+  },
+  "claude-code-workflows": {
+    "source": {
+      "source": "git",
+      "url": "https://github.com/wshobson/agents.git"
+    },
+    "installLocation": "/home/sharaths/.claude/plugins/marketplaces/claude-code-workflows",
+    "lastUpdated": "2026-01-30T20:29:54.396Z"
+  },
+  "weave-claude-plugin": {
+    "source": {
+      "source": "github",
+      "repo": "wandb/claude_code_weave_plugin",
+      "ref": "v0.1.2"
+    },
+    "installLocation": "/home/sharaths/.claude/plugins/marketplaces/weave-claude-plugin",
+    "lastUpdated": "2026-05-08T15:51:04.603Z"
+  },
+  "triz-arena": {
+    "source": {
+      "source": "git",
+      "url": "https://github.com/SharathSPhD/triz-engine.git"
+    },
+    "installLocation": "/home/sharaths/.claude/plugins/marketplaces/triz-arena",
+    "lastUpdated": "2026-06-24T09:01:47.556Z"
+  },
+  "attractor-flow": {
+    "source": {
+      "source": "git",
+      "url": "https://github.com/SharathSPhD/attractor-flow.git"
+    },
+    "installLocation": "/home/sharaths/.claude/plugins/marketplaces/attractor-flow",
+    "lastUpdated": "2026-06-24T09:02:23.954Z"
+  },
+  "pratyaksha-context-eng-harness": {
+    "source": {
+      "source": "git",
+      "url": "https://github.com/SharathSPhD/pratyaksha-context-eng-harness.git"
+    },
+    "installLocation": "/home/sharaths/.claude/plugins/marketplaces/pratyaksha-context-eng-harness",
+    "lastUpdated": "2026-06-24T09:04:30.139Z"
+  },
+  "claude-code-plugins": {
+    "source": {
+      "source": "github",
+      "repo": "anthropics/claude-code"
+    },
+    "installLocation": "/home/sharaths/.claude/plugins/marketplaces/claude-code-plugins",
+    "lastUpdated": "2026-07-17T19:04:09.361Z"
+  },
+  "pratyabhijna-creative-engine": {
+    "source": {
+      "source": "git",
+      "url": "https://github.com/SharathSPhD/pratyabhijna.git"
+    },
+    "installLocation": "/home/sharaths/.claude/plugins/marketplaces/pratyabhijna-creative-engine",
+    "lastUpdated": "2026-05-01T06:20:55.698Z"
+  }
+}
