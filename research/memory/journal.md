@@ -755,3 +755,24 @@ early and close late, but that history is from 46-121M on BabyLM; whether
 it repeats at 1B on web data is precisely what the gate exists to decide.
 Recorded now so that whatever the verdict, no one can say the trajectory
 was hidden.
+
+## 2026-09-01 — The kill gate fails at 1B tokens
+
+Arm T held-out perplexity 785.4 against the registered bar of 604.2 — ratio
+1.560, and wider than the 1.543 of the 0.5B milestone, so the tied arm is
+not closing on this trajectory. In loss terms: 0.44 nats behind at matched
+tokens where the gate allowed 0.18. Per SPEC 0022 the extension does not
+launch without a new operator decision. Per the closure contract's hard
+rule, this gate verdict is recorded now but the FINDING is not a closed
+NULL: no failure is declared on attempt one, and at least two documented
+interventions precede any NULL. The candidate diagnoses, stated before any
+diagnostic runs: the tied block accumulates ~16 gradient contributions per
+token where an explicit layer takes one, so the shared learning rate may be
+effectively 16x too hot for the block at this width (F24's regime never saw
+d=2048); single-epoch web data at this budget is memorization-heavy and the
+158M-parameter arm memorizes 5.8x less — the depth-versus-parameters crux
+the architecture analysis pre-registered as a risk; and the anytime
+supervision weights, tuned at depth 12 and 46-121M, may misallocate at
+depth 16. The byte cell (SPEC 0023, pack ready) bears directly on the
+second diagnosis. Operator consulted on Phase 1 completion, diagnostic
+sequencing, and the utility path.
