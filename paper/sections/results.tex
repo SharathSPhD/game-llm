@@ -752,6 +752,63 @@ BLiMP (3 seeds)            & 0.683  & 0.655  & 0.958 \\
 \end{tabular}
 \end{table}
 
+\subsection{The Twin at One Billion Parameters: A Scale Boundary}
+\label{sec:results:twin}
+
+The exchange rate of Section~\ref{sec:results:compute} was measured at 46--121M
+parameters on BabyLM, and the question the audit left open was whether it
+survives at the scale a practitioner would deploy. A twin was pre-registered to
+answer it: an explicit transformer of 913M parameters ($d = 2048$, sixteen
+layers) and a tied block of the same width iterated sixteen times, 158M
+parameters resident, trained on an identical stream of 2.5B FineWeb-Edu tokens
+with the same optimizer, schedule and batch composition, so that compute is
+equal by construction and only the architecture differs. Two gates were fixed
+before training: a kill gate at 1B tokens requiring a held-out perplexity ratio
+of at most $1.20$, and a success bar at 2.5B tokens of at most $1.10$ or a
+benchmark-ladder ratio of at least $0.95$.
+
+Table~\ref{tab:twin} records the trajectory. The tied arm fails the kill gate
+at 1B tokens with a ratio of $1.560$, wider than the $1.543$ measured at 0.5B,
+and misses the success bar at 2.5B with a ratio of $1.308$. The gap nonetheless
+closes over the second half of training, from $0.44$ to $0.27$ nats at matched
+tokens, which is the pattern the small-scale record showed --- the tied arm lags
+early and closes late --- rather than a plateau. A power law fitted to the three
+milestones of each arm ($R^2$ of $0.97$ and $0.99$) places the $1.10$ bar between
+5B and 10B tokens; that figure is an extrapolation and is reported as one. On
+the public ladder both arms score at chance at this budget (a mean of $0.34$
+over six multiple-choice tasks against $0.51$ for Pythia-410m and $0.61$ for
+SmolLM2-360M on the same harness), so held-out perplexity is the only
+discriminating measurement the budget affords.
+
+The finding is therefore a boundary rather than a verdict in either direction.
+The exchange rate that holds at 46--121M does not transfer unchanged to a
+billion parameters on web data at 2.5B tokens, and the trajectory does not
+exclude its recovery with more tokens. Under the closure contract of
+Section~\ref{sec:setup} a null is not declared on a first attempt; the
+two mechanisms most likely to produce the gap without the claim being false ---
+a shared learning rate that is effectively too hot for a block receiving
+sixteen gradient contributions per token, and anytime supervision weights tuned
+at depth twelve --- were registered as interventions before either ran, and
+their readings are reported below.
+
+\begin{table}[t]
+\centering
+\caption{The compute-matched twin at $d = 2048$ on FineWeb-Edu. Held-out
+perplexity at the three pre-registered milestones, single seed, identical token
+stream. The kill gate applied at 1B tokens (ratio $\le 1.20$) and the success
+bar at 2.5B (ratio $\le 1.10$).}
+\label{tab:twin}
+\begin{tabular}{lcccc}
+\toprule
+Tokens & Explicit (913M) & Tied (158M resident) & Ratio & Gate \\
+\midrule
+0.5B & 1271.4 & 1961.6 & 1.543 & --- \\
+1.0B & 503.5  & 785.4  & 1.560 & kill $\le 1.20$: failed \\
+2.5B & 259.7  & 339.7  & 1.308 & success $\le 1.10$: missed \\
+\bottomrule
+\end{tabular}
+\end{table}
+
 \subsection{Deployment Measurements: Where the Saving Lives and What Can Carry It}
 \label{sec:results:deployment}
 

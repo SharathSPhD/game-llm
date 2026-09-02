@@ -819,3 +819,24 @@ the SPEC 0024 code and launched the interventions at 09:17 (I1 block-lr/4
 first, then I2 final-only, 0.5B tokens each, ~9h apiece, repo 2e1bee8).
 I1's 0.5B reading is due this evening against the fixed bars: ≤1589
 rescue, ≥1780 no rescue.
+
+## 2026-09-02 — Adversarial review and the closure decision (ADR 0010)
+
+Five reviewers and a TRIZ pass were set on the whole programme — science,
+paper and site, app and serving, code and reproducibility — with the
+question of whether to push or close. What survived fact-checking: F45's
+interval straddles its bar and F50 is one seed; every finding from F45 to
+F54 still carries an open Tarka review; the paper and site say nothing of
+SPEC 0022; the app is a replay shell whose backend left with the GB10; the
+technical layer has three mypy errors, exp32's seed 43/44 configs missing
+beside their results, and six scripts naming the GB10 home path. What did
+not survive: three reviewers' confident errors (the paper does carry F45;
+the four HF models and the council dataset are on the Hub; the
+interventions cost 9h each, not 2.7h). A power-law fit of the twin's three
+milestones per arm projects the 1.10 ratio between 5B and 10B tokens —
+recorded as a projection. The operator decided: close after SPEC 0024, C1
+only on rescue, no 10B extension; the product is the equilibrium layer over
+public players and the tied model a research artifact; serving becomes
+profile-driven so the 5090 carries it now and the GB10 again later; the
+paper goes to arXiv as v2 with the scale boundary stated. GPU-free closure
+work begins while I1 trains.

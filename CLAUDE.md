@@ -106,7 +106,12 @@ layer of the closure contract, not a later cleanup.
 
 ## Hardware & environment
 
-- This machine is the GB10 (DGX Spark). RTX 5090 box is reserved (other training).
+- Two machines: the GB10 (DGX Spark, 121GB unified, aarch64) and the RTX 5090
+  workstation (32GB, x86_64). Since 2026-09-02 the GB10 is away for RMA and the
+  5090 carries training, evals and serving alone (ADR 0010). Serving is
+  profile-driven: `KINETIC_SERVE_PROFILE={gb10|rtx5090}` selects
+  `configs/serve/profiles/<name>.yaml`; the 5090 profile serves from the CPU
+  while `state.json` holds `gpu_lock: true`. Never two GPU jobs at once.
 - Python via `uv`; venv at `.venv` (torch cu130). GPU training jobs run in Docker
   containers; serving must stay portable to RunPod serverless
   (`kinetic_ai/serve/executor.py` abstraction).
