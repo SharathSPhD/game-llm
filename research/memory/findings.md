@@ -1555,7 +1555,7 @@ layer and compute is equal by construction rather than by calibration.
   constraint. It is not worth making where arithmetic binds, which F44 already
   established from the other direction.
 - **Status:** VALIDATED (3 seeds, compute equal by construction, pre-registered
-  prediction met on the point estimate) · Tarka PENDING
+  prediction met on the point estimate) · Tarka RESOLVED WITH AMENDMENT 2026-09-02: all six seed accuracies, the ratios, 45.8M/123.8M and 84.9M compute units recompute exactly from results/scale/exp32 and exp10_5090; SPEC 0018 registered two seeds and seed 44 was added after the two-seed figure was seen (documented above); the interval straddles the 0.95 bar and the finding says so; exp32's config hashes do not reproduce from the committed files (configs/exp32_seed4{3,4}.yaml headers)
 
 ## F46 — Stability separates right from wrong, and still does not beat the best member
 
@@ -1599,7 +1599,7 @@ carried no signal.
   worked as intended: four GPU-hours were saved by a one-hour probe whose
   purpose was to make exactly this call.
 - **Status:** VALIDATED (60 questions, 5 samples, single seed) · precondition MET
-  · system-versus-best-member NOT MET · Tarka PENDING
+  · system-versus-best-member NOT MET · Tarka RESOLVED 2026-09-02: 0.679/0.472, difference 0.206, t=6.69 recompute exactly from the exp29 stability probe; single seed by gate design; precondition met, system not
 
 ## F47 — Depth conditioning makes weight tying worse, and the prediction was wrong in direction
 
@@ -1642,7 +1642,7 @@ and refute it in the opposite direction to the one anticipated.
   (F45). That is the result, and this attempt to improve it failed. Reporting the
   failed attempt at the same length as the success is the point of recording it.
 - **Status:** VALIDATED (3 seeds, pre-registered prediction refuted in direction)
-  · verdict NOT MET · closes depth modulation · Tarka PENDING
+  · verdict NOT MET · closes depth modulation · Tarka RESOLVED 2026-09-02: plain 0.663/0.650/0.651 and conditioned 0.637/0.621/0.640 recompute from exp34; three md5-distinct seeds; prediction refuted in the opposite direction and the finding says so
 
 ## F48 — The memory saving is in weights, not activations, and the deployment claim must say so
 
@@ -1680,7 +1680,7 @@ is the reason to measure at all.
   change, and the quality cost of doing so is measurable with the checkpoints
   already in hand.
 - **Status:** VALIDATED (direct allocation measurement, both models, same card,
-  same dtype) · qualifies the low-memory claim to weights only · Tarka PENDING
+  same dtype) · qualifies the low-memory claim to weights only · Tarka RESOLVED 2026-09-02: 183.2 MB vs 495.7 MB (0.370) and the batch-1 activation regression recompute from the deployment measurements; same models, machine and dtype; claim correctly narrowed to weights
 
 ## F49 — GGUF cannot represent this architecture without destroying what makes it worth shipping
 
@@ -1723,7 +1723,7 @@ incompatible in a way no amount of engineering resolves.
   formats that can represent it, and that constraint belongs beside the number
   rather than in a footnote.
 - **Status:** VALIDATED (export tests pass, unrolling cost recomputed by the
-  author) · GGUF rejected on integrity grounds · Tarka PENDING
+  author) · GGUF rejected on integrity grounds · Tarka RESOLVED 2026-09-02: 417.6 MB unrolled GGUF against 85.1M layer parameters (4.91x), safetensors round-trip exact to 1e-5, ONNX 1.31M stored values against 1.06M parameters recompute; format costs measured, not asserted
 
 ## F50 — The equal-compute ratio holds on a threefold-wider benchmark
 
@@ -1740,7 +1740,7 @@ evaluation, and per-phenomenon the two models are close rather than the ratio
 being an average over divergent behaviours.
 
 **Status:** VALIDATED (single seed, 31 phenomena, paired per-phenomenon) ·
-consistent with F45 · Tarka PENDING
+consistent with F45 · Tarka RESOLVED 2026-09-02: 0.5731/0.6005/0.9544 and the 12-17-2 per-phenomenon split recompute exactly from results/scale/exp36_full.json; single seed by design as a breadth check of F45, not an independent validation
 
 ## F51 — The leap gate fails: conversion at any gentleness starts outside recoverable range
 
@@ -1776,7 +1776,7 @@ representable exactly in safetensors and ONNX but not GGUF (F49).
 
 **Status:** VALIDATED (probe measured, gate applied as pre-registered) · closes
 SPEC 0020 · the leap is future work with a stated budget requirement · Tarka
-PENDING
+PENDING · Tarka RESOLVED 2026-09-02: 64.5x/102x/270x damage recompute from base ppl 15.927; gate (<5x) applied as registered; closure of the conversion route stands
 
 ## F52 — ONNX carries the weight saving that GGUF destroys, verified
 
@@ -1802,7 +1802,7 @@ which the architecture's parameter saving survives (F48) in a format that can
 express it.
 
 **Status:** VALIDATED (initializer accounting on an exported graph; export tests
-5/5) · completes F49's boundary · Tarka PENDING
+5/5) · completes F49's boundary · Tarka RESOLVED 2026-09-02: shared-initializer accounting and round-trip fidelity verified from the export tests; completes F49's boundary
 
 ## F53 — The KD pilot fails its gate: distillation does not accelerate the from-scratch tied student
 
@@ -1834,7 +1834,7 @@ requiring a pretraining budget, with conversion (F51) and cheap distillation
 (this finding) both measured and closed as shortcuts.
 
 **Status:** VALIDATED (pre-registered gate applied as written) · closes SPEC
-0021 and the leap · the programme's empirical record ends at F53 · Tarka PENDING
+0021 and the leap · the programme's empirical record ends at F53 · Tarka RESOLVED 2026-09-02: 482.96 vs 493.39 ppl (-2.2% against a +15% gate) recompute from the pilot results; one configuration by design and the finding says so; closure per SPEC 0021
 
 ## F54 — The council survives matched compute and loses matched capacity
 
@@ -1865,7 +1865,7 @@ and it is not the best use of 6.34B resident parameters, which is a single
 larger model by a wide margin.
 
 **Status:** VALIDATED (single arena, 360 questions, paired) · completes the
-council side-result's audit · the empirical record ends at F54
+council side-result's audit · the empirical record ends at F54 · Tarka RESOLVED 2026-09-02: 0.6194 vs 0.5556/0.6028/0.6361 self-consistency and 0.8139 for the 7B recompute from results/scale/exp30_fair_baselines.json on the 360 registered questions; both audits complete
 
 ## F55 — The exchange rate does not transfer unchanged to a billion parameters, and the programme halts at that boundary
 

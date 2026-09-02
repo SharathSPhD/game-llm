@@ -788,8 +788,13 @@ Section~\ref{sec:setup} a null is not declared on a first attempt; the
 two mechanisms most likely to produce the gap without the claim being false ---
 a shared learning rate that is effectively too hot for a block receiving
 sixteen gradient contributions per token, and anytime supervision weights tuned
-at depth twelve --- were registered as interventions before either ran, and
-their readings are reported below.
+at depth twelve --- were registered as interventions before either ran. The
+first was halted by operator decision at 210M of its 500M tokens, over which
+its training loss tracked the original tied arm's within $0.014$ nats at matched
+steps, and the second never ran; the mechanism is therefore unresolved and the
+record states a boundary rather than a null (F55). The reason for halting is
+the subject of Section~\ref{sec:discussion}: at this budget neither arm is a
+model anyone would use, and the programme's objective was utility.
 
 \begin{table}[t]
 \centering
