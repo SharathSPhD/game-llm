@@ -74,7 +74,9 @@ def load_profile(name: str | None = None) -> ServeProfile:
         if env is not None:
             raw[key] = cast(env)
 
-    lock = raw.get("gpu_lock_file")
+    # KINETIC_STATE_FILE (shared with the executor) wins over the profile so tests
+    # and one-off deployments can point every lock reader at the same file.
+    lock = os.environ.get("KINETIC_STATE_FILE") or raw.get("gpu_lock_file")
     lock_path = (REPO_ROOT / lock) if lock and not Path(lock).is_absolute() else (Path(lock) if lock else None)
     known = {"host", "port", "device", "dtype", "max_resident_gb", "allowed_origins",
              "results_dir", "gpu_lock_file", "tunnel", "description", "name"}

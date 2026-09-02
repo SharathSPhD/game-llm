@@ -136,6 +136,10 @@ class Executor(ABC):
 # ─── LocalExecutor ───────────────────────────────────────────────────────────
 
 
+#: Environment override for the GPU-lock state file (tests, deployments).
+STATE_FILE_ENV = "KINETIC_STATE_FILE"
+
+
 class LocalExecutor(Executor):
     """In-process executor with thread pool and file-based GPU lock.
 
@@ -155,6 +159,7 @@ class LocalExecutor(Executor):
         mock_experiments: bool = False,
     ) -> None:
         self.max_workers = max_workers
+        self._explicit_state_file = state_file is not None
         if state_file is None:
             state_file = os.path.join(
                 os.path.dirname(
@@ -170,11 +175,20 @@ class LocalExecutor(Executor):
         self.mock_experiments = mock_experiments
 
     def _is_gpu_locked(self) -> bool:
-        """Check if GPU is locked in state.json."""
-        if not os.path.exists(self.state_file):
+        """Check if GPU is locked in state.json.
+
+        When the executor was built without an explicit state file, the path is
+        re-read from KINETIC_STATE_FILE at every check: app/server.py constructs
+        its executor at import time, before a test session or a deployment
+        script has had the chance to point the lock somewhere else.
+        """
+        path = self.state_file
+        if not self._explicit_state_file:
+            path = os.environ.get(STATE_FILE_ENV) or path
+        if not os.path.exists(path):
             return False
         try:
-            with open(self.state_file) as f:
+            with open(path) as f:
                 state: dict = json.load(f)
                 return bool(state.get("gpu_lock", False))
         except (json.JSONDecodeError, OSError):
