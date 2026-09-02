@@ -28,9 +28,11 @@
   ],
   "on_resume": "Programme closed. No training job should be running; if `pgrep -x -f 'python train.py'` finds one, it was not launched by this programme. See docs/RESUMPTION.md before any GPU work.",
   "closure_work": [
-    "paper+site: SPEC 0022 twin + gate + F45 interval straddle (v2)",
-    "Tarka pass F45-F54",
-    "v2 tag",
-    "SPEC 0025 product closure: replay-only app (council telemetry from F41/F54, leaderboard snapshot, Studio -> read-only registry), live inference returns with the GB10 via KINETIC_SERVE_PROFILE=gb10; default live council = F41 council"
+    "DONE: paper v2 text (abstract/results/discussion/limitations/conclusion/availability) \u2014 PDF not rebuilt here (no TeX on the 5090; run `make -C paper` where latexmk exists)",
+    "DONE: site F55 + closure wording (Astro build green; GH Pages workflow builds from source)",
+    "DONE: replay-only app (SPEC 0025) e2e-tested locally on the production build; Vercel redeploy from main",
+    "DONE: Tarka verdicts F28-F55 applied; no PENDING remains",
+    "PENDING (operator): push docs/hf-cards/kinetic-eqlm-46m-compute-matched.md with HF_TOKEN via scripts/push_hf_card.py",
+    "PENDING: tag v2.0.0-closure after the Vercel deployment is verified in a real browser"
   ]
 }
