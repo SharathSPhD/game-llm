@@ -32,8 +32,8 @@
     "mypy clean (pack.py dtype, onnxruntime/gguf overrides)",
     "serving profiles configs/serve/profiles/{gb10,rtx5090}.yaml + KINETIC_SERVE_PROFILE",
     "Tarka pass F45-F54",
-    "equilibrium-layer product over public players (app/API)",
     "stale /home/sharaths paths in 6 scripts",
-    "v2 tag"
+    "v2 tag",
+    "SPEC 0025 product closure: replay-only app (council telemetry from F41/F54, leaderboard snapshot, Studio -> read-only registry), live inference returns with the GB10 via KINETIC_SERVE_PROFILE=gb10; default live council = F41 council"
   ]
 }

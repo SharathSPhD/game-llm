@@ -47,6 +47,14 @@ perplexity (≈ 70–100) would remain at chance on the ladder.
    as research artifacts with a model card carrying the twin's numbers and
    non-claims. Live inference must not depend on a competitive base model
    of our own or on a specific host.
+   Operator refinement (2026-09-02, later the same day): live inference is
+   deferred until the GB10 returns; until then the app ships replay-only,
+   with the council's telemetry pre-recorded from the F41/F54 measurements
+   and every page that once called the backend labelled as replay. The
+   default live council is the measured F41 council, so the app's numbers
+   are the paper's. The Training Studio is retired to a read-only run
+   registry; job submission goes, since the product must never contend
+   for a training GPU.
 4. **Serving host.** Serving is profile-driven: `configs/serve/profiles/`
    holds one YAML per host (`gb10`, `rtx5090`), selected by
    `KINETIC_SERVE_PROFILE`. The 5090 profile runs CPU-only while a training
