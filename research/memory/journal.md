@@ -840,3 +840,18 @@ public players and the tied model a research artifact; serving becomes
 profile-driven so the 5090 carries it now and the GB10 again later; the
 paper goes to arXiv as v2 with the scale boundary stated. GPU-free closure
 work begins while I1 trains.
+
+## 2026-09-02 — The programme halts (ADR 0011)
+
+At 13:00 the operator asked the only question that mattered: with both arms
+at chance on every public benchmark and the nearest useful model some 220
+GPU-days away on the one card, would nine more hours of I1 and nine of I2
+change anything that ships? They would not. I1 was stopped at 13:06 with
+209.7M tokens seen — its training loss had tracked Arm T's within 0.014
+nats the whole way, which is an observation and not a reading — and I2 and
+C1 do not run. The contract's condition for a NULL is therefore unmet and
+none is declared: F55 records a scale boundary with the mechanism open,
+ADR 0011 records why, and docs/RESUMPTION.md records how to reopen it. The
+GPU lock is released for the first time since 2026-08-30. What remains is
+closure proper: paper v2, site, model card, the replay-only app, the Tarka
+verdicts on F45–F54, and the tag.

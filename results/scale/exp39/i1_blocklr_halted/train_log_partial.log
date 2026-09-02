@@ -1,0 +1,24 @@
+=== stage 1/2: ['--arm', 'tied', '--target-tokens', '500000000', '--block-lr-scale', '0.25', '--out-dir', 'results/scale/exp39/i1_blocklr', '--milestones', '500000000', '--pack-dir', 'pack_1b', '--device', 'cuda:0']
+/usr/local/lib/python3.12/dist-packages/requests/__init__.py:113: RequestsDependencyWarning: urllib3 (2.0.7) or chardet (6.0.0.post1)/charset_normalizer (3.4.2) doesn't match a supported version!
+  warnings.warn(
+{"arm": "tied", "params": 157581313, "depth": 16, "d_model": 2048, "seq_len": 2048, "micro_batch": 4, "grad_accum": 128, "tokens_per_step": 1048576, "target_tokens": 500000000, "pack_hash": "973c14c07147", "grad_checkpoint": true, "sdpa": true, "n_units": 1281738}
+{'step': 10, 'tokens': 10485760, 'loss': 10.8099, 'lr': 1.132e-05, 'tok_s': 15571.9, 'mem_gib': 12.25, 'min': 11.3}
+{'step': 20, 'tokens': 20971520, 'loss': 10.7806, 'lr': 2.391e-05, 'tok_s': 15577.8, 'mem_gib': 12.25, 'min': 22.6}
+{'step': 30, 'tokens': 31457280, 'loss': 10.7502, 'lr': 3.649e-05, 'tok_s': 15585.0, 'mem_gib': 12.25, 'min': 33.8}
+{'step': 40, 'tokens': 41943040, 'loss': 10.7212, 'lr': 4.907e-05, 'tok_s': 15584.4, 'mem_gib': 12.25, 'min': 45.1}
+{'step': 50, 'tokens': 52428800, 'loss': 10.6892, 'lr': 6.166e-05, 'tok_s': 15587.8, 'mem_gib': 12.25, 'min': 56.4}
+{'step': 60, 'tokens': 62914560, 'loss': 10.6522, 'lr': 7.424e-05, 'tok_s': 15588.9, 'mem_gib': 12.25, 'min': 67.7}
+{'step': 70, 'tokens': 73400320, 'loss': 10.608, 'lr': 8.682e-05, 'tok_s': 15591.4, 'mem_gib': 12.25, 'min': 78.9}
+{'step': 80, 'tokens': 83886080, 'loss': 10.5538, 'lr': 9.941e-05, 'tok_s': 15592.3, 'mem_gib': 12.25, 'min': 90.2}
+{'step': 90, 'tokens': 94371840, 'loss': 10.4918, 'lr': 0.00011199, 'tok_s': 15590.1, 'mem_gib': 12.25, 'min': 101.5}
+{'step': 100, 'tokens': 104857600, 'loss': 10.4219, 'lr': 0.00012457, 'tok_s': 15587.6, 'mem_gib': 12.25, 'min': 112.8}
+{'step': 110, 'tokens': 115343360, 'loss': 10.3454, 'lr': 0.00013715, 'tok_s': 15590.4, 'mem_gib': 12.25, 'min': 124.0}
+{'step': 120, 'tokens': 125829120, 'loss': 10.2582, 'lr': 0.00014974, 'tok_s': 15590.4, 'mem_gib': 12.25, 'min': 135.3}
+{'step': 130, 'tokens': 136314880, 'loss': 10.1731, 'lr': 0.00016232, 'tok_s': 15590.8, 'mem_gib': 12.25, 'min': 146.6}
+{'step': 140, 'tokens': 146800640, 'loss': 10.0761, 'lr': 0.0001749, 'tok_s': 15591.7, 'mem_gib': 12.25, 'min': 157.9}
+{'step': 150, 'tokens': 157286400, 'loss': 9.9799, 'lr': 0.00018749, 'tok_s': 15591.4, 'mem_gib': 12.25, 'min': 169.1}
+{'step': 160, 'tokens': 167772160, 'loss': 9.8736, 'lr': 0.00020007, 'tok_s': 15591.5, 'mem_gib': 12.25, 'min': 180.4}
+{'step': 170, 'tokens': 178257920, 'loss': 9.7627, 'lr': 0.00021265, 'tok_s': 15591.4, 'mem_gib': 12.25, 'min': 191.7}
+{'step': 180, 'tokens': 188743680, 'loss': 9.6534, 'lr': 0.00022523, 'tok_s': 15602.3, 'mem_gib': 12.25, 'min': 202.9}
+{'step': 190, 'tokens': 199229440, 'loss': 9.5418, 'lr': 0.00023782, 'tok_s': 15604.1, 'mem_gib': 12.25, 'min': 214.2}
+{'step': 200, 'tokens': 209715200, 'loss': 9.4156, 'lr': 0.0002504, 'tok_s': 15596.4, 'mem_gib': 12.25, 'min': 225.4}

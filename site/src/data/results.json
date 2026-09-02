@@ -1038,6 +1038,38 @@
       },
       "status": "VALIDATED",
       "verdict": "completes the audit; record ends at F54"
+    },
+    {
+      "id": "F55",
+      "title": "The exchange rate does not transfer unchanged to a billion parameters; the programme halts at that boundary",
+      "claim": "Compute-matched twin at d=2048 on FineWeb-Edu (explicit 913M vs tied 158M resident, 2.5B tokens each): held-out ppl 1271/503/260 vs 1962/785/340 at 0.5B/1B/2.5B tokens, ratios 1.543/1.560/1.308. The pre-registered 1B kill gate (<=1.20) failed; the 2.5B success bar (<=1.10) was missed while the gap closed from 0.44 to 0.27 nats. Both arms at chance on the public ladder (mean6 0.34 vs Pythia-410m 0.51). SPEC 0024's interventions were halted by operator decision (I1 at 210M tokens, tracking Arm T within 0.014 nats); no NULL is declared, the record states a scale boundary with the mechanism open.",
+      "evidence": {
+        "exp": "exp39/exp40",
+        "ppl_explicit": [
+          1271.4,
+          503.5,
+          259.7
+        ],
+        "ppl_tied": [
+          1961.6,
+          785.4,
+          339.7
+        ],
+        "ratio": [
+          1.543,
+          1.56,
+          1.308
+        ],
+        "ladder_mean6": {
+          "explicit_2p5B": 0.337,
+          "tied_2p5B": 0.34,
+          "pythia_410m": 0.509,
+          "smollm2_360m": 0.613
+        },
+        "path": "results/scale/exp39/, results/scale/exp40/milestone_*_2p5B.json"
+      },
+      "status": "RECORDED AS A BOUNDARY",
+      "verdict": "operator halt (ADR 0011); not a NULL under the closure contract; record ends at F55"
     }
   ]
 }

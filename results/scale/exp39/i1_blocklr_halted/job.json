@@ -1,0 +1,35 @@
+{
+ "stages": [
+  [
+   "--arm",
+   "tied",
+   "--target-tokens",
+   "500000000",
+   "--block-lr-scale",
+   "0.25",
+   "--out-dir",
+   "results/scale/exp39/i1_blocklr",
+   "--milestones",
+   "500000000",
+   "--pack-dir",
+   "pack_1b",
+   "--device",
+   "cuda:0"
+  ],
+  [
+   "--arm",
+   "tied",
+   "--target-tokens",
+   "500000000",
+   "--supervise-final-only",
+   "--out-dir",
+   "results/scale/exp39/i2_finalonly",
+   "--milestones",
+   "500000000",
+   "--pack-dir",
+   "pack_1b",
+   "--device",
+   "cuda:0"
+  ]
+ ]
+}

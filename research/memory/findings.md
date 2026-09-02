@@ -1866,3 +1866,58 @@ larger model by a wide margin.
 
 **Status:** VALIDATED (single arena, 360 questions, paired) · completes the
 council side-result's audit · the empirical record ends at F54
+
+## F55 — The exchange rate does not transfer unchanged to a billion parameters, and the programme halts at that boundary
+
+**Cycle 34 · 2026-09-02 · exp39 / exp40, SPEC 0022 and 0024 · single seed · RTX 5090**
+
+SPEC 0022 pre-registered the compute-matched twin at deployment scale: an
+explicit transformer of 913M parameters ($d = 2048$, sixteen layers) against a
+tied block of the same width iterated sixteen times (158M resident), identical
+FineWeb-Edu stream of 2.5B tokens, identical optimizer, schedule and batch
+composition, so that compute is equal by construction and only the architecture
+differs. The kill gate at 1B tokens required a held-out perplexity ratio of at
+most 1.20; the success bar at 2.5B required at most 1.10 or a ladder ratio of at
+least 0.95.
+
+- **The gate fails and the bar is missed, while the gap closes.** Held-out
+  perplexity is 1271.4 / 503.5 / 259.7 for the explicit arm and 1961.6 / 785.4 /
+  339.7 for the tied arm at 0.5B / 1B / 2.5B tokens (`results/scale/exp39/
+  {explicit,tied}/milestones.jsonl`): ratios **1.543, 1.560, 1.308**. The 1B
+  ratio is wider than the 0.5B ratio and the gate fails by 30%; the 2.5B ratio
+  misses the success bar by 19% but the gap has closed from 0.44 to 0.27 nats at
+  matched tokens. A power law fitted to each arm's three milestones ($R^2$ 0.97
+  explicit, 0.99 tied) places the 1.10 bar between 5B and 10B tokens; this is an
+  extrapolation and is recorded as one.
+- **The ladder is at chance for both arms.** On the harness of exp40 (1000
+  examples per task) the mean over six multiple-choice tasks is 0.337 for the
+  explicit arm and 0.340 for the tied arm at 2.5B tokens, against 0.509 for
+  Pythia-410m and 0.613 for SmolLM2-360M measured the same way
+  (`results/scale/exp40/milestone_*_2p5B.json`, `rung_*.json`). Perplexity is
+  therefore the only discriminating signal this budget affords, and neither arm
+  is a model anyone would use.
+- **The interventions were halted before reading.** SPEC 0024 registered two
+  0.5B-token arms to precede any NULL: I1 (tied block learning rate scaled by
+  1/4) and I2 (final-depth supervision only). I1 launched at 09:17 and was
+  stopped by operator decision at 13:06 with 209.7M tokens seen
+  (`results/scale/exp39/i1_blocklr_halted/`). Over that stretch its training
+  loss tracked Arm T's at matched steps within $+0.009$ to $+0.014$ nats (steps
+  50, 100, 150, 200: 10.689 vs 10.681, 10.422 vs 10.409, 9.980 vs 9.966, 9.416
+  vs 9.403), so the quarter-rate block showed no early separation from the
+  shared-rate block in either direction; that is an observation on a partial
+  trajectory, not a reading against the registered bars. I2 never ran.
+
+**Interpretation.** The exchange rate measured at 46–121M (F45, F50) does not
+transfer unchanged to a billion parameters on web data at 2.5B tokens; the
+trajectory is consistent with late convergence and does not exclude a hard
+ceiling. Because the two registered interventions were not completed, the
+closure contract's condition for a NULL is not met and none is declared: the
+record states a **scale boundary** with the mechanism unresolved. The operator's
+reason for halting is recorded in ADR 0011 — with both arms at chance on every
+public benchmark and Pythia-410m's token budget some 220 GPU-days away on the
+one available card, further science could not produce utility, and utility was
+the objective.
+
+**Status:** RECORDED AS A BOUNDARY (operator halt, ADR 0011) · single seed by
+registration (SPEC 0022 §budget) · not a NULL under the contract · the
+empirical record ends at F55 · Tarka: measurements only, no claim beyond them

@@ -1,10 +1,10 @@
 {
   "cycle": 34,
-  "phase": "CLOSURE (ADR 0010, 2026-09-02): scale programme closes after SPEC 0024 (running); C1 only on rescue; no 10B extension. Product = equilibrium decoding layer over public players (ADR 0008); tied EqLM ships as research artifact. Serving profile-driven (gb10|rtx5090). Paper v2 to arXiv with the scale boundary.",
+  "phase": "CLOSED 2026-09-02 (ADR 0010 + ADR 0011). Record ends at F55 (scale boundary; SPEC 0024 halted, no NULL). Closure work in progress: paper v2, site, HF card, replay-only app (SPEC 0025), Tarka F45-F54, tag v2.0.0-closure.",
   "current_rq": "RQ-7: does the compute-matched exchange rate (F45/F50) persist at 1B params on general web data?",
-  "gpu_lock": true,
+  "gpu_lock": false,
   "open_questions": [
-    "RQ-7 (SPEC 0022): exchange rate at 1B; kill gate ppl ratio <=1.20 at 1B tokens; success >=0.95 ladder ratio at 2.5B",
+    "RQ-7 (SPEC 0022): OPEN AT THE BOUNDARY \u2014 ratio 1.308 at 2.5B, mechanism unresolved (SPEC 0024 halted); see docs/RESUMPTION.md",
     "RQ-3b (H1-prime): warm-start decoding / per-token early exit / think-harder dial (ADR 0004)",
     "RQ-4 (H3): MPO vs DPO",
     "RQ-5 (H4): token-auction decoding",
@@ -20,19 +20,16 @@
     "GB10 powered off for RMA on 2026-09-02; app model serving (FastAPI + tunnel) offline until it returns; Vercel front end replay-only. Sessions now run on the 5090 (x86_64): the fp32 argmax tie in tests/test_aggregate.py flipped between aarch64 and x86_64 and the test now asserts the distribution (commit ca6fb36).",
     "Reproducibility (found 2026-09-02): exp32 (F45) seed 43/44 configs were never committed and the committed seed42 config's SHA-256 does not match the hash recorded in results/scale/exp32/seed42.json \u2014 the runs were launched from an uncommitted variant. Reconstructed configs added with a header saying so; the F45 numbers stand, the hash chain for exp32 does not. Paper availability text must not claim hash-exact reproduction for exp32."
   ],
-  "next_action": "On I1's 0.5B MILESTONE (~18:30 BST 2026-09-02, results/scale/exp39/i1_blocklr/milestones.jsonl) and I2's (~03:30 next day): read held-out ppl against SPEC 0024 bars \u2014 <=1589 rescue (send that arm to 1B, gate 604.2), both >=1780 NULL earned, between -> operator. Journal each; ladder eval optional (at chance). Then C1 preflight (SPEC 0023, pack_byte). Push main once GitHub credentials exist on the 5090.",
-  "gpu_lock_holder": "5090: SPEC 0024 interventions (python train.py pid 344187, job.json = I1 then I2; results/scale/exp39/i1_blocklr, i2_finalonly) | GB10: OFFLINE since 2026-09-02 (RMA)",
+  "next_action": "Closure only: (1) paper v2 abstract/results/limitations/conclusion/availability carry F55 and the halt; build PDF; (2) site results.json gains F55; (3) HF card for kinetic-eqlm-46m-compute-matched gains the scale-boundary paragraph; (4) SPEC 0025 replay-only app: label backend pages, council telemetry pre-recorded, Studio -> registry, leaderboard snapshot; (5) apply Tarka verdicts to F45-F54; (6) tag v2.0.0-closure, push. No GPU work. Resumption: docs/RESUMPTION.md.",
+  "gpu_lock_holder": "none (I1 stopped 2026-09-02 13:06; GPU free) | GB10: OFFLINE (RMA)",
   "adrs": [
-    "0010-closure-after-interventions"
+    "0010-closure-after-interventions",
+    "0011-programme-halt"
   ],
-  "on_resume": "Session-bound watches die with the client; the docker job does not. On any resume: (1) ps -o args= -p $(pgrep -x -f 'python train.py') must show the SPEC 0024 job (launched 2026-09-02 09:17, pid 344187; I1 then I2 in one process) \u2014 if absent, check ~/fusion-project/kinetic-twin/train.log tail and results/scale/exp39/{i1_blocklr,i2_finalonly}/milestones.jsonl before anything else; (2) re-arm a Monitor on train.log for ^MILESTONE|^=== stage|Traceback|Error|Killed|OOM; (3) read any MILESTONE against SPEC 0024 bars (<=1589 rescue, >=1780 no rescue), journal it, commit, push (origin is SSH now).",
+  "on_resume": "Programme closed. No training job should be running; if `pgrep -x -f 'python train.py'` finds one, it was not launched by this programme. See docs/RESUMPTION.md before any GPU work.",
   "closure_work": [
     "paper+site: SPEC 0022 twin + gate + F45 interval straddle (v2)",
-    "restore exp32 seed43/44 configs (hash-verified)",
-    "mypy clean (pack.py dtype, onnxruntime/gguf overrides)",
-    "serving profiles configs/serve/profiles/{gb10,rtx5090}.yaml + KINETIC_SERVE_PROFILE",
     "Tarka pass F45-F54",
-    "stale /home/sharaths paths in 6 scripts",
     "v2 tag",
     "SPEC 0025 product closure: replay-only app (council telemetry from F41/F54, leaderboard snapshot, Studio -> read-only registry), live inference returns with the GB10 via KINETIC_SERVE_PROFILE=gb10; default live council = F41 council"
   ]
