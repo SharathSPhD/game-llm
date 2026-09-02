@@ -28,7 +28,7 @@
   ],
   "on_resume": "Programme closed. No training job should be running; if `pgrep -x -f 'python train.py'` finds one, it was not launched by this programme. See docs/RESUMPTION.md before any GPU work.",
   "closure_work": [
-    "DONE: paper v2 text (abstract/results/discussion/limitations/conclusion/availability) \u2014 PDF not rebuilt here (no TeX on the 5090; run `make -C paper` where latexmk exists)",
+    "DONE: paper v2 built (54 pages, latexmk clean via TinyTeX in ~/.TinyTeX on the 5090); text carries F55 and the halt",
     "DONE: site F55 + closure wording (Astro build green; GH Pages workflow builds from source)",
     "DONE: replay-only app (SPEC 0025) e2e-tested locally on the production build; Vercel redeploy from main",
     "DONE: Tarka verdicts F28-F55 applied; no PENDING remains",
