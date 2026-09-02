@@ -1,0 +1,2919 @@
+{
+ "findings": [
+  "F41",
+  "F54"
+ ],
+ "seeds": [
+  {
+   "seed": 45,
+   "n_tasks": 120,
+   "players": [
+    "Qwen/Qwen2.5-1.5B-Instruct",
+    "Qwen/Qwen3-1.7B",
+    "Qwen/Qwen2.5-Math-1.5B-Instruct",
+    "Qwen/Qwen2.5-Coder-1.5B-Instruct"
+   ],
+   "accuracy": {
+    "cross_exam": 0.475,
+    "equilibrium": 0.4833,
+    "leave_one_out": 0.4667,
+    "majority": 0.5833,
+    "oracle": 0.7333,
+    "self_preference": 0.4333,
+    "single::Qwen/Qwen2.5-1.5B-Instruct": 0.5333,
+    "single::Qwen/Qwen2.5-Coder-1.5B-Instruct": 0.4333,
+    "single::Qwen/Qwen2.5-Math-1.5B-Instruct": 0.525,
+    "single::Qwen/Qwen3-1.7B": 0.2167
+   },
+   "per_domain": {
+    "math": {
+     "cross_exam": 0.7667,
+     "leave_one_out": 0.75,
+     "self_preference": 0.75,
+     "equilibrium": 0.7667,
+     "majority": 0.7833,
+     "oracle": 0.8833,
+     "n": 60
+    },
+    "general": {
+     "cross_exam": 0.1833,
+     "leave_one_out": 0.1833,
+     "self_preference": 0.1167,
+     "equilibrium": 0.2,
+     "majority": 0.3833,
+     "oracle": 0.5833,
+     "n": 60
+    }
+   },
+   "sample": [
+    {
+     "i": 0,
+     "domain": "math",
+     "winners": {
+      "equilibrium": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "cross_exam": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "leave_one_out": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "self_preference": "Qwen/Qwen2.5-Math-1.5B-Instruct"
+     },
+     "correct": {
+      "equilibrium": true,
+      "cross_exam": true,
+      "leave_one_out": true,
+      "self_preference": true
+     },
+     "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": false,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": true
+     }
+    },
+    {
+     "i": 1,
+     "domain": "math",
+     "winners": {
+      "equilibrium": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "cross_exam": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "leave_one_out": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "self_preference": "Qwen/Qwen2.5-Math-1.5B-Instruct"
+     },
+     "correct": {
+      "equilibrium": false,
+      "cross_exam": false,
+      "leave_one_out": false,
+      "self_preference": false
+     },
+     "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": false,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": false,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": false
+     }
+    },
+    {
+     "i": 2,
+     "domain": "math",
+     "winners": {
+      "equilibrium": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "cross_exam": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "leave_one_out": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "self_preference": "Qwen/Qwen2.5-Math-1.5B-Instruct"
+     },
+     "correct": {
+      "equilibrium": true,
+      "cross_exam": true,
+      "leave_one_out": true,
+      "self_preference": true
+     },
+     "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": true
+     }
+    },
+    {
+     "i": 3,
+     "domain": "math",
+     "winners": {
+      "equilibrium": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "cross_exam": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "leave_one_out": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "self_preference": "Qwen/Qwen2.5-Math-1.5B-Instruct"
+     },
+     "correct": {
+      "equilibrium": true,
+      "cross_exam": true,
+      "leave_one_out": true,
+      "self_preference": true
+     },
+     "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": true,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": false
+     }
+    },
+    {
+     "i": 4,
+     "domain": "math",
+     "winners": {
+      "equilibrium": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "cross_exam": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "leave_one_out": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "self_preference": "Qwen/Qwen3-1.7B"
+     },
+     "correct": {
+      "equilibrium": false,
+      "cross_exam": false,
+      "leave_one_out": false,
+      "self_preference": false
+     },
+     "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": false,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": false,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": false
+     }
+    },
+    {
+     "i": 5,
+     "domain": "math",
+     "winners": {
+      "equilibrium": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "cross_exam": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "leave_one_out": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "self_preference": "Qwen/Qwen2.5-Math-1.5B-Instruct"
+     },
+     "correct": {
+      "equilibrium": true,
+      "cross_exam": true,
+      "leave_one_out": true,
+      "self_preference": true
+     },
+     "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": false,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": true
+     }
+    },
+    {
+     "i": 6,
+     "domain": "math",
+     "winners": {
+      "equilibrium": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "cross_exam": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "leave_one_out": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "self_preference": "Qwen/Qwen2.5-Math-1.5B-Instruct"
+     },
+     "correct": {
+      "equilibrium": true,
+      "cross_exam": true,
+      "leave_one_out": true,
+      "self_preference": true
+     },
+     "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": false
+     }
+    },
+    {
+     "i": 7,
+     "domain": "math",
+     "winners": {
+      "equilibrium": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "cross_exam": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "leave_one_out": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "self_preference": "Qwen/Qwen2.5-Math-1.5B-Instruct"
+     },
+     "correct": {
+      "equilibrium": true,
+      "cross_exam": true,
+      "leave_one_out": true,
+      "self_preference": true
+     },
+     "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": true,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": true
+     }
+    },
+    {
+     "i": 8,
+     "domain": "math",
+     "winners": {
+      "equilibrium": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "cross_exam": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "leave_one_out": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "self_preference": "Qwen/Qwen2.5-Math-1.5B-Instruct"
+     },
+     "correct": {
+      "equilibrium": true,
+      "cross_exam": true,
+      "leave_one_out": true,
+      "self_preference": true
+     },
+     "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": true
+     }
+    },
+    {
+     "i": 9,
+     "domain": "math",
+     "winners": {
+      "equilibrium": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "cross_exam": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "leave_one_out": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "self_preference": "Qwen/Qwen2.5-Math-1.5B-Instruct"
+     },
+     "correct": {
+      "equilibrium": false,
+      "cross_exam": false,
+      "leave_one_out": false,
+      "self_preference": false
+     },
+     "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": false,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": false,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": false
+     }
+    },
+    {
+     "i": 10,
+     "domain": "math",
+     "winners": {
+      "equilibrium": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "cross_exam": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "leave_one_out": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "self_preference": "Qwen/Qwen2.5-Math-1.5B-Instruct"
+     },
+     "correct": {
+      "equilibrium": false,
+      "cross_exam": false,
+      "leave_one_out": false,
+      "self_preference": false
+     },
+     "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": false,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": false,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": false
+     }
+    },
+    {
+     "i": 11,
+     "domain": "math",
+     "winners": {
+      "equilibrium": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "cross_exam": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "leave_one_out": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "self_preference": "Qwen/Qwen2.5-Math-1.5B-Instruct"
+     },
+     "correct": {
+      "equilibrium": true,
+      "cross_exam": true,
+      "leave_one_out": true,
+      "self_preference": true
+     },
+     "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": false,
+      "Qwen/Qwen3-1.7B": true,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": true
+     }
+    },
+    {
+     "i": 12,
+     "domain": "math",
+     "winners": {
+      "equilibrium": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "cross_exam": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "leave_one_out": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "self_preference": "Qwen/Qwen2.5-Math-1.5B-Instruct"
+     },
+     "correct": {
+      "equilibrium": true,
+      "cross_exam": true,
+      "leave_one_out": true,
+      "self_preference": true
+     },
+     "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": false
+     }
+    },
+    {
+     "i": 13,
+     "domain": "math",
+     "winners": {
+      "equilibrium": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+      "cross_exam": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+      "leave_one_out": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+      "self_preference": "Qwen/Qwen2.5-Math-1.5B-Instruct"
+     },
+     "correct": {
+      "equilibrium": true,
+      "cross_exam": true,
+      "leave_one_out": true,
+      "self_preference": true
+     },
+     "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": true,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": true
+     }
+    },
+    {
+     "i": 14,
+     "domain": "math",
+     "winners": {
+      "equilibrium": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "cross_exam": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "leave_one_out": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+      "self_preference": "Qwen/Qwen2.5-Math-1.5B-Instruct"
+     },
+     "correct": {
+      "equilibrium": true,
+      "cross_exam": true,
+      "leave_one_out": true,
+      "self_preference": true
+     },
+     "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": true,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": true
+     }
+    },
+    {
+     "i": 15,
+     "domain": "math",
+     "winners": {
+      "equilibrium": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "cross_exam": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "leave_one_out": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "self_preference": "Qwen/Qwen2.5-Math-1.5B-Instruct"
+     },
+     "correct": {
+      "equilibrium": true,
+      "cross_exam": true,
+      "leave_one_out": true,
+      "self_preference": true
+     },
+     "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": true
+     }
+    },
+    {
+     "i": 16,
+     "domain": "math",
+     "winners": {
+      "equilibrium": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "cross_exam": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "leave_one_out": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "self_preference": "Qwen/Qwen2.5-Math-1.5B-Instruct"
+     },
+     "correct": {
+      "equilibrium": true,
+      "cross_exam": true,
+      "leave_one_out": true,
+      "self_preference": true
+     },
+     "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": true,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": false
+     }
+    },
+    {
+     "i": 17,
+     "domain": "math",
+     "winners": {
+      "equilibrium": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "cross_exam": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "leave_one_out": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "self_preference": "Qwen/Qwen2.5-Math-1.5B-Instruct"
+     },
+     "correct": {
+      "equilibrium": true,
+      "cross_exam": true,
+      "leave_one_out": true,
+      "self_preference": true
+     },
+     "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": false
+     }
+    },
+    {
+     "i": 18,
+     "domain": "math",
+     "winners": {
+      "equilibrium": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+      "cross_exam": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+      "leave_one_out": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+      "self_preference": "Qwen/Qwen3-1.7B"
+     },
+     "correct": {
+      "equilibrium": false,
+      "cross_exam": false,
+      "leave_one_out": false,
+      "self_preference": false
+     },
+     "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": false,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": false
+     }
+    },
+    {
+     "i": 19,
+     "domain": "math",
+     "winners": {
+      "equilibrium": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "cross_exam": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "leave_one_out": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "self_preference": "Qwen/Qwen2.5-Math-1.5B-Instruct"
+     },
+     "correct": {
+      "equilibrium": true,
+      "cross_exam": true,
+      "leave_one_out": true,
+      "self_preference": true
+     },
+     "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": false,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": false
+     }
+    },
+    {
+     "i": 20,
+     "domain": "math",
+     "winners": {
+      "equilibrium": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "cross_exam": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "leave_one_out": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "self_preference": "Qwen/Qwen2.5-Math-1.5B-Instruct"
+     },
+     "correct": {
+      "equilibrium": true,
+      "cross_exam": true,
+      "leave_one_out": true,
+      "self_preference": true
+     },
+     "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": false
+     }
+    },
+    {
+     "i": 21,
+     "domain": "math",
+     "winners": {
+      "equilibrium": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "cross_exam": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "leave_one_out": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "self_preference": "Qwen/Qwen2.5-Math-1.5B-Instruct"
+     },
+     "correct": {
+      "equilibrium": true,
+      "cross_exam": true,
+      "leave_one_out": true,
+      "self_preference": true
+     },
+     "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": false
+     }
+    },
+    {
+     "i": 22,
+     "domain": "math",
+     "winners": {
+      "equilibrium": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "cross_exam": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "leave_one_out": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "self_preference": "Qwen/Qwen2.5-Math-1.5B-Instruct"
+     },
+     "correct": {
+      "equilibrium": true,
+      "cross_exam": true,
+      "leave_one_out": true,
+      "self_preference": true
+     },
+     "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": true
+     }
+    },
+    {
+     "i": 23,
+     "domain": "math",
+     "winners": {
+      "equilibrium": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "cross_exam": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "leave_one_out": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "self_preference": "Qwen/Qwen2.5-Math-1.5B-Instruct"
+     },
+     "correct": {
+      "equilibrium": false,
+      "cross_exam": false,
+      "leave_one_out": false,
+      "self_preference": false
+     },
+     "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": false,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": false,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": false
+     }
+    },
+    {
+     "i": 24,
+     "domain": "math",
+     "winners": {
+      "equilibrium": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+      "cross_exam": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+      "leave_one_out": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+      "self_preference": "Qwen/Qwen2.5-Coder-1.5B-Instruct"
+     },
+     "correct": {
+      "equilibrium": true,
+      "cross_exam": true,
+      "leave_one_out": true,
+      "self_preference": true
+     },
+     "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": true
+     }
+    },
+    {
+     "i": 25,
+     "domain": "math",
+     "winners": {
+      "equilibrium": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+      "cross_exam": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+      "leave_one_out": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+      "self_preference": "Qwen/Qwen2.5-Math-1.5B-Instruct"
+     },
+     "correct": {
+      "equilibrium": false,
+      "cross_exam": false,
+      "leave_one_out": false,
+      "self_preference": true
+     },
+     "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": true,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": false
+     }
+    },
+    {
+     "i": 26,
+     "domain": "math",
+     "winners": {
+      "equilibrium": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "cross_exam": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "leave_one_out": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "self_preference": "Qwen/Qwen2.5-Math-1.5B-Instruct"
+     },
+     "correct": {
+      "equilibrium": true,
+      "cross_exam": true,
+      "leave_one_out": true,
+      "self_preference": true
+     },
+     "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": false,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": false
+     }
+    },
+    {
+     "i": 27,
+     "domain": "math",
+     "winners": {
+      "equilibrium": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "cross_exam": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "leave_one_out": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "self_preference": "Qwen/Qwen2.5-Coder-1.5B-Instruct"
+     },
+     "correct": {
+      "equilibrium": true,
+      "cross_exam": true,
+      "leave_one_out": true,
+      "self_preference": true
+     },
+     "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": true
+     }
+    },
+    {
+     "i": 28,
+     "domain": "math",
+     "winners": {
+      "equilibrium": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "cross_exam": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "leave_one_out": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "self_preference": "Qwen/Qwen2.5-Math-1.5B-Instruct"
+     },
+     "correct": {
+      "equilibrium": true,
+      "cross_exam": true,
+      "leave_one_out": true,
+      "self_preference": true
+     },
+     "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": true,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": true
+     }
+    },
+    {
+     "i": 29,
+     "domain": "math",
+     "winners": {
+      "equilibrium": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+      "cross_exam": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+      "leave_one_out": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+      "self_preference": "Qwen/Qwen2.5-Math-1.5B-Instruct"
+     },
+     "correct": {
+      "equilibrium": true,
+      "cross_exam": true,
+      "leave_one_out": true,
+      "self_preference": false
+     },
+     "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": false,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": false,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": true
+     }
+    },
+    {
+     "i": 30,
+     "domain": "math",
+     "winners": {
+      "equilibrium": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+      "cross_exam": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+      "leave_one_out": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+      "self_preference": "Qwen/Qwen2.5-Coder-1.5B-Instruct"
+     },
+     "correct": {
+      "equilibrium": true,
+      "cross_exam": true,
+      "leave_one_out": true,
+      "self_preference": true
+     },
+     "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": true,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": true
+     }
+    },
+    {
+     "i": 31,
+     "domain": "math",
+     "winners": {
+      "equilibrium": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "cross_exam": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "leave_one_out": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "self_preference": "Qwen/Qwen2.5-Math-1.5B-Instruct"
+     },
+     "correct": {
+      "equilibrium": true,
+      "cross_exam": true,
+      "leave_one_out": true,
+      "self_preference": true
+     },
+     "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": true,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": true
+     }
+    },
+    {
+     "i": 32,
+     "domain": "math",
+     "winners": {
+      "equilibrium": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "cross_exam": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "leave_one_out": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "self_preference": "Qwen/Qwen2.5-Math-1.5B-Instruct"
+     },
+     "correct": {
+      "equilibrium": true,
+      "cross_exam": true,
+      "leave_one_out": true,
+      "self_preference": true
+     },
+     "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": true
+     }
+    },
+    {
+     "i": 33,
+     "domain": "math",
+     "winners": {
+      "equilibrium": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "cross_exam": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "leave_one_out": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "self_preference": "Qwen/Qwen2.5-Math-1.5B-Instruct"
+     },
+     "correct": {
+      "equilibrium": true,
+      "cross_exam": true,
+      "leave_one_out": true,
+      "self_preference": true
+     },
+     "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": true
+     }
+    },
+    {
+     "i": 34,
+     "domain": "math",
+     "winners": {
+      "equilibrium": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "cross_exam": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "leave_one_out": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "self_preference": "Qwen/Qwen2.5-Math-1.5B-Instruct"
+     },
+     "correct": {
+      "equilibrium": true,
+      "cross_exam": true,
+      "leave_one_out": true,
+      "self_preference": true
+     },
+     "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": false
+     }
+    },
+    {
+     "i": 35,
+     "domain": "math",
+     "winners": {
+      "equilibrium": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "cross_exam": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "leave_one_out": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "self_preference": "Qwen/Qwen2.5-Math-1.5B-Instruct"
+     },
+     "correct": {
+      "equilibrium": true,
+      "cross_exam": true,
+      "leave_one_out": true,
+      "self_preference": true
+     },
+     "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": true
+     }
+    },
+    {
+     "i": 36,
+     "domain": "math",
+     "winners": {
+      "equilibrium": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "cross_exam": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "leave_one_out": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "self_preference": "Qwen/Qwen2.5-Math-1.5B-Instruct"
+     },
+     "correct": {
+      "equilibrium": true,
+      "cross_exam": true,
+      "leave_one_out": true,
+      "self_preference": true
+     },
+     "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": false,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": true
+     }
+    },
+    {
+     "i": 37,
+     "domain": "math",
+     "winners": {
+      "equilibrium": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+      "cross_exam": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+      "leave_one_out": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+      "self_preference": "Qwen/Qwen3-1.7B"
+     },
+     "correct": {
+      "equilibrium": true,
+      "cross_exam": true,
+      "leave_one_out": true,
+      "self_preference": false
+     },
+     "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": true
+     }
+    },
+    {
+     "i": 38,
+     "domain": "math",
+     "winners": {
+      "equilibrium": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "cross_exam": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "leave_one_out": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "self_preference": "Qwen/Qwen2.5-Math-1.5B-Instruct"
+     },
+     "correct": {
+      "equilibrium": true,
+      "cross_exam": true,
+      "leave_one_out": true,
+      "self_preference": true
+     },
+     "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": true,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": true
+     }
+    },
+    {
+     "i": 39,
+     "domain": "math",
+     "winners": {
+      "equilibrium": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "cross_exam": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "leave_one_out": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "self_preference": "Qwen/Qwen2.5-Math-1.5B-Instruct"
+     },
+     "correct": {
+      "equilibrium": true,
+      "cross_exam": true,
+      "leave_one_out": true,
+      "self_preference": true
+     },
+     "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": true,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": true
+     }
+    }
+   ]
+  },
+  {
+   "seed": 46,
+   "n_tasks": 120,
+   "players": [
+    "Qwen/Qwen2.5-1.5B-Instruct",
+    "Qwen/Qwen3-1.7B",
+    "Qwen/Qwen2.5-Math-1.5B-Instruct",
+    "Qwen/Qwen2.5-Coder-1.5B-Instruct"
+   ],
+   "accuracy": {
+    "cross_exam": 0.525,
+    "equilibrium": 0.5167,
+    "leave_one_out": 0.525,
+    "majority": 0.525,
+    "oracle": 0.6917,
+    "self_preference": 0.475,
+    "single::Qwen/Qwen2.5-1.5B-Instruct": 0.5,
+    "single::Qwen/Qwen2.5-Coder-1.5B-Instruct": 0.4417,
+    "single::Qwen/Qwen2.5-Math-1.5B-Instruct": 0.475,
+    "single::Qwen/Qwen3-1.7B": 0.1917
+   },
+   "per_domain": {
+    "math": {
+     "cross_exam": 0.8167,
+     "leave_one_out": 0.8167,
+     "self_preference": 0.8167,
+     "equilibrium": 0.8167,
+     "majority": 0.7333,
+     "oracle": 0.8833,
+     "n": 60
+    },
+    "general": {
+     "cross_exam": 0.2333,
+     "leave_one_out": 0.2333,
+     "self_preference": 0.1333,
+     "equilibrium": 0.2167,
+     "majority": 0.3167,
+     "oracle": 0.5,
+     "n": 60
+    }
+   },
+   "sample": [
+    {
+     "i": 0,
+     "domain": "math",
+     "winners": {
+      "equilibrium": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "cross_exam": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "leave_one_out": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "self_preference": "Qwen/Qwen2.5-Math-1.5B-Instruct"
+     },
+     "correct": {
+      "equilibrium": true,
+      "cross_exam": true,
+      "leave_one_out": true,
+      "self_preference": true
+     },
+     "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": false,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": false
+     }
+    },
+    {
+     "i": 1,
+     "domain": "math",
+     "winners": {
+      "equilibrium": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+      "cross_exam": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+      "leave_one_out": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+      "self_preference": "Qwen/Qwen2.5-Math-1.5B-Instruct"
+     },
+     "correct": {
+      "equilibrium": true,
+      "cross_exam": true,
+      "leave_one_out": true,
+      "self_preference": true
+     },
+     "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": true
+     }
+    },
+    {
+     "i": 2,
+     "domain": "math",
+     "winners": {
+      "equilibrium": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "cross_exam": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "leave_one_out": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "self_preference": "Qwen/Qwen2.5-Math-1.5B-Instruct"
+     },
+     "correct": {
+      "equilibrium": true,
+      "cross_exam": true,
+      "leave_one_out": true,
+      "self_preference": true
+     },
+     "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": true
+     }
+    },
+    {
+     "i": 3,
+     "domain": "math",
+     "winners": {
+      "equilibrium": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "cross_exam": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "leave_one_out": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "self_preference": "Qwen/Qwen2.5-Math-1.5B-Instruct"
+     },
+     "correct": {
+      "equilibrium": false,
+      "cross_exam": false,
+      "leave_one_out": false,
+      "self_preference": false
+     },
+     "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": false,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": false,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": false
+     }
+    },
+    {
+     "i": 4,
+     "domain": "math",
+     "winners": {
+      "equilibrium": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "cross_exam": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "leave_one_out": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+      "self_preference": "Qwen/Qwen2.5-Math-1.5B-Instruct"
+     },
+     "correct": {
+      "equilibrium": true,
+      "cross_exam": true,
+      "leave_one_out": true,
+      "self_preference": true
+     },
+     "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": true
+     }
+    },
+    {
+     "i": 5,
+     "domain": "math",
+     "winners": {
+      "equilibrium": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "cross_exam": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "leave_one_out": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "self_preference": "Qwen/Qwen2.5-Math-1.5B-Instruct"
+     },
+     "correct": {
+      "equilibrium": true,
+      "cross_exam": true,
+      "leave_one_out": true,
+      "self_preference": true
+     },
+     "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": true
+     }
+    },
+    {
+     "i": 6,
+     "domain": "math",
+     "winners": {
+      "equilibrium": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+      "cross_exam": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+      "leave_one_out": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+      "self_preference": "Qwen/Qwen2.5-Coder-1.5B-Instruct"
+     },
+     "correct": {
+      "equilibrium": true,
+      "cross_exam": true,
+      "leave_one_out": true,
+      "self_preference": true
+     },
+     "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": false,
+      "Qwen/Qwen3-1.7B": true,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": false,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": true
+     }
+    },
+    {
+     "i": 7,
+     "domain": "math",
+     "winners": {
+      "equilibrium": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "cross_exam": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "leave_one_out": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "self_preference": "Qwen/Qwen2.5-Math-1.5B-Instruct"
+     },
+     "correct": {
+      "equilibrium": true,
+      "cross_exam": true,
+      "leave_one_out": true,
+      "self_preference": true
+     },
+     "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": true
+     }
+    },
+    {
+     "i": 8,
+     "domain": "math",
+     "winners": {
+      "equilibrium": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "cross_exam": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "leave_one_out": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "self_preference": "Qwen/Qwen2.5-Math-1.5B-Instruct"
+     },
+     "correct": {
+      "equilibrium": false,
+      "cross_exam": false,
+      "leave_one_out": false,
+      "self_preference": false
+     },
+     "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": false,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": false,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": false
+     }
+    },
+    {
+     "i": 9,
+     "domain": "math",
+     "winners": {
+      "equilibrium": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "cross_exam": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "leave_one_out": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "self_preference": "Qwen/Qwen2.5-Math-1.5B-Instruct"
+     },
+     "correct": {
+      "equilibrium": true,
+      "cross_exam": true,
+      "leave_one_out": true,
+      "self_preference": true
+     },
+     "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": true
+     }
+    },
+    {
+     "i": 10,
+     "domain": "math",
+     "winners": {
+      "equilibrium": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+      "cross_exam": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+      "leave_one_out": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+      "self_preference": "Qwen/Qwen2.5-Math-1.5B-Instruct"
+     },
+     "correct": {
+      "equilibrium": false,
+      "cross_exam": false,
+      "leave_one_out": false,
+      "self_preference": false
+     },
+     "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": false,
+      "Qwen/Qwen3-1.7B": true,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": false,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": false
+     }
+    },
+    {
+     "i": 11,
+     "domain": "math",
+     "winners": {
+      "equilibrium": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "cross_exam": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "leave_one_out": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "self_preference": "Qwen/Qwen2.5-Math-1.5B-Instruct"
+     },
+     "correct": {
+      "equilibrium": false,
+      "cross_exam": false,
+      "leave_one_out": false,
+      "self_preference": false
+     },
+     "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": false,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": false,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": false
+     }
+    },
+    {
+     "i": 12,
+     "domain": "math",
+     "winners": {
+      "equilibrium": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "cross_exam": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "leave_one_out": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "self_preference": "Qwen/Qwen2.5-Math-1.5B-Instruct"
+     },
+     "correct": {
+      "equilibrium": false,
+      "cross_exam": false,
+      "leave_one_out": false,
+      "self_preference": false
+     },
+     "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": false,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": false,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": false
+     }
+    },
+    {
+     "i": 13,
+     "domain": "math",
+     "winners": {
+      "equilibrium": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "cross_exam": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "leave_one_out": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "self_preference": "Qwen/Qwen2.5-Math-1.5B-Instruct"
+     },
+     "correct": {
+      "equilibrium": true,
+      "cross_exam": true,
+      "leave_one_out": true,
+      "self_preference": true
+     },
+     "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": false,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": false
+     }
+    },
+    {
+     "i": 14,
+     "domain": "math",
+     "winners": {
+      "equilibrium": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+      "cross_exam": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+      "leave_one_out": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+      "self_preference": "Qwen/Qwen2.5-Math-1.5B-Instruct"
+     },
+     "correct": {
+      "equilibrium": true,
+      "cross_exam": true,
+      "leave_one_out": true,
+      "self_preference": true
+     },
+     "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": true
+     }
+    },
+    {
+     "i": 15,
+     "domain": "math",
+     "winners": {
+      "equilibrium": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "cross_exam": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "leave_one_out": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "self_preference": "Qwen/Qwen2.5-Math-1.5B-Instruct"
+     },
+     "correct": {
+      "equilibrium": true,
+      "cross_exam": true,
+      "leave_one_out": true,
+      "self_preference": true
+     },
+     "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": true,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": false
+     }
+    },
+    {
+     "i": 16,
+     "domain": "math",
+     "winners": {
+      "equilibrium": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "cross_exam": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "leave_one_out": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "self_preference": "Qwen/Qwen2.5-Math-1.5B-Instruct"
+     },
+     "correct": {
+      "equilibrium": true,
+      "cross_exam": true,
+      "leave_one_out": true,
+      "self_preference": true
+     },
+     "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": false
+     }
+    },
+    {
+     "i": 17,
+     "domain": "math",
+     "winners": {
+      "equilibrium": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+      "cross_exam": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+      "leave_one_out": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+      "self_preference": "Qwen/Qwen2.5-Math-1.5B-Instruct"
+     },
+     "correct": {
+      "equilibrium": true,
+      "cross_exam": true,
+      "leave_one_out": true,
+      "self_preference": true
+     },
+     "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": true
+     }
+    },
+    {
+     "i": 18,
+     "domain": "math",
+     "winners": {
+      "equilibrium": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+      "cross_exam": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+      "leave_one_out": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+      "self_preference": "Qwen/Qwen2.5-Math-1.5B-Instruct"
+     },
+     "correct": {
+      "equilibrium": true,
+      "cross_exam": true,
+      "leave_one_out": true,
+      "self_preference": true
+     },
+     "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": true,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": true
+     }
+    },
+    {
+     "i": 19,
+     "domain": "math",
+     "winners": {
+      "equilibrium": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "cross_exam": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "leave_one_out": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+      "self_preference": "Qwen/Qwen2.5-Math-1.5B-Instruct"
+     },
+     "correct": {
+      "equilibrium": true,
+      "cross_exam": true,
+      "leave_one_out": true,
+      "self_preference": true
+     },
+     "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": true
+     }
+    },
+    {
+     "i": 20,
+     "domain": "math",
+     "winners": {
+      "equilibrium": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "cross_exam": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "leave_one_out": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "self_preference": "Qwen/Qwen2.5-Math-1.5B-Instruct"
+     },
+     "correct": {
+      "equilibrium": true,
+      "cross_exam": true,
+      "leave_one_out": true,
+      "self_preference": true
+     },
+     "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": false,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": false
+     }
+    },
+    {
+     "i": 21,
+     "domain": "math",
+     "winners": {
+      "equilibrium": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "cross_exam": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "leave_one_out": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "self_preference": "Qwen/Qwen2.5-Math-1.5B-Instruct"
+     },
+     "correct": {
+      "equilibrium": false,
+      "cross_exam": false,
+      "leave_one_out": false,
+      "self_preference": false
+     },
+     "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": false,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": false,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": false
+     }
+    },
+    {
+     "i": 22,
+     "domain": "math",
+     "winners": {
+      "equilibrium": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "cross_exam": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "leave_one_out": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "self_preference": "Qwen/Qwen2.5-Math-1.5B-Instruct"
+     },
+     "correct": {
+      "equilibrium": true,
+      "cross_exam": true,
+      "leave_one_out": true,
+      "self_preference": true
+     },
+     "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": true
+     }
+    },
+    {
+     "i": 23,
+     "domain": "math",
+     "winners": {
+      "equilibrium": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+      "cross_exam": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+      "leave_one_out": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+      "self_preference": "Qwen/Qwen2.5-Math-1.5B-Instruct"
+     },
+     "correct": {
+      "equilibrium": true,
+      "cross_exam": true,
+      "leave_one_out": true,
+      "self_preference": true
+     },
+     "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": true
+     }
+    },
+    {
+     "i": 24,
+     "domain": "math",
+     "winners": {
+      "equilibrium": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "cross_exam": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "leave_one_out": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "self_preference": "Qwen/Qwen2.5-Math-1.5B-Instruct"
+     },
+     "correct": {
+      "equilibrium": false,
+      "cross_exam": false,
+      "leave_one_out": false,
+      "self_preference": false
+     },
+     "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": false,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": false,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": false
+     }
+    },
+    {
+     "i": 25,
+     "domain": "math",
+     "winners": {
+      "equilibrium": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "cross_exam": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "leave_one_out": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "self_preference": "Qwen/Qwen2.5-Math-1.5B-Instruct"
+     },
+     "correct": {
+      "equilibrium": true,
+      "cross_exam": true,
+      "leave_one_out": true,
+      "self_preference": true
+     },
+     "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": true,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": true
+     }
+    },
+    {
+     "i": 26,
+     "domain": "math",
+     "winners": {
+      "equilibrium": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+      "cross_exam": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+      "leave_one_out": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+      "self_preference": "Qwen/Qwen2.5-Math-1.5B-Instruct"
+     },
+     "correct": {
+      "equilibrium": true,
+      "cross_exam": true,
+      "leave_one_out": true,
+      "self_preference": true
+     },
+     "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": true
+     }
+    },
+    {
+     "i": 27,
+     "domain": "math",
+     "winners": {
+      "equilibrium": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "cross_exam": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "leave_one_out": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "self_preference": "Qwen/Qwen2.5-Math-1.5B-Instruct"
+     },
+     "correct": {
+      "equilibrium": true,
+      "cross_exam": true,
+      "leave_one_out": true,
+      "self_preference": true
+     },
+     "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": false
+     }
+    },
+    {
+     "i": 28,
+     "domain": "math",
+     "winners": {
+      "equilibrium": "Qwen/Qwen2.5-1.5B-Instruct",
+      "cross_exam": "Qwen/Qwen2.5-1.5B-Instruct",
+      "leave_one_out": "Qwen/Qwen2.5-1.5B-Instruct",
+      "self_preference": "Qwen/Qwen2.5-Math-1.5B-Instruct"
+     },
+     "correct": {
+      "equilibrium": true,
+      "cross_exam": true,
+      "leave_one_out": true,
+      "self_preference": true
+     },
+     "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": true,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": true
+     }
+    },
+    {
+     "i": 29,
+     "domain": "math",
+     "winners": {
+      "equilibrium": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "cross_exam": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "leave_one_out": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "self_preference": "Qwen/Qwen2.5-Math-1.5B-Instruct"
+     },
+     "correct": {
+      "equilibrium": true,
+      "cross_exam": true,
+      "leave_one_out": true,
+      "self_preference": true
+     },
+     "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": true
+     }
+    },
+    {
+     "i": 30,
+     "domain": "math",
+     "winners": {
+      "equilibrium": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "cross_exam": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "leave_one_out": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "self_preference": "Qwen/Qwen2.5-Math-1.5B-Instruct"
+     },
+     "correct": {
+      "equilibrium": true,
+      "cross_exam": true,
+      "leave_one_out": true,
+      "self_preference": true
+     },
+     "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": true,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": true
+     }
+    },
+    {
+     "i": 31,
+     "domain": "math",
+     "winners": {
+      "equilibrium": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "cross_exam": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "leave_one_out": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "self_preference": "Qwen/Qwen2.5-Math-1.5B-Instruct"
+     },
+     "correct": {
+      "equilibrium": false,
+      "cross_exam": false,
+      "leave_one_out": false,
+      "self_preference": false
+     },
+     "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": false,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": false,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": false
+     }
+    },
+    {
+     "i": 32,
+     "domain": "math",
+     "winners": {
+      "equilibrium": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "cross_exam": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "leave_one_out": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "self_preference": "Qwen/Qwen2.5-Math-1.5B-Instruct"
+     },
+     "correct": {
+      "equilibrium": true,
+      "cross_exam": true,
+      "leave_one_out": true,
+      "self_preference": true
+     },
+     "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": true,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": false
+     }
+    },
+    {
+     "i": 33,
+     "domain": "math",
+     "winners": {
+      "equilibrium": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "cross_exam": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "leave_one_out": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "self_preference": "Qwen/Qwen2.5-Math-1.5B-Instruct"
+     },
+     "correct": {
+      "equilibrium": true,
+      "cross_exam": true,
+      "leave_one_out": true,
+      "self_preference": true
+     },
+     "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": true
+     }
+    },
+    {
+     "i": 34,
+     "domain": "math",
+     "winners": {
+      "equilibrium": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+      "cross_exam": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+      "leave_one_out": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+      "self_preference": "Qwen/Qwen2.5-Coder-1.5B-Instruct"
+     },
+     "correct": {
+      "equilibrium": true,
+      "cross_exam": true,
+      "leave_one_out": true,
+      "self_preference": true
+     },
+     "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": false,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": true
+     }
+    },
+    {
+     "i": 35,
+     "domain": "math",
+     "winners": {
+      "equilibrium": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "cross_exam": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "leave_one_out": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "self_preference": "Qwen/Qwen2.5-Math-1.5B-Instruct"
+     },
+     "correct": {
+      "equilibrium": true,
+      "cross_exam": true,
+      "leave_one_out": true,
+      "self_preference": true
+     },
+     "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": true
+     }
+    },
+    {
+     "i": 36,
+     "domain": "math",
+     "winners": {
+      "equilibrium": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "cross_exam": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "leave_one_out": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "self_preference": "Qwen/Qwen2.5-Math-1.5B-Instruct"
+     },
+     "correct": {
+      "equilibrium": true,
+      "cross_exam": true,
+      "leave_one_out": true,
+      "self_preference": true
+     },
+     "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": false
+     }
+    },
+    {
+     "i": 37,
+     "domain": "math",
+     "winners": {
+      "equilibrium": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "cross_exam": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "leave_one_out": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "self_preference": "Qwen/Qwen2.5-Math-1.5B-Instruct"
+     },
+     "correct": {
+      "equilibrium": true,
+      "cross_exam": true,
+      "leave_one_out": true,
+      "self_preference": true
+     },
+     "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": true
+     }
+    },
+    {
+     "i": 38,
+     "domain": "math",
+     "winners": {
+      "equilibrium": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "cross_exam": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "leave_one_out": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "self_preference": "Qwen/Qwen2.5-Math-1.5B-Instruct"
+     },
+     "correct": {
+      "equilibrium": true,
+      "cross_exam": true,
+      "leave_one_out": true,
+      "self_preference": true
+     },
+     "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": false,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": true
+     }
+    },
+    {
+     "i": 39,
+     "domain": "math",
+     "winners": {
+      "equilibrium": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "cross_exam": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "leave_one_out": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "self_preference": "Qwen/Qwen2.5-Math-1.5B-Instruct"
+     },
+     "correct": {
+      "equilibrium": true,
+      "cross_exam": true,
+      "leave_one_out": true,
+      "self_preference": true
+     },
+     "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": false,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": false
+     }
+    }
+   ]
+  },
+  {
+   "seed": 47,
+   "n_tasks": 120,
+   "players": [
+    "Qwen/Qwen2.5-1.5B-Instruct",
+    "Qwen/Qwen3-1.7B",
+    "Qwen/Qwen2.5-Math-1.5B-Instruct",
+    "Qwen/Qwen2.5-Coder-1.5B-Instruct"
+   ],
+   "accuracy": {
+    "cross_exam": 0.5917,
+    "equilibrium": 0.5917,
+    "leave_one_out": 0.5917,
+    "majority": 0.65,
+    "oracle": 0.8417,
+    "self_preference": 0.5583,
+    "single::Qwen/Qwen2.5-1.5B-Instruct": 0.575,
+    "single::Qwen/Qwen2.5-Coder-1.5B-Instruct": 0.5167,
+    "single::Qwen/Qwen2.5-Math-1.5B-Instruct": 0.6167,
+    "single::Qwen/Qwen3-1.7B": 0.3083
+   },
+   "per_domain": {
+    "math": {
+     "cross_exam": 0.85,
+     "leave_one_out": 0.85,
+     "self_preference": 0.8333,
+     "equilibrium": 0.85,
+     "majority": 0.8167,
+     "oracle": 0.9167,
+     "n": 60
+    },
+    "general": {
+     "cross_exam": 0.3333,
+     "leave_one_out": 0.3333,
+     "self_preference": 0.2833,
+     "equilibrium": 0.3333,
+     "majority": 0.4833,
+     "oracle": 0.7667,
+     "n": 60
+    }
+   },
+   "sample": [
+    {
+     "i": 0,
+     "domain": "math",
+     "winners": {
+      "equilibrium": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+      "cross_exam": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+      "leave_one_out": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+      "self_preference": "Qwen/Qwen3-1.7B"
+     },
+     "correct": {
+      "equilibrium": true,
+      "cross_exam": true,
+      "leave_one_out": true,
+      "self_preference": false
+     },
+     "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": true
+     }
+    },
+    {
+     "i": 1,
+     "domain": "math",
+     "winners": {
+      "equilibrium": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "cross_exam": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "leave_one_out": "Qwen/Qwen2.5-1.5B-Instruct",
+      "self_preference": "Qwen/Qwen2.5-Math-1.5B-Instruct"
+     },
+     "correct": {
+      "equilibrium": true,
+      "cross_exam": true,
+      "leave_one_out": true,
+      "self_preference": true
+     },
+     "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": true,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": true
+     }
+    },
+    {
+     "i": 2,
+     "domain": "math",
+     "winners": {
+      "equilibrium": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "cross_exam": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "leave_one_out": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "self_preference": "Qwen/Qwen2.5-Math-1.5B-Instruct"
+     },
+     "correct": {
+      "equilibrium": true,
+      "cross_exam": true,
+      "leave_one_out": true,
+      "self_preference": true
+     },
+     "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": true,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": true
+     }
+    },
+    {
+     "i": 3,
+     "domain": "math",
+     "winners": {
+      "equilibrium": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+      "cross_exam": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+      "leave_one_out": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+      "self_preference": "Qwen/Qwen2.5-Math-1.5B-Instruct"
+     },
+     "correct": {
+      "equilibrium": false,
+      "cross_exam": false,
+      "leave_one_out": false,
+      "self_preference": false
+     },
+     "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": false,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": false,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": false
+     }
+    },
+    {
+     "i": 4,
+     "domain": "math",
+     "winners": {
+      "equilibrium": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+      "cross_exam": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+      "leave_one_out": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+      "self_preference": "Qwen/Qwen3-1.7B"
+     },
+     "correct": {
+      "equilibrium": true,
+      "cross_exam": true,
+      "leave_one_out": true,
+      "self_preference": false
+     },
+     "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": false,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": true
+     }
+    },
+    {
+     "i": 5,
+     "domain": "math",
+     "winners": {
+      "equilibrium": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "cross_exam": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "leave_one_out": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "self_preference": "Qwen/Qwen2.5-Math-1.5B-Instruct"
+     },
+     "correct": {
+      "equilibrium": true,
+      "cross_exam": true,
+      "leave_one_out": true,
+      "self_preference": true
+     },
+     "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": true,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": true
+     }
+    },
+    {
+     "i": 6,
+     "domain": "math",
+     "winners": {
+      "equilibrium": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "cross_exam": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "leave_one_out": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "self_preference": "Qwen/Qwen2.5-Math-1.5B-Instruct"
+     },
+     "correct": {
+      "equilibrium": true,
+      "cross_exam": true,
+      "leave_one_out": true,
+      "self_preference": true
+     },
+     "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": false,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": false
+     }
+    },
+    {
+     "i": 7,
+     "domain": "math",
+     "winners": {
+      "equilibrium": "Qwen/Qwen2.5-1.5B-Instruct",
+      "cross_exam": "Qwen/Qwen2.5-1.5B-Instruct",
+      "leave_one_out": "Qwen/Qwen2.5-1.5B-Instruct",
+      "self_preference": "Qwen/Qwen3-1.7B"
+     },
+     "correct": {
+      "equilibrium": false,
+      "cross_exam": false,
+      "leave_one_out": false,
+      "self_preference": false
+     },
+     "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": false,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": false,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": false
+     }
+    },
+    {
+     "i": 8,
+     "domain": "math",
+     "winners": {
+      "equilibrium": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "cross_exam": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "leave_one_out": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "self_preference": "Qwen/Qwen2.5-Math-1.5B-Instruct"
+     },
+     "correct": {
+      "equilibrium": true,
+      "cross_exam": true,
+      "leave_one_out": true,
+      "self_preference": true
+     },
+     "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": true,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": true
+     }
+    },
+    {
+     "i": 9,
+     "domain": "math",
+     "winners": {
+      "equilibrium": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "cross_exam": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "leave_one_out": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "self_preference": "Qwen/Qwen2.5-Math-1.5B-Instruct"
+     },
+     "correct": {
+      "equilibrium": true,
+      "cross_exam": true,
+      "leave_one_out": true,
+      "self_preference": true
+     },
+     "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": true
+     }
+    },
+    {
+     "i": 10,
+     "domain": "math",
+     "winners": {
+      "equilibrium": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "cross_exam": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "leave_one_out": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+      "self_preference": "Qwen/Qwen2.5-Math-1.5B-Instruct"
+     },
+     "correct": {
+      "equilibrium": true,
+      "cross_exam": true,
+      "leave_one_out": true,
+      "self_preference": true
+     },
+     "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": true
+     }
+    },
+    {
+     "i": 11,
+     "domain": "math",
+     "winners": {
+      "equilibrium": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+      "cross_exam": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+      "leave_one_out": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+      "self_preference": "Qwen/Qwen2.5-Math-1.5B-Instruct"
+     },
+     "correct": {
+      "equilibrium": true,
+      "cross_exam": true,
+      "leave_one_out": true,
+      "self_preference": true
+     },
+     "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": false,
+      "Qwen/Qwen3-1.7B": true,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": true
+     }
+    },
+    {
+     "i": 12,
+     "domain": "math",
+     "winners": {
+      "equilibrium": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "cross_exam": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "leave_one_out": "Qwen/Qwen2.5-1.5B-Instruct",
+      "self_preference": "Qwen/Qwen2.5-Math-1.5B-Instruct"
+     },
+     "correct": {
+      "equilibrium": true,
+      "cross_exam": true,
+      "leave_one_out": true,
+      "self_preference": true
+     },
+     "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": true
+     }
+    },
+    {
+     "i": 13,
+     "domain": "math",
+     "winners": {
+      "equilibrium": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+      "cross_exam": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+      "leave_one_out": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+      "self_preference": "Qwen/Qwen2.5-Math-1.5B-Instruct"
+     },
+     "correct": {
+      "equilibrium": true,
+      "cross_exam": true,
+      "leave_one_out": true,
+      "self_preference": true
+     },
+     "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": true,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": true
+     }
+    },
+    {
+     "i": 14,
+     "domain": "math",
+     "winners": {
+      "equilibrium": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "cross_exam": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "leave_one_out": "Qwen/Qwen2.5-1.5B-Instruct",
+      "self_preference": "Qwen/Qwen2.5-Math-1.5B-Instruct"
+     },
+     "correct": {
+      "equilibrium": true,
+      "cross_exam": true,
+      "leave_one_out": true,
+      "self_preference": true
+     },
+     "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": true,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": false
+     }
+    },
+    {
+     "i": 15,
+     "domain": "math",
+     "winners": {
+      "equilibrium": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "cross_exam": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "leave_one_out": "Qwen/Qwen2.5-1.5B-Instruct",
+      "self_preference": "Qwen/Qwen2.5-Math-1.5B-Instruct"
+     },
+     "correct": {
+      "equilibrium": true,
+      "cross_exam": true,
+      "leave_one_out": true,
+      "self_preference": true
+     },
+     "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": true,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": true
+     }
+    },
+    {
+     "i": 16,
+     "domain": "math",
+     "winners": {
+      "equilibrium": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "cross_exam": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "leave_one_out": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+      "self_preference": "Qwen/Qwen2.5-Math-1.5B-Instruct"
+     },
+     "correct": {
+      "equilibrium": true,
+      "cross_exam": true,
+      "leave_one_out": true,
+      "self_preference": true
+     },
+     "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": true
+     }
+    },
+    {
+     "i": 17,
+     "domain": "math",
+     "winners": {
+      "equilibrium": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "cross_exam": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "leave_one_out": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "self_preference": "Qwen/Qwen2.5-Math-1.5B-Instruct"
+     },
+     "correct": {
+      "equilibrium": false,
+      "cross_exam": false,
+      "leave_one_out": false,
+      "self_preference": false
+     },
+     "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": false,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": false,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": false
+     }
+    },
+    {
+     "i": 18,
+     "domain": "math",
+     "winners": {
+      "equilibrium": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+      "cross_exam": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+      "leave_one_out": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+      "self_preference": "Qwen/Qwen2.5-Coder-1.5B-Instruct"
+     },
+     "correct": {
+      "equilibrium": true,
+      "cross_exam": true,
+      "leave_one_out": true,
+      "self_preference": true
+     },
+     "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": true
+     }
+    },
+    {
+     "i": 19,
+     "domain": "math",
+     "winners": {
+      "equilibrium": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "cross_exam": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "leave_one_out": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "self_preference": "Qwen/Qwen2.5-Math-1.5B-Instruct"
+     },
+     "correct": {
+      "equilibrium": false,
+      "cross_exam": false,
+      "leave_one_out": false,
+      "self_preference": false
+     },
+     "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": false,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": false,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": false
+     }
+    },
+    {
+     "i": 20,
+     "domain": "math",
+     "winners": {
+      "equilibrium": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "cross_exam": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "leave_one_out": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "self_preference": "Qwen/Qwen2.5-Math-1.5B-Instruct"
+     },
+     "correct": {
+      "equilibrium": true,
+      "cross_exam": true,
+      "leave_one_out": true,
+      "self_preference": true
+     },
+     "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": true,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": false
+     }
+    },
+    {
+     "i": 21,
+     "domain": "math",
+     "winners": {
+      "equilibrium": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "cross_exam": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "leave_one_out": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "self_preference": "Qwen/Qwen2.5-Math-1.5B-Instruct"
+     },
+     "correct": {
+      "equilibrium": false,
+      "cross_exam": false,
+      "leave_one_out": false,
+      "self_preference": false
+     },
+     "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": false,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": false,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": false
+     }
+    },
+    {
+     "i": 22,
+     "domain": "math",
+     "winners": {
+      "equilibrium": "Qwen/Qwen2.5-1.5B-Instruct",
+      "cross_exam": "Qwen/Qwen2.5-1.5B-Instruct",
+      "leave_one_out": "Qwen/Qwen2.5-1.5B-Instruct",
+      "self_preference": "Qwen/Qwen2.5-Coder-1.5B-Instruct"
+     },
+     "correct": {
+      "equilibrium": true,
+      "cross_exam": true,
+      "leave_one_out": true,
+      "self_preference": true
+     },
+     "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": false,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": true
+     }
+    },
+    {
+     "i": 23,
+     "domain": "math",
+     "winners": {
+      "equilibrium": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+      "cross_exam": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+      "leave_one_out": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+      "self_preference": "Qwen/Qwen2.5-Math-1.5B-Instruct"
+     },
+     "correct": {
+      "equilibrium": true,
+      "cross_exam": true,
+      "leave_one_out": true,
+      "self_preference": true
+     },
+     "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": true
+     }
+    },
+    {
+     "i": 24,
+     "domain": "math",
+     "winners": {
+      "equilibrium": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "cross_exam": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "leave_one_out": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "self_preference": "Qwen/Qwen2.5-Math-1.5B-Instruct"
+     },
+     "correct": {
+      "equilibrium": true,
+      "cross_exam": true,
+      "leave_one_out": true,
+      "self_preference": true
+     },
+     "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": true
+     }
+    },
+    {
+     "i": 25,
+     "domain": "math",
+     "winners": {
+      "equilibrium": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "cross_exam": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "leave_one_out": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "self_preference": "Qwen/Qwen2.5-Math-1.5B-Instruct"
+     },
+     "correct": {
+      "equilibrium": true,
+      "cross_exam": true,
+      "leave_one_out": true,
+      "self_preference": true
+     },
+     "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": true
+     }
+    },
+    {
+     "i": 26,
+     "domain": "math",
+     "winners": {
+      "equilibrium": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "cross_exam": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "leave_one_out": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "self_preference": "Qwen/Qwen2.5-Math-1.5B-Instruct"
+     },
+     "correct": {
+      "equilibrium": true,
+      "cross_exam": true,
+      "leave_one_out": true,
+      "self_preference": true
+     },
+     "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": true,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": true
+     }
+    },
+    {
+     "i": 27,
+     "domain": "math",
+     "winners": {
+      "equilibrium": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "cross_exam": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "leave_one_out": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "self_preference": "Qwen/Qwen2.5-Math-1.5B-Instruct"
+     },
+     "correct": {
+      "equilibrium": true,
+      "cross_exam": true,
+      "leave_one_out": true,
+      "self_preference": true
+     },
+     "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": false,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": false
+     }
+    },
+    {
+     "i": 28,
+     "domain": "math",
+     "winners": {
+      "equilibrium": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "cross_exam": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "leave_one_out": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "self_preference": "Qwen/Qwen2.5-Math-1.5B-Instruct"
+     },
+     "correct": {
+      "equilibrium": true,
+      "cross_exam": true,
+      "leave_one_out": true,
+      "self_preference": true
+     },
+     "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": false
+     }
+    },
+    {
+     "i": 29,
+     "domain": "math",
+     "winners": {
+      "equilibrium": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "cross_exam": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "leave_one_out": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "self_preference": "Qwen/Qwen2.5-Math-1.5B-Instruct"
+     },
+     "correct": {
+      "equilibrium": true,
+      "cross_exam": true,
+      "leave_one_out": true,
+      "self_preference": true
+     },
+     "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": false,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": true
+     }
+    },
+    {
+     "i": 30,
+     "domain": "math",
+     "winners": {
+      "equilibrium": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "cross_exam": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "leave_one_out": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "self_preference": "Qwen/Qwen2.5-Math-1.5B-Instruct"
+     },
+     "correct": {
+      "equilibrium": true,
+      "cross_exam": true,
+      "leave_one_out": true,
+      "self_preference": true
+     },
+     "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": true,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": true
+     }
+    },
+    {
+     "i": 31,
+     "domain": "math",
+     "winners": {
+      "equilibrium": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "cross_exam": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "leave_one_out": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "self_preference": "Qwen/Qwen2.5-Math-1.5B-Instruct"
+     },
+     "correct": {
+      "equilibrium": true,
+      "cross_exam": true,
+      "leave_one_out": true,
+      "self_preference": true
+     },
+     "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": false,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": true
+     }
+    },
+    {
+     "i": 32,
+     "domain": "math",
+     "winners": {
+      "equilibrium": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "cross_exam": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "leave_one_out": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "self_preference": "Qwen/Qwen2.5-1.5B-Instruct"
+     },
+     "correct": {
+      "equilibrium": true,
+      "cross_exam": true,
+      "leave_one_out": true,
+      "self_preference": true
+     },
+     "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": true
+     }
+    },
+    {
+     "i": 33,
+     "domain": "math",
+     "winners": {
+      "equilibrium": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "cross_exam": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "leave_one_out": "Qwen/Qwen2.5-1.5B-Instruct",
+      "self_preference": "Qwen/Qwen2.5-Math-1.5B-Instruct"
+     },
+     "correct": {
+      "equilibrium": true,
+      "cross_exam": true,
+      "leave_one_out": true,
+      "self_preference": true
+     },
+     "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": true,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": false
+     }
+    },
+    {
+     "i": 34,
+     "domain": "math",
+     "winners": {
+      "equilibrium": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+      "cross_exam": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+      "leave_one_out": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+      "self_preference": "Qwen/Qwen2.5-Math-1.5B-Instruct"
+     },
+     "correct": {
+      "equilibrium": true,
+      "cross_exam": true,
+      "leave_one_out": true,
+      "self_preference": true
+     },
+     "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": true
+     }
+    },
+    {
+     "i": 35,
+     "domain": "math",
+     "winners": {
+      "equilibrium": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "cross_exam": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "leave_one_out": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "self_preference": "Qwen/Qwen2.5-Math-1.5B-Instruct"
+     },
+     "correct": {
+      "equilibrium": true,
+      "cross_exam": true,
+      "leave_one_out": true,
+      "self_preference": true
+     },
+     "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": true
+     }
+    },
+    {
+     "i": 36,
+     "domain": "math",
+     "winners": {
+      "equilibrium": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "cross_exam": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "leave_one_out": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "self_preference": "Qwen/Qwen2.5-Math-1.5B-Instruct"
+     },
+     "correct": {
+      "equilibrium": false,
+      "cross_exam": false,
+      "leave_one_out": false,
+      "self_preference": false
+     },
+     "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": false,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": false
+     }
+    },
+    {
+     "i": 37,
+     "domain": "math",
+     "winners": {
+      "equilibrium": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "cross_exam": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "leave_one_out": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "self_preference": "Qwen/Qwen2.5-Math-1.5B-Instruct"
+     },
+     "correct": {
+      "equilibrium": true,
+      "cross_exam": true,
+      "leave_one_out": true,
+      "self_preference": true
+     },
+     "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": true
+     }
+    },
+    {
+     "i": 38,
+     "domain": "math",
+     "winners": {
+      "equilibrium": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+      "cross_exam": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+      "leave_one_out": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+      "self_preference": "Qwen/Qwen2.5-Math-1.5B-Instruct"
+     },
+     "correct": {
+      "equilibrium": true,
+      "cross_exam": true,
+      "leave_one_out": true,
+      "self_preference": true
+     },
+     "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": true,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": true
+     }
+    },
+    {
+     "i": 39,
+     "domain": "math",
+     "winners": {
+      "equilibrium": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "cross_exam": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "leave_one_out": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+      "self_preference": "Qwen/Qwen2.5-Math-1.5B-Instruct"
+     },
+     "correct": {
+      "equilibrium": true,
+      "cross_exam": true,
+      "leave_one_out": true,
+      "self_preference": true
+     },
+     "singles": {
+      "Qwen/Qwen2.5-1.5B-Instruct": false,
+      "Qwen/Qwen3-1.7B": false,
+      "Qwen/Qwen2.5-Math-1.5B-Instruct": true,
+      "Qwen/Qwen2.5-Coder-1.5B-Instruct": false
+     }
+    }
+   ]
+  }
+ ],
+ "fair_baselines": {
+  "n": 360,
+  "accuracy": {
+   "baseline_single_greedy": 0.5361,
+   "council_system": 0.6194,
+   "self_consistency_k2": 0.5556,
+   "self_consistency_k3": 0.6028,
+   "self_consistency_k5": 0.6361,
+   "capacity_matched_7b_greedy": 0.8139
+  },
+  "generations_per_request": {
+   "baseline_single_greedy": 1.0,
+   "council_system": 1.258,
+   "self_consistency_k2": 2.0,
+   "self_consistency_k3": 3.0,
+   "self_consistency_k5": 5.0,
+   "capacity_matched_7b_greedy": 1.0
+  },
+  "council_vs": {
+   "baseline_single_greedy": {
+    "wins": 38,
+    "losses": 8,
+    "z": 4.42
+   },
+   "self_consistency_k2": {
+    "wins": 66,
+    "losses": 43,
+    "z": 2.2
+   },
+   "self_consistency_k3": {
+    "wins": 49,
+    "losses": 43,
+    "z": 0.63
+   },
+   "self_consistency_k5": {
+    "wins": 41,
+    "losses": 47,
+    "z": -0.64
+   },
+   "capacity_matched_7b_greedy": {
+    "wins": 14,
+    "losses": 84,
+    "z": -7.07
+   }
+  },
+  "note": "Same questions, prompts, extraction and scoring as the confirmation run. Self-consistency arms reuse one set of five samples, so k=2 and k=3 are prefixes of k=5 rather than independent draws."
+ },
+ "note": "Per-question winners and rule accuracies from the pre-registered confirmation arena (SPEC 0017); no per-token influence traces were recorded, so the equilibrium view replays answer-level outcomes.",
+ "anchored_confirmation": {
+  "seeds": [
+   "seed45",
+   "seed46",
+   "seed47"
+  ],
+  "router": {
+   "math": "Qwen/Qwen2.5-Math-1.5B-Instruct",
+   "general": "Qwen/Qwen2.5-1.5B-Instruct"
+  },
+  "per_seed": {
+   "seed45": {
+    "mechanism": 0.6,
+    "router": 0.5833,
+    "fallback_router": 0.6083,
+    "margin_vs_plain": 0.0167,
+    "margin_vs_fallback": -0.0083,
+    "decomposition": {
+     "loss_vs_plain_router": 1,
+     "win_abstain": 3
+    },
+    "paired_vs_plain": {
+     "wins": 3,
+     "losses": 1,
+     "z": 1.0
+    },
+    "per_domain": {
+     "math": {
+      "mechanism": 0.8167,
+      "router": 0.8167
+     },
+     "general": {
+      "mechanism": 0.3833,
+      "router": 0.35
+     }
+    }
+   },
+   "seed46": {
+    "mechanism": 0.5917,
+    "router": 0.5667,
+    "fallback_router": 0.5917,
+    "margin_vs_plain": 0.025,
+    "margin_vs_fallback": 0.0,
+    "decomposition": {
+     "win_abstain": 3
+    },
+    "paired_vs_plain": {
+     "wins": 3,
+     "losses": 0,
+     "z": 1.7320508075688774
+    },
+    "per_domain": {
+     "math": {
+      "mechanism": 0.8,
+      "router": 0.7833
+     },
+     "general": {
+      "mechanism": 0.3833,
+      "router": 0.35
+     }
+    }
+   },
+   "seed47": {
+    "mechanism": 0.6583,
+    "router": 0.65,
+    "fallback_router": 0.6583,
+    "margin_vs_plain": 0.0083,
+    "margin_vs_fallback": 0.0,
+    "decomposition": {
+     "loss_vs_plain_router": 1,
+     "win_abstain": 1,
+     "win_override": 1
+    },
+    "paired_vs_plain": {
+     "wins": 2,
+     "losses": 1,
+     "z": 0.5773502691896258
+    },
+    "per_domain": {
+     "math": {
+      "mechanism": 0.85,
+      "router": 0.85
+     },
+     "general": {
+      "mechanism": 0.4667,
+      "router": 0.45
+     }
+    }
+   }
+  }
+ }
+}

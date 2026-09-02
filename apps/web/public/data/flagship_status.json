@@ -1,6 +1,6 @@
 {
-  "stage": "closed_budget_gated",
-  "spec": "0021",
-  "description": "The Qwen-class kinetic model is recorded as future work requiring a pretraining budget: conversion of pretrained weights fails at any gentleness (F51) and cheap distillation into from-scratch tied weights fails its pre-registered gate (F53, -2.2% vs required +15%). The validated result stands: 96% of a conventional transformer's quality at equal compute with 2.70x fewer parameters.",
-  "updated": "2026-08-29"
+  "stage": "closed",
+  "spec": "ADR 0011",
+  "description": "The programme closed on 2026-09-02 at finding F55. The validated result stands at 46-121M parameters: 96% of a conventional transformer's quality at equal compute with 2.70x fewer parameters. Taken to a billion parameters on web data, the tied arm failed its pre-registered 1B-token kill gate (perplexity ratio 1.56 vs 1.20) and was still closing at 2.5B tokens (1.31); both arms score at chance on public benchmarks, so the scale programme was halted rather than spent on a model no one would use. Everything shown here is pre-recorded from the record.",
+  "updated": "2026-09-02"
 }

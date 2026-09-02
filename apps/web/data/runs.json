@@ -1,0 +1,401 @@
+{
+ "runs": [
+  {
+   "dir": "exp01_mmd_vs_gda",
+   "experiment": "exp01_mmd_vs_gda",
+   "spec": null,
+   "seed": null,
+   "config_hash": "e1c1efdd46ea3b7c5db885db89cbded882ef5449718132986d6d5ac253d1d46a",
+   "git_commit": "9a2cde2f2193b29194d6773de10f410e4d48378f",
+   "headline": {}
+  },
+  {
+   "dir": "exp02_qre_homotopy",
+   "experiment": "exp02_qre_homotopy",
+   "spec": null,
+   "seed": null,
+   "config_hash": "b52d1e0b00b261cb5aa62a07a63382db30ca3af250fedfd2190cd0a9de019008",
+   "git_commit": "9a2cde2f2193b29194d6773de10f410e4d48378f",
+   "headline": {}
+  },
+  {
+   "dir": "exp03_deq_solvers",
+   "experiment": "exp03_deq_solvers",
+   "spec": null,
+   "seed": null,
+   "config_hash": "unknown",
+   "git_commit": "unknown",
+   "headline": {}
+  },
+  {
+   "dir": "exp04_auction_truthfulness",
+   "experiment": "exp04_auction_truthfulness",
+   "spec": null,
+   "seed": null,
+   "config_hash": "5c458dac27de777e90f9f85e6d5e5b16d810200561ce7d0646d6e7ed9d5b56f0",
+   "git_commit": "9a2cde2f2193b29194d6773de10f410e4d48378f",
+   "headline": {}
+  },
+  {
+   "dir": "exp05_eqlm_pretrain",
+   "experiment": "exp05_eqlm_pretrain",
+   "spec": null,
+   "seed": null,
+   "config_hash": "3ed6e8fcb75635351dd7f9cfd0925faa0ed023ebf06052674c5fe827aef66979",
+   "git_commit": "2151a19ed59a3106fcceeaca96bd106c2ab75c53",
+   "headline": {
+    "A1.blimp_accuracy": 0.465,
+    "A2.blimp_accuracy": 0.452,
+    "A3.blimp_accuracy": 0.481
+   }
+  },
+  {
+   "dir": "exp05_full",
+   "experiment": "exp05_full",
+   "spec": null,
+   "seed": null,
+   "config_hash": "8a2fa16e5cd86fe18f69246007a129449ba27bed5a7a37082119ee365e5a2d56",
+   "git_commit": "385f5d4cfd10fca364e3776c05c8e3efb548a5f4",
+   "headline": {
+    "A1.blimp_accuracy": 0.734,
+    "A2.blimp_accuracy": 0.571,
+    "A3.blimp_accuracy": 0.584
+   }
+  },
+  {
+   "dir": "exp05_full_v4",
+   "experiment": "exp05_full_v4",
+   "spec": null,
+   "seed": null,
+   "config_hash": "8f3c8969ce13f17119cecd27390926a10999a6b0bcad9f60ee24cc968f96a256",
+   "git_commit": "e360e7c5b5fcbaf0b0ff21b63213a8c4a2ea67f7",
+   "headline": {
+    "A1.blimp_accuracy": 0.746,
+    "A2.blimp_accuracy": 0.658,
+    "A3.blimp_accuracy": 0.704
+   }
+  },
+  {
+   "dir": "exp05_full_v4_s43",
+   "experiment": "exp05_full_v4_s43",
+   "spec": null,
+   "seed": null,
+   "config_hash": "b1ad499be6e0e5e853cdf02da61185a7bda4e5df6b01178a9e4f4eaf2c785c39",
+   "git_commit": "0a13bcba5820e7872c6ef71f744e60c2a7fe8f1e",
+   "headline": {
+    "A1.blimp_accuracy": 0.689,
+    "A2.blimp_accuracy": 0.62,
+    "A3.blimp_accuracy": 0.654
+   }
+  },
+  {
+   "dir": "exp05_full_v4_s44",
+   "experiment": "exp05_full_v4_s44",
+   "spec": null,
+   "seed": null,
+   "config_hash": "0461692a78b4e72c4b942f8dbc19d4441e2eec35a32614166849b6d795f3474e",
+   "git_commit": "23db155f9188c212f40c5bb0bde67eb50a12ffcc",
+   "headline": {
+    "A1.blimp_accuracy": 0.705,
+    "A2.blimp_accuracy": 0.643,
+    "A3.blimp_accuracy": 0.633
+   }
+  },
+  {
+   "dir": "exp06_magnetic_sweep",
+   "experiment": "exp06_magnetic_sweep",
+   "spec": null,
+   "seed": null,
+   "config_hash": "2e7cc76470019224f176d44d93d69d2eea8e088144dd5a977336d0c1794ba698",
+   "git_commit": "615c32578807a2e0ac301fa10216518630f50bb3",
+   "headline": {
+    "A1_tau1e4_ema.final_loss": 8.6146,
+    "A2_tau1e4_periodic.final_loss": 8.5943,
+    "A3_tau1e3_ema.final_loss": 8.5439,
+    "A4_tau1e3_periodic.final_loss": 8.5738,
+    "A5_tau1e2_ema.final_loss": 8.5216,
+    "A6_tau1e2_periodic.final_loss": 8.5776,
+    "Baseline.final_loss": 8.5133
+   }
+  },
+  {
+   "dir": "exp06_magnetic_sweep/solver_budget",
+   "experiment": "solver_budget",
+   "spec": null,
+   "seed": null,
+   "config_hash": "unknown",
+   "git_commit": "8eae3db14121ace76e54d0a23a1eeb7cd30e13ab",
+   "headline": {}
+  },
+  {
+   "dir": "exp07_contraction_check",
+   "experiment": "exp07_contraction_check",
+   "spec": null,
+   "seed": null,
+   "config_hash": "28c4ea1f50ed8c5edb227f606ff849c8c1cd7958fce36370593cb951e3276df0",
+   "git_commit": "unknown",
+   "headline": {
+    "A1.final_loss": 8.7153,
+    "A2.final_loss": 8.8586,
+    "A3.final_loss": 8.8216,
+    "A4.final_loss": 8.8373
+   }
+  },
+  {
+   "dir": "exp08_solver_aware",
+   "experiment": "exp08_solver_aware",
+   "spec": null,
+   "seed": null,
+   "config_hash": "932f004bde9b670a803bb081f3fdfa1deee1dd29e2e1ad813af6d54760854c25",
+   "git_commit": "unknown",
+   "headline": {}
+  },
+  {
+   "dir": "exp09_adaptive",
+   "experiment": "exp09_adaptive",
+   "spec": null,
+   "seed": null,
+   "config_hash": "unknown",
+   "git_commit": "unknown",
+   "headline": {}
+  },
+  {
+   "dir": "exp10_5090/exp10_seed42",
+   "experiment": "exp10_seed42",
+   "spec": null,
+   "seed": null,
+   "config_hash": "2a92f4f1b1dbfc70fd6d7f3e681afb4a476763f08faf96588bb7074b6b501832",
+   "git_commit": "unknown",
+   "headline": {
+    "A1.blimp_accuracy": 0.682,
+    "A2.blimp_accuracy": 0.535,
+    "A3.blimp_accuracy": 0.537
+   }
+  },
+  {
+   "dir": "exp10_5090/exp10_seed43",
+   "experiment": "exp10_seed43",
+   "spec": null,
+   "seed": null,
+   "config_hash": "9b2f58adb16e7923897a38be9fb9f27a2ced39e055cf23a414144a6319c8a6ba",
+   "git_commit": "unknown",
+   "headline": {
+    "A1.blimp_accuracy": 0.675,
+    "A2.blimp_accuracy": 0.538,
+    "A3.blimp_accuracy": 0.532
+   }
+  },
+  {
+   "dir": "exp10_5090/exp10_seed44",
+   "experiment": "exp10_seed44",
+   "spec": null,
+   "seed": null,
+   "config_hash": "8944b1f33c054152f74d4aadeb0f36bdea2c37d422a81650024229b5e368dfb4",
+   "git_commit": "unknown",
+   "headline": {
+    "A1.blimp_accuracy": 0.693,
+    "A2.blimp_accuracy": 0.542,
+    "A3.blimp_accuracy": 0.544
+   }
+  },
+  {
+   "dir": "exp10_probe",
+   "experiment": "exp10_probe",
+   "spec": null,
+   "seed": null,
+   "config_hash": "f7731f4fca0212972689ad08d2a4bd5871b004e539932f73b367bdeebb3a5f76",
+   "git_commit": "eb4703d41ef3ddc9aa684d631483a46912182695",
+   "headline": {
+    "A1.blimp_accuracy": 0.457,
+    "A2.blimp_accuracy": 0.443,
+    "A3.blimp_accuracy": 0.439
+   }
+  },
+  {
+   "dir": "exp11_seed42",
+   "experiment": "exp11_mpo_dpo",
+   "spec": "0007",
+   "seed": 42,
+   "config_hash": "1d0222be618feb754a6c67a17011cf8391f85f5440874cbac5a897ad29dcc762",
+   "git_commit": "unknown",
+   "headline": {}
+  },
+  {
+   "dir": "exp11_seed43",
+   "experiment": "exp11_mpo_dpo",
+   "spec": "0007",
+   "seed": 43,
+   "config_hash": "92fc3c0a093ad4f880f6a4110f31b39b5358d730ff3e2df4ea54328d1b5f8251",
+   "git_commit": "unknown",
+   "headline": {}
+  },
+  {
+   "dir": "exp11_seed44",
+   "experiment": "exp11_mpo_dpo",
+   "spec": "0007",
+   "seed": 44,
+   "config_hash": "af5262bda63209ff57133d11fa30a04f8e510ee04d662dacf87f2435a7324490",
+   "git_commit": "unknown",
+   "headline": {}
+  },
+  {
+   "dir": "exp11b_seed42",
+   "experiment": "exp11_mpo_dpo",
+   "spec": "0007",
+   "seed": 42,
+   "config_hash": "649cb156def734a7e647ea02b742db5efdbd5cb914255ca54e8e6ba9d8fd1f06",
+   "git_commit": "unknown",
+   "headline": {}
+  },
+  {
+   "dir": "exp11b_seed43",
+   "experiment": "exp11_mpo_dpo",
+   "spec": "0007",
+   "seed": 43,
+   "config_hash": "38ee24b3349eb4f97c579f3f2a0fef9863026ce3c8ef8f98d5c3d8e7d511c0ab",
+   "git_commit": "unknown",
+   "headline": {}
+  },
+  {
+   "dir": "exp11b_seed44",
+   "experiment": "exp11_mpo_dpo",
+   "spec": "0007",
+   "seed": 44,
+   "config_hash": "4766b8955e382d2779c97c19dd260354491f3a657bad847426837dd1b93ed347",
+   "git_commit": "unknown",
+   "headline": {}
+  },
+  {
+   "dir": "exp13_seed42",
+   "experiment": "exp13_contraction_at_width",
+   "spec": "0010",
+   "seed": 42,
+   "config_hash": "40b471ce0ad103f91930b9f3f492a6aed0379d6cb11048da48847dd9ba46d3e3",
+   "git_commit": "unknown",
+   "headline": {
+    "B1.blimp_accuracy": 0.662,
+    "B2.blimp_accuracy": 0.577,
+    "B3.blimp_accuracy": 0.642
+   }
+  },
+  {
+   "dir": "exp13_seed43",
+   "experiment": "exp13_contraction_at_width",
+   "spec": "0010",
+   "seed": 43,
+   "config_hash": "33b106ea36f6f2db58eb1748a6169f269559b5d008ea87822816d214e0689b3d",
+   "git_commit": "unknown",
+   "headline": {
+    "B1.blimp_accuracy": 0.697
+   }
+  },
+  {
+   "dir": "exp13_seed44",
+   "experiment": "exp13_contraction_at_width",
+   "spec": "0010",
+   "seed": 44,
+   "config_hash": "161f6cd98344313e968355e338dc4f78d2891cf3b56871a09a28a718933dbfe9",
+   "git_commit": "unknown",
+   "headline": {
+    "B1.blimp_accuracy": 0.672
+   }
+  },
+  {
+   "dir": "exp13b_seed42",
+   "experiment": "exp13_contraction_at_width",
+   "spec": "0010",
+   "seed": 42,
+   "config_hash": "bcce8514869b34f2b59c56310f8da46cbb403f20a0be7dedf2ed8e5f42a75745",
+   "git_commit": "unknown",
+   "headline": {
+    "B4.blimp_accuracy": 0.529
+   }
+  },
+  {
+   "dir": "scale/exp15_h10/depth_curriculum_eval",
+   "experiment": "exp15_eval",
+   "spec": "0011",
+   "seed": null,
+   "config_hash": "unknown",
+   "git_commit": "unknown",
+   "headline": {}
+  },
+  {
+   "dir": "scale/exp15_h10/depth_curriculum_train",
+   "experiment": "exp15_kinetic_uptrain",
+   "spec": "0011",
+   "seed": 42,
+   "config_hash": "7fa211619e7d904bac516e52c9587cb1c9ae85010f6f56118159c0e2d16c7fde",
+   "git_commit": "unknown",
+   "headline": {}
+  },
+  {
+   "dir": "scale/exp15_h10/lora_relax_eval",
+   "experiment": "exp15_eval",
+   "spec": "0011",
+   "seed": null,
+   "config_hash": "unknown",
+   "git_commit": "unknown",
+   "headline": {}
+  },
+  {
+   "dir": "scale/exp15_h10/lora_relax_train",
+   "experiment": "exp15_kinetic_uptrain",
+   "spec": "0011",
+   "seed": 42,
+   "config_hash": "9ec9b7e16ef28f5d4eaa590b538522233031356c23085469cc5f102ec35e891d",
+   "git_commit": "unknown",
+   "headline": {}
+  },
+  {
+   "dir": "scale/exp15_kinetic",
+   "experiment": "exp15_kinetic_uptrain",
+   "spec": "0011",
+   "seed": 42,
+   "config_hash": "40fd98c86bafc45a429ac82704b6ce0d20dfbb83eba4aaacef6f56fb8a33dc5a",
+   "git_commit": "unknown",
+   "headline": {}
+  },
+  {
+   "dir": "scale/exp28",
+   "experiment": "exp28",
+   "spec": null,
+   "seed": null,
+   "config_hash": "unknown",
+   "git_commit": "unknown",
+   "headline": {
+    "best_single_name": "tiiuae/Falcon3-3B-Instruct",
+    "oracle_any_player": 0.7917
+   }
+  },
+  {
+   "dir": "scale/exp32",
+   "experiment": "exp13_contraction_at_width",
+   "spec": "0010",
+   "seed": 42,
+   "config_hash": "485fdc4218a9dddb04539bd163a3b71bb8f7518bb063f6e794c06b2b86c5e3ee",
+   "git_commit": "unknown",
+   "headline": {
+    "C1.blimp_accuracy": 0.663
+   }
+  },
+  {
+   "dir": "scale/exp42_test/mpo",
+   "experiment": "mpo",
+   "spec": null,
+   "seed": null,
+   "config_hash": "unknown",
+   "git_commit": "unknown",
+   "headline": {}
+  },
+  {
+   "dir": "scale/exp42_test/sft",
+   "experiment": "sft",
+   "spec": null,
+   "seed": null,
+   "config_hash": "unknown",
+   "git_commit": "unknown",
+   "headline": {}
+  }
+ ]
+}

@@ -1,0 +1,54 @@
+[
+ {
+  "model_name": "Qwen2.5-1.5B-Instruct",
+  "size_b": 1.5,
+  "source": "Alibaba Qwen",
+  "mmlu_acc": 0.6172,
+  "arc_challenge_acc": 0.435,
+  "hellaswag_acc": 0.5,
+  "gsm8k_flexible": 0.595,
+  "mixed_arena": 0.6061,
+  "config_sha": "266798e",
+  "git_commit": "266798e",
+  "machine": "GB10"
+ },
+ {
+  "model_name": "Qwen2.5-Coder-1.5B-Instruct",
+  "size_b": 1.5,
+  "source": "Alibaba Qwen",
+  "mmlu_acc": 0.516,
+  "arc_challenge_acc": 0.39,
+  "hellaswag_acc": 0.465,
+  "gsm8k_flexible": 0.51,
+  "mixed_arena": 0.513,
+  "config_sha": "cd8fd07",
+  "git_commit": "cd8fd07",
+  "machine": "GB10"
+ },
+ {
+  "model_name": "Qwen2.5-Math-1.5B-Instruct",
+  "size_b": 1.5,
+  "source": "Alibaba Qwen",
+  "mmlu_acc": 0.3923,
+  "arc_challenge_acc": 0.325,
+  "hellaswag_acc": 0.4,
+  "gsm8k_flexible": 0.795,
+  "mixed_arena": 0.5937,
+  "config_sha": "0066fa9",
+  "git_commit": "0066fa9",
+  "machine": "GB10"
+ },
+ {
+  "model_name": "Qwen3-1.7B",
+  "size_b": 1.7,
+  "source": "Alibaba Qwen",
+  "mmlu_acc": 0.5765,
+  "arc_challenge_acc": 0.45,
+  "hellaswag_acc": 0.44,
+  "gsm8k_flexible": 0.45,
+  "mixed_arena": 0.5133,
+  "config_sha": "a60f277",
+  "git_commit": "a60f277",
+  "machine": "GB10"
+ }
+]

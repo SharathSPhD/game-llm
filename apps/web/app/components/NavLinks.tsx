@@ -16,9 +16,9 @@ export function NavLinks() {
   // Secondary tools
   const toolLinks = [
     { href: "/lab", label: "Lab" },
-    { href: "/chat", label: "Chat" },
+    { href: "/leaderboard", label: "Leaderboard" },
+    { href: "/studio", label: "Registry" },
     { href: "/findings", label: "Findings" },
-    { href: "/login", label: "Sign in" },
   ];
 
   const isActive = (href: string) => {

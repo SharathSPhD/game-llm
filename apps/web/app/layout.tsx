@@ -4,6 +4,8 @@ import "../styles/globals.css";
 import { NavLinks } from "./components/NavLinks";
 import { ThemeToggle } from "./components/ThemeToggle";
 import { HealthDot } from "./components/HealthDot";
+import { ReplayBanner } from "./components/ReplayBanner";
+import { REPLAY_MODE } from "@/lib/config";
 
 export const metadata: Metadata = {
   title: {
@@ -59,14 +61,15 @@ export default function RootLayout({
             <ThemeToggle />
           </div>
         </nav>
+        {REPLAY_MODE && <ReplayBanner />}
         <main id="main">{children}</main>
         <footer className="site-footer">
           <div className="footer-inner">
             <div>
               <p className="footer-blurb">
                 <strong>EqLM</strong> is a research platform for equilibrium learning dynamics,
-                quantal response equilibria, mechanism design verification, and GPU-accelerated training.
-                All results include reproducible configs and are tracked via Tarka verification.
+                quantal response equilibria and mechanism design verification. The programme closed on
+                2026-09-02 at finding F55; every result shown is pre-recorded and traced to its configuration hash.
               </p>
             </div>
             <div>
@@ -80,7 +83,8 @@ export default function RootLayout({
             <div>
               <h3>Research</h3>
               <ul>
-                <li><Link href="/studio">Training Studio</Link></li>
+                <li><Link href="/studio">Run Registry</Link></li>
+                <li><Link href="/leaderboard">Leaderboard</Link></li>
                 <li><Link href="/findings">Findings</Link></li>
                 <li><a href="https://github.com/SharathSPhD/game-llm">Source</a></li>
               </ul>

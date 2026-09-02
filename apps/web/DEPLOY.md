@@ -90,8 +90,9 @@ The frontend forwards requests to the backend via Next.js API routes:
 | `/api/proxy/api/solve` | `/api/solve` | POST | Bearer |
 | `/api/proxy/api/qre_path` | `/api/qre_path` | POST | Bearer |
 | `/api/proxy/api/auction` | `/api/auction` | POST | Bearer |
-| `/api/proxy/api/jobs` | `/api/jobs` | POST | Bearer |
-| `/api/proxy/api/jobs/{id}` | `/api/jobs/{id}` | GET | Bearer |
+| `/api/proxy/api/runs` | `/api/runs` | GET | Bearer |
+| `/api/proxy/api/models` | `/api/models` | GET | Bearer |
+| `/api/proxy/api/playground/generate` | `/api/playground/generate` | POST | Bearer |
 | `/api/proxy/api/results` | `/api/results` | GET | Bearer |
 | `/api/health` | `/health` | GET | None |
 
@@ -187,19 +188,31 @@ vercel --prod
 
 ---
 
-## Replay Mode (Offline Demo)
+## Replay Mode (the closed programme)
 
-When `GATEWAY_URL` is unset, the frontend enters **replay mode**:
+The programme closed on 2026-09-02 (ADR 0011) with its serving host away, so
+the deployed app runs in **replay mode**: `GATEWAY_URL` is unset on Vercel.
 
-- API routes serve canned demo responses (realistic synthetic data)
-- All responses include `replay: true` flag
-- Health check shows "offline" status in header
-- Each page remains functional with demo data
+- A site-wide banner (`app/components/ReplayBanner.tsx`) says so on every page.
+- `/api/health` returns `{replay: true}` and the health dot reads **Replay** (amber).
+  It reads **Live** only when a real backend answers, and **Offline** when a
+  configured backend does not.
+- Interactive pages (`/lab`, `/qre`, `/auction`, `/playground`, `/chat`) serve the
+  canned responses in `lib/replay-data.ts` (synthetic trajectories; the auction
+  traces are real F22 data) and carry a `DemoBadge`.
+- `/studio` is the read-only **Run Registry**; job submission and model
+  publishing were retired and their proxy routes removed.
+- `/leaderboard` renders committed snapshots: the Qwen ladder
+  (`data/leaderboard.json`), the 1B twin against public rungs
+  (`data/ladder_exp40.json`, F55) and the council record (`data/council.json`,
+  F41/F54). `/findings` renders `data/results.json` (F1–F55).
 
-**Demo data sources:**
-- `lib/replay-data.ts` — Pre-generated solve trajectories, QRE paths, auction results
-- Realistic convergence curves (log-linear decay)
-- Consistent with backend response shapes
+Rebuild the snapshots from the results tree with
+`python scripts/build_app_data.py` at the repo root, then commit `apps/web/data/`.
+
+**Bringing live inference back:** start the backend on the returned host with
+`KINETIC_SERVE_PROFILE=gb10 scripts/gateway/run_gateway.sh`, set `GATEWAY_URL`
+and `GATEWAY_SECRET` on Vercel, redeploy. No code change.
 
 ---
 
@@ -212,14 +225,15 @@ Check each page at:
 - `/lab` — Equilibrium Lab (solver runs)
 - `/qre` — QRE Explorer
 - `/auction` — Auction Playground
-- `/studio` — Training Studio
+- `/studio` — Run Registry (read-only)
 - `/findings` — Research Findings
 
 ### Health Dot
 
 The navigation bar shows a health status indicator:
-- **Green dot + "Live"** — Backend is reachable (version and GPU status in tooltip)
-- **Red dot + "Demo"** — Backend unreachable, using replay demo data
+- **Green dot + "Live"** — a real backend answered (version and GPU status in tooltip)
+- **Amber dot + "Replay"** — replay mode: pre-recorded results, no backend (the closed programme)
+- **Red dot + "Offline"** — a backend is configured but did not answer
 
 Health check refreshes every 30 seconds.
 

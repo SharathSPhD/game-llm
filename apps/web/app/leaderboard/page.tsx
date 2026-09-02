@@ -1,4 +1,6 @@
 import { LeaderboardTableClient } from "./client";
+import { TwinLadder } from "./TwinLadder";
+import { CouncilRecord } from "./CouncilRecord";
 
 export const metadata = {
   title: "Leaderboard — Kinetic AI",
@@ -10,12 +12,16 @@ export default function LeaderboardPage() {
     <div className="page">
       <h1>Benchmark Leaderboard</h1>
       <p style={{ color: "var(--text-secondary)", marginBottom: "1.5rem" }}>
-        Qwen2.5-1.5B baselines (generalist, coder, math specialist) and Qwen3-1.7B measured on our GB10 harness.
+        Qwen2.5-1.5B baselines (generalist, coder, math specialist) and Qwen3-1.7B measured on the GB10 harness in August 2026 (F28).
         MMLU (0-shot), GSM8K (chat template, flexible extract), and mixed arena (50/50 blend).
         All numbers trace to lm-eval config hash, seed set, and reproducible invocation.
       </p>
 
       <LeaderboardTableClient />
+
+      <TwinLadder />
+
+      <CouncilRecord />
 
       <section style={{ marginTop: "var(--space-8)", marginBottom: "var(--space-5)" }}>
         <h2>Domain Strengths &amp; Aggregation Headroom</h2>

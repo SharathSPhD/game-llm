@@ -18,6 +18,7 @@ import {
   getReplayTracesListResponse,
   getReplayTracesResponse,
 } from "@/lib/replay-data";
+import runsSnapshot from "@/data/runs.json";
 
 /**
  * Proxy for the GB10 gateway. Security model:
@@ -29,25 +30,24 @@ import {
  *  - Replay mode (no GATEWAY_URL) serves canned demo data, no auth needed.
  */
 
+// Write endpoints (job submission, model publishing) were retired at closure
+// (ADR 0011): the app never contends for a training GPU. Read-only routes stay.
 const POST_ALLOWLIST = new Set([
   "/api/solve",
   "/api/qre_path",
   "/api/auction",
-  "/api/jobs",
-  "/api/models/publish",
   "/api/playground/generate",
 ]);
 const GET_ALLOWLIST_EXACT = new Set([
   "/api/eqlm/generate",
   "/api/eqlm/results",
   "/api/results",
-  "/api/jobs",
   "/api/experiments",
   "/api/runs",
   "/api/models",
   "/api/auction/traces",
 ]);
-const GET_ALLOWLIST_PREFIX = ["/api/jobs/", "/api/auction/traces/"];
+const GET_ALLOWLIST_PREFIX = ["/api/auction/traces/"];
 
 function isAllowed(method: "GET" | "POST", endpoint: string): boolean {
   if (method === "POST") return POST_ALLOWLIST.has(endpoint);
@@ -104,6 +104,14 @@ function postDemoResponse(endpoint: string, body: Record<string, unknown>): Next
 
 /** Canned demo response for a GET endpoint, or null if none exists. */
 function getDemoResponse(endpoint: string): NextResponse | null {
+  if (endpoint === "/api/runs") {
+    // The registry snapshot built by scripts/build_app_data.py.
+    return NextResponse.json({ ...runsSnapshot, replay: true });
+  }
+  if (endpoint === "/api/experiments") {
+    // No templates: submission was retired at closure.
+    return NextResponse.json({ templates: [], replay: true });
+  }
   if (endpoint === "/api/models") {
     return NextResponse.json(getReplayModelsResponse());
   }

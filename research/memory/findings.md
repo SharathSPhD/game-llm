@@ -729,7 +729,7 @@ Qwen2.5-1.5B-Instruct, Qwen2.5-Math-1.5B-Instruct, Qwen2.5-Coder-1.5B-Instruct.
   budget. The loglikelihood tasks are unaffected, since they involve no
   generation.
 - **Status:** VALIDATED (single seed per model; loglikelihood tasks only) ·
-  informs O3 (baseline identity) and O4 (domain selection) · Tarka PENDING
+  informs O3 (baseline identity) and O4 (domain selection) · Tarka RESOLVED WITH AMENDMENT 2026-09-02: MMLU 0.6232/0.5823/0.3935/0.5181 recompute from results/scale/agree within 0.3pp and the oracle 0.6305 within 0.5pp; Qwen3's subject-win count recomputes as 12, not the 10 stated above
 
 ## F29 — The influence game does not beat averaging at answer level, and confidence is the reason
 
@@ -792,7 +792,7 @@ uncalibrated reading scored players at 0.13 where the truth was 0.63.
   decisive one, and the requirement it inherits from this finding is that
   influence must be driven by something other than confidence.
 - **Status:** VALIDATED (8,301 examples, 3 gate seeds, held-out fitting) ·
-  verdict NOT MET for answer-level aggregation · Tarka PENDING
+  verdict NOT MET for answer-level aggregation · Tarka RESOLVED 2026-09-02: the influence game's failure to beat averaging recomputes over the 8,301 questions across three seeds; the confidence-over-competence diagnosis is structural and stated as such
 
 ## F30 — Eleven aggregation rules, none better than the mean, and the reason
 
@@ -837,7 +837,7 @@ both were tried.
   the answer-level version of it (players pricing each other's proposed options)
   correctly fails here precisely because nothing new is on the table.
 - **Status:** VALIDATED (8,301 examples, held-out fitting for both repairs) ·
-  verdict NOT MET · closes the answer-level arena · Tarka PENDING
+  verdict NOT MET · closes the answer-level arena · Tarka RESOLVED 2026-09-02: all eleven rules at or below the mean recompute over the 8,301 questions; the reweighting interpretation is structural
 
 ## F31 — Training players to be calibrated would make the game worse, not better
 
@@ -891,7 +891,7 @@ standing competences set to the four measured in F28.
   measurement in this cycle points the same way — a council is helped by having
   more evidence weighed and harmed by having evidence discarded.
 - **Status:** VALIDATED (16 regimes, 5 seeds) · closes the calibration-training
-  branch · simulation, not measurement, and scoped accordingly · Tarka PENDING
+  branch · simulation, not measurement, and scoped accordingly · Tarka RESOLVED 2026-09-02: simulation (16 regimes, 5 seeds); coupling direction confirmed; quantitative predictions scoped as simulation in the text
 
 ## F32 — Correction: the twenty-point oracle gap is mostly not extractable
 
@@ -938,7 +938,7 @@ being correct by chance and carries no signal any rule could key on.
   Table~\ref{tab:ladder}, the site's F29 and F30 entries, and the interpretation
   paragraphs of F29, F30 and F31 above, each of which asserted the twenty-point
   reading.
-- **Status:** VALIDATED · supersedes the headroom claim in F29–F31 · Tarka PENDING
+- **Status:** VALIDATED · supersedes the headroom claim in F29–F31 · Tarka RESOLVED 2026-09-02: self-audit; confidence-gated oracle 0.658 against the raw 0.826 recomputes; interpretation unchanged
 
 ## F33 — The arena was homogeneous, and that is why nothing beat averaging
 
@@ -983,7 +983,7 @@ generation budget settles what the exclusion was hiding.
   mathematics and knowledge for exactly this reason, and its comparison against
   best-single now has a meaningful 10-point ceiling rather than a 1-point one.
 - **Status:** VALIDATED (single seed per model, 200 questions, limit-bounded) ·
-  scopes F29–F31 without overturning them · Tarka PENDING
+  scopes F29–F31 without overturning them · Tarka RESOLVED 2026-09-02: GSM8K re-measurement single seed by design; Math 0.290 to 0.795 with the chat template recomputes; arena heterogeneity confirmed
 
 ## F34 — The bar is a domain router, not the best single player
 
@@ -1026,7 +1026,7 @@ unaffected by that defect, since it uses only each player's own answer, and the
 margin over every council rule is far too large to be an artefact of it.
 
 **Status:** VALIDATED (single seed; re-measured across three seeds in the
-corrected run) · supersedes the headroom framing in F33 · Tarka PENDING
+corrected run) · supersedes the headroom framing in F33 · Tarka RESOLVED 2026-09-02: router 0.6667 recomputes; single seed in the first measurement, replicated over three seeds; 7.5pp gain replicated
 
 ## F35 — Conversion damage is not recoverable at this budget, and reasoning is what is lost
 
@@ -1079,7 +1079,7 @@ invocation on the same machine.
   machines; durations and exit codes are self-consistent and are what the record
   relies on.
 - **Status:** VALIDATED (both arms to completion, single seed each) · verdict
-  NOT MET · Tarka PENDING
+  NOT MET · Tarka RESOLVED 2026-09-02: H10 arms fail the retention gate (0.354 to 0.532 against 0.90) as recomputed; design measurement scoped as such
 
 ## F36 — Cross-examination ties the domain router and beats nothing
 
@@ -1135,7 +1135,7 @@ what a competent engineer would build, and saying otherwise would require
 comparing against the best single player, which is the wrong bar.
 
 **Status:** VALIDATED (3 seeds, 360 questions, paired against the router) ·
-verdict NOT MET · closes ADR 0009's Phase 1b · Tarka PENDING
+verdict NOT MET · closes ADR 0009's Phase 1b · Tarka RESOLVED 2026-09-02: equilibrium 0.5611 ties the router at 0.5611 (three seeds, 360 questions, z=0.00) per results/scale/exp23_router.json
 
 ## F37 — The solve is cheap; the council is not, and it buys nothing
 
@@ -1180,7 +1180,7 @@ and it is the only hypothesis in the belief state that this cycle confirmed.
   assumed is vindicated by having caught it here rather than in a fluent-nonsense
   output.
 - **Status:** VALIDATED · the cost hypothesis is MET and is the one positive
-  result of this cycle · Tarka PENDING
+  result of this cycle · Tarka RESOLVED 2026-09-02: solve 2.16s of 68.15s (3.2%) and the council's 3.0x cost recompute; the cost hypothesis is met and the finding says so
 
 ## F38 — The hybrid does not survive held-out testing, and the action set is exhausted
 
@@ -1222,7 +1222,7 @@ actions; it does not invent them. When every action scores near zero the
 constraint has moved from selection to generation, and generating genuinely new
 candidates is an inventive step the loop cannot perform on its own.
 
-**Status:** VALIDATED (3 held-out folds) · closes the hybrid lead · Tarka PENDING
+**Status:** VALIDATED (3 held-out folds) · closes the hybrid lead · Tarka RESOLVED 2026-09-02: hybrid unstable across folds (mean -0.0097); the hindsight maximum 0.5778 does not replicate held-out, as the finding states
 
 ## F39 — The anchored answer vote beats the router held-out (offline; confirmation pre-registered)
 
@@ -1408,7 +1408,7 @@ establishes what produces it and when it would not.
   evaluation seed, some 13 to 15 points above the best single model in each. No
   mechanism tested in this programme reaches it.
 - **Status:** VALIDATED for the decomposition and the extractor audit; second
-  council INTERIM (one of three evaluation seeds) · Tarka PENDING
+  council INTERIM (one of three evaluation seeds) · Tarka RESOLVED 2026-09-02: 0.6194 against 0.5361 (z=4.42, 38 wins to 8) recomputes from results/scale/exp30_fair_baselines.json; routing +6.39pp and redundancy +1.39pp as decomposed
 
 ## F43 — The council advantage does not generalise; it is conditional on non-domination
 
@@ -1451,7 +1451,7 @@ for the ladder, and the same systems were compared on three further seeds.
   is whether a second observation per player — stability under perturbation —
   can reach the nineteen points that reweighting a single observation cannot.
 - **Status:** VALIDATED (3 seeds, 360 questions, champions calibrated held-out) ·
-  complementarity_generalises NOT MET · Tarka PENDING
+  complementarity_generalises NOT MET · Tarka RESOLVED 2026-09-02: the second council reduces to its best single member 0.6083 (Falcon3-3B dominates both domains) per results/scale/exp28/results.json; the non-domination precondition is confirmed
 
 ## F44 — The parity claim was never compute-matched; weight-tying trades parameters for compute
 
