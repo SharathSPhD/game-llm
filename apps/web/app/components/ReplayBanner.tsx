@@ -1,9 +1,31 @@
+"use client";
+
+import { useEffect, useState } from "react";
+
 /**
- * Site-wide notice rendered by the layout while REPLAY_MODE is on. Server
- * component: the flag is read at build time from lib/config, which is also
- * when /api/health is prerendered, so the banner and the health dot agree.
+ * Site-wide notice while the app is replaying. Client-driven by /api/health so
+ * it is right whether replay comes from an unset GATEWAY_URL at build time or
+ * from a configured gateway that is unreachable at request time (ADR 0011).
  */
-export function ReplayBanner() {
+export function ReplayBanner({ initial = false }: { initial?: boolean }) {
+  const [replay, setReplay] = useState(initial);
+
+  useEffect(() => {
+    let cancelled = false;
+    fetch("/api/health", { headers: { Accept: "application/json" } })
+      .then((r) => (r.ok ? r.json() : { replay: true }))
+      .then((d) => {
+        if (!cancelled) setReplay(Boolean(d.replay));
+      })
+      .catch(() => {
+        if (!cancelled) setReplay(true);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  if (!replay) return null;
   return (
     <div
       role="status"

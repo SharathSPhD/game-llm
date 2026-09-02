@@ -112,9 +112,10 @@ export default function LeaderboardPage() {
           rules are operating within reach of what these distributions support.
           <br />
           <br />
-          <strong>Next Iteration (Phase 2):</strong> Build teachers from measured eval gaps.
-          Math specialist already exists and is strong; replicate that pattern for other weak
-          domains. Then test council on heterogeneous mixed arena.
+          <strong>Closure (F41, F54, F55):</strong> The routing council with fallback beat its best member
+          by 8.3 points on the confirmation questions and is the best measured use of a 1.5B-class generation
+          budget; a single 7B of comparable resident memory beats it by nineteen. The programme closed on
+          2026-09-02 at the one-billion-parameter boundary (F55); nothing further is queued.
         </p>
       </section>
     </div>

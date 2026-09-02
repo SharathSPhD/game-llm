@@ -472,42 +472,6 @@
       "artifact_path": "results/exp09_adaptive/results.json"
     },
     {
-      "id": "exp10_probe",
-      "title": "exp10 Probe: Memory advantage and loss lead appear at 110M matched parameters (early observations, full run in progress)",
-      "claim": "Early probe (300 steps, 121\u2013124M params matched): EqLM peak memory 6.2GB vs explicit 8.0GB (\u221222% \u2014 O(1)-depth advantage first visible at LM scale); EqLM AHEAD on training loss (6.79 vs 7.40 at step 275, same random init). Wall-clock 5.6\u00d7 slower (2.57 vs 0.46 s/step). Full 10k-step run in progress.",
-      "evidence": {
-        "exp": "exp10_probe",
-        "iteration": 3,
-        "steps": 300,
-        "config_hash": "f7731f4fca0212972689ad08d2a4bd5871b004e539932f73b367bdeebb3a5f76",
-        "git_commit": "eb4703d41ef3ddc9aa684d631483a46912182695",
-        "arms": [
-          {
-            "arm": "A1",
-            "model": "ExplicitLM",
-            "params_m": 123.76,
-            "peak_memory_gb": 8.0,
-            "loss_at_275": 7.4,
-            "time_per_step_sec": 0.46
-          },
-          {
-            "arm": "A2",
-            "model": "EqLM",
-            "params_m": 120.7,
-            "peak_memory_gb": 6.2,
-            "loss_at_275": 6.79,
-            "time_per_step_sec": 2.57
-          }
-        ],
-        "memory_reduction_pct": -22.0,
-        "loss_advantage": "6.79 vs 7.40 (\u22128.2%)"
-      },
-      "observations": "Loss reverses small-scale pattern (EqLM ahead, not capacity-traded). O(1)-depth memory advantage proven at scale. Wall-clock driven by 12 fixed-point iters/forward \u2014 F19 warm-start will be critical for decode efficiency.",
-      "status": "PROBE \u2014 early observations only \u00b7 full 10k-step run in progress",
-      "type": "PROBE",
-      "artifact_path": "results/exp10_probe/results.json"
-    },
-    {
       "id": "F20",
       "title": "At 121M parameters the truncation penalty widens with width: quality ratio 0.787, memory \u221223%",
       "claim": "Across 3 seeds at 121M matched params (10k steps, full BabyLM stream), EqLM reaches 78.7% of the explicit baseline's BLiMP (CI [0.785, 0.788]) while confirming the O(1)-depth memory advantage (6.29 vs 8.13 GB). The fixed-point solver exhausts its 12-iteration budget at every width tested; width raises the price of that truncation (7% gap at d=204 vs 21% at d=1704). Adversarial review corrected the initial 'convergence fails at scale' reading \u2014 the effect is graded contraction loss, not binary failure.",

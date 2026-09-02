@@ -61,7 +61,7 @@ export default function RootLayout({
             <ThemeToggle />
           </div>
         </nav>
-        {REPLAY_MODE && <ReplayBanner />}
+        <ReplayBanner initial={REPLAY_MODE} />
         <main id="main">{children}</main>
         <footer className="site-footer">
           <div className="footer-inner">

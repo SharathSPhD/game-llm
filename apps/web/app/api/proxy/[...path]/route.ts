@@ -103,7 +103,27 @@ function postDemoResponse(endpoint: string, body: Record<string, unknown>): Next
 }
 
 /** Canned demo response for a GET endpoint, or null if none exists. */
-function getDemoResponse(endpoint: string): NextResponse | null {
+function getDemoResponse(endpoint: string, query?: URLSearchParams): NextResponse | null {
+  if (endpoint === "/api/eqlm/generate") {
+    // The anytime-depth demo: the same canned continuation the playground
+    // replays, at the requested solver budget. The demo page reads text,
+    // status and tokens_generated.
+    const prompt = query?.get("prompt") ?? "";
+    const depth = Number(query?.get("depth") ?? 8);
+    const maxNew = Number(query?.get("max_new_tokens") ?? 16);
+    const pg = getReplayPlaygroundResponse({
+      prompt,
+      max_new_tokens: Number.isFinite(maxNew) ? maxNew : 16,
+      solver_budget: Number.isFinite(depth) ? depth : 8,
+    });
+    return NextResponse.json({
+      status: "ok",
+      text: pg.text.slice(prompt.length),
+      tokens_generated: pg.tokens.length,
+      depth: pg.mean_iters,
+      replay: true,
+    });
+  }
   if (endpoint === "/api/runs") {
     // The registry snapshot built by scripts/build_app_data.py.
     return NextResponse.json({ ...runsSnapshot, replay: true });
@@ -218,12 +238,22 @@ export async function POST(
       console.error(
         `gateway POST ${endpoint} -> ${response.status}: ${(await response.text()).slice(0, 500)}`
       );
+      // A gateway that answers with a server error is treated like an absent
+      // one: replay if we can (ADR 0011), otherwise surface the status.
+      if (response.status >= 500) {
+        const demo = postDemoResponse(endpoint, body);
+        if (demo) return demo;
+      }
       return NextResponse.json({ error: "Upstream error" }, { status: response.status });
     }
     return NextResponse.json(await response.json());
   } catch (error) {
     console.error(`gateway POST ${endpoint} unreachable:`, error);
-    return NextResponse.json({ error: "Gateway unreachable" }, { status: 503 });
+    // The serving host is away (ADR 0011): fall back to replay rather than fail,
+    // so a stale GATEWAY_URL in a deployment cannot break the closed app.
+    const demo = postDemoResponse(endpoint, body);
+    if (demo) return demo;
+    return NextResponse.json({ error: "Gateway unreachable", replay: true }, { status: 503 });
   }
 }
 
@@ -237,7 +267,7 @@ export async function GET(
   }
 
   if (REPLAY_MODE) {
-    const demo = getDemoResponse(endpoint);
+    const demo = getDemoResponse(endpoint, request.nextUrl.searchParams);
     if (demo) return demo;
     return NextResponse.json(
       { error: "Endpoint not available in replay mode", replay: true },
@@ -247,7 +277,7 @@ export async function GET(
 
   const denied = await requireTieredUser();
   if (denied) {
-    const demo = getDemoResponse(endpoint);
+    const demo = getDemoResponse(endpoint, request.nextUrl.searchParams);
     if (demo) return demo;
     return denied;
   }
@@ -279,6 +309,8 @@ export async function GET(
     return NextResponse.json(await response.json());
   } catch (error) {
     console.error(`gateway GET ${endpoint} unreachable:`, error);
-    return NextResponse.json({ error: "Gateway unreachable" }, { status: 503 });
+    const demo = getDemoResponse(endpoint, request.nextUrl.searchParams);
+    if (demo) return demo;
+    return NextResponse.json({ error: "Gateway unreachable", replay: true }, { status: 503 });
   }
 }

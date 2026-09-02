@@ -56,3 +56,6 @@ results/**/checkpoints/
 .claude/
 data/pack_*/
 session-traces/
+
+# Playwright MCP session artifacts
+.playwright-mcp/

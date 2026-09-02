@@ -33,7 +33,7 @@ export default function DemoPage() {
         setResult({
           status: "model_not_loaded",
           text: "",
-          error: "Model not yet available. ONNX artifact pending.",
+          error: "No model is being served while the programme is closed (ADR 0011).",
         });
       }
     } catch (err) {
@@ -56,7 +56,8 @@ export default function DemoPage() {
           <p className="lede">
             Adjust the depth slider to control the solver budget. Watch how quality degrades gracefully
             as you reduce iterations — EqLM adapts to any compute budget, from 4 to 12 iterations.
-            The in-browser model scaffold awaits the ONNX artifact.
+            While the serving host is away the dial replays a canned continuation (F55); the real
+            checkpoint ships as safetensors and ONNX on Hugging Face (F52).
           </p>
         </div>
       </section>

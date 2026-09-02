@@ -1,5 +1,6 @@
 "use client";
 
+import { DemoBadge } from "@/app/components/DemoBadge";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
@@ -60,8 +61,9 @@ export default function ModelsPage() {
           }
           return;
         }
-        const data = await resp.json();
-        setModels(data);
+        const raw = await resp.json();
+        // The backend returns a bare array; the replay stub wraps it as {models}.
+        setModels(Array.isArray(raw) ? raw : Array.isArray(raw?.models) ? raw.models : []);
       } catch (err) {
         setError(`Error fetching models: ${err}`);
       } finally {
@@ -146,7 +148,8 @@ export default function ModelsPage() {
     return (
       <div className="page">
         <h1>Models Registry</h1>
-        <p>Loading...</p>
+        <DemoBadge what="the registry snapshot" />
+      <p>Loading...</p>
       </div>
     );
   }
@@ -164,7 +167,7 @@ export default function ModelsPage() {
     <div className="page">
       <h1>Models Registry</h1>
       <p className="subtitle">
-        Checkpoints from completed training runs. One-click publish to Hugging Face.
+        Checkpoints from completed training runs. Publishing from the app was retired at closure (ADR 0011); the released models are on Hugging Face under qbz506.
       </p>
 
       {models.length === 0 ? (
@@ -204,12 +207,7 @@ export default function ModelsPage() {
                     {model.run.config_sha.slice(0, 8)}
                   </td>
                   <td>
-                    <button
-                      className="btn-small"
-                      onClick={() => handlePublishClick(model.path)}
-                    >
-                      Publish
-                    </button>
+                    <span style={{ color: "var(--text-tertiary)", fontSize: "0.8rem" }}>publishing retired</span>
                   </td>
                 </tr>
               ))}

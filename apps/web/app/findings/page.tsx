@@ -11,8 +11,8 @@ export default function FindingsPage() {
       <section style={{ marginBottom: "var(--space-7)" }}>
         <h1 style={{ marginBottom: "var(--space-3)" }}>Research Findings</h1>
         <p className="lede" style={{ marginBottom: "var(--space-5)" }}>
-          All findings are Tarka-reviewed and operator-signed. Each entry includes experiment ID, config hash, seed count,
-          and links to evidence artifacts. Status is VALIDATED or SIGNED OFF.
+          The complete record, F1 to F55, each Tarka-reviewed. Each entry carries its experiment, configuration hash,
+            seed count and evidence path. The programme closed on 2026-09-02 at F55, recorded as a scale boundary rather than a verdict.
         </p>
       </section>
 

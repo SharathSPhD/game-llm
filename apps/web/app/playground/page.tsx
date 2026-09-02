@@ -61,7 +61,9 @@ export default function PlaygroundPage() {
           setModelsError(`Failed to fetch models: ${resp.statusText}`);
           return;
         }
-        const data = await resp.json();
+        const raw = await resp.json();
+        // The backend returns a bare array; the replay stub wraps it as {models}.
+        const data = Array.isArray(raw) ? raw : Array.isArray(raw?.models) ? raw.models : [];
         setModels(data);
         if (data.length > 0) {
           setSelectedModel(data[0].path);

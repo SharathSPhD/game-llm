@@ -8,13 +8,10 @@ export const metadata = {
 
 // Load flagship status at build time
 let flagshipStatus = {
-  stage: "damage_probe",
-  updated: new Date().toISOString(),
-  model: "Qwen2.5-1.5B-Instruct",
-  approach: "Two-fold reuse",
-  estimated_unique_params: "1.10B (28% reduction)",
-  fixed_compute: true,
-  comment: "SPEC 0020: Qwen conversion at scale.",
+  stage: "closed",
+  spec: "ADR 0011",
+  updated: "2026-09-02",
+  description: "",
 };
 
 try {
@@ -34,11 +31,12 @@ export default function Home() {
           <h1>A language model whose depth, training, and decoding are equilibrium computations.</h1>
           <p className="lede">
             EqLM replaces the fixed depth of a conventional transformer with a fixed-point computation whose
-            depth is a stopping criterion rather than an architecture. At 121M parameters it reaches parity
-            with an explicit transformer (F24) — but that parity is measured at matched parameters and matched
-            iteration count, and the tied block is 4.92× more expensive per iteration, so parity costs roughly
-            five times the arithmetic. At genuinely equal compute the ratio is 0.72 (F44). Weight-tying
-            compresses parameters, not compute.
+            depth is a stopping criterion rather than an architecture. The validated result: at equal compute,
+            a weight-tied block reaches 0.958 of an explicit transformer&apos;s quality with 2.70× fewer
+            parameters at 46–121M (F45, three seeds). Taken to a billion parameters on web data, the tied arm
+            failed its pre-registered 1B-token gate (perplexity ratio 1.56 vs 1.20) and was still closing at
+            2.5B tokens (1.31); both arms score at chance on public benchmarks, and the programme closed there
+            (F55). Weight-tying compresses parameters, not compute, and the record says where that stops.
           </p>
           <div className="hero-actions">
             <Link href="/benchmarks" className="btn" data-primary="true">
@@ -53,19 +51,19 @@ export default function Home() {
           </div>
           <div className="hero-stats">
             <div className="hero-stat">
-              <div className="panel-label">EqLM vs Explicit (F24)</div>
-              <div className="reading">0.991</div>
-              <div className="panel-note">Ratio at matched params and iterations; at equal FLOPs: 0.72 (F44)</div>
+              <div className="panel-label">Equal compute, three seeds (F45)</div>
+              <div className="reading">0.958</div>
+              <div className="panel-note">BLiMP ratio of the tied block to the explicit baseline, CI [0.939, 0.977]</div>
             </div>
             <div className="hero-stat">
-              <div className="panel-label">Flagship Progress</div>
+              <div className="panel-label">Programme</div>
               <div className="reading">{flagshipStatus.stage}</div>
-              <div className="panel-note">{flagshipStatus.model} · {flagshipStatus.approach}</div>
+              <div className="panel-note">{flagshipStatus.spec} · {flagshipStatus.updated} · record ends at F55</div>
             </div>
             <div className="hero-stat">
               <div className="panel-label">Parameter Saving</div>
-              <div className="reading">28%</div>
-              <div className="panel-note">SPEC 0020: {flagshipStatus.estimated_unique_params}</div>
+              <div className="reading">2.70×</div>
+              <div className="panel-note">45.8M against 123.8M at identical arithmetic (F45)</div>
             </div>
           </div>
         </div>
@@ -79,7 +77,8 @@ export default function Home() {
             <p>
               A language model whose effective depth is not a fixed architecture choice but a solved game:
               at each token, the model computes a fixed point. At matched parameters (121M) it reaches 0.991 of an explicit
-              transformer (F24). At genuinely equal compute, the ratio is 0.72 (F44).
+              transformer (F24); at equal compute with the block at the baseline&apos;s width, 0.958 with 2.70× fewer
+              parameters (F45). At a billion parameters the exchange rate did not transfer unchanged (F55).
             </p>
           </div>
 
@@ -96,8 +95,8 @@ export default function Home() {
             <h3>Adaptive Per-Token Depth</h3>
             <p>
               An equilibrium model can spend few iterations on easy tokens and many on hard ones.
-              Measured (exp31), uneven spending reaches 0.996 at the same mean depth as fixed 0.684 —
-              the model adapts to any compute budget.
+              Measured (exp31), uneven spending scores 0.681 against 0.684 at the same mean depth — it buys
+              nothing at matched depth and supplies the anytime property, not an advantage.
             </p>
           </div>
         </div>
@@ -143,8 +142,8 @@ export default function Home() {
           <Link href="/findings" className="card" style={{ textDecoration: "none" }}>
             <h3>All Findings</h3>
             <p>
-              Validated findings from convergence (F1–F8), mechanism design (F6), EqLM paradigm (F24–F26),
-              and scale results (SPEC 0020 damage probe). Each links to config hash, seeds, and harness.
+              The complete record F1–F55, each Tarka-reviewed: convergence, mechanism design, the EqLM
+              paradigm, the council, the exchange rate and the billion-parameter boundary.
             </p>
           </Link>
         </div>
@@ -174,8 +173,8 @@ export default function Home() {
           <Link href="/chat" className="card" style={{ textDecoration: "none" }}>
             <h3>Council Chat</h3>
             <p>
-              Multi-turn conversation with the council. Tune rationality and solver budget,
-              see per-token influence weights.
+              Replays the measured council record (F41, F54). Live council decoding returns with the
+              serving host; no per-token influence traces were recorded, and the page says so.
             </p>
           </Link>
         </div>
@@ -189,7 +188,7 @@ export default function Home() {
             hash, git commit, seed set, and lm-eval invocation. No hardcoded numbers in the code.
           </li>
           <li style={{ marginBottom: "var(--space-3)" }}>
-            <strong>Pre-registration.</strong> Hypotheses (H1–H10), experiment specs (SPEC 0001–0020), and success
+            <strong>Pre-registration.</strong> Hypotheses (H1–H10), experiment specs (SPEC 0001–0024), decisions (ADR 0001–0011), and success
             criteria are recorded before runs. Findings are validated or formally missed, not reinterpreted.
           </li>
           <li style={{ marginBottom: "var(--space-3)" }}>
@@ -197,8 +196,9 @@ export default function Home() {
             result ships with diagnosis and cost. The council&apos;s 8-point win exists alongside its precondition and cost.
           </li>
           <li>
-            <strong>API-first delivery.</strong> OpenAI-compatible endpoints from GB10 FastAPI. Models released to
-            Hugging Face with full reproducibility card. Anytime inference usable at any compute budget.
+            <strong>Artifacts.</strong> Four models and the council dataset on Hugging Face under qbz506, with cards
+            carrying the claims and the non-claims. The API backend is profile-driven and offline while the serving
+            host is away; the app replays the record until it returns.
           </li>
         </ul>
       </section>

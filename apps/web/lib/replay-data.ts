@@ -227,12 +227,29 @@ export function getReplayPlaygroundResponse(params: {
 
 export function getReplayModelsResponse() {
   return {
+    // Shape mirrors app/server.py scan_models_registry(): the models, chat and
+    // playground pages read path, model_class, params_estimate, size_mb,
+    // config.{d_model,n_heads} and run.{config_sha,git_commit,dir}.
     models: [
       {
-        path: "demo/checkpoints/eqlm_demo.pt",
+        path: "results/scale/exp32/checkpoints/C1_seed42.pt",
+        model_class: "EqLM",
+        num_params: 45785857,
+        params_estimate: 45785857,
+        size_mb: 183.2,
+        config: { d_model: 768, n_heads: 12, d_ff: 3072, deq_max_iter: 12 },
+        run: { config_sha: "485fdc4218a9", git_commit: "unknown", dir: "scale/exp32" },
+        label: "kinetic-eqlm-46m-compute-matched (F45; replay — not a live model)",
+      },
+      {
+        path: "results/exp13_seed42/checkpoints/B1_anytime.pt",
         model_class: "EqLM",
         num_params: 120696016,
-        label: "EqLM 121M (demo replay — sign in for live checkpoints)",
+        params_estimate: 120696016,
+        size_mb: 482.8,
+        config: { d_model: 1704, n_heads: 12, d_ff: 6816, deq_max_iter: 12 },
+        run: { config_sha: "40b471ce0a", git_commit: "unknown", dir: "exp13_seed42" },
+        label: "kinetic-eqlm-anytime-121m-babylm (F24; replay — not a live model)",
       },
     ],
     replay: true,
