@@ -33,6 +33,6 @@
     "DONE: replay-only app (SPEC 0025) e2e-tested locally on the production build; Vercel redeploy from main",
     "DONE: Tarka verdicts F28-F55 applied; no PENDING remains",
     "PENDING (operator): push docs/hf-cards/kinetic-eqlm-46m-compute-matched.md with HF_TOKEN via scripts/push_hf_card.py",
-    "PENDING: tag v2.0.0-closure after the Vercel deployment is verified in a real browser"
+    "DONE: Vercel deployment verified in Chrome (banner, Replay dot, Lab solve through the dead-gateway fallback); tagged v2.0.0-closure"
   ]
 }
