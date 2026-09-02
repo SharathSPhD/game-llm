@@ -21,5 +21,6 @@
   ],
   "next_action": "On I1's 0.5B MILESTONE (~18:30 BST 2026-09-02, results/scale/exp39/i1_blocklr/milestones.jsonl) and I2's (~03:30 next day): read held-out ppl against SPEC 0024 bars \u2014 <=1589 rescue (send that arm to 1B, gate 604.2), both >=1780 NULL earned, between -> operator. Journal each; ladder eval optional (at chance). Then C1 preflight (SPEC 0023, pack_byte). Push main once GitHub credentials exist on the 5090.",
   "gpu_lock_holder": "5090: SPEC 0024 interventions (python train.py pid 344187, job.json = I1 then I2; results/scale/exp39/i1_blocklr, i2_finalonly) | GB10: OFFLINE since 2026-09-02 (RMA)",
-  "adrs": []
+  "adrs": [],
+  "on_resume": "Session-bound watches die with the client; the docker job does not. On any resume: (1) ps -o args= -p $(pgrep -x -f 'python train.py') must show the SPEC 0024 job (launched 2026-09-02 09:17, pid 344187; I1 then I2 in one process) \u2014 if absent, check ~/fusion-project/kinetic-twin/train.log tail and results/scale/exp39/{i1_blocklr,i2_finalonly}/milestones.jsonl before anything else; (2) re-arm a Monitor on train.log for ^MILESTONE|^=== stage|Traceback|Error|Killed|OOM; (3) read any MILESTONE against SPEC 0024 bars (<=1589 rescue, >=1780 no rescue), journal it, commit, push (origin is SSH now)."
 }
