@@ -1,6 +1,6 @@
 {
   "cycle": 34,
-  "phase": "CLOSED 2026-09-02 (ADR 0010 + ADR 0011). Record ends at F55 (scale boundary; SPEC 0024 halted, no NULL). Closure work in progress: paper v2, site, HF card, replay-only app (SPEC 0025), Tarka F45-F54, tag v2.0.0-closure.",
+  "phase": "CLOSED 2026-09-02 (ADR 0010 + ADR 0011, tag v2.0.0-closure). Record ends at F55. All closure deliverables complete: paper v2 PDF, site, replay-only app (verified on Vercel), HF card, Tarka F1-F55.",
   "current_rq": "RQ-7: does the compute-matched exchange rate (F45/F50) persist at 1B params on general web data?",
   "gpu_lock": false,
   "open_questions": [
@@ -32,7 +32,7 @@
     "DONE: site F55 + closure wording (Astro build green; GH Pages workflow builds from source)",
     "DONE: replay-only app (SPEC 0025) e2e-tested locally on the production build; Vercel redeploy from main",
     "DONE: Tarka verdicts F28-F55 applied; no PENDING remains",
-    "PENDING (operator): push docs/hf-cards/kinetic-eqlm-46m-compute-matched.md with HF_TOKEN via scripts/push_hf_card.py",
+    "DONE: HF card for kinetic-eqlm-46m-compute-matched updated with the F55 boundary (commit 82e93a5 on the Hub, 2026-09-02)",
     "DONE: Vercel deployment verified in Chrome (banner, Replay dot, Lab solve through the dead-gateway fallback); tagged v2.0.0-closure"
   ]
 }
