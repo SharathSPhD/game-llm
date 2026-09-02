@@ -32,7 +32,17 @@ but the public URL is unaffected.
 
 ## Starting the Gateway
 
-### Prerequisites
+### Host profiles (ADR 0010)
+
+The backend host is not named in code. `configs/serve/profiles/<name>.yaml`
+holds port, device policy, residency budget, origins and tunnel settings per
+host; `KINETIC_SERVE_PROFILE` (default `rtx5090`) selects one. `device: auto`
+serves from the CPU while `research/memory/state.json` records `gpu_lock: true`,
+so the 5090 can serve beside its training queue. When the GB10 returns:
+`KINETIC_SERVE_PROFILE=gb10 scripts/gateway/run_gateway.sh`. Inspect the
+resolved profile with `python -m kinetic_ai.serve.profile`.
+
+## Prerequisites
 
 - `cloudflared` CLI installed (https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/downloads/)
 - Cloudflare account with:

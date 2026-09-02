@@ -263,7 +263,7 @@ def get_git_commit() -> str:
     try:
         result = subprocess.run(
             ["git", "rev-parse", "HEAD"],
-            cwd="/home/sharaths/projects/game-llm",
+            cwd=Path(__file__).resolve().parent.parent,
             capture_output=True,
             text=True,
             check=True,
@@ -276,8 +276,8 @@ def get_git_commit() -> str:
 def main():
     """Run the experiment and save results."""
     # Paths
-    config_path = Path("/home/sharaths/projects/game-llm/configs/exp02_qre_homotopy.yaml")
-    output_dir = Path("/home/sharaths/projects/game-llm/results/exp02_qre_homotopy")
+    config_path = Path(__file__).resolve().parent.parent / "configs" / "exp02_qre_homotopy.yaml"
+    output_dir = Path(__file__).resolve().parent.parent / "results" / "exp02_qre_homotopy"
     output_dir.mkdir(parents=True, exist_ok=True)
 
     print("=" * 70)

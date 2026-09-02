@@ -104,7 +104,7 @@ def get_git_commit() -> str:
         import subprocess
         result = subprocess.run(
             ["git", "rev-parse", "HEAD"],
-            cwd="/home/sharaths/projects/game-llm",
+            cwd=Path(__file__).resolve().parent.parent,
             capture_output=True,
             text=True,
             timeout=5,

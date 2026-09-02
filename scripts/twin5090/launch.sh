@@ -16,7 +16,7 @@ set -euo pipefail
 MODE="${1:?usage: launch.sh preflight|phase1|extend|interventions|sync-pack <pack_dir>}"
 PACK_DIR="${2:?give the local pack directory}"
 REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
-SKILL=/home/sharaths/.claude/skills/rtx5090-connect/scripts
+SKILL="${RTX5090_SKILL_DIR:-$HOME/.claude/skills/rtx5090-connect/scripts}"
 HOST="${RTX5090_HOST:-ss@192.168.0.204}"
 JOB=kinetic-twin
 STAGE_DIR="$(mktemp -d /tmp/twin5090.XXXXXX)"

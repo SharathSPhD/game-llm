@@ -1,0 +1,17 @@
+# Serving profile: GB10 (DGX Spark, 121 GB unified memory, aarch64).
+# Selected with KINETIC_SERVE_PROFILE=gb10. No training runs on this box, so the
+# GPU is always available to serving and the residency budget is generous.
+description: "GB10 DGX Spark — evaluation and serving host (no training)"
+host: 127.0.0.1
+port: 8097
+device: auto            # auto = cuda unless research/memory/state.json says gpu_lock: true
+dtype: bfloat16
+max_resident_gb: 96
+results_dir: ./results
+gpu_lock_file: research/memory/state.json
+allowed_origins:
+  - https://kinetic.kinetic-ai.workers.dev
+  - https://kinetic-ai-web.vercel.app
+tunnel:
+  enabled: true         # cloudflared quick tunnel, URL pushed to Cloudflare KV
+  kv_key: gateway_url

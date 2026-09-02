@@ -70,7 +70,7 @@ def git_commit() -> str:
     try:
         return subprocess.check_output(
             ["git", "rev-parse", "HEAD"],
-            cwd="/home/sharaths/projects/game-llm",
+            cwd=Path(__file__).resolve().parent.parent,
             text=True,
         ).strip()
     except Exception:
@@ -456,7 +456,7 @@ def run_experiment(config_path: Path) -> dict:
 
 
 if __name__ == "__main__":
-    config_path = Path("/home/sharaths/projects/game-llm/configs/exp01_mmd_vs_gda.yaml")
+    config_path = Path(__file__).resolve().parent.parent / "configs" / "exp01_mmd_vs_gda.yaml"
     results = run_experiment(config_path)
 
     # Print pre-registered outcomes (UPDATED ITERATION 2)

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Black-box recorder: 30s samples of power/thermal/load, synced to disk so the
 # final pre-crash sample survives a hard power loss.
-OUT="${1:-/home/sharaths/projects/game-llm/results/blackbox.log}"
+OUT="${1:-$(cd "$(dirname "$0")/.." && pwd)/results/blackbox.log}"
 while true; do
   {
     echo "=== $(date -Is)"

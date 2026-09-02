@@ -7,7 +7,6 @@ PackReader.
 
 from __future__ import annotations
 
-import hashlib
 import json
 import subprocess
 import sys
@@ -393,7 +392,6 @@ class TestBytePackIntegration:
 
         # Simple test text with known UTF-8 encoding
         test_text = "Hello world"
-        expected_bytes = test_text.encode("utf-8")
 
         # Tokenize
         ids = tok(test_text, add_special_tokens=False).input_ids

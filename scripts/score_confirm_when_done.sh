@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Score the SPEC 0017 confirmation the moment generation completes.
 set -u
-cd /home/sharaths/projects/game-llm
+cd "$(dirname "$0")/.."
 until grep -q "EXP23 CONFIRMATION COMPLETE" results/scale/exp23_confirm.log 2>/dev/null; do
   sleep 60
 done

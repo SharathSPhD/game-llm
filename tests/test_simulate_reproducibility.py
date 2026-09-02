@@ -5,10 +5,10 @@ reproducibility across multiple runs, which is essential for the research
 harness requirement of ≥3 md5-distinct seeds.
 """
 
-from pathlib import Path
 import re
 import subprocess
 import sys
+from pathlib import Path
 
 
 class TestSimulateSeeding:

@@ -105,6 +105,11 @@ module = ["transformers"]
 ignore_missing_imports = true
 
 [[tool.mypy.overrides]]
+# Optional export backends: installed only when exporting (see kinetic_ai/serve/export).
+module = ["onnxruntime", "gguf"]
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
 module = [
     "tokenizers",
     "tokenizers.models",

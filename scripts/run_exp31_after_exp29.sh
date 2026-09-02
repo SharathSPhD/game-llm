@@ -2,7 +2,7 @@
 # The paradigm test: one model, matched parameters, matched average compute,
 # adaptive depth against a fixed stack. Queued directly behind exp29.
 set -u
-cd /home/sharaths/projects/game-llm
+cd "$(dirname "$0")/.."
 until grep -q "EXP29 STABILITY PROBE COMPLETE" results/scale/exp29.log 2>/dev/null; do
   sleep 60
 done

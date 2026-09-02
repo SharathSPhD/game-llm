@@ -21,7 +21,7 @@ set -u
 PID="${1:-}"
 PAUSE=${2:-82000}
 RESUME=${3:-74000}
-LOG=/home/sharaths/projects/game-llm/results/thermal_governor.log
+LOG="$(cd "$(dirname "$0")/.." && pwd)/results/thermal_governor.log"
 
 if ! [[ "$PID" =~ ^[0-9]+$ ]]; then
   echo "usage: $0 <pid> [pause_mC] [resume_mC]" >&2

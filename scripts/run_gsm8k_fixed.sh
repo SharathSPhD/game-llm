@@ -6,7 +6,7 @@
 # model is prompted the way it was tuned, and give generation enough room for a
 # chain of thought instead of truncating it mid-derivation.
 set -u
-cd /home/sharaths/projects/game-llm
+cd "$(dirname "$0")/.."
 OUT=results/scale/gsm8k_fixed
 for M in Qwen/Qwen3-1.7B Qwen/Qwen2.5-1.5B-Instruct Qwen/Qwen2.5-Math-1.5B-Instruct Qwen/Qwen2.5-Coder-1.5B-Instruct; do
   SAFE=${M//\//_}

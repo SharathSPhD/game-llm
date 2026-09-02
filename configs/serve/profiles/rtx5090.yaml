@@ -1,0 +1,19 @@
+# Serving profile: RTX 5090 workstation (32 GB VRAM, x86_64), the only host while
+# the GB10 is away for RMA (ADR 0010). Selected with KINETIC_SERVE_PROFILE=rtx5090.
+# This box also carries the training queue: device auto falls back to the CPU
+# whenever state.json records gpu_lock: true, and the residency budget leaves the
+# trainer its ~25 GB. Never two GPU jobs at once.
+description: "RTX 5090 — training host doubling as serving host while the GB10 is away"
+host: 127.0.0.1
+port: 8097
+device: auto
+dtype: bfloat16
+max_resident_gb: 4
+results_dir: ./results
+gpu_lock_file: research/memory/state.json
+allowed_origins:
+  - https://kinetic.kinetic-ai.workers.dev
+  - https://kinetic-ai-web.vercel.app
+tunnel:
+  enabled: true
+  kv_key: gateway_url

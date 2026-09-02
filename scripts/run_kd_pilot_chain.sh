@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # SPEC 0021 pilot chain: wait for cache -> ship -> smoke -> full pilot on 5090.
 set -u
-cd /home/sharaths/projects/game-llm
+cd "$(dirname "$0")/.."
 until grep -q "wrote .*tokens" results/scale/kd_cache.log 2>/dev/null; do sleep 60; done
 echo "$(date -Is) cache ready, shipping to 5090"
 rsync -aL experiments/exp38_kd_pilot.py ss@192.168.0.204:~/fusion-project/kinetic_exp10/experiments/

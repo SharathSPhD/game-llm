@@ -41,6 +41,7 @@ from kinetic_ai.serve.hf_publish import (
     get_metrics_from_results_json,
     publish_checkpoint_to_hf,
 )
+from kinetic_ai.serve.profile import load_profile, resolve_device
 
 # ─── Config ──────────────────────────────────────────────────────────────────
 
@@ -113,14 +114,14 @@ def get_gateway_secret() -> str:
 
 def get_allowed_origins() -> list[str]:
     # Never wildcard: credentials are allowed, so origins must be explicit.
-    origins_str = os.environ.get(
-        "ALLOWED_ORIGINS", "https://kinetic.kinetic-ai.workers.dev"
-    )
+    # Default comes from the serving profile (configs/serve/profiles/, ADR 0010);
+    # the env var remains the override so tests and one-off hosts can pin it.
+    origins_str = os.environ.get("ALLOWED_ORIGINS") or ",".join(load_profile().allowed_origins)
     return [o.strip() for o in origins_str.split(",") if o.strip() and o.strip() != "*"]
 
 
 def get_results_dir() -> str:
-    return os.environ.get("RESULTS_DIR", "./results")
+    return os.environ.get("RESULTS_DIR") or load_profile().results_dir
 
 
 # CORS
@@ -732,7 +733,8 @@ async def playground_generate(
 
         # Load model (cache ONE model)
         global _playground_model_cache
-        device = "cuda" if torch.cuda.is_available() else "cpu"
+        # Profile policy: the 5090 serves from the CPU while training holds the GPU lock.
+        device = resolve_device(load_profile())
 
         if _playground_model_cache is None or _playground_model_cache[0] != str(full_path):
             # Load via the canonical (weights_only-safe, tested) loader.
@@ -2169,7 +2171,7 @@ async def eqlm_generate(
     # Validate inputs
     depth = max(1, min(int(depth), 12))  # Clamp depth to 1-12
     max_new_tokens = max(1, min(int(max_new_tokens), 48))  # Cap at 48
-    device_str = "cpu" if device == "cpu" else ("cuda" if torch.cuda.is_available() else "cpu")
+    device_str = "cpu" if device == "cpu" else resolve_device(load_profile())
 
     # Get checkpoint path from env, with fallback
     ckpt_path = os.environ.get("KINETIC_EQLM_CKPT", "results/scale/ckpt/eqlm_anytime_seed42.pt")

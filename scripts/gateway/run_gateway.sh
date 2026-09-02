@@ -6,12 +6,15 @@
 
 set -uo pipefail
 REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
-PORT="${PORT:-8097}"
+cd "$REPO"
+export KINETIC_SERVE_PROFILE="${KINETIC_SERVE_PROFILE:-rtx5090}"
+PORT="${PORT:-$(.venv/bin/python -m kinetic_ai.serve.profile port)}"
+if [ "$(.venv/bin/python -m kinetic_ai.serve.profile tunnel_enabled)" != "True" ]; then
+  echo "profile $KINETIC_SERVE_PROFILE has tunnel disabled; use start_backend.sh"; exit 1
+fi
 CF_ACCT="${CF_ACCT:-b7f7f1b1e657f2eed429523ba5788de0}"
 KV_ID="${KV_ID:-fb379d3131714d7ab3e7c1cda1ee3baa}"
 : "${CF_EMAIL:?export CF_EMAIL}"; : "${CF_KEY:?export CF_KEY}"
-
-cd "$REPO"
 
 # Start FastAPI server (assumes venv at .venv)
 echo "Starting FastAPI backend on port $PORT..."

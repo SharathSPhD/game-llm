@@ -2,7 +2,7 @@
 # Second-family generality test, queued behind the SPEC 0017 confirmation so
 # the single-GPU lock is respected.
 set -u
-cd /home/sharaths/projects/game-llm
+cd "$(dirname "$0")/.."
 until grep -q "EXP23 CONFIRMATION COMPLETE" results/scale/exp23_confirm.log 2>/dev/null; do
   sleep 120
 done

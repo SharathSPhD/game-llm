@@ -59,6 +59,7 @@ class PackReader:
 
         # Determine dtype from manifest (default uint16 for backward compatibility)
         dtype_str = self.manifest.get("dtype", "uint16")
+        dtype: type[np.unsignedinteger]
         if dtype_str == "uint8":
             dtype = np.uint8
             bytes_per_token = 1

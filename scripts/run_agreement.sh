@@ -5,7 +5,7 @@
 # and every comparison (equilibrium / averaging / best-single / oracle) is
 # computed from the same stored scores on identical examples.
 set -u
-cd /home/sharaths/projects/game-llm
+cd "$(dirname "$0")/.."
 OUT=results/scale/agree
 TASKS=arc_challenge,hellaswag,piqa,winogrande,mmlu
 for M in Qwen/Qwen3-1.7B Qwen/Qwen2.5-1.5B-Instruct Qwen/Qwen2.5-Math-1.5B-Instruct Qwen/Qwen2.5-Coder-1.5B-Instruct; do

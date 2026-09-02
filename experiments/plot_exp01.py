@@ -173,7 +173,7 @@ def plot_final_bars(results: dict, output_dir: Path) -> None:
 
 def main():
     """Generate all plots."""
-    results_path = Path("/home/sharaths/projects/game-llm/results/exp01_mmd_vs_gda/results.json")
+    results_path = Path(__file__).resolve().parent.parent / "results" / "exp01_mmd_vs_gda" / "results.json"
     output_dir = results_path.parent
 
     with open(results_path) as f:
