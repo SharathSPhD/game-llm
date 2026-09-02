@@ -799,3 +799,23 @@ launched nothing. Serving is offline with the GB10; the front end is
 replay-only. A cross-platform note for the reproducibility layer: the
 zero-rationality aggregation test passed on aarch64 and failed on x86_64
 because it argmaxed an exact fp32 tie; it now asserts the distribution.
+
+## 2026-09-02 — Arm T completes at 2.5B tokens: the tied arm closes late
+
+Held-out perplexity 339.65 against Arm E's 259.69 at identical tokens — a
+ratio of 1.308, down from 1.560 at 1B and 1.543 at 0.5B; in loss terms the
+gap is 0.27 nats where it was 0.44 at the gate. The kill gate was
+registered at 1B and was read there; this milestone does not reverse that
+verdict, it sharpens its interpretation: the tied arm's trajectory is the
+F24 pattern of lagging early and closing late, not a hard ceiling at this
+width, and the extension stays halted only because the registration says
+so, not because the arm stopped learning. The ladder is at chance for both
+arms (tied 2.5B arc_easy 0.297, piqa 0.547, winogrande 0.515 against the
+explicit 0.310, 0.548, 0.512) and remains uninformative at this budget;
+the perplexity trail is the record. Stage 2 ran 44.82h without
+intervention. The stage-2 watcher did its whole job unattended: verified
+the clean exit, ran the ladder in under three minutes on the GPU, staged
+the SPEC 0024 code and launched the interventions at 09:17 (I1 block-lr/4
+first, then I2 final-only, 0.5B tokens each, ~9h apiece, repo 2e1bee8).
+I1's 0.5B reading is due this evening against the fixed bars: ≤1589
+rescue, ≥1780 no rescue.
